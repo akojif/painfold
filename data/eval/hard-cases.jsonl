@@ -1,0 +1,47 @@
+{"id":"hard-001","lang":"de","text":"Schreiben Sie an anna.feldmoser@example.com.","spans":[{"start":17,"end":43,"type":"EMAIL","text":"anna.feldmoser@example.com"}]}
+{"id":"hard-002","lang":"en","text":"Reach me at <j.dunmore@mail.example.com>, not the old address.","spans":[{"start":13,"end":39,"type":"EMAIL","text":"j.dunmore@mail.example.com"}]}
+{"id":"hard-003","lang":"de","text":"Kontakt: Sabine.Weidenauer@Example.org; bitte nicht an info@ schreiben.","spans":[{"start":9,"end":38,"type":"EMAIL","text":"Sabine.Weidenauer@Example.org"}]}
+{"id":"hard-004","lang":"en","text":"Email me at olivia (at) example (dot) net if the form fails.","spans":[{"start":12,"end":41,"type":"EMAIL","text":"olivia (at) example (dot) net"}]}
+{"id":"hard-005","lang":"de","text":"Die Adresse felix+rechnungen@example.net bitte für alle Belege verwenden.","spans":[{"start":12,"end":40,"type":"EMAIL","text":"felix+rechnungen@example.net"}]}
+{"id":"hard-006","lang":"en","text":"The @mention feature doesn't notify @team members.","spans":[]}
+{"id":"hard-007","lang":"de","text":"Erreichbar unter +43 (0) 664 000 12 34 ab 9 Uhr.","spans":[{"start":17,"end":38,"type":"PHONE","text":"+43 (0) 664 000 12 34"}]}
+{"id":"hard-008","lang":"de","text":"Tel. 030/23125-417, Fax gibt es keines.","spans":[{"start":5,"end":18,"type":"PHONE","text":"030/23125-417"}]}
+{"id":"hard-009","lang":"en","text":"Call +44 7700 900 461 or text 07700900462.","spans":[{"start":5,"end":21,"type":"PHONE","text":"+44 7700 900 461"},{"start":30,"end":41,"type":"PHONE","text":"07700900462"}]}
+{"id":"hard-010","lang":"de","text":"Bestellnummer 4711-0815-2231 ist immer noch offen.","spans":[]}
+{"id":"hard-011","lang":"de","text":"Rechnung RE-2026-000417 über € 1.299,00 wurde am 12.03.2026 bezahlt.","spans":[]}
+{"id":"hard-012","lang":"en","text":"Our order 20 553 1820 shipped on 3 March, tracking 1Z 999 AA1 01 2345 6784.","spans":[]}
+{"id":"hard-013","lang":"de","text":"Wir haben 2023 bis 2026 rund 14000 Rechnungen erstellt.","spans":[]}
+{"id":"hard-014","lang":"en","text":"Opening hours are 08:30 to 17:00, Monday to Friday.","spans":[]}
+{"id":"hard-015","lang":"de","text":"Neue Bankverbindung: AT61 1904 3002 3457 3201.","spans":[{"start":21,"end":45,"type":"IBAN","text":"AT61 1904 3002 3457 3201"}]}
+{"id":"hard-016","lang":"de","text":"IBAN DE89370400440532013000 (ohne Leerzeichen kopiert).","spans":[{"start":5,"end":27,"type":"IBAN","text":"DE89370400440532013000"}]}
+{"id":"hard-017","lang":"de","text":"Bitte nicht auf AT61 1904 3002 3457 3202 überweisen, da fehlt eine Ziffer.","spans":[]}
+{"id":"hard-018","lang":"en","text":"Refund to de89 3704 0044 0532 0130 00 please, lower case from my banking app.","spans":[{"start":10,"end":37,"type":"IBAN","text":"de89 3704 0044 0532 0130 00"}]}
+{"id":"hard-019","lang":"en","text":"Card 4111-1111-1111-1111 expired last month.","spans":[{"start":5,"end":24,"type":"CARD","text":"4111-1111-1111-1111"}]}
+{"id":"hard-020","lang":"de","text":"Amex 3782 822463 10005 wurde abgelehnt.","spans":[{"start":5,"end":22,"type":"CARD","text":"3782 822463 10005"}]}
+{"id":"hard-021","lang":"en","text":"The number 4111 1111 1111 1112 is not a card, it's our internal batch ID.","spans":[]}
+{"id":"hard-022","lang":"en","text":"Ticket 1234567890123456 was closed without a reply.","spans":[]}
+{"id":"hard-023","lang":"de","text":"Meine Sozialversicherungsnummer ist 1237 010180.","spans":[{"start":36,"end":47,"type":"SVNR","text":"1237 010180"}]}
+{"id":"hard-024","lang":"de","text":"SV-Nr. 1237010180 für die Lohnverrechnung.","spans":[{"start":7,"end":17,"type":"SVNR","text":"1237010180"}]}
+{"id":"hard-025","lang":"de","text":"Die Kundennummer 1238 010180 hat nichts mit der Versicherung zu tun.","spans":[]}
+{"id":"hard-026","lang":"de","text":"UID ATU13585627 fehlt auf der Rechnung.","spans":[{"start":4,"end":15,"type":"VAT_ID","text":"ATU13585627"}]}
+{"id":"hard-027","lang":"de","text":"USt-IdNr. DE136695976, bitte übernehmen.","spans":[{"start":10,"end":21,"type":"VAT_ID","text":"DE136695976"}]}
+{"id":"hard-028","lang":"en","text":"ATU13585628 was rejected by the VIES check, so it is probably a typo.","spans":[]}
+{"id":"hard-029","lang":"en","text":"My invoice link: https://example.com/i/88213?token=ab12cd.","spans":[{"start":17,"end":57,"type":"URL","text":"https://example.com/i/88213?token=ab12cd"}]}
+{"id":"hard-030","lang":"de","text":"Siehe www.example.org/rechnung/88213, da ist der Fehler.","spans":[{"start":6,"end":36,"type":"URL","text":"www.example.org/rechnung/88213"}]}
+{"id":"hard-031","lang":"en","text":"Version 2.14.3.1 crashes on start.","spans":[]}
+{"id":"hard-032","lang":"en","text":"Our office IP is 203.0.113.42 if you need to whitelist it.","spans":[{"start":17,"end":29,"type":"IP","text":"203.0.113.42"}]}
+{"id":"hard-033","lang":"en","text":"Connection from 2001:db8::8a2e:370:7334 was blocked.","spans":[{"start":16,"end":39,"type":"IP","text":"2001:db8::8a2e:370:7334"}]}
+{"id":"hard-034","lang":"de","text":"Das Problem tritt seit 1.2.2026 auf, Version 4.0.1.","spans":[]}
+{"id":"hard-035","lang":"de","text":"Geburtsdatum 03.07.1988, Eintritt am 01.09.2024.","spans":[{"start":13,"end":23,"type":"DATE_OF_BIRTH","text":"03.07.1988"}]}
+{"id":"hard-036","lang":"de","text":"Ich (geb. 14.2.1979) bin seit 2019 Kunde.","spans":[{"start":10,"end":19,"type":"DATE_OF_BIRTH","text":"14.2.1979"}]}
+{"id":"hard-037","lang":"en","text":"Born 21 July 1985, member since March 2020.","spans":[{"start":5,"end":17,"type":"DATE_OF_BIRTH","text":"21 July 1985"}]}
+{"id":"hard-038","lang":"en","text":"The invoice dated 21/07/2025 is missing from the export.","spans":[]}
+{"id":"hard-039","lang":"de","text":"Kündigung zum 31.12.2026, Vertrag seit 01.01.2021.","spans":[]}
+{"id":"hard-040","lang":"de","text":"Neue Adresse: Mariahilfer Straße 45/3, 1060 Wien.","spans":[{"start":14,"end":37,"type":"ADDRESS","text":"Mariahilfer Straße 45/3"},{"start":39,"end":43,"type":"POSTCODE","text":"1060"},{"start":44,"end":48,"type":"PLACE","text":"Wien"}]}
+{"id":"hard-041","lang":"de","text":"Lieferung an Hauptplatz 7 in 4020 Linz.","spans":[{"start":13,"end":25,"type":"ADDRESS","text":"Hauptplatz 7"},{"start":29,"end":33,"type":"POSTCODE","text":"4020"},{"start":34,"end":38,"type":"PLACE","text":"Linz"}]}
+{"id":"hard-042","lang":"en","text":"Ship to 27 Willow Lane, Bristol BS1 4DJ.","spans":[{"start":8,"end":22,"type":"ADDRESS","text":"27 Willow Lane"},{"start":24,"end":31,"type":"PLACE","text":"Bristol"},{"start":32,"end":39,"type":"POSTCODE","text":"BS1 4DJ"}]}
+{"id":"hard-043","lang":"de","text":"Wir haben 1070 Rechnungen im Jahr und 4020 Buchungszeilen.","spans":[]}
+{"id":"hard-044","lang":"de","text":"Frau Theresa Haselsteiner aus Wels hat das gemeldet.","spans":[{"start":5,"end":25,"type":"NAME","text":"Theresa Haselsteiner"},{"start":30,"end":34,"type":"PLACE","text":"Wels"}]}
+{"id":"hard-045","lang":"en","text":"Thanks to Grace from your support team.","spans":[{"start":10,"end":15,"type":"NAME","text":"Grace"}]}
+{"id":"hard-046","lang":"de","text":"Feature request: export für unseren Steuerberater as Excel, bitte.","spans":[]}
+{"id":"hard-047","lang":"en","text":"Works fine. No complaints.","spans":[]}
