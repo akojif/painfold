@@ -5,8 +5,8 @@ import { parseMarkup } from '../../scripts/fake-data/markup'
 import { seededRandom } from '../../scripts/fake-data/random'
 import { isValidIban, isValidLuhn, isValidSvnr, isValidVatId } from '../../scripts/fake-data/values'
 import {
-  buildEvalGenerated, buildEvalHardCases, buildSample,
-  EVAL_GENERATED_PATH, EVAL_HARD_CASES_PATH, EVAL_ITEMS, EVAL_SEED, SAMPLE_PATH, SAMPLE_ROWS, SAMPLE_SEED,
+  buildEvalGenerated, buildEvalHardCases, buildSample, buildSampleXlsx,
+  EVAL_GENERATED_PATH, EVAL_HARD_CASES_PATH, EVAL_ITEMS, EVAL_SEED, SAMPLE_PATH, SAMPLE_ROWS, SAMPLE_SEED, SAMPLE_XLSX_PATH,
 } from '../../scripts/generate-fake-data'
 
 const read = (path: string) => readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8')
@@ -55,6 +55,8 @@ describe('committed fake data', () => {
     expect(read(SAMPLE_PATH)).toBe(buildSample(SAMPLE_SEED, SAMPLE_ROWS))
     expect(read(EVAL_GENERATED_PATH)).toBe(buildEvalGenerated(EVAL_SEED, EVAL_ITEMS))
     expect(read(EVAL_HARD_CASES_PATH)).toBe(buildEvalHardCases())
+    const committedXlsx = readFileSync(new URL(`../../${SAMPLE_XLSX_PATH}`, import.meta.url))
+    expect(Buffer.compare(committedXlsx, Buffer.from(buildSampleXlsx(SAMPLE_SEED, SAMPLE_ROWS)))).toBe(0)
   })
 
   it('contains no email address outside the reserved example domains', () => {

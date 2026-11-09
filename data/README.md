@@ -9,7 +9,7 @@ node scripts/generate-fake-data.ts --rows 5000 --out tmp/large.csv   # a larger 
 
 ## Files
 
-- `sample/support-tickets.csv`: 200 support tickets, reviews and survey comments for a fictional invoicing and time-tracking app, in German and English. Columns: `id`, `created_at`, `channel`, `rating`, `plan`, `country`, `customer_name`, `customer_email`, `message`. The customer columns are there to exercise the default "Drop" role for columns with personal headers.
+- `sample/support-tickets.csv` and `sample/support-tickets.xlsx`: the same 200 support tickets, reviews and survey comments for a fictional invoicing and time-tracking app, in German and English. Columns: `id`, `created_at`, `channel`, `rating`, `plan`, `country`, `customer_name`, `customer_email`, `message`. The customer columns are there to exercise the default "Drop" role for columns with personal headers.
 - `eval/generated.jsonl`: 1,200 labelled messages from the same templates. The generator rotates through the types of personal data so each type has at least 50 examples per language, and 1 in 12 items has none.
 - `eval/hard-cases.jsonl`: hand-written edge cases (`scripts/fake-data/hard-cases.ts`): obfuscated emails, invalid checksums, order numbers that look like phone numbers, version strings that look like IP addresses, ordinary dates, numbers that look like postcodes.
 
@@ -19,9 +19,9 @@ Each evaluation line is `{ id, lang, text, spans: [{ start, end, type, text }] }
 
 - **Email addresses and URLs** use the reserved `example.com`, `example.org` and `example.net` domains (RFC 2606).
 - **IP addresses** come from the documentation ranges `192.0.2.0/24`, `198.51.100.0/24`, `203.0.113.0/24` and `2001:db8::/32` (RFC 5737, RFC 3849).
-- **German landline numbers** use the Bundesnetzagentur block for media productions, Berlin `030 23125 000` to `999`.
-- **UK numbers** use the Ofcom ranges for drama, `07700 900000` to `900999` and `020 7946 0000` to `0999`.
-- **Austrian numbers** are random. Austria has no official range of fictional numbers, so these are invented, not taken from anyone, but not guaranteed to be unassigned.
+- **German landline numbers** use the Bundesnetzagentur block for media productions, Berlin `030 23125 000` to `999` ([Bundesnetzagentur, Drama Numbers](https://bundesnetzagentur.de/DE/Fachthemen/Telekommunikation/Nummerierung/DramaNumbers/artikel.html)).
+- **UK numbers** use the Ofcom numbers for drama, mobile `07700 900000` to `900999` and London `020 7946 0000` to `0999`, which Ofcom does not allocate to providers ([Ofcom, numbers for drama](https://www.ofcom.org.uk/phones-and-broadband/phone-numbers/numbers-for-drama)).
+- **Austrian numbers** are random, in the mobile ranges (0)650 to (0)699. Checked in November 2026: RTR, the Austrian regulator, publishes no block of fictional or reserved numbers, and names no unassigned mobile prefix; the gaps in its list of assignable mobile prefixes ((0)654, (0)656, (0)658, (0)662) are the start of Salzburg-region landline area codes, so they are no safer ([RTR, mobile numbers](https://www.rtr.at/TKP/was_wir_tun/telekommunikation/nummerierung/nationaleRufnummern/mobileN.de.html)). The numbers are invented, not taken from anyone, but not guaranteed to be unassigned.
 - **IBANs, SV-Nummern and VAT IDs** are random with valid check digits, plus the documentation IBANs `DE89 3704 0044 0532 0130 00` and `AT61 1904 3002 3457 3201` and the textbook SV-Nummer `1237 010180`.
 - **Card numbers** are the published test numbers of Visa, Mastercard and American Express.
 - **Surnames** are invented. First names are common ones. Street names are generic; towns and postcodes are real places, which are not personal data on their own.
