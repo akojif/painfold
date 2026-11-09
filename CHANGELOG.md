@@ -16,6 +16,7 @@ The first release: remove personal data from a feedback file in the browser and 
 - **Privacy:** a strict Content-Security-Policy, no cookies, no analytics, and a "What leaves your browser" panel that lists every network request. The only stored setting is the theme.
 - **Interface:** light and dark themes (or follow the system), full keyboard operation of the review, reduced motion respected, tested at 320px wide.
 - **Roadmap page** in the app: what v0.1 does and what comes next, kept in step with ROADMAP.md by a test.
+- **A 404 page** for unknown addresses, with a real 404 status.
 - **Measured quality:** detection recall and precision per type and language on a generated set and on hand-written hard cases, published in docs/accuracy.md and checked in CI; a 5,000-row file is cleaned in about 1.5 seconds.
 
 ### Known limits
