@@ -24,10 +24,14 @@ test('the roadmap page is prerendered and lists every stage with the current one
   await expect(stages.first()).toHaveAttribute('aria-current', 'step')
   await expect(stages.first()).toContainText('Current stage')
   await expect(stages.first()).toContainText('Available')
-  await expect(stages.nth(1)).toContainText('Planned')
+  await expect(stages.nth(1)).toContainText('Next')
+  await expect(stages.nth(2)).toContainText('Planned')
   await expect(page.getByRole('link', { name: 'Read the full roadmap on GitHub' })).toHaveAttribute('href', 'https://github.com/akojif/painfold/blob/main/ROADMAP.md')
   await expect(page.getByRole('navigation', { name: 'Steps' })).toHaveCount(0)
-  await expect(page.locator('footer')).toContainText('Your file is never uploaded. It stays in this browser.')
+  await expect(page.locator('footer').getByRole('list', { name: 'About Painfold' }).getByRole('listitem')).toHaveText(['Your file is never uploaded. It stays in this browser.', 'No cookies', 'No account'])
+  const source = page.locator('footer').getByRole('link', { name: 'Open source' })
+  await expect(source).toHaveAttribute('href', 'https://github.com/akojif/painfold')
+  await expect(source.locator('svg')).toHaveCount(1)
 })
 
 test('the download step links to the roadmap page and back keeps the cleaned file', async ({ page }) => {

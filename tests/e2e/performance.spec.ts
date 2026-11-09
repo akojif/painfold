@@ -5,7 +5,7 @@ import { expect, test } from './fixtures'
 // Stage 1 is done when a 5,000-row file is cleaned in under 10 seconds on a
 // normal laptop: import, column step, detection, review and export, clicked
 // straight through. Shared CI runners are slower, so CI gets twice the time;
-// the number in the README comes from `npm run bench` on a laptop.
+// the number in docs/accuracy.md comes from `npm run bench` on a laptop.
 const ROWS = 5000
 const BUDGET = process.env.CI ? 20_000 : 10_000
 

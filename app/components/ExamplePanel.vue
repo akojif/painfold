@@ -11,12 +11,13 @@ onMounted(() => {
 })
 onBeforeUnmount(() => clearTimeout(timer))
 
+// Each value found, and the placeholder it becomes.
 const values = [
-  { type: 'EMAIL', value: 'anna.huber@example.com', rows: 3, token: '[EMAIL_1]' },
-  { type: 'PHONE', value: '+49 30 23125 417', rows: 1, token: '[PHONE_1]' },
-  { type: 'IBAN', value: 'AT61 1904 3002 3457 3201', rows: 2 },
-  { type: 'ADDRESS', value: 'Lindengasse 5/2/7', rows: 1 },
-  { type: 'DATE_OF_BIRTH', value: '12.03.1987', rows: 1 },
+  { type: 'EMAIL', value: 'anna.huber@example.com', token: '[EMAIL_1]' },
+  { type: 'PHONE', value: '+49 30 23125 417', token: '[PHONE_1]' },
+  { type: 'IBAN', value: 'AT61 1904 3002 3457 3201', token: '[IBAN_1]' },
+  { type: 'ADDRESS', value: 'Lindengasse 5/2/7', token: '[ADDRESS_1]' },
+  { type: 'DATE_OF_BIRTH', value: '12.03.1987', token: '[DATE_OF_BIRTH_1]' },
 ] as const
 </script>
 
@@ -69,24 +70,27 @@ const values = [
       <p class="px-5 pt-4 pb-1 text-xs text-fg-muted">
         {{ $t('example.found') }}
       </p>
-      <ul class="px-2 pb-3">
+      <!-- One grid for all rows (subgrid), so values, arrows and placeholders line up.
+           On small screens the type is left out: the placeholder names it. -->
+      <ul class="grid grid-cols-[minmax(0,1fr)_auto_auto] px-2 pb-3 sm:grid-cols-[auto_minmax(0,1fr)_auto_auto]">
         <li
           v-for="item in values"
           :key="item.type"
-          class="grid grid-cols-[7.5rem_minmax(0,1fr)_auto] items-center gap-3 rounded-sm px-3 py-1.5 text-sm"
+          class="col-span-3 grid grid-cols-subgrid items-center gap-x-2.5 rounded-sm px-3 py-1.5 text-sm sm:col-span-4"
         >
-          <span class="truncate text-fg-muted">{{ $t(`typeOne.${item.type}`) }}</span>
+          <span class="whitespace-nowrap text-fg-muted max-sm:hidden">{{ $t(`typeOne.${item.type}`) }}</span>
+          <span class="truncate font-mono text-xs text-fg-muted">{{ item.value }}</span>
+          <svg
+            viewBox="0 0 16 16"
+            class="size-3 fill-none stroke-current stroke-[1.5] text-fg-muted"
+          ><path d="M3 8h10m-3.5-3.5L13 8l-3.5 3.5" /></svg>
+          <!-- The token's space is kept before it appears, so the row does not shift. -->
           <RedactionToken
-            v-if="cleaned && 'token' in item"
             class="justify-self-start"
+            :class="{ invisible: !cleaned }"
             :placeholder="item.token"
-            motion="wipe"
+            :motion="cleaned ? 'wipe' : undefined"
           />
-          <span
-            v-else
-            class="truncate font-mono text-xs"
-          >{{ item.value }}</span>
-          <span class="text-xs text-fg-muted tabular-nums">{{ $t('example.rows', { n: item.rows }, item.rows) }}</span>
         </li>
       </ul>
     </div>

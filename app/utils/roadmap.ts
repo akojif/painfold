@@ -2,7 +2,8 @@
 // interface text, so they live in i18n/locales under roadmap.stages.<id>;
 // tests/unit/roadmap.test.ts checks versions and names against ROADMAP.md.
 // Change a status here when work on a stage starts or it is released.
-export type StageStatus = 'available' | 'inProgress' | 'planned'
+// next: the stage after the current one, not started yet.
+export type StageStatus = 'available' | 'inProgress' | 'next' | 'planned'
 export type StageId = 'clean' | 'names' | 'jobs' | 'report' | 'launch'
 
 export interface RoadmapStage {
@@ -13,7 +14,7 @@ export interface RoadmapStage {
 
 export const ROADMAP_STAGES: readonly RoadmapStage[] = [
   { id: 'clean', version: 'v0.1', status: 'available' },
-  { id: 'names', version: 'v0.2', status: 'planned' },
+  { id: 'names', version: 'v0.2', status: 'next' },
   { id: 'jobs', version: 'v0.3', status: 'planned' },
   { id: 'report', version: 'v0.4', status: 'planned' },
   { id: 'launch', version: 'v1.0', status: 'planned' },

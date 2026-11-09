@@ -13,9 +13,12 @@
     }
   },
   "footer": {
-    "source": "Source code",
+    "source": "Open source",
     "roadmap": "Roadmap",
-    "credit": "Built with love by {name}"
+    "credit": "Built with love by {name}",
+    "factsLabel": "About Painfold",
+    "noCookies": "No cookies",
+    "noAccount": "No account"
   },
   "start": {
     "headline": "Find what hurts your customers. Without exposing who they are.",
@@ -39,12 +42,6 @@
         "title": "Decide what to build",
         "when": "v0.4"
       }
-    },
-    "trustLabel": "About Painfold",
-    "trust": {
-      "openSource": "Open source",
-      "noCookies": "No cookies",
-      "noAccount": "No account"
     },
     "dropOverlay": "Drop to open. Nothing is uploaded."
   },
@@ -315,7 +312,6 @@
     "phone": "+49 30 23125 417",
     "email": "anna.huber{'@'}example.com",
     "found": "Found in the file",
-    "rows": "1 row | {n} rows",
     "description": "Example: in a support ticket, a phone number and an email address are replaced by the placeholders [PHONE_1] and [EMAIL_1]."
   },
   "typeManyLower": {
@@ -355,7 +351,8 @@
     "status": {
       "available": "Available",
       "inProgress": "In progress",
-      "planned": "Planned"
+      "planned": "Planned",
+      "next": "Next"
     },
     "stagesLabel": "Stages",
     "full": "Read the full roadmap on GitHub",

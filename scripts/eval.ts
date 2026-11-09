@@ -3,7 +3,7 @@
 // hand-written hard cases separately.
 //
 //   node scripts/eval.ts            print the tables as Markdown
-//   node scripts/eval.ts --write    also update the numbers in README.md
+//   node scripts/eval.ts --write    also update the numbers in docs/accuracy.md
 //   node scripts/eval.ts --misses   list every missed value and wrong detection
 //
 // Rules:
@@ -107,15 +107,15 @@ export function readItems(path: string): EvalItem[] {
   return readFileSync(path, 'utf8').trim().split('\n').map(line => JSON.parse(line) as EvalItem)
 }
 
-export const README_PATH = 'README.md'
+export const ACCURACY_PATH = 'docs/accuracy.md'
 const START = '<!-- accuracy:start -->'
 const END = '<!-- accuracy:end -->'
 
-/** README.md with the text between the accuracy markers replaced. */
+/** The accuracy page with the text between its markers replaced. */
 export function withAccuracy(readme: string, tables: string): string {
   const start = readme.indexOf(START)
   const end = readme.indexOf(END)
-  if (start === -1 || end < start) throw new Error(`README.md needs ${START} and ${END}`)
+  if (start === -1 || end < start) throw new Error(`${ACCURACY_PATH} needs ${START} and ${END}`)
   return `${readme.slice(0, start + START.length)}\n${tables}\n${readme.slice(end)}`
 }
 
@@ -135,5 +135,5 @@ if (import.meta.main) {
       for (const { id, kind, type, text } of mistakes.filter(mistake => !NOT_DETECTED_YET.includes(mistake.type))) console.log(`  ${id}  ${kind.padEnd(6)}  ${type.padEnd(13)}  ${text}`)
     }
   }
-  if (process.argv.includes('--write')) writeFileSync(README_PATH, withAccuracy(readFileSync(README_PATH, 'utf8'), tables))
+  if (process.argv.includes('--write')) writeFileSync(ACCURACY_PATH, withAccuracy(readFileSync(ACCURACY_PATH, 'utf8'), tables))
 }

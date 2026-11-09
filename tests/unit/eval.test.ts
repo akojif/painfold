@@ -46,8 +46,8 @@ describe('evaluate', () => {
 })
 
 describe('published numbers', () => {
-  it('README.md shows the numbers the detectors reach today (run `npm run eval -- --write` after changing a detector)', () => {
-    const readme = readFileSync(new URL('../../README.md', import.meta.url), 'utf8')
-    expect(withAccuracy(readme, currentTables())).toBe(readme)
+  it('docs/accuracy.md shows the numbers the detectors reach today (run `npm run eval -- --write` after changing a detector)', () => {
+    const page = readFileSync(new URL('../../docs/accuracy.md', import.meta.url), 'utf8')
+    expect(withAccuracy(page, currentTables())).toBe(page)
   })
 })
