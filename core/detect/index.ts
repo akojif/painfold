@@ -1,12 +1,17 @@
 import type { PiiType } from '../pii-types.ts'
+import { cardDetector } from './card.ts'
 import { emailDetector } from './email.ts'
+import { ibanDetector } from './iban.ts'
 import { ipDetector } from './ip.ts'
+import { svnrDetector } from './svnr.ts'
 import { urlDetector } from './url.ts'
+import { vatDetector } from './vat.ts'
 import type { Detection, Detector } from './types.ts'
 
 export type { Detection, Detector } from './types.ts'
 
-export const DETECTORS: readonly Detector[] = [emailDetector, urlDetector, ipDetector]
+// The order is the order the interface lists them in.
+export const DETECTORS: readonly Detector[] = [emailDetector, ibanDetector, cardDetector, svnrDetector, vatDetector, urlDetector, ipDetector]
 
 /** The types Painfold can find today; the interface lists exactly these. */
 export const DETECTED_TYPES: readonly PiiType[] = DETECTORS.map(detector => detector.type)

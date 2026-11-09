@@ -3,8 +3,8 @@ import type { PiiType } from '../pii-types.ts'
 
 /**
  * Values that differ only in ways that do not change who they point to share
- * a placeholder: case in emails and IP addresses, scheme and host case in URLs.
- * Detectors added later (phone, IBAN) extend this with their own rules.
+ * a placeholder: case in emails and IP addresses, scheme and host case in URLs,
+ * spaces, dashes and case in IBANs, card numbers, SV-Nummern and VAT IDs.
  */
 export function normalizeValue(type: PiiType, value: string): string {
   switch (type) {
@@ -13,13 +13,18 @@ export function normalizeValue(type: PiiType, value: string): string {
       return value.toLowerCase()
     case 'URL':
       return value.replace(/^(?:https?:\/\/)?[^/?#]+/i, origin => origin.toLowerCase().replace(/^https?:\/\//, ''))
+    case 'IBAN':
+    case 'CARD':
+    case 'SVNR':
+    case 'VAT_ID':
+      return value.replace(/[\s-]/g, '').toUpperCase()
     default:
       return value.replace(/\s+/g, ' ').trim()
   }
 }
 
 // Placeholder labels read as plain words where the internal type name does not.
-const LABELS: Partial<Record<PiiType, string>> = { URL: 'LINK' }
+const LABELS: Partial<Record<PiiType, string>> = { URL: 'LINK', VAT_ID: 'VAT' }
 
 /** The word inside a placeholder, e.g. EMAIL in [EMAIL_3] or LINK for a URL. */
 export function placeholderLabel(type: PiiType): string {

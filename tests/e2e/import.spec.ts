@@ -17,12 +17,12 @@ test.describe('start screen', () => {
   test('promises the file stays local, offers the sample file and lists what is removed', async ({ page }) => {
     await page.goto('/')
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Take the personal data out. Keep the feedback.')
-    await expect(page.getByText('Painfold removes email addresses, links, and IP addresses from support tickets and surveys. Your file is never uploaded. It stays in this browser.')).toBeVisible()
+    await expect(page.getByText('Painfold removes email addresses, IBANs, card numbers, Austrian social security numbers, VAT IDs, links, and IP addresses from support tickets and surveys. Your file is never uploaded. It stays in this browser.')).toBeVisible()
     await expect(page.getByText('Stays in this browser', { exact: true })).toBeVisible()
     await expect(page.getByRole('button', { name: 'Try the sample file' })).toBeVisible()
     await expect(page.getByText('200 made-up tickets, no real people')).toBeVisible()
     const removed = page.getByRole('list', { name: 'What gets removed' })
-    await expect(removed.getByRole('listitem')).toHaveText(['[EMAIL]email addresses', '[LINK]links', '[IP]IP addresses', '[NAME] in v0.2names in v0.2'])
+    await expect(removed.getByRole('listitem')).toHaveText(['[EMAIL]email addresses', '[IBAN]IBANs', '[CARD]card numbers', '[SVNR]Austrian social security numbers', '[VAT]VAT IDs', '[LINK]links', '[IP]IP addresses', '[NAME] in v0.2names in v0.2'])
   })
 
   test('shows that nothing has left the browser', async ({ page }) => {
