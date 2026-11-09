@@ -187,9 +187,10 @@ async function startOver() {
         </p>
         <NuxtLink
           to="/roadmap"
-          class="focus-ring mt-2 inline-block rounded-sm text-sm text-accent underline-offset-4 hover:underline"
+          class="group focus-ring mt-2 inline-flex items-center gap-1 rounded-sm text-sm text-accent underline-offset-4 hover:underline"
         >
           {{ $t('download.next.link') }}
+          <LinkArrow />
         </NuxtLink>
       </section>
     </div>

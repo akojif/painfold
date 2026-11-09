@@ -11,7 +11,7 @@
   },
   "scripts": {
     "dev": "nuxt dev",
-    "generate": "nuxt generate && node scripts/apply-csp.ts",
+    "generate": "nuxt generate && node scripts/remove-spa-fallback.ts && node scripts/apply-csp.ts",
     "serve": "node scripts/serve-static.ts",
     "lint": "eslint .",
     "typecheck": "nuxt typecheck",

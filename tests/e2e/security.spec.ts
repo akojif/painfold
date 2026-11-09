@@ -53,7 +53,7 @@ test('the theme choice is the only thing stored in the browser', async ({ page, 
   expect(await context.cookies()).toEqual([])
 })
 
-for (const path of ['/', '/200.html', '/404.html']) {
+for (const path of ['/', '/roadmap', '/404.html']) {
   test(`the CSP meta tag on ${path} comes before everything but the charset`, async ({ request }) => {
     const html = await (await request.get(path)).text()
     const head = html.slice(html.indexOf('<head>') + '<head>'.length, html.indexOf('</head>'))

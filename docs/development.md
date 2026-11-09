@@ -42,6 +42,7 @@ Every pull request runs three jobs: lint, typecheck, unit tests, the detection a
 The live site is a static build on Vercel. `vercel.json` (generated from `deploy/headers.ts`) sets the install and build commands, so Vercel runs the same `npm run generate` as CI, including the CSP check, and serves `.output/public` with the security headers. No Vercel framework preset, server functions or analytics are used.
 
 - `main` deploys to https://painfold.vercel.app; every pull request gets a preview deployment.
+- Unknown addresses get the 404 page with status 404. The build removes Nuxt's `200.html` single-page fallback (`scripts/remove-spa-fallback.ts`), which hosts would otherwise serve for every unknown path with status 200; every page is prerendered, so it is not needed.
 - Turn off the Vercel Toolbar for preview deployments (Project Settings, General): it injects a script from another origin, which the CSP blocks.
 - Any static host works the same way: serve `.output/public` with the headers from `headersFor()`.
 

@@ -25,7 +25,15 @@ const contentTypes: Record<string, string> = {
 }
 
 async function resolveFile(urlPath: string): Promise<string | undefined> {
-  const safePath = normalize(decodeURIComponent(urlPath)).replace(/^(\.\.[/\\])+/, '')
+  let decoded: string
+  try {
+    decoded = decodeURIComponent(urlPath)
+  }
+  catch {
+    // A malformed address such as /%E0%A4 names no file; it gets the 404 page.
+    return undefined
+  }
+  const safePath = normalize(decoded).replace(/^(\.\.[/\\])+/, '')
   const candidate = join(root, safePath)
   if (!candidate.startsWith(root)) return undefined
 

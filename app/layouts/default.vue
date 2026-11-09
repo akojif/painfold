@@ -1,4 +1,8 @@
 <script setup lang="ts">
+// Set here rather than in app.vue: the error page (404) renders this layout but not app.vue.
+useHead({
+  bodyAttrs: { class: 'bg-canvas text-fg font-sans text-base antialiased' },
+})
 const route = useRoute()
 // A name and a URL, the same in every language, so they are not in the locale files.
 const author = { name: 'Francis Akoji', url: 'https://francisakoji.com' }
