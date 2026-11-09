@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { cleanedFileName, cleanedTable, removedByType, toCsv } from '~~/core/export/csv'
+import { cleanedFileName, cleanedTable, removedByType, reportFileName, toCsv } from '~~/core/export/csv'
+import { cleaningReport, reportTimestamp } from '~~/core/export/report'
 
 definePageMeta({
   step: 3,
@@ -20,13 +21,38 @@ const kept = computed(() => (revision.value, review.value?.findings.filter(findi
 const dropped = computed(() => table.value?.columns.filter((_, index) => roles.value[index] === 'drop') ?? [])
 const unchecked = computed(() => table.value?.columns.filter((_, index) => roles.value[index] === 'keep') ?? [])
 
+const { version } = useRuntimeConfig().public
+
 function download() {
   if (!table.value || !review.value) return
-  const csv = toCsv(cleanedTable(table.value, roles.value, review.value), {
-    delimiter: table.value.delimiter ?? ',',
-    note: t('download.fileNote', { limits: t('review.limits') }),
+  saveTextFile(fileName.value, toCsv(cleanedTable(table.value, roles.value, review.value), { delimiter: table.value.delimiter ?? ',' }))
+}
+
+function downloadReport() {
+  if (!table.value) return
+  const notes = [
+    ...(notReviewed.value > 0 ? [t('download.notReviewed', { n: number(notReviewed.value) }, notReviewed.value)] : []),
+    ...(kept.value > 0 ? [t('download.kept', { n: number(kept.value) }, kept.value)] : []),
+    ...(dropped.value.length > 0 ? [t('download.dropped', { columns: dropped.value.join(', ') })] : []),
+    ...(unchecked.value.length > 0 ? [t('download.unchecked', { columns: unchecked.value.join(', ') })] : []),
+  ]
+  const report = cleaningReport({
+    title: t('report.title'),
+    details: [
+      [t('report.original'), table.value.fileName],
+      [t('report.cleaned'), fileName.value],
+      [t('report.rows'), number(table.value.rows.length)],
+      [t('report.date'), reportTimestamp(new Date())],
+      [t('report.version'), String(version)],
+    ],
+    removedHeading: t('report.removedHeading'),
+    removed: removed.value.map(([type, count]) => [t(`typeMany.${type}`), number(count)]),
+    nothingRemoved: t('report.nothingRemoved'),
+    notes,
+    limitsHeading: t('report.limitsHeading'),
+    limits: t('review.limits'),
   })
-  saveTextFile(fileName.value, csv)
+  saveTextFile(reportFileName(table.value.fileName), report, 'text/plain;charset=utf-8')
 }
 
 async function startOver() {
@@ -97,6 +123,13 @@ async function startOver() {
         >
           {{ $t('download.button', { name: fileName }) }}
         </button>
+        <button
+          type="button"
+          class="rounded-control border border-rule-strong bg-sheet px-5 py-3 outline-signal hover:border-ink focus-visible:outline-2 focus-visible:outline-offset-2"
+          @click="downloadReport"
+        >
+          {{ $t('download.reportButton') }}
+        </button>
         <NuxtLink
           to="/review"
           class="text-signal underline underline-offset-4 outline-signal focus-visible:outline-2 focus-visible:outline-offset-2"
@@ -113,7 +146,7 @@ async function startOver() {
       </div>
 
       <div class="mt-8 space-y-2 text-sm text-ink-muted">
-        <p>{{ $t('download.noteInFile') }}</p>
+        <p>{{ $t('download.reportExplain') }}</p>
         <p>{{ $t('download.mapStays') }}</p>
         <p class="max-w-[60ch] border-l-4 border-rule-strong pl-3">
           {{ $t('review.limits') }}

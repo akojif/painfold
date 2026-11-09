@@ -30,21 +30,26 @@ export function cleanedTable(table: { columns: string[], rows: string[][] }, rol
 }
 
 /**
- * The cleaned file as CSV text: a byte order mark so Excel reads UTF-8,
- * CRLF line endings, every cell protected against formulas, and the limits
- * note as the last line, after an empty line, so the header stays first.
+ * The cleaned file as CSV text, data only: a byte order mark so Excel reads
+ * UTF-8, CRLF line endings, and every cell protected against formulas. Notes
+ * about the cleaning go in the separate cleaning report.
  */
-export function toCsv(file: CleanedFile, options: { delimiter?: string, note?: string } = {}): string {
+export function toCsv(file: CleanedFile, options: { delimiter?: string } = {}): string {
   const delimiter = options.delimiter ?? ','
   const line = (cells: string[]) => cells.map(cell => quote(neutralizeFormula(cell), delimiter)).join(delimiter)
-  const lines = [line(file.header), ...file.rows.map(line)]
-  if (options.note) lines.push('', line([options.note]))
-  return `\uFEFF${lines.join('\r\n')}\r\n`
+  return `\uFEFF${[line(file.header), ...file.rows.map(line)].join('\r\n')}\r\n`
 }
+
+const baseName = (fileName: string) => fileName.replace(/\.[^.]+$/, '') || 'feedback'
 
 /** The cleaned file's name: "tickets.xlsx" becomes "tickets_cleaned.csv". */
 export function cleanedFileName(fileName: string): string {
-  return `${fileName.replace(/\.[^.]+$/, '') || 'feedback'}_cleaned.csv`
+  return `${baseName(fileName)}_cleaned.csv`
+}
+
+/** The cleaning report's name: "tickets.xlsx" becomes "tickets_cleaning-report.txt". */
+export function reportFileName(fileName: string): string {
+  return `${baseName(fileName)}_cleaning-report.txt`
 }
 
 /**

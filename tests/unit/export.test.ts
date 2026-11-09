@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { detectTable } from '../../core/detect/table'
-import { cleanedFileName, cleanedTable, leakedValues, neutralizeFormula, removedByType, toCsv } from '../../core/export/csv'
+import { cleanedFileName, cleanedTable, leakedValues, neutralizeFormula, removedByType, reportFileName, toCsv } from '../../core/export/csv'
 import { importFile } from '../../core/import'
 import { Review } from '../../core/review/review'
 
@@ -49,16 +49,16 @@ describe('cleanedTable and toCsv', () => {
     ])
   })
 
-  it('writes CSV with a byte order mark, CRLF, quoting, formula protection and the note last', async () => {
+  it('writes data-only CSV with a byte order mark, CRLF, quoting and formula protection', async () => {
     const { table, roles, review } = await setUp()
-    const csv = toCsv(cleanedTable(table, roles, review), { note: 'Note from Painfold: check it.' })
+    const csv = toCsv(cleanedTable(table, roles, review))
     expect(csv.startsWith('﻿')).toBe(true)
     const lines = csv.slice(1).split('\r\n')
     expect(lines[0]).toBe('id,message,note')
     expect(lines[1]).toBe('1,"Mail [EMAIL_1], IP [IP_1]",\'=1+1')
     expect(lines[2]).toBe('2,"Again [EMAIL_1] ""soon""","-12,50"')
     expect(lines[3]).toBe("3,\"No findings, just text\",'@SUM(A1)")
-    expect(lines.slice(4)).toEqual(['', 'Note from Painfold: check it.', ''])
+    expect(lines.slice(4)).toEqual([''])
   })
 
   it('uses the delimiter it is given', async () => {
@@ -91,8 +91,12 @@ describe('leakedValues (the check behind the "nothing removed reaches the downlo
   })
 })
 
-describe('cleanedFileName', () => {
-  it.each([['tickets.csv', 'tickets_cleaned.csv'], ['Rückmeldungen.xlsx', 'Rückmeldungen_cleaned.csv'], ['notes', 'notes_cleaned.csv'], ['.csv', 'feedback_cleaned.csv']])('%s becomes %s', (input, expected) => {
+describe('file names', () => {
+  it.each([['tickets.csv', 'tickets_cleaned.csv'], ['Rückmeldungen.xlsx', 'Rückmeldungen_cleaned.csv'], ['notes', 'notes_cleaned.csv'], ['.csv', 'feedback_cleaned.csv']])('%s is cleaned to %s', (input, expected) => {
     expect(cleanedFileName(input)).toBe(expected)
+  })
+
+  it('names the cleaning report after the original file', () => {
+    expect(reportFileName('tickets.xlsx')).toBe('tickets_cleaning-report.txt')
   })
 })

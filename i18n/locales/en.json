@@ -204,9 +204,9 @@
     "button": "Download {name}",
     "back": "Back to review",
     "startOver": "Clean another file",
-    "noteInFile": "The file ends with a note on the limits of automatic detection.",
     "mapStays": "The list of original values behind each placeholder stays in this browser and is gone when you close the tab.",
-    "fileNote": "Note from Painfold: {limits}"
+    "reportButton": "Download cleaning report (.txt)",
+    "reportExplain": "The cleaned file holds only your data. The cleaning report lists what was replaced, with the date, the Painfold version and the limits of automatic detection."
   },
   "typeMany": {
     "EMAIL": "Email addresses",
@@ -242,5 +242,16 @@
     "bytes": "{n} B",
     "kilobytes": "{n} kB",
     "close": "Close"
+  },
+  "report": {
+    "title": "Painfold cleaning report",
+    "original": "Original file",
+    "cleaned": "Cleaned file",
+    "date": "Cleaned on",
+    "version": "Painfold version",
+    "rows": "Rows",
+    "removedHeading": "Replaced with placeholders",
+    "nothingRemoved": "Nothing was found or marked.",
+    "limitsHeading": "Limits"
   }
 }

@@ -1,4 +1,5 @@
 import tailwindcss from '@tailwindcss/vite'
+import { version } from './package.json'
 
 // Painfold is a fully static site: everything that touches a user's file runs
 // in the browser. There are no server routes, so there is nowhere for data to go.
@@ -15,6 +16,11 @@ export default defineNuxtConfig({
   },
 
   css: ['~/assets/css/main.css'],
+
+  // The cleaning report names the Painfold version that produced it.
+  runtimeConfig: {
+    public: { version },
+  },
 
   compatibilityDate: '2026-11-01',
 

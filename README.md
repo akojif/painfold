@@ -17,6 +17,19 @@ The first release (v0.1, Clean) removes personal data from a CSV or XLSX file in
 - Numbers are counted by code, and quotes are checked against your data.
 - No cookies, no analytics, no tracking. An end-to-end test checks that no cookies are set.
 
+## What you download
+
+**The cleaned file** (`<name>_cleaned.csv`) holds only your data, so it can go straight into a spreadsheet or another tool:
+
+- Columns set to Drop are left out. Columns set to Keep as is are copied unchanged.
+- In checked columns, every finding you removed, and every finding you did not review, is replaced by a placeholder such as `[EMAIL_3]`. The same value always gets the same placeholder. Findings you kept stay as they were.
+- UTF-8 with a byte order mark (so Excel shows umlauts correctly), and the same delimiter as the original CSV: a semicolon file stays a semicolon file. Files imported from XLSX are saved with commas.
+- **Formula protection:** a cell that starts with `=`, `+`, `-` or `@` (also after leading spaces), a tab or a carriage return could run as a formula when the file is opened in Excel, LibreOffice or Google Sheets ("CSV injection"). Painfold puts an apostrophe in front of such cells, for example `'=1+1` or `'+43 664 1234567`, so spreadsheets show them as text. Plain numbers such as `-12,50` are left alone. If you process the file with other tools, remove a leading apostrophe where you need the original value.
+
+**The cleaning report** (`<name>_cleaning-report.txt`) goes with it: the file names, the number of rows, the date, the Painfold version, how many values of each type were replaced, what was not reviewed, kept or left out, and the limits of automatic detection.
+
+The list of original values behind each placeholder is never exported. It stays in the browser tab and is gone when you close it.
+
 ## Development
 
 Requires Node 24 and npm 11. The version is pinned in `.nvmrc`; with [nvm](https://github.com/nvm-sh/nvm), run `nvm use` in the project folder (or `nvm install` the first time) before any npm command. If your shell still reports another version with `node -v`, run `hash -r` or open a new terminal.

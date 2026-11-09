@@ -57,8 +57,9 @@ async function cleanFile(page: Page, file: { name: string, mimeType: string, buf
 
   await page.getByRole('button', { name: 'Continue to download' }).click()
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Your cleaned file is ready.')
-  const [download] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: /^Download / }).click()])
-  return { requests, download, csv: await text(download) }
+  const [download] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: /^Download tickets_cleaned/ }).click()])
+  const [reportDownload] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: 'Download cleaning report (.txt)' }).click()])
+  return { requests, download, csv: await text(download), reportDownload, report: await text(reportDownload) }
 }
 
 for (const [format, file] of [
@@ -88,12 +89,31 @@ for (const [format, file] of [
       expect(lines[1]).toBe("1,Bitte an [EMAIL_1] schreiben. [NAME_1],'=1+1")
       expect(lines[2]).toBe("2,\"Login von 192.0.2.7, [NAME_1] ist informiert\",'-2+3")
       expect(lines[3]).toBe("3,Siehe [LINK_1] bitte,'@SUM(A1)")
-      expect(lines[4]).toBe('')
-      expect(lines[5]).toMatch(/^Note from Painfold: Automatic detection can miss personal data\./)
+      expect(lines.slice(4)).toEqual(['']) // data only: nothing after the last row
+      expect(csv).not.toContain('Painfold')
       for (const removed of ['anna@example.com', 'james@example.org', 'Anna Huber', 'https://example.com/rechnung/88213']) expect(csv).not.toContain(removed)
     })
   })
 }
+
+test('the cleaning report lists the files, date, version, removals and limits', async ({ page }) => {
+  const { reportDownload, report } = await cleanFile(page, { name: 'tickets.csv', mimeType: 'text/csv', buffer: Buffer.from(csvText) })
+  expect(reportDownload.suggestedFilename()).toBe('tickets_cleaning-report.txt')
+  const lines = report.split('\r\n')
+  expect(lines[0]).toBe('Painfold cleaning report')
+  expect(report).toMatch(/Original file\s+tickets\.csv/)
+  expect(report).toMatch(/Cleaned file\s+tickets_cleaned\.csv/)
+  expect(report).toMatch(/Rows\s+3/)
+  expect(report).toMatch(/Cleaned on\s+\d{4}-\d\d-\d\d \d\d:\d\d \(UTC[+-]\d\d:\d\d\)/)
+  expect(report).toMatch(/Painfold version\s+\d+\.\d+\.\d+/)
+  expect(report).toMatch(/Email addresses\s+1\r\n/)
+  expect(report).toMatch(/Names\s+2\r\n/)
+  expect(report).toMatch(/Links\s+1\r\n/)
+  expect(report).toContain('Includes 1 finding that was not reviewed.')
+  expect(report).toContain('Left out: customer_email.')
+  expect(report.replace(/\r\n/g, ' ')).toContain('Automatic detection can miss personal data. Review the results before sharing the cleaned file.')
+  for (const removed of ['anna@example.com', 'Anna Huber', 'https://example.com/rechnung/88213']) expect(report).not.toContain(removed)
+})
 
 test('the download step summarises what the file contains', async ({ page }) => {
   await cleanFile(page, { name: 'tickets.csv', mimeType: 'text/csv', buffer: Buffer.from(csvText) })
@@ -105,7 +125,7 @@ test('the download step summarises what the file contains', async ({ page }) => 
   await expect(summary).toContainText('1 finding was kept.')
   await expect(summary).toContainText('Left out: customer_email.')
   await expect(summary).toContainText('Copied without checking: id, note.')
-  await expect(summary).toContainText('The file ends with a note on the limits of automatic detection.')
+  await expect(summary).toContainText('The cleaned file holds only your data. The cleaning report lists what was replaced')
 })
 
 test('a semicolon file is downloaded with semicolons', async ({ page }) => {
@@ -113,7 +133,7 @@ test('a semicolon file is downloaded with semicolons', async ({ page }) => {
   await page.getByTestId('file-input').setInputFiles({ name: 'de.csv', mimeType: 'text/csv', buffer: Buffer.from('Nr;Rückmeldung\n1;Bitte an anna@example.com schreiben, danke\n') })
   await page.getByRole('button', { name: /Find personal data/ }).click()
   await page.getByRole('button', { name: 'Continue to download' }).click()
-  const [download] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: /^Download / }).click()])
+  const [download] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: /^Download de_cleaned/ }).click()])
   const lines = (await text(download)).slice(1).split('\r\n')
   expect(lines.slice(0, 2)).toEqual(['Nr;Rückmeldung', '1;Bitte an [EMAIL_1] schreiben, danke'])
 })
