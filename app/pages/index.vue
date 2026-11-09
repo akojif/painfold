@@ -20,7 +20,14 @@ const summary = useTemplateRef<HTMLElement>('summary')
 // The file's bytes stay in memory so another sheet of a workbook can be read.
 let lastFile: { name: string, bytes: Uint8Array } | undefined
 
-const types = computed(() => list(DETECTED_TYPES.map(type => t(`types.${type}`))))
+// The lead names the first few types and counts the rest; the list below it shows every one.
+const LEAD_TYPES = 3
+const lead = computed(() => {
+  const named = DETECTED_TYPES.length > LEAD_TYPES + 1 ? DETECTED_TYPES.slice(0, LEAD_TYPES) : DETECTED_TYPES
+  const more = DETECTED_TYPES.length - named.length
+  const items = [...named.map(type => t(`types.${type}`)), ...(more > 0 ? [t('start.moreTypes', { n: more }, more)] : [])]
+  return t('start.lead', { types: list(items) })
+})
 const rowCount = computed(() => t('file.rows', { n: number(table.value?.rows.length ?? 0) }, table.value?.rows.length ?? 0))
 
 async function read(file: { name: string, bytes: Uint8Array }, options: { sheetName?: string, sample?: boolean } = {}) {
@@ -97,7 +104,7 @@ async function findPersonalData() {
             {{ $t('start.headline') }}
           </h1>
           <p class="mt-6 max-w-[44ch] text-lg text-ink-muted">
-            {{ $t('start.lead', { types }) }}
+            {{ lead }}
           </p>
           <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
             <button
