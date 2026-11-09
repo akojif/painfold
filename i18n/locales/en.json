@@ -72,7 +72,6 @@
     "unreadable": "This file could not be read. It may be damaged or password-protected. Try exporting it again."
   },
   "file": {
-    "summary": "{name}, {rows}",
     "rows": "no rows | 1 row | {n} rows",
     "chooseAnother": "Choose another file",
     "sheet": "Sheet",
@@ -80,22 +79,42 @@
     "ragged": "1 row had a different number of cells than the header and was filled in. | {n} rows had a different number of cells than the header and were filled in."
   },
   "columns": {
-    "feedback": "Feedback column",
-    "heading": "What happens to each column",
-    "isFeedback": "Feedback column, always checked",
+    "heading": "Choose what to check",
+    "help": "Check: searched for personal data. Keep as is: copied to the cleaned file without checking. Drop: left out of the cleaned file.",
+    "listLabel": "Columns",
+    "headers": {
+      "column": "Column",
+      "samples": "Sample values",
+      "choice": "What happens"
+    },
     "roleLabel": "What happens to {column}",
     "roles": {
       "scan": "Check",
       "keep": "Keep as is",
       "drop": "Drop"
     },
-    "personal": "Looks like personal data (“{term}”), so it is left out of the cleaned file.",
-    "empty": "(empty)",
-    "help": "Check: searched for personal data. Keep as is: copied to the cleaned file without checking. Drop: left out of the cleaned file."
+    "useAsFeedback": "Use {column} as the feedback column",
+    "isFeedback": "Feedback column, always checked",
+    "reason": {
+      "names": "Looks like names",
+      "emails": "Looks like email addresses",
+      "phones": "Looks like phone numbers",
+      "birthDates": "Looks like dates of birth",
+      "addresses": "Looks like addresses",
+      "ids": "Looks like personal IDs",
+      "noText": "Only numbers and dates"
+    },
+    "empty": "Empty column",
+    "masked": "Values hidden because this column is dropped",
+    "warning": "Contains {found}.",
+    "checkInstead": "Check it instead",
+    "summary": "Cleaned file: {columns}, {checked} checked, {kept} kept as is, {dropped} dropped",
+    "columnCount": "1 column | {n} columns",
+    "noFeedback": "No column looks like feedback. Mark the one that holds it with the circle at the start of its row."
   },
   "preview": {
-    "heading": "First {n} rows",
-    "dropped": "Dropped columns are struck through.",
+    "heading": "Show first {n} rows",
+    "note": "Only the columns that stay in the cleaned file.",
     "label": "Preview of the first rows"
   },
   "find": {

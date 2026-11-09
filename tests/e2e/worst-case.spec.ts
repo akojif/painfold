@@ -121,3 +121,98 @@ test.describe('at 320px', () => {
     for (const start of lineStarts) expect(',.;:').not.toContain(start)
   })
 })
+
+// The column step, with files that have too many, too long, empty and oddly named columns.
+const wideHeader = [
+  'Freitext-Rückmeldung des Kunden (Pflichtfeld, max. 2000 Zeichen)',
+  'customer_email_address_primary_contact',
+  'Телефон клиента',
+  'x',
+  'Rückrufnummer',
+  'notes',
+  ...Array.from({ length: 54 }, (_, i) => `custom_field_${String(i + 1).padStart(2, '0')}_${['segment', 'plan', 'region', 'channel'][i % 4]}`),
+]
+const wideRow = (i: number) => [
+  `Der Export nach DATEV bricht seit dem Update nach genau 90 Tagen ab, Ticket ${i}`,
+  `bartholomew.fitzgerald${i}@northwind-industries-holdings.example.com`,
+  `Позвоните мне ${i}`,
+  i % 2 ? 'y' : 'n',
+  ['+43 660 234 2972', '5555 5555 5555 4444', '192.0.2.7'][i % 3]!,
+  '',
+  ...Array.from({ length: 54 }, (_, j) => (j % 9 === 0 ? '' : j % 5 === 0 ? 'https://support.northwind-industries-holdings.example.com/tickets/2026/09/ZD-4481920' : `Wert ${j}`)),
+]
+const COLUMN_FILES = {
+  wide: { name: 'Kundenfeedback_Q3-2026_Export_Zendesk_alle_Kanäle_final_v12 (2).csv', text: csv(wideHeader, Array.from({ length: 6 }, (_, i) => wideRow(i + 1))) },
+  single: { name: 'single.csv', text: csv(['Feedback'], [['Bitte die Rechnungen als PDF anhängen, danke!'], ['Export dauert zu lange']]) },
+  noGuess: { name: 'short.csv', text: csv(['code', 'tag'], [['A1', 'ok'], ['B2', 'slow']]) },
+  big: { name: 'big.csv', text: csv(['message', 'ref', ...Array.from({ length: 10 }, (_, i) => `field_${i}`)], Array.from({ length: 5000 }, (_, i) => [`Bitte um Rückruf wegen Rechnung ${i}`, `+43 660 ${String(1000000 + i).slice(-7)}`, ...Array.from({ length: 10 }, (_, j) => `Wert ${j}`)])) },
+}
+
+async function openColumns(page: Page, file: { name: string, text: string }) {
+  await page.goto('/')
+  await page.getByTestId('file-input').setInputFiles({ name: file.name, mimeType: 'text/csv', buffer: Buffer.from(file.text) })
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Choose what to check')
+}
+
+for (const width of [1280, 390, 320]) {
+  test.describe(`column step at ${width}px`, () => {
+    test.use({ viewport: { width, height: 900 } })
+
+    for (const [state, file] of Object.entries(COLUMN_FILES)) {
+      test(`${state}: no sideways scroll, nothing cut off without a title`, async ({ page }) => {
+        test.setTimeout(60_000)
+        await openColumns(page, file)
+        await page.waitForTimeout(state === 'big' ? 3000 : 500)
+        expect(await sideways(page), 'columns').toBeLessThanOrEqual(0)
+        expect(await hiddenTruncation(page), 'columns').toEqual([])
+        if (out) await page.screenshot({ path: `${out}/columns-${state}-${width}.png`, fullPage: true })
+        await page.getByText(/Show first \d rows?/).click()
+        expect(await sideways(page), 'preview').toBeLessThanOrEqual(0)
+        if (out) await page.screenshot({ path: `${out}/columns-${state}-preview-${width}.png`, fullPage: true })
+      })
+    }
+  })
+}
+
+test('the survey of 5,000 rows and 12 columns finishes quickly and flags the kept phone column', async ({ page }) => {
+  await openColumns(page, COLUMN_FILES.big)
+  const started = Date.now()
+  await expect(page.getByText('Contains 5,000 phone numbers.')).toBeVisible({ timeout: 20_000 })
+  expect(Date.now() - started).toBeLessThan(5_000)
+})
+
+test('sentences win the feedback guess over a column of long links', async ({ page }) => {
+  await openColumns(page, COLUMN_FILES.wide)
+  await expect(page.getByRole('radio', { name: `Use ${wideHeader[0]} as the feedback column` })).toBeChecked()
+})
+
+test('with no feedback column guessed, the choice is visible and explained', async ({ page }) => {
+  await openColumns(page, COLUMN_FILES.noGuess)
+  await expect(page.getByText('No column looks like feedback.', { exact: false })).toBeVisible()
+  await expect(page.getByRole('radio', { name: 'Use code as the feedback column' })).toHaveCSS('opacity', '1')
+  await page.getByRole('radio', { name: 'Use tag as the feedback column' }).check()
+  await expect(page.getByText('No column looks like feedback.', { exact: false })).toHaveCount(0)
+})
+
+test('long column names wrap after separators, not mid-word', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 })
+  await openColumns(page, COLUMN_FILES.wide)
+  const name = page.getByRole('region', { name: 'Columns' }).locator(':scope > ul > li p:first-child').filter({ hasText: /^custom_field_05_segment$/ })
+  await expect(name).toHaveText('custom_field_05_segment')
+  // The character before each line break, found from where each character is drawn.
+  const beforeBreaks = await name.evaluate((element) => {
+    const range = document.createRange()
+    const characters: Array<{ character: string, top: number }> = []
+    const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT)
+    for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+      for (let i = 0; i < node.textContent!.length; i++) {
+        range.setStart(node, i)
+        range.setEnd(node, i + 1)
+        characters.push({ character: node.textContent![i]!, top: Math.round(range.getBoundingClientRect().top) })
+      }
+    }
+    return characters.flatMap((current, i) => (i > 0 && current.top > characters[i - 1]!.top + 4 ? [characters[i - 1]!.character] : []))
+  })
+  expect(beforeBreaks.length).toBeGreaterThan(0)
+  for (const character of beforeBreaks) expect('_-./').toContain(character)
+})

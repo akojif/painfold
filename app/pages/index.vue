@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { ColumnCounts } from '~~/core/detect/table'
 import { ImportError, importFile, type ImportErrorCode } from '~~/core/import'
 
 definePageMeta({ step: 1 })
@@ -6,7 +7,7 @@ definePageMeta({ step: 1 })
 const { t } = useI18n()
 const { number } = useFormat()
 const session = useSession()
-const { table, isSample, feedbackColumn, scanColumns } = session
+const { table, isSample, roles, scanColumns } = session
 const detection = useDetection()
 
 const reading = ref<string>()
@@ -21,6 +22,33 @@ let lastFile: { name: string, bytes: Uint8Array } | undefined
 
 const journey = [['clean', true], ['find', false], ['decide', false]] as const
 const trust = ['openSource', 'noCookies', 'noAccount'] as const
+const columnCounts = shallowRef<readonly ColumnCounts[]>()
+const cleanedSummary = computed(() => {
+  const count = (role: string) => roles.value.filter(current => current === role).length
+  const [checked, kept, dropped] = [count('scan'), count('keep'), count('drop')]
+  return t('columns.summary', {
+    columns: t('columns.columnCount', { n: number(checked + kept) }, checked + kept),
+    checked: number(checked),
+    kept: number(kept),
+    dropped: number(dropped),
+  })
+})
+
+// Once a file is open, the worker counts the personal data in every column, so
+// a column kept as is can be flagged before anything is reviewed. Only counts
+// come back, never values.
+watch(table, async (current) => {
+  columnCounts.value = undefined
+  if (!current) return
+  try {
+    const counts = await detection.survey(current.rows, current.columns.map((_, index) => index))
+    if (table.value === current) columnCounts.value = counts
+  }
+  catch {
+    // Without the survey there are no warnings; checking still works as before.
+  }
+})
+
 const rowCount = computed(() => t('file.rows', { n: number(table.value?.rows.length ?? 0) }, table.value?.rows.length ?? 0))
 
 async function read(file: { name: string, bytes: Uint8Array }, options: { sheetName?: string, sample?: boolean } = {}) {
@@ -213,100 +241,94 @@ async function findPersonalData() {
 
     <div
       v-else
-      class="max-w-3xl space-y-8"
+      class="max-w-4xl"
     >
-      <div class="flex flex-wrap items-start justify-between gap-x-6 gap-y-2">
-        <div>
+      <div class="grid items-start gap-x-10 gap-y-4 md:grid-cols-[minmax(0,1fr)_minmax(0,18rem)]">
+        <div class="max-w-measure">
           <h1
             ref="summary"
             tabindex="-1"
             class="text-xl font-semibold outline-none"
           >
-            {{ $t('file.summary', { name: table.fileName, rows: rowCount }) }}
+            {{ $t('columns.heading') }}
           </h1>
-          <p
-            v-if="isSample"
-            class="mt-1 text-sm text-fg-muted"
-          >
-            {{ $t('file.sample') }}
-          </p>
-          <p
-            v-if="table.raggedRows > 0"
-            class="mt-1 text-sm text-fg-muted"
-          >
-            {{ $t('file.ragged', { n: number(table.raggedRows) }, table.raggedRows) }}
+          <p class="mt-2 text-sm text-fg-muted">
+            {{ $t('columns.help') }}
           </p>
         </div>
-        <button
-          type="button"
-          class="press focus-ring h-8 rounded-md border border-line px-3 text-sm hover:border-line-strong"
-          @click="chooseAnother"
-        >
-          {{ $t('file.chooseAnother') }}
-        </button>
+        <div class="min-w-0 space-y-1 text-sm text-fg-muted md:text-right">
+          <p class="flex min-w-0 gap-1 text-fg md:justify-end">
+            <MiddleTruncate :text="table.fileName" />
+          </p>
+          <p>{{ rowCount }}</p>
+          <p v-if="isSample">
+            {{ $t('file.sample') }}
+          </p>
+          <p v-if="table.raggedRows > 0">
+            {{ $t('file.ragged', { n: number(table.raggedRows) }, table.raggedRows) }}
+          </p>
+          <label
+            v-if="(table.sheetNames?.length ?? 0) > 1"
+            class="flex items-center gap-2 md:justify-end"
+          >
+            <span>{{ $t('file.sheet') }}</span>
+            <select
+              class="focus-ring h-8 max-w-48 rounded-md border border-line-strong bg-canvas px-2 text-fg"
+              :value="table.sheetName"
+              @change="onSheet"
+            >
+              <option
+                v-for="sheet in table.sheetNames"
+                :key="sheet"
+                :value="sheet"
+              >
+                {{ sheet }}
+              </option>
+            </select>
+          </label>
+          <button
+            type="button"
+            class="focus-ring rounded-sm text-accent underline-offset-4 hover:underline"
+            @click="chooseAnother"
+          >
+            {{ $t('file.chooseAnother') }}
+          </button>
+        </div>
       </div>
 
-      <div class="flex flex-wrap gap-6">
-        <label
-          v-if="(table.sheetNames?.length ?? 0) > 1"
-          class="block text-sm"
-        >
-          <span class="block font-medium">{{ $t('file.sheet') }}</span>
-          <select
-            class="focus-ring mt-1.5 h-9 rounded-md border border-line-strong bg-canvas px-2.5"
-            :value="table.sheetName"
-            @change="onSheet"
+      <ColumnTable
+        class="mt-8"
+        :counts="columnCounts"
+      />
+      <PreviewTable class="mt-8" />
+
+      <div class="sticky bottom-0 z-10 mt-8 -mb-8 border-t border-line bg-canvas py-4 sm:-mb-10">
+        <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
+          <p
+            class="text-sm text-fg-muted tabular-nums"
+            aria-live="polite"
           >
-            <option
-              v-for="sheet in table.sheetNames"
-              :key="sheet"
-              :value="sheet"
-            >
-              {{ sheet }}
-            </option>
-          </select>
-        </label>
-
-        <label class="block text-sm">
-          <span class="block font-medium">{{ $t('columns.feedback') }}</span>
-          <select
-            class="focus-ring mt-1.5 h-9 w-72 max-w-full rounded-md border border-line-strong bg-canvas px-2.5"
-            :value="feedbackColumn"
-            @change="session.setFeedbackColumn(Number(($event.target as HTMLSelectElement).value))"
+            {{ cleanedSummary }}
+          </p>
+          <button
+            type="button"
+            class="press focus-ring h-10 rounded-md bg-fg px-4 font-medium text-canvas hover:opacity-90 disabled:opacity-50 max-sm:w-full"
+            :disabled="detecting"
+            @click="findPersonalData"
           >
-            <option
-              v-for="(column, index) in table.columns"
-              :key="column"
-              :value="index"
-            >
-              {{ column }}
-            </option>
-          </select>
-        </label>
-      </div>
-
-      <ColumnRoles />
-      <PreviewTable />
-
-      <div class="flex flex-wrap items-center gap-4 border-t border-line pt-6">
-        <button
-          type="button"
-          class="press focus-ring h-10 rounded-md bg-fg px-4 font-medium text-canvas hover:opacity-90 disabled:opacity-50"
-          :disabled="detecting"
-          @click="findPersonalData"
-        >
-          {{ $t('find.button', { rows: rowCount }) }}
-        </button>
+            {{ $t('find.button', { rows: rowCount }) }}
+          </button>
+        </div>
         <DetectionProgress
           v-if="detecting && detection.progress.value"
-          class="min-w-48 flex-1"
+          class="mt-3"
           :done="detection.progress.value.done"
           :total="detection.progress.value.total"
         />
         <p
           v-if="detectionFailed"
           role="alert"
-          class="w-full text-sm text-danger"
+          class="mt-3 text-sm text-danger"
         >
           {{ $t('find.failed') }}
         </p>
