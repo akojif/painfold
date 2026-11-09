@@ -95,6 +95,19 @@ Known gaps in v0.1, from the hand-written cases:
 - English addresses that start with a flat number (`Flat 2, 14 Market Street`).
 - Names and places, from v0.2. Until then, look for them in the review step and mark them with M.
 
+## Performance
+
+A 5,000-row file is cleaned in about 1.5 seconds: import, column step, detection, review and export, clicked straight through in a real browser. Stage 1 asks for under 10 seconds on a normal laptop.
+
+| Step | Time |
+| --- | ---: |
+| Import (read and parse the file) | 0.2–0.3 s |
+| Find personal data and open the review | 0.9–1.2 s |
+| Export the cleaned file | 0.1–0.2 s |
+| **Total** | **1.2–1.6 s** |
+
+Measured with `npm run bench` (three runs) on an Apple M3 Pro with 18 GB of memory, macOS 26.7, headless Chromium from Playwright 1.65, using a generated 5,000-row file. The same test runs in CI on every pull request with a 20-second limit, since shared runners are slower.
+
 ## Development
 
 Requires Node 24 and npm 11. The version is pinned in `.nvmrc`; with [nvm](https://github.com/nvm-sh/nvm), run `nvm use` in the project folder (or `nvm install` the first time) before any npm command. If your shell still reports another version with `node -v`, run `hash -r` or open a new terminal.
@@ -109,8 +122,9 @@ npm run lint
 npm run typecheck
 npm test             # unit tests (Vitest)
 npm run test:e2e     # end-to-end tests against the static build (Playwright)
+npm run bench        # time a 5,000-row file from import to download
 npm run licenses     # fail on dependency licenses outside the allowlist
-npm run eval         # detection recall and precision; --write updates the numbers below
+npm run eval         # detection recall and precision; --write updates the numbers under Accuracy
 ```
 
 Run `npm run generate` before `npm run test:e2e`. The first time, install the test browser with `npx playwright install chromium`.
