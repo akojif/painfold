@@ -47,4 +47,6 @@ If a new dependency brings an install script, `npm install` warns about it. Revi
 
 ## License
 
-[MIT](LICENSE)
+Code: [MIT](LICENSE).
+
+Fonts in `app/assets/fonts/` (Atkinson Hyperlegible Next, Atkinson Hyperlegible Mono, Source Serif 4) are self-hosted under the SIL Open Font License 1.1; each folder contains its license.
