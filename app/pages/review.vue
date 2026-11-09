@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import type { PiiType } from '~~/core/pii-types'
+import { PII_TYPES, type PiiType } from '~~/core/pii-types'
 import { OverlapError, type Decision, type Finding } from '~~/core/review/review'
 import type { CellSelection } from '~/utils/selection'
+import type { ValueEntry, ValueGroup } from '~/utils/value-list'
 
 definePageMeta({
   step: 2,
@@ -12,33 +13,58 @@ definePageMeta({
 })
 
 const BATCH = 100
+const VALUE_BATCH = 300
+const SNIPPETS = 5
 const { t } = useI18n()
 const { number } = useFormat()
 const session = useSession()
 const { table, review, revision, feedbackColumn, scanColumns } = session
 
-const filterType = ref<PiiType | 'ALL'>('ALL')
+// By value: each distinct value once, decided for every copy. By row: the file as written.
+const view = ref<'value' | 'row'>('value')
 const onlyWithFindings = ref(false)
 const selectedId = ref<number>()
-const sweepKeys = shallowRef<ReadonlySet<string>>(new Set())
+const motions = shallowRef<ReadonlyMap<string, RemovalMotion>>(new Map())
 const marking = ref<CellSelection & { text: string }>()
 const problem = ref<string>()
 const announcement = ref('')
 const visibleCount = ref(BATCH)
+const visibleValues = ref(VALUE_BATCH)
 const sentinel = useTemplateRef<HTMLElement>('sentinel')
 
 // A fresh array per revision: marking text adds findings to the same list, and
 // an unchanged reference would not update anything computed from it.
 const all = computed<readonly Finding[]>(() => (revision.value, [...(review.value?.findings ?? [])]))
 const counts = computed(() => (revision.value, review.value?.counts() ?? { total: 0, reviewed: 0, left: 0 }))
-const navigable = computed(() => all.value.filter(finding => filterType.value === 'ALL' || finding.type === filterType.value))
+const kept = computed(() => (revision.value, all.value.filter(finding => review.value?.decisionFor(finding.key) === 'keep').length))
 const selected = computed(() => all.value.find(finding => finding.id === selectedId.value))
+const finished = computed(() => counts.value.total > 0 && counts.value.left === 0)
 
-const typeCounts = computed(() => {
-  const byType = new Map<PiiType, number>()
-  for (const finding of all.value) byType.set(finding.type, (byType.get(finding.type) ?? 0) + 1)
-  return [...byType]
+// One entry per distinct value, grouped by type, in order of first appearance within a type.
+const values = computed<ValueEntry[]>(() => {
+  const byKey = new Map<string, { finding: Finding, rows: Set<number> }>()
+  for (const finding of all.value) {
+    const entry = byKey.get(finding.key)
+    if (entry) entry.rows.add(finding.row)
+    else byKey.set(finding.key, { finding, rows: new Set([finding.row]) })
+  }
+  return [...byKey.values()]
+    .map(({ finding, rows }) => ({ key: finding.key, type: finding.type, finding, rows: rows.size }))
+    .sort((a, b) => PII_TYPES.indexOf(a.type) - PII_TYPES.indexOf(b.type))
 })
+const groups = computed<ValueGroup[]>(() => {
+  const pending = new Map<PiiType, number>()
+  for (const finding of all.value) {
+    if (!review.value?.decisionFor(finding.key)) pending.set(finding.type, (pending.get(finding.type) ?? 0) + 1)
+  }
+  const byType = new Map<PiiType, ValueEntry[]>()
+  for (const entry of values.value.slice(0, visibleValues.value)) byType.set(entry.type, [...(byType.get(entry.type) ?? []), entry])
+  return [...byType].map(([type, entries]) => ({ type, pending: pending.get(type) ?? 0, values: entries }))
+})
+
+// N and P step through values in the By value view and through findings in the By row view.
+const navigable = computed(() => (view.value === 'value' ? values.value.map(entry => entry.finding) : all.value))
+const position = (finding?: Finding) => navigable.value.findIndex(item => (view.value === 'value' ? item.key === finding?.key : item.id === finding?.id))
 
 const findingsByCell = computed(() => {
   const byCell = new Map<string, Finding[]>()
@@ -53,10 +79,17 @@ const findingsByCell = computed(() => {
 // without findings are where they hide.
 const rowIndices = computed(() => {
   if (!table.value) return []
-  if (filterType.value === 'ALL' && !onlyWithFindings.value) return table.value.rows.map((_, index) => index)
-  return [...new Set(navigable.value.map(finding => finding.row))]
+  if (!onlyWithFindings.value) return table.value.rows.map((_, index) => index)
+  return [...new Set(all.value.map(finding => finding.row))]
 })
 const shownRows = computed(() => rowIndices.value.slice(0, visibleCount.value))
+
+// The rows the selected value appears in, for the By value view.
+const valueRows = computed(() => {
+  const finding = selected.value
+  if (!finding || !review.value) return []
+  return [...new Set((revision.value, review.value.copiesOf(finding.key)).map(copy => copy.row))]
+})
 
 // Checked columns that hold free text, where missed names can hide; short
 // columns such as channel or plan only show where they have a finding.
@@ -89,51 +122,62 @@ async function select(id: number | undefined, focus = true) {
   problem.value = undefined
   const finding = selected.value
   if (!finding) return
-  const position = rowIndices.value.indexOf(finding.row)
-  if (position >= visibleCount.value) visibleCount.value = position + BATCH
+  let target = `[data-finding="${finding.id}"]`
+  if (view.value === 'value') {
+    const index = values.value.findIndex(entry => entry.key === finding.key)
+    if (index >= visibleValues.value) visibleValues.value = index + VALUE_BATCH
+    target = `[data-value="${values.value[index]?.finding.id}"]`
+  }
+  else {
+    const index = rowIndices.value.indexOf(finding.row)
+    if (index >= visibleCount.value) visibleCount.value = index + BATCH
+  }
   if (!focus) return
   await nextTick()
-  const element = document.querySelector<HTMLElement>(`[data-finding="${finding.id}"]`)
+  const element = document.querySelector<HTMLElement>(target)
   element?.focus({ preventScroll: true })
-  element?.scrollIntoView({ block: 'center' })
+  element?.scrollIntoView({ block: view.value === 'value' ? 'nearest' : 'center' })
 }
 
 function step(direction: 1 | -1) {
   const list = navigable.value
   if (list.length === 0) return
-  const index = list.findIndex(finding => finding.id === selectedId.value)
+  const index = position(selected.value)
   const next = index === -1 ? (direction === 1 ? 0 : list.length - 1) : Math.min(list.length - 1, Math.max(0, index + direction))
   select(list[next]!.id)
 }
 
 function nextPending(after: Finding): Finding | undefined {
   const list = navigable.value
-  const index = list.findIndex(finding => finding.id === after.id)
+  const index = position(after)
   const pending = (finding: Finding) => !review.value?.decisionFor(finding.key)
   return list.slice(index + 1).find(pending) ?? list.slice(0, index).find(pending)
 }
 
-function decide(decision: Decision) {
+/** Decides the selected value. Without a pointer event the decision came from the keyboard. */
+function decide(decision: Decision, event?: MouseEvent) {
   const finding = selected.value
   if (!finding) return
   session.change(current => current.decide(finding.key, decision))
-  sweepKeys.value = decision === 'remove' ? new Set([finding.key]) : new Set()
+  motions.value = decision === 'remove' ? new Map([[finding.key, motionFor(event)]]) : new Map()
   announcement.value = t(`review.announce.${decision}`, { type: t(`typeOne.${finding.type}`), left: number(counts.value.left) })
   const next = nextPending(finding)
-  if (next) select(next.id)
+  if (next) select(next.id, view.value === 'row' || !event)
 }
 
 function undo() {
   const undone = session.change(current => current.undo())
-  sweepKeys.value = new Set()
+  motions.value = new Map()
   announcement.value = t(undone ? 'review.announce.undo' : 'review.announce.nothingToUndo')
   if (selectedId.value && !selected.value) selectedId.value = undefined
 }
 
-function removeAll() {
-  session.change(current => current.removeAllLeft())
-  sweepKeys.value = new Set()
-  announcement.value = t('review.announce.removeAll')
+// Bulk removals fade: a wipe across many tokens at once would be noise.
+function removeLeft(type?: PiiType) {
+  const keys = new Set(all.value.filter(finding => !review.value?.decisionFor(finding.key) && (!type || finding.type === type)).map(finding => finding.key))
+  session.change(current => current.removeAllLeft(type))
+  motions.value = new Map([...keys].map(key => [key, 'fade' as const]))
+  announcement.value = type ? t('review.announce.removeType', { type: t(`typeManyLower.${type}`) }) : t('review.announce.removeAll')
 }
 
 function startMark() {
@@ -160,7 +204,7 @@ function confirmMark(type: PiiType) {
     ].join(' ')
     window.getSelection()?.removeAllRanges()
     marking.value = undefined
-    sweepKeys.value = new Set()
+    motions.value = new Map()
     if (added[0]) select(added[0].id)
   }
   catch (error) {
@@ -177,7 +221,7 @@ function onKeydown(event: KeyboardEvent) {
     return
   }
   if (target.closest('input, select, textarea, [contenteditable="true"]')) return
-  const onFinding = Boolean(target.closest('[data-finding]'))
+  const onFinding = Boolean(target.closest('[data-finding], [data-value]'))
   const actions: Record<string, () => void> = {
     [SHORTCUTS.next]: () => step(1),
     [SHORTCUTS.previous]: () => step(-1),
@@ -193,9 +237,18 @@ function onKeydown(event: KeyboardEvent) {
   action()
 }
 
-watch(filterType, () => {
-  visibleCount.value = BATCH
-  select(navigable.value[0]?.id, false)
+const views = ['value', 'row'] as const
+function onTabKey(event: KeyboardEvent) {
+  if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return
+  view.value = view.value === 'value' ? 'row' : 'value'
+  nextTick(() => document.getElementById(`view-tab-${view.value}`)?.focus())
+}
+
+watch(view, () => {
+  motions.value = new Map()
+  // Keep the same value selected; in the By value view that is its first appearance.
+  if (view.value === 'value' && selected.value) selectedId.value = values.value.find(entry => entry.key === selected.value!.key)?.finding.id
+  select(selectedId.value, false)
 })
 watch(onlyWithFindings, () => (visibleCount.value = BATCH))
 
@@ -224,67 +277,103 @@ onBeforeUnmount(() => {
       v-if="review && table"
       class="max-lg:pb-72"
     >
-      <div class="flex flex-wrap items-end justify-between gap-x-10 gap-y-6">
-        <div>
-          <h1 class="font-serif text-3xl font-semibold">
+      <div class="flex flex-wrap items-end justify-between gap-x-10 gap-y-3">
+        <div class="min-w-0">
+          <h1 class="text-xl font-semibold">
             {{ heading }}
           </h1>
-          <p class="mt-1 text-sm text-ink-muted">
+          <p class="mt-1 truncate text-sm text-fg-muted">
             {{ table.fileName }}
           </p>
         </div>
-        <div class="w-full max-w-60">
-          <i18n-t
-            keypath="review.progress"
-            tag="p"
-            class="text-sm"
-          >
-            <template #reviewed>
-              <strong>{{ number(counts.reviewed) }}</strong>
-            </template>
-            <template #left>
-              {{ number(counts.left) }}
-            </template>
-          </i18n-t>
-          <div
-            role="progressbar"
-            :aria-label="$t('review.progressLabel')"
-            aria-valuemin="0"
-            :aria-valuemax="counts.total"
-            :aria-valuenow="counts.reviewed"
-            class="mt-2 h-1.5 bg-rule"
-          >
-            <div
-              class="h-full origin-left bg-ink transition-transform duration-300 motion-reduce:transition-none"
-              :style="{ transform: `scaleX(${progress})` }"
-            />
-          </div>
-        </div>
+        <i18n-t
+          keypath="review.progress"
+          tag="p"
+          class="text-sm text-fg-muted tabular-nums"
+        >
+          <template #reviewed>
+            <span class="font-medium text-fg">{{ number(counts.reviewed) }}</span>
+          </template>
+          <template #left>
+            {{ number(counts.left) }}
+          </template>
+        </i18n-t>
+      </div>
+      <div
+        role="progressbar"
+        :aria-label="$t('review.progressLabel')"
+        aria-valuemin="0"
+        :aria-valuemax="counts.total"
+        :aria-valuenow="counts.reviewed"
+        class="mt-4 h-0.5 overflow-hidden rounded-full bg-line"
+      >
+        <div
+          class="h-full origin-left bg-accent transition-transform duration-200 ease-out motion-reduce:transition-none"
+          :style="{ transform: `scaleX(${progress})` }"
+        />
       </div>
 
-      <div class="mt-8 flex flex-wrap items-end justify-between gap-4 border-b border-rule">
+      <div
+        v-if="finished"
+        class="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-md border border-line bg-surface px-4 py-3"
+        role="status"
+      >
+        <div class="flex items-start gap-3">
+          <svg
+            viewBox="0 0 16 16"
+            aria-hidden="true"
+            class="mt-0.5 size-4 shrink-0 fill-none stroke-accent stroke-2"
+          >
+            <path d="m3.5 8.5 3 3 6-7" />
+          </svg>
+          <div>
+            <p class="font-medium">
+              {{ $t('review.finished.title') }}
+            </p>
+            <p class="text-sm text-fg-muted">
+              {{ $t('review.finished.body', { removed: number(counts.total - kept), kept: number(kept) }) }}
+            </p>
+          </div>
+        </div>
+        <NuxtLink
+          to="/download"
+          class="focus-ring press inline-flex h-9 items-center rounded-md bg-fg px-3.5 font-medium text-canvas"
+        >
+          {{ $t('review.finished.action') }}
+        </NuxtLink>
+      </div>
+
+      <div class="mt-6 flex flex-wrap items-end justify-between gap-x-4 gap-y-2 border-b border-line">
         <div
-          role="group"
-          :aria-label="$t('review.filterLabel')"
-          class="flex flex-wrap gap-x-6"
+          role="tablist"
+          :aria-label="$t('review.views.label')"
+          class="flex gap-5"
         >
           <button
-            v-for="[type, count] in [['ALL', counts.total] as const, ...typeCounts]"
-            :key="type"
+            v-for="option in views"
+            :id="`view-tab-${option}`"
+            :key="option"
             type="button"
-            class="-mb-px border-b-2 pb-2.5 text-sm outline-signal focus-visible:outline-2 focus-visible:outline-offset-2"
-            :class="filterType === type ? 'border-ink font-semibold text-ink' : 'border-transparent text-ink-muted hover:text-ink'"
-            :aria-pressed="filterType === type"
-            @click="filterType = type"
+            role="tab"
+            :aria-selected="view === option"
+            :aria-controls="`view-${option}`"
+            :tabindex="view === option ? 0 : -1"
+            class="focus-ring -mb-px rounded-t-sm border-b pb-2.5 text-sm"
+            :class="view === option ? 'border-fg font-medium text-fg' : 'border-transparent text-fg-muted hover:text-fg'"
+            @click="view = option"
+            @keydown="onTabKey"
           >
-            {{ type === 'ALL' ? $t('review.all', { n: number(count) }) : `${$t(`typeShort.${type}`)} ${number(count)}` }}
+            {{ $t(option === 'value' ? 'review.views.byValue' : 'review.views.byRow') }}
           </button>
         </div>
-        <label class="mb-2.5 flex items-center gap-2 text-sm">
+        <label
+          v-if="view === 'row'"
+          class="mb-2.5 flex items-center gap-2 text-sm"
+        >
           <input
             v-model="onlyWithFindings"
             type="checkbox"
-            class="size-4 accent-ink"
+            class="focus-ring size-4 accent-fg"
           >
           {{ $t('review.onlyWithFindings') }}
         </label>
@@ -292,30 +381,95 @@ onBeforeUnmount(() => {
 
       <p
         v-if="counts.total === 0"
-        class="mt-6 text-ink-muted"
+        class="mt-6 text-fg-muted"
       >
         {{ $t('review.noFindings') }}
       </p>
 
-      <div class="mt-6 grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_17rem]">
-        <div class="paper">
-          <ol
-            v-if="shownRows.length > 0"
-            class="border border-rule bg-sheet text-ink shadow-sheet"
+      <div
+        v-if="view === 'value'"
+        id="view-value"
+        role="tabpanel"
+        aria-labelledby="view-tab-value"
+        class="mt-6 grid items-start gap-8 lg:grid-cols-[20rem_minmax(0,1fr)]"
+      >
+        <div
+          v-if="values.length > 0"
+          class="overflow-y-auto rounded-md border border-line bg-surface max-lg:max-h-[50vh] lg:sticky lg:top-20 lg:max-h-[calc(100dvh-7rem)]"
+        >
+          <ValueList
+            :groups="groups"
+            :selected-key="selected?.key"
+            :motions="motions"
+            @select="select($event, false)"
+            @remove-type="removeLeft($event)"
+          />
+          <button
+            v-if="visibleValues < values.length"
+            type="button"
+            class="focus-ring m-1 rounded-sm px-2 py-1 text-sm text-accent hover:underline"
+            @click="visibleValues += VALUE_BATCH"
           >
+            {{ $t('review.showMore', { n: number(Math.min(VALUE_BATCH, values.length - visibleValues)) }) }}
+          </button>
+        </div>
+        <div class="min-w-0">
+          <MarginNote
+            :finding="selected"
+            :marking="marking"
+            :problem="problem"
+            @remove="decide('remove', $event)"
+            @keep="decide('keep')"
+            @undo="undo"
+            @start-mark="startMark"
+            @confirm-mark="confirmMark"
+            @cancel-mark="marking = undefined"
+          />
+          <ol
+            v-if="valueRows.length > 0"
+            class="mt-6 border-t border-line"
+          >
+            <ReviewRow
+              v-for="row in valueRows.slice(0, SNIPPETS)"
+              :key="row"
+              :row="row"
+              :cells="cellsFor(row)"
+              :selected-id="selectedId"
+              :motions="motions"
+              @select="(id) => select(id, false)"
+            />
+          </ol>
+          <p
+            v-if="valueRows.length > SNIPPETS"
+            class="mt-2 text-sm text-fg-muted"
+          >
+            {{ $t('review.moreRows', { n: number(valueRows.length - SNIPPETS) }, valueRows.length - SNIPPETS) }}
+          </p>
+        </div>
+      </div>
+
+      <div
+        v-else
+        id="view-row"
+        role="tabpanel"
+        aria-labelledby="view-tab-row"
+        class="mt-2 grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_18rem]"
+      >
+        <div>
+          <ol v-if="shownRows.length > 0">
             <ReviewRow
               v-for="row in shownRows"
               :key="row"
               :row="row"
               :cells="cellsFor(row)"
               :selected-id="selectedId"
-              :sweep-keys="sweepKeys"
-              @select="select($event)"
+              :motions="motions"
+              @select="(id) => select(id)"
             />
           </ol>
           <p
             v-else
-            class="text-ink-muted"
+            class="mt-4 text-fg-muted"
           >
             {{ $t('review.noRows') }}
           </p>
@@ -327,10 +481,12 @@ onBeforeUnmount(() => {
         </div>
 
         <MarginNote
+          class="lg:mt-4"
+          docked
           :finding="selected"
           :marking="marking"
           :problem="problem"
-          @remove="decide('remove')"
+          @remove="decide('remove', $event)"
           @keep="decide('keep')"
           @undo="undo"
           @start-mark="startMark"
@@ -339,32 +495,33 @@ onBeforeUnmount(() => {
         />
       </div>
 
-      <div class="mt-10 flex flex-wrap items-center justify-between gap-6 border-t border-rule pt-6">
-        <p class="max-w-[60ch] text-sm text-ink-muted">
+      <div class="mt-10 flex flex-wrap items-end justify-between gap-6 border-t border-line pt-6">
+        <p class="max-w-measure text-sm text-fg-muted">
           {{ $t('review.limits') }}
         </p>
-        <div class="flex flex-wrap items-center gap-3">
+        <div class="flex flex-col items-end gap-3">
           <p
             v-if="counts.left > 0"
-            class="w-full text-right text-sm"
+            class="text-sm text-fg-muted"
           >
             {{ $t('review.willRemove', { n: number(counts.left) }, counts.left) }}
           </p>
-          <button
-            type="button"
-            class="rounded-control border border-rule-strong bg-sheet px-4 py-2.5 outline-signal hover:border-ink focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-60"
-            :disabled="counts.left === 0"
-            @click="removeAll"
-          >
-            {{ $t('review.removeAll', { n: number(counts.left) }) }}
-          </button>
-          <button
-            type="button"
-            class="rounded-control bg-signal px-4 py-2.5 font-semibold text-on-signal outline-signal hover:underline hover:underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2"
-            @click="navigateTo('/download')"
-          >
-            {{ $t('review.continue') }}
-          </button>
+          <div class="flex flex-wrap justify-end gap-2">
+            <button
+              v-if="counts.left > 0"
+              type="button"
+              class="focus-ring press h-9 rounded-md border border-line px-3.5 hover:border-line-strong"
+              @click="removeLeft()"
+            >
+              {{ $t('review.removeAll', { n: number(counts.left) }) }}
+            </button>
+            <NuxtLink
+              to="/download"
+              class="focus-ring press inline-flex h-9 items-center rounded-md bg-fg px-3.5 font-medium text-canvas"
+            >
+              {{ $t('review.continue') }}
+            </NuxtLink>
+          </div>
         </div>
       </div>
 

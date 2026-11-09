@@ -1,131 +1,145 @@
 /*
- * The only CSS file in Painfold: Tailwind, design tokens, font faces and the
- * ink-sweep keyframes. Components use Tailwind utilities built from these
- * tokens; Tailwind's default palette, radii and shadows are removed so they
- * cannot be used by accident.
+ * The only CSS file in Painfold: Tailwind, design tokens, font faces, two
+ * shared utilities and the redaction motion. Components use Tailwind
+ * utilities built from these tokens; Tailwind's defaults (palette, radii,
+ * shadows, easings, type scale) are removed so they cannot be used by accident.
  */
 @import "tailwindcss";
 
-/* Fonts: self-hosted, SIL Open Font License (see OFL.txt next to each file). */
+/* Fonts: Geist and Geist Mono, self-hosted, SIL Open Font License (see OFL.txt next to each file). */
 
 @font-face {
-  font-family: "Atkinson Hyperlegible Next";
+  font-family: "Geist";
   font-style: normal;
   font-display: swap;
-  font-weight: 200 800;
-  src: url("../fonts/atkinson-hyperlegible-next/atkinson-hyperlegible-next-latin-wght-normal.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  src: url("../fonts/geist/geist-latin-wght-normal.woff2") format("woff2-variations");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 @font-face {
-  font-family: "Atkinson Hyperlegible Next";
+  font-family: "Geist";
   font-style: normal;
   font-display: swap;
-  font-weight: 200 800;
-  src: url("../fonts/atkinson-hyperlegible-next/atkinson-hyperlegible-next-latin-ext-wght-normal.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  src: url("../fonts/geist/geist-latin-ext-wght-normal.woff2") format("woff2-variations");
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
 @font-face {
-  font-family: "Atkinson Hyperlegible Mono";
+  font-family: "Geist Mono";
   font-style: normal;
   font-display: swap;
-  font-weight: 200 800;
-  src: url("../fonts/atkinson-hyperlegible-mono/atkinson-hyperlegible-mono-latin-wght-normal.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  src: url("../fonts/geist-mono/geist-mono-latin-wght-normal.woff2") format("woff2-variations");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 @font-face {
-  font-family: "Atkinson Hyperlegible Mono";
+  font-family: "Geist Mono";
   font-style: normal;
   font-display: swap;
-  font-weight: 200 800;
-  src: url("../fonts/atkinson-hyperlegible-mono/atkinson-hyperlegible-mono-latin-ext-wght-normal.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  src: url("../fonts/geist-mono/geist-mono-latin-ext-wght-normal.woff2") format("woff2-variations");
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
-}
-
-@font-face {
-  font-family: "Source Serif 4";
-  font-style: normal;
-  font-display: swap;
-  font-weight: 200 900;
-  src: url("../fonts/source-serif-4/source-serif-4-latin-wght-normal.woff2") format("woff2-variations");
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
-@font-face {
-  font-family: "Source Serif 4";
-  font-style: normal;
-  font-display: swap;
-  font-weight: 200 900;
-  src: url("../fonts/source-serif-4/source-serif-4-latin-ext-wght-normal.woff2") format("woff2-variations");
-  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
 /*
- * Colour roles. Light and dark are designed separately, not inverted.
- * tests/unit/design-tokens.test.ts reads these blocks and checks every
- * text/background pair against WCAG AA, so keep one `--pf-*: #rrggbb;` per line.
+ * Colour roles, defined once per theme. tests/unit/design-tokens.test.ts reads
+ * these and checks every text, control and focus pair against WCAG AA, so keep
+ * one `--pf-light-*` / `--pf-dark-*: #rrggbb;` per line.
  */
 :root {
-  color-scheme: light;
+  --pf-light-canvas: #FFFFFF;        /* page */
+  --pf-light-surface: #F7F8FA;       /* panels, lists, the side of a split view */
+  --pf-light-line: #E4E7EC;          /* hairline borders and dividers */
+  --pf-light-line-strong: #7D8796;   /* borders of inputs and controls (3:1) */
+  --pf-light-fg: #111827;            /* text */
+  --pf-light-fg-muted: #5B6472;      /* secondary text */
+  --pf-light-accent: #0F766E;        /* the one accent: links, focus, progress, the current stage */
+  --pf-light-on-accent: #FFFFFF;
+  --pf-light-danger: #B91C1C;        /* errors and risks only */
+  --pf-light-pending: #FEF3C7;       /* personal data waiting for review (soft amber) */
+  --pf-light-pending-line: #B45309;  /* its underline, so colour is not the only cue */
+  --pf-light-on-pending: #111827;
+  --pf-light-token: #111827;         /* placeholder tokens such as [EMAIL_1] */
+  --pf-light-on-token: #F7F8FA;
 
-  --pf-desk: #EEF1F4;          /* page background */
-  --pf-sheet: #F8F9FB;         /* the document the feedback sits on */
-  --pf-ink: #1B2433;           /* text */
-  --pf-ink-muted: #4B5566;     /* secondary text */
-  --pf-rule: #C9D0D8;          /* decorative dividers only, too faint for controls */
-  --pf-rule-strong: #7D8896;   /* borders of inputs and controls */
-  --pf-signal: #28706A;        /* the one accent: actions, links, focus */
-  --pf-on-signal: #F8F9FB;
-  --pf-alert: #B4442F;         /* errors and risks only */
-  --pf-highlighter: #F2E05C;   /* personal data waiting for review; too close to sheet to be the only cue, so pair it with an underline */
-  --pf-on-highlighter: #1B2433;
-  --pf-redaction: #1B2433;     /* the bar over removed data */
-  --pf-on-redaction: #DDE3EA;  /* placeholder text on the bar */
-  --pf-sheet-edge: #C9D0D8;    /* the hard edge under a sheet of paper */
+  --pf-dark-canvas: #11161F;
+  --pf-dark-surface: #161C27;
+  --pf-dark-line: #232B38;
+  --pf-dark-line-strong: #6B7789;
+  --pf-dark-fg: #E6EAF0;
+  --pf-dark-fg-muted: #94A0B0;
+  --pf-dark-accent: #2DD4BF;
+  --pf-dark-on-accent: #11161F;
+  --pf-dark-danger: #F87171;
+  --pf-dark-pending: #3B2F12;
+  --pf-dark-pending-line: #F59E0B;
+  --pf-dark-on-pending: #E6EAF0;
+  --pf-dark-token: #E6EAF0;
+  --pf-dark-on-token: #11161F;
+}
+
+/* Light is the default; "System" follows the OS; data-theme on <html> overrides both. */
+:root,
+:root[data-theme="light"] {
+  color-scheme: light;
+  --pf-canvas: var(--pf-light-canvas);
+  --pf-surface: var(--pf-light-surface);
+  --pf-line: var(--pf-light-line);
+  --pf-line-strong: var(--pf-light-line-strong);
+  --pf-fg: var(--pf-light-fg);
+  --pf-fg-muted: var(--pf-light-fg-muted);
+  --pf-accent: var(--pf-light-accent);
+  --pf-on-accent: var(--pf-light-on-accent);
+  --pf-danger: var(--pf-light-danger);
+  --pf-pending: var(--pf-light-pending);
+  --pf-pending-line: var(--pf-light-pending-line);
+  --pf-on-pending: var(--pf-light-on-pending);
+  --pf-token: var(--pf-light-token);
+  --pf-on-token: var(--pf-light-on-token);
+  --pf-shadow-color: 17 24 39;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     color-scheme: dark;
-
-    --pf-desk: #11161F;
-    --pf-sheet: #18202B;
-    --pf-ink: #E3E8EE;
-    --pf-ink-muted: #9AA6B4;
-    --pf-rule: #2A3442;
-    --pf-rule-strong: #617080;
-    --pf-signal: #5FB3A8;
-    --pf-on-signal: #11161F;
-    --pf-alert: #E07A63;
-    --pf-highlighter: #D9C843;
-    --pf-on-highlighter: #11161F;
-    --pf-redaction: #05070A;   /* redaction stays black in both themes */
-    --pf-on-redaction: #DDE3EA;
-    --pf-sheet-edge: #05080D;
+    --pf-canvas: var(--pf-dark-canvas);
+    --pf-surface: var(--pf-dark-surface);
+    --pf-line: var(--pf-dark-line);
+    --pf-line-strong: var(--pf-dark-line-strong);
+    --pf-fg: var(--pf-dark-fg);
+    --pf-fg-muted: var(--pf-dark-fg-muted);
+    --pf-accent: var(--pf-dark-accent);
+    --pf-on-accent: var(--pf-dark-on-accent);
+    --pf-danger: var(--pf-dark-danger);
+    --pf-pending: var(--pf-dark-pending);
+    --pf-pending-line: var(--pf-dark-pending-line);
+    --pf-on-pending: var(--pf-dark-on-pending);
+    --pf-token: var(--pf-dark-token);
+    --pf-on-token: var(--pf-dark-on-token);
+    --pf-shadow-color: 0 0 0;
   }
+}
 
-  /*
-   * Night desk: the desk goes dark, but sheets of paper (.paper) keep their
-   * light colours, like pages under a desk lamp. The colour utilities read
-   * --color-*, so the paper roles are set on those directly.
-   */
-  .paper {
-    color-scheme: light;
-
-    --color-sheet: #F1F3F6;
-    --color-ink: #1B2433;
-    --color-ink-muted: #4B5566;
-    --color-rule: #C9D0D8;
-    --color-rule-strong: #7D8896;
-    --color-signal: #28706A;
-    --color-on-signal: #F8F9FB;
-    --color-highlighter: #F2E05C;
-    --color-on-highlighter: #1B2433;
-    --color-redaction: #1B2433;
-    --color-on-redaction: #DDE3EA;
-  }
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --pf-canvas: var(--pf-dark-canvas);
+  --pf-surface: var(--pf-dark-surface);
+  --pf-line: var(--pf-dark-line);
+  --pf-line-strong: var(--pf-dark-line-strong);
+  --pf-fg: var(--pf-dark-fg);
+  --pf-fg-muted: var(--pf-dark-fg-muted);
+  --pf-accent: var(--pf-dark-accent);
+  --pf-on-accent: var(--pf-dark-on-accent);
+  --pf-danger: var(--pf-dark-danger);
+  --pf-pending: var(--pf-dark-pending);
+  --pf-pending-line: var(--pf-dark-pending-line);
+  --pf-on-pending: var(--pf-dark-on-pending);
+  --pf-token: var(--pf-dark-token);
+  --pf-on-token: var(--pf-dark-on-token);
+  --pf-shadow-color: 0 0 0;
 }
 
 @theme {
@@ -138,97 +152,112 @@
   --blur-*: initial;
   --font-*: initial;
   --text-*: initial;
+  --ease-*: initial;
   --animate-*: initial;
 
-  --color-desk: var(--pf-desk);
-  --color-sheet: var(--pf-sheet);
-  --color-ink: var(--pf-ink);
-  --color-ink-muted: var(--pf-ink-muted);
-  --color-rule: var(--pf-rule);
-  --color-rule-strong: var(--pf-rule-strong);
-  --color-signal: var(--pf-signal);
-  --color-on-signal: var(--pf-on-signal);
-  --color-alert: var(--pf-alert);
-  --color-highlighter: var(--pf-highlighter);
-  --color-on-highlighter: var(--pf-on-highlighter);
-  --color-redaction: var(--pf-redaction);
-  --color-on-redaction: var(--pf-on-redaction);
+  --color-canvas: var(--pf-canvas);
+  --color-surface: var(--pf-surface);
+  --color-line: var(--pf-line);
+  --color-line-strong: var(--pf-line-strong);
+  --color-fg: var(--pf-fg);
+  --color-fg-muted: var(--pf-fg-muted);
+  --color-accent: var(--pf-accent);
+  --color-on-accent: var(--pf-on-accent);
+  --color-danger: var(--pf-danger);
+  --color-pending: var(--pf-pending);
+  --color-pending-line: var(--pf-pending-line);
+  --color-on-pending: var(--pf-on-pending);
+  --color-token: var(--pf-token);
+  --color-on-token: var(--pf-on-token);
   --color-transparent: transparent;
   --color-current: currentcolor;
 
-  /* Interface, customer voices, and placeholder tokens such as [EMAIL_3]. */
-  --font-sans: "Atkinson Hyperlegible Next", system-ui, sans-serif;
-  --font-serif: "Source Serif 4", Georgia, serif;
-  --font-mono: "Atkinson Hyperlegible Mono", ui-monospace, monospace;
+  --font-sans: "Geist", system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
 
-  /* Type scale, ratio 1.2 from a 16px base. Line heights land on a 2px grid. */
-  --text-display: 3.5rem;          /* 56px serif, the start screen's headline */
-  --text-display--line-height: 1.04;
-  --text-display--letter-spacing: -0.02em;
-  --text-display-sm: 2.5rem;       /* 40px, the same headline on small screens */
-  --text-display-sm--line-height: 1.08;
-  --text-display-sm--letter-spacing: -0.015em;
-  --text-xs: 0.8125rem;            /* 13px, the smallest size used */
-  --text-xs--line-height: 1.125rem;
-  --text-sm: 0.875rem;             /* 14px, dense UI and table cells */
+  /* Type scale: 12, 13, 14, 16, 20, 24, 32, 48. Large sizes tighten their tracking. */
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1rem;
+  --text-sm: 0.8125rem;
   --text-sm--line-height: 1.25rem;
-  --text-base: 1rem;               /* 16px, body and controls */
-  --text-base--line-height: 1.5rem;
-  --text-voice: 1.125rem;          /* 18px serif, customer feedback text */
-  --text-voice--line-height: 1.75rem;
-  --text-specimen: 1.25rem;        /* 20px serif, the example ticket on the start screen */
-  --text-specimen--line-height: 2.0625rem;
-  --text-lg: 1.1875rem;            /* 19px, lead text */
+  --text-base: 0.875rem;
+  --text-base--line-height: 1.375rem;
+  --text-md: 1rem;
+  --text-md--line-height: 1.625rem;
+  --text-lg: 1.25rem;
   --text-lg--line-height: 1.75rem;
-  --text-xl: 1.4375rem;            /* 23px, section headings */
-  --text-xl--line-height: 1.875rem;
-  --text-2xl: 1.75rem;             /* 28px, screen titles */
-  --text-2xl--line-height: 2.125rem;
-  --text-3xl: 2.125rem;            /* 34px, report title (Stage 3 on) */
-  --text-3xl--line-height: 2.5rem;
+  --text-lg--letter-spacing: -0.01em;
+  --text-xl: 1.5rem;
+  --text-xl--line-height: 2rem;
+  --text-xl--letter-spacing: -0.015em;
+  --text-2xl: 2rem;
+  --text-2xl--line-height: 2.375rem;
+  --text-2xl--letter-spacing: -0.025em;
+  --text-3xl: 3rem;
+  --text-3xl--line-height: 3.25rem;
+  --text-3xl--letter-spacing: -0.035em;
 
-  /* Paper has square corners; controls get a hint of rounding. */
-  --radius-none: 0;
-  --radius-control: 2px;
-  --radius-full: 9999px;           /* step markers only */
+  --radius-sm: 4px;      /* tokens, key caps */
+  --radius-md: 6px;      /* controls and panels */
+  --radius-full: 9999px; /* status dots and step markers */
 
-  /* Paper on a desk: hard edges, never soft blurred shadows. */
-  --shadow-sheet: 0 2px 0 0 var(--pf-sheet-edge);
-  --shadow-lift: 0 10px 0 -2px var(--pf-sheet-edge);
+  /* Depth only where something is raised: a selected item, a dialog, the drop overlay. */
+  --shadow-raised: 0 0 0 1px rgb(var(--pf-shadow-color) / 0.06), 0 1px 2px rgb(var(--pf-shadow-color) / 0.06);
+  --shadow-overlay: 0 0 0 1px rgb(var(--pf-shadow-color) / 0.08), 0 8px 16px rgb(var(--pf-shadow-color) / 0.08), 0 24px 48px rgb(var(--pf-shadow-color) / 0.12);
 
-  /* Prose never runs wider than this (max-w-measure). */
+  /* Only these two curves exist, so ease-in cannot be used. */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+
   --container-measure: 68ch;
 
   /*
-   * The one orchestrated motion: approving a finding sweeps an ink bar over
-   * the value (ink-sweep), and the placeholder appears once the bar has
-   * mostly covered it (ink-reveal).
+   * The redaction: a removed value becomes its placeholder token, revealed
+   * left to right (token-wipe) when removed by pointer, faded in (token-fade)
+   * when removed from the keyboard, which reviewers do hundreds of times.
    */
-  --animate-ink-sweep: ink-sweep 240ms cubic-bezier(0.22, 1, 0.36, 1) both;
-  --animate-ink-reveal: ink-reveal 240ms linear both;
-  --animate-highlight-in: highlight-in 260ms ease-out both;
+  --animate-token-wipe: token-wipe 180ms var(--ease-out) both;
+  --animate-token-fade: token-fade 120ms var(--ease-out) both;
+  --animate-overlay-in: overlay-in 160ms var(--ease-out) both;
 
-  @keyframes ink-sweep {
-    from { transform: scaleX(0); transform-origin: left center; }
-    to { transform: scaleX(1); transform-origin: left center; }
+  @keyframes token-wipe {
+    from { clip-path: inset(0 100% 0 0); }
+    to { clip-path: inset(0 0 0 0); }
   }
 
-  @keyframes highlight-in {
-    from { background-color: transparent; }
-    to { background-color: var(--color-highlighter); }
+  @keyframes token-fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
   }
 
-  @keyframes ink-reveal {
-    0%, 60% { opacity: 0; }
-    100% { opacity: 1; }
+  @keyframes overlay-in {
+    from { opacity: 0; transform: scale(0.98); }
+    to { opacity: 1; transform: scale(1); }
   }
 }
 
-/* With reduced motion the redaction appears at once. */
+/* Every control: the same focus ring, and a small press on :active. */
+@utility focus-ring {
+  &:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+}
+
+@utility press {
+  transition-property: transform, background-color, border-color, color, opacity;
+  transition-duration: 160ms;
+  transition-timing-function: var(--ease-out);
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+/* With reduced motion, changes are instant. */
 @media (prefers-reduced-motion: reduce) {
   :root {
-    --animate-ink-sweep: none;
-    --animate-ink-reveal: none;
-    --animate-highlight-in: none;
+    --animate-token-wipe: none;
+    --animate-token-fade: none;
+    --animate-overlay-in: none;
   }
 }

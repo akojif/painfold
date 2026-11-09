@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto'
 import { describe, expect, it } from 'vitest'
-import { externalReferences, inlineScriptHashes, styleAttributes, withPolicyMeta } from '../../scripts/apply-csp'
+import { externalReferences, inlineScriptHashes, styleAttributes, styleElements, withPolicyMeta } from '../../scripts/apply-csp'
 
 const sha256 = (text: string) => createHash('sha256').update(text, 'utf8').digest('base64')
 
@@ -55,6 +55,16 @@ describe('styleAttributes', () => {
 
   it('ignores the word style elsewhere', () => {
     expect(styleAttributes('<p class="style">style="x" in text</p><link rel="stylesheet" href="/a.css">')).toEqual([])
+  })
+})
+
+describe('styleElements', () => {
+  it('finds inline style elements', () => {
+    expect(styleElements('<head><style>a{}</style><style data-v="1">b{}</style></head>')).toEqual(['<style>', '<style data-v="1">'])
+  })
+
+  it('ignores stylesheet links and the word in text', () => {
+    expect(styleElements('<link rel="stylesheet" href="/a.css"><p>a <styled> word</p>')).toEqual([])
   })
 })
 

@@ -15,7 +15,8 @@ const session = useSession()
 const { table, roles, review, revision } = session
 
 const fileName = computed(() => cleanedFileName(table.value?.fileName ?? ''))
-const removed = computed(() => (revision.value, review.value ? [...removedByType(review.value)] : []))
+// Largest first, in the summary and in the cleaning report.
+const removed = computed(() => (revision.value, review.value ? [...removedByType(review.value)].sort((a, b) => b[1] - a[1]) : []))
 const notReviewed = computed(() => (revision.value, review.value?.counts().left ?? 0))
 const kept = computed(() => (revision.value, review.value?.findings.filter(finding => review.value?.decisionFor(finding.key) === 'keep').length ?? 0))
 const dropped = computed(() => table.value?.columns.filter((_, index) => roles.value[index] === 'drop') ?? [])
@@ -65,22 +66,45 @@ async function startOver() {
   <ClientOnly>
     <div
       v-if="table && review"
-      class="max-w-3xl"
+      class="max-w-2xl"
     >
-      <h1 class="font-serif text-3xl font-semibold">
+      <h1 class="text-xl font-semibold">
         {{ $t('download.heading') }}
       </h1>
-      <p class="mt-1 text-sm text-ink-muted">
+      <p class="mt-1 truncate text-sm text-fg-muted">
         {{ table.fileName }}
       </p>
 
-      <div class="paper mt-8 border border-rule bg-sheet px-7 py-6 text-ink shadow-sheet">
-        <h2 class="text-sm text-ink-muted">
+      <div class="mt-6 flex flex-wrap gap-2">
+        <button
+          type="button"
+          class="focus-ring press h-10 max-w-full truncate rounded-md bg-fg px-4 font-medium text-canvas"
+          @click="download"
+        >
+          {{ $t('download.button', { name: fileName }) }}
+        </button>
+        <button
+          type="button"
+          class="focus-ring press h-10 rounded-md border border-line px-4 hover:border-line-strong"
+          @click="downloadReport"
+        >
+          {{ $t('download.reportButton') }}
+        </button>
+      </div>
+
+      <section
+        class="mt-10"
+        aria-labelledby="removed-heading"
+      >
+        <h2
+          id="removed-heading"
+          class="text-sm font-medium"
+        >
           {{ $t('download.removed') }}
         </h2>
         <dl
           v-if="removed.length > 0"
-          class="mt-2 divide-y divide-rule"
+          class="mt-2 divide-y divide-line border-y border-line"
         >
           <div
             v-for="[type, count] in removed"
@@ -88,18 +112,21 @@ async function startOver() {
             class="flex justify-between gap-6 py-2"
           >
             <dt>{{ $t(`typeMany.${type}`) }}</dt>
-            <dd class="font-semibold tabular-nums">
+            <dd class="font-mono tabular-nums">
               {{ number(count) }}
             </dd>
           </div>
         </dl>
         <p
           v-else
-          class="mt-2"
+          class="mt-2 text-fg-muted"
         >
           {{ $t('download.nothingRemoved') }}
         </p>
-        <ul class="mt-4 space-y-1 border-t border-rule pt-4 text-sm text-ink-muted">
+        <ul
+          v-if="notReviewed > 0 || kept > 0 || dropped.length > 0 || unchecked.length > 0"
+          class="mt-3 space-y-1 text-sm text-fg-muted"
+        >
           <li v-if="notReviewed > 0">
             {{ $t('download.notReviewed', { n: number(notReviewed) }, notReviewed) }}
           </li>
@@ -113,45 +140,49 @@ async function startOver() {
             {{ $t('download.unchecked', { columns: unchecked.join(', ') }) }}
           </li>
         </ul>
-      </div>
+        <div class="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm">
+          <NuxtLink
+            to="/review"
+            class="focus-ring rounded-sm text-accent underline-offset-4 hover:underline"
+          >
+            {{ $t('download.back') }}
+          </NuxtLink>
+          <button
+            type="button"
+            class="focus-ring rounded-sm text-accent underline-offset-4 hover:underline"
+            @click="startOver"
+          >
+            {{ $t('download.startOver') }}
+          </button>
+        </div>
+      </section>
 
-      <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
-        <button
-          type="button"
-          class="rounded-control bg-ink px-5 py-3 font-semibold text-desk outline-signal hover:underline hover:underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2"
-          @click="download"
-        >
-          {{ $t('download.button', { name: fileName }) }}
-        </button>
-        <button
-          type="button"
-          class="rounded-control border border-rule-strong bg-sheet px-5 py-3 outline-signal hover:border-ink focus-visible:outline-2 focus-visible:outline-offset-2"
-          @click="downloadReport"
-        >
-          {{ $t('download.reportButton') }}
-        </button>
-        <NuxtLink
-          to="/review"
-          class="text-signal underline underline-offset-4 outline-signal focus-visible:outline-2 focus-visible:outline-offset-2"
-        >
-          {{ $t('download.back') }}
-        </NuxtLink>
-        <button
-          type="button"
-          class="text-signal underline underline-offset-4 outline-signal focus-visible:outline-2 focus-visible:outline-offset-2"
-          @click="startOver"
-        >
-          {{ $t('download.startOver') }}
-        </button>
-      </div>
-
-      <div class="mt-8 space-y-2 text-sm text-ink-muted">
+      <div class="mt-10 space-y-2 text-sm text-fg-muted">
         <p>{{ $t('download.reportExplain') }}</p>
         <p>{{ $t('download.mapStays') }}</p>
-        <p class="max-w-[60ch] border-l-4 border-rule-strong pl-3">
-          {{ $t('review.limits') }}
-        </p>
+        <p>{{ $t('review.limits') }}</p>
       </div>
+
+      <section
+        class="mt-10 border-t border-line pt-6"
+        aria-labelledby="next-heading"
+      >
+        <h2
+          id="next-heading"
+          class="font-medium"
+        >
+          {{ $t('download.next.title') }}
+        </h2>
+        <p class="mt-1 text-fg-muted">
+          {{ $t('download.next.body') }}
+        </p>
+        <a
+          href="https://github.com/akojif/painfold/blob/main/ROADMAP.md"
+          class="focus-ring mt-2 inline-block rounded-sm text-sm text-accent underline-offset-4 hover:underline"
+        >
+          {{ $t('download.next.link') }}
+        </a>
+      </section>
     </div>
   </ClientOnly>
 </template>

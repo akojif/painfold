@@ -12,6 +12,11 @@ export default defineNuxtConfig({
     head: {
       htmlAttrs: { lang: 'en' },
       title: 'Painfold',
+      script: [
+        // Applies a saved Light or Dark choice before first paint, so the page
+        // never flashes the wrong theme. scripts/apply-csp.ts hashes it into the CSP.
+        { innerHTML: "try{var t=localStorage.getItem('painfold-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}" },
+      ],
     },
   },
 

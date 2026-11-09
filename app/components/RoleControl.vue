@@ -7,15 +7,15 @@ const options: ColumnRole[] = ['scan', 'keep', 'drop']
 </script>
 
 <template>
-  <fieldset class="inline-flex">
+  <fieldset class="inline-flex rounded-md border border-line bg-surface p-0.5">
     <legend class="sr-only">
       {{ $t('columns.roleLabel', { column }) }}
     </legend>
     <label
       v-for="option in options"
       :key="option"
-      class="-ml-px cursor-pointer border border-rule-strong px-3 py-1 text-sm outline-signal first:ml-0 first:rounded-l-control last:rounded-r-control has-focus-visible:relative has-focus-visible:outline-2 has-focus-visible:outline-offset-2"
-      :class="model === option ? 'border-ink bg-ink text-desk font-semibold' : 'bg-sheet text-ink hover:border-ink'"
+      class="press cursor-pointer rounded-sm px-2.5 py-1 text-sm has-focus-visible:outline-2 has-focus-visible:outline-offset-1 has-focus-visible:outline-accent"
+      :class="model === option ? 'bg-canvas font-medium text-fg shadow-raised' : 'text-fg-muted hover:text-fg'"
     >
       <input
         v-model="model"

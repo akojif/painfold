@@ -13,22 +13,39 @@
     }
   },
   "footer": {
-    "promise": "Open source. No cookies, no accounts, no tracking.",
-    "source": "Source code"
+    "source": "Source code",
+    "roadmap": "Roadmap"
   },
   "start": {
-    "headline": "Take the personal data out. Keep the feedback.",
-    "lead": "Painfold removes {types} from support tickets and surveys. Your file is never uploaded. It stays in this browser.",
+    "headline": "Find what hurts your customers. Without exposing who they are.",
+    "subline": "Start by cleaning your feedback file: emails, phone numbers, IBANs and more are removed right here in your browser.",
     "choose": "Choose a CSV or Excel file",
-    "reading": "Reading {name}…",
     "sampleButton": "Try the sample file",
     "sampleNote": "200 made-up tickets, no real people",
-    "removedHeading": "What gets removed",
-    "nameNext": "{token} in v0.2",
-    "dropAnywhere": "Or drop a file anywhere on this page.",
-    "dropActive": "Drop the file to read it.",
-    "stamp": "Stays in this browser",
-    "moreTypes": "1 more kind of personal data | {n} more kinds of personal data"
+    "privacy": "Your file is never uploaded. It stays in this browser.",
+    "reading": "Reading {name}…",
+    "journeyLabel": "What Painfold does",
+    "journey": {
+      "clean": {
+        "title": "Clean your file",
+        "when": "Now"
+      },
+      "find": {
+        "title": "Find jobs, pains and gains",
+        "when": "v0.3"
+      },
+      "decide": {
+        "title": "Decide what to build",
+        "when": "v0.4"
+      }
+    },
+    "trustLabel": "About Painfold",
+    "trust": {
+      "openSource": "Open source",
+      "noCookies": "No cookies",
+      "noAccount": "No account"
+    },
+    "dropOverlay": "Drop to open. Nothing is uploaded."
   },
   "types": {
     "EMAIL": "email addresses",
@@ -72,9 +89,9 @@
       "keep": "Keep as is",
       "drop": "Drop"
     },
-    "keepHelp": "Keep as is: copied to the cleaned file without checking.",
     "personal": "Looks like personal data (“{term}”), so it is left out of the cleaned file.",
-    "empty": "(empty)"
+    "empty": "(empty)",
+    "help": "Check: searched for personal data. Keep as is: copied to the cleaned file without checking. Drop: left out of the cleaned file."
   },
   "preview": {
     "heading": "First {n} rows",
@@ -92,13 +109,10 @@
     "findings": "No findings | 1 finding | {n} findings",
     "progress": "{reviewed} reviewed, {left} left",
     "progressLabel": "Reviewed",
-    "filterLabel": "Show findings",
-    "all": "All {n}",
     "onlyWithFindings": "Only rows with findings",
     "row": "Row {n}",
     "nothingFound": "Nothing found in this row",
     "noFindings": "No findings. Select any text that should be removed and press M, or continue.",
-    "noRows": "No rows match this filter.",
     "state": {
       "pending": "not reviewed",
       "remove": "removed",
@@ -142,24 +156,33 @@
       "remove": "{type} removed, {left} left.",
       "keep": "{type} kept, {left} left.",
       "removeAll": "All findings left are removed.",
+      "removeType": "All {type} removed.",
       "undo": "Undone.",
       "nothingToUndo": "Nothing to undo."
-    }
+    },
+    "views": {
+      "label": "View",
+      "byValue": "By value",
+      "byRow": "By row"
+    },
+    "valuesLabel": "Values found",
+    "removeAllOfType": "Remove all {n} {type}",
+    "valueLabel": "{type}, {state}: {text}",
+    "inRows": "In 1 row. Removing it replaces it with {placeholder}. | In {n} rows. Removing it replaces every copy with {placeholder}.",
+    "finished": {
+      "title": "All findings are reviewed.",
+      "body": "{removed} removed, {kept} kept. Next: download the cleaned file and the cleaning report.",
+      "action": "Continue to download"
+    },
+    "removeAllShort": "Remove all {n}",
+    "keptTag": "Kept",
+    "moreRows": "And 1 more row. | And {n} more rows.",
+    "showMore": "Show {n} more",
+    "noRows": "No rows with findings."
   },
   "header": {
     "outbound": "What leaves your browser",
     "bytes": "0 bytes | 1 byte | {n} bytes"
-  },
-  "specimen": {
-    "description": "Example: a support ticket in which a phone number and an email address are replaced by placeholders.",
-    "ticket": "Ticket 4172, support",
-    "date": "12 March 2026",
-    "before": "Hallo, seit dem letzten Update kann ich keine Rechnungen mehr als PDF exportieren. Bitte rufen Sie mich unter",
-    "phone": "+49 30 23125 417",
-    "middle": "zurück oder schreiben Sie an",
-    "email": "anna.huber{'@'}example.com",
-    "after": ".",
-    "closing": "Danke!"
   },
   "privacy": {
     "notice": "Your file is never uploaded. It stays in this browser."
@@ -207,7 +230,12 @@
     "startOver": "Clean another file",
     "mapStays": "The list of original values behind each placeholder stays in this browser and is gone when you close the tab.",
     "reportButton": "Download cleaning report (.txt)",
-    "reportExplain": "The cleaned file holds only your data. The cleaning report lists what was replaced, with the date, the Painfold version and the limits of automatic detection."
+    "reportExplain": "The cleaned file holds only your data. The cleaning report lists what was replaced, with the date, the Painfold version and the limits of automatic detection.",
+    "next": {
+      "title": "Your file is clean.",
+      "body": "Next in Painfold: turn it into ranked customer pains (coming in v0.3).",
+      "link": "See the roadmap"
+    }
   },
   "typeMany": {
     "EMAIL": "Email addresses",
@@ -254,5 +282,35 @@
     "removedHeading": "Replaced with placeholders",
     "nothingRemoved": "Nothing was found or marked.",
     "limitsHeading": "Limits"
+  },
+  "theme": {
+    "label": "Theme",
+    "system": "Use the system setting",
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "example": {
+    "caption": "A support ticket, before and after cleaning",
+    "ticket": "Bitte rufen Sie mich unter {phone} zurück oder schreiben Sie an {email}.",
+    "phone": "+49 30 23125 417",
+    "email": "anna.huber{'@'}example.com",
+    "found": "Found in the file",
+    "rows": "1 row | {n} rows",
+    "description": "Example: in a support ticket, a phone number and an email address are replaced by the placeholders [PHONE_1] and [EMAIL_1]."
+  },
+  "typeManyLower": {
+    "EMAIL": "email addresses",
+    "PHONE": "phone numbers",
+    "IBAN": "IBANs",
+    "CARD": "card numbers",
+    "SVNR": "SV-Nummern",
+    "VAT_ID": "VAT IDs",
+    "URL": "links",
+    "IP": "IP addresses",
+    "DATE_OF_BIRTH": "dates of birth",
+    "ADDRESS": "addresses",
+    "POSTCODE": "postcodes",
+    "NAME": "names",
+    "PLACE": "places"
   }
 }

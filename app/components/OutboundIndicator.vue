@@ -14,34 +14,39 @@ function size(bytes: number) {
   <div>
     <button
       type="button"
-      class="flex items-baseline gap-3 rounded-control border border-rule-strong bg-sheet px-3.5 py-2 text-sm outline-signal hover:border-ink focus-visible:outline-2 focus-visible:outline-offset-2"
+      class="press focus-ring flex h-8 items-center gap-2 rounded-md border border-line px-2.5 text-sm text-fg-muted hover:border-line-strong hover:text-fg"
       aria-haspopup="dialog"
       @click="dialog?.showModal()"
     >
-      <span>{{ $t('header.outbound') }}</span>
       <span
-        class="font-mono"
-        :class="foreign.length > 0 ? 'text-alert' : 'text-signal'"
+        aria-hidden="true"
+        class="size-1.5 rounded-full"
+        :class="foreign.length > 0 ? 'bg-danger' : 'bg-accent'"
+      />
+      <span class="max-sm:sr-only">{{ $t('header.outbound') }}</span>
+      <span
+        class="font-mono text-xs"
+        :class="foreign.length > 0 ? 'text-danger' : 'text-fg'"
       >{{ label }}</span>
     </button>
 
     <dialog
       ref="dialog"
       aria-labelledby="network-title"
-      class="m-0 mt-16 ml-auto max-h-[80vh] w-full max-w-xl border border-rule bg-sheet p-0 text-ink shadow-sheet backdrop:bg-ink/30 max-sm:mt-0 max-sm:max-h-full"
+      class="m-0 mt-16 ml-auto max-h-[80vh] w-full max-w-xl rounded-md border border-line bg-canvas p-0 text-fg shadow-overlay backdrop:bg-fg/20 open:animate-overlay-in max-sm:mt-0 max-sm:max-h-full sm:mr-6"
       @click.self="dialog?.close()"
     >
       <div class="space-y-4 px-6 py-5">
         <div class="flex items-start justify-between gap-4">
           <h2
             id="network-title"
-            class="font-serif text-xl font-semibold"
+            class="text-lg font-semibold"
           >
             {{ $t('header.outbound') }}
           </h2>
           <button
             type="button"
-            class="text-sm text-signal underline underline-offset-4 outline-signal focus-visible:outline-2 focus-visible:outline-offset-2"
+            class="press focus-ring rounded-sm text-sm text-fg-muted hover:text-fg"
             @click="dialog?.close()"
           >
             {{ $t('network.close') }}
@@ -49,17 +54,17 @@ function size(bytes: number) {
         </div>
         <p
           class="font-semibold"
-          :class="foreign.length > 0 ? 'text-alert' : 'text-signal'"
+          :class="foreign.length > 0 ? 'text-danger' : 'text-accent'"
         >
           {{ foreign.length > 0 ? $t('network.foreign', { n: foreign.length }, foreign.length) : $t('network.none') }}
         </p>
-        <p class="text-sm text-ink-muted">
+        <p class="text-sm text-fg-muted">
           {{ $t('network.explain') }}
         </p>
-        <div class="max-h-[45vh] overflow-y-auto border-y border-rule">
+        <div class="max-h-[45vh] overflow-y-auto border-y border-line">
           <table class="w-full text-left text-sm">
-            <thead class="sticky top-0 bg-sheet">
-              <tr class="border-b border-rule">
+            <thead class="sticky top-0 bg-canvas">
+              <tr class="border-b border-line">
                 <th
                   scope="col"
                   class="py-2 pr-3 font-semibold"
@@ -84,15 +89,15 @@ function size(bytes: number) {
               <tr
                 v-for="(entry, index) in entries"
                 :key="index"
-                class="border-b border-rule last:border-b-0"
+                class="border-b border-line last:border-b-0"
               >
                 <td class="max-w-0 py-1.5 pr-3">
                   <span
                     class="block truncate font-mono text-xs"
-                    :class="{ 'text-alert': !entry.own }"
+                    :class="{ 'text-danger': !entry.own }"
                   >{{ entry.own ? entry.url : entry.host }}</span>
                 </td>
-                <td class="py-1.5 pr-3 whitespace-nowrap text-ink-muted">
+                <td class="py-1.5 pr-3 whitespace-nowrap text-fg-muted">
                   {{ entry.own ? $t(`network.kind.${entry.kind}`) : $t('network.otherSite') }}
                 </td>
                 <td class="py-1.5 text-right whitespace-nowrap tabular-nums">
@@ -104,7 +109,7 @@ function size(bytes: number) {
         </div>
         <p
           v-if="foreign.length === 0"
-          class="text-sm text-ink-muted"
+          class="text-sm text-fg-muted"
         >
           {{ $t('network.allOwn', { host: entries[0]?.host ?? '' }) }}
         </p>

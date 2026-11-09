@@ -4,66 +4,62 @@ import { contrastRatio } from './contrast'
 
 const css = readFileSync(new URL('../../app/assets/css/main.css', import.meta.url), 'utf8')
 
-const darkStart = css.indexOf('@media (prefers-color-scheme: dark)')
-const themeStart = css.indexOf('@theme')
-
-function readTokens(block: string): Record<string, string> {
+function readTheme(name: 'light' | 'dark'): Record<string, string> {
   return Object.fromEntries(
-    [...block.matchAll(/--pf-([a-z-]+):\s*(#[0-9a-fA-F]{6});/g)].map(([, name, value]) => [name!, value!]),
+    [...css.matchAll(new RegExp(`--pf-${name}-([a-z-]+):\\s*(#[0-9a-fA-F]{6});`, 'g'))].map(([, role, value]) => [role!, value!]),
   )
 }
 
-const themes = {
-  light: readTokens(css.slice(0, darkStart)),
-  dark: readTokens(css.slice(darkStart, themeStart)),
-}
+const themes = { light: readTheme('light'), dark: readTheme('dark') }
 
-// Sheets of paper on the night desk set the --color-* roles directly.
-const paperStart = css.indexOf('.paper {', darkStart)
-const paper = Object.fromEntries(
-  [...css.slice(paperStart, css.indexOf('}', paperStart)).matchAll(/--color-([a-z-]+):\s*(#[0-9a-fA-F]{6});/g)].map(([, name, value]) => [name!, value!]),
-)
-
-// Text must reach 4.5:1 (WCAG 1.4.3). Borders of controls and focus
-// indicators must reach 3:1 against what they sit on (WCAG 1.4.11).
+// Text must reach 4.5:1 (WCAG 1.4.3). Control borders, focus rings and the
+// pending underline must reach 3:1 against what they sit on (WCAG 1.4.11).
 const TEXT = 4.5
 const NON_TEXT = 3
 
 const pairs: Array<[foreground: string, background: string, minimum: number]> = [
-  ['ink', 'desk', TEXT],
-  ['ink', 'sheet', TEXT],
-  ['ink-muted', 'desk', TEXT],
-  ['ink-muted', 'sheet', TEXT],
-  ['signal', 'desk', TEXT],
-  ['signal', 'sheet', TEXT],
-  ['alert', 'desk', TEXT],
-  ['alert', 'sheet', TEXT],
-  ['on-signal', 'signal', TEXT],
-  ['on-highlighter', 'highlighter', TEXT],
-  ['on-redaction', 'redaction', TEXT],
-  ['rule-strong', 'desk', NON_TEXT],
-  ['rule-strong', 'sheet', NON_TEXT],
+  ['fg', 'canvas', TEXT],
+  ['fg', 'surface', TEXT],
+  ['fg-muted', 'canvas', TEXT],
+  ['fg-muted', 'surface', TEXT],
+  ['accent', 'canvas', TEXT],
+  ['accent', 'surface', TEXT],
+  ['on-accent', 'accent', TEXT],
+  ['danger', 'canvas', TEXT],
+  ['danger', 'surface', TEXT],
+  ['on-pending', 'pending', TEXT],
+  ['on-token', 'token', TEXT],
+  ['line-strong', 'canvas', NON_TEXT],
+  ['line-strong', 'surface', NON_TEXT],
+  ['pending-line', 'pending', NON_TEXT],
+  ['pending-line', 'canvas', NON_TEXT],
+  ['token', 'canvas', NON_TEXT],
 ]
 
 describe('design tokens', () => {
   it('define the same colour roles in light and dark', () => {
-    expect(Object.keys(themes.light).length).toBeGreaterThan(0)
+    expect(Object.keys(themes.light).length).toBeGreaterThan(10)
     expect(Object.keys(themes.dark).sort()).toEqual(Object.keys(themes.light).sort())
   })
 
+  it('use the dark page colours agreed for the design pass', () => {
+    expect(themes.dark).toMatchObject({ 'canvas': '#11161F', 'surface': '#161C27', 'line': '#232B38', 'fg': '#E6EAF0', 'fg-muted': '#94A0B0' })
+  })
+
   it('map every Tailwind colour to a defined role', () => {
+    const themeStart = css.indexOf('@theme')
     const mapped = [...css.slice(themeStart).matchAll(/--color-[a-z-]+:\s*var\(--pf-([a-z-]+)\)/g)].map(([, name]) => name!)
-    expect(mapped.length).toBeGreaterThan(0)
+    expect(mapped.length).toBeGreaterThan(10)
     for (const name of mapped) expect(themes.light, name).toHaveProperty(name)
   })
 
-  it('keep sheets of paper readable on the night desk', () => {
-    expect(paperStart).toBeGreaterThan(darkStart)
-    for (const [foreground, background] of [['ink', 'sheet'], ['ink-muted', 'sheet'], ['signal', 'sheet'], ['on-signal', 'signal'], ['on-highlighter', 'highlighter'], ['on-redaction', 'redaction']]) {
-      const ratio = contrastRatio(paper[foreground!]!, paper[background!]!)
-      expect(ratio, `${foreground} on ${background} (paper) is ${ratio.toFixed(2)}:1`).toBeGreaterThanOrEqual(TEXT)
+  it('switch every role in both dark selectors', () => {
+    const roles = Object.keys(themes.light)
+    for (const selector of [':root:not([data-theme="light"])', ':root[data-theme="dark"]']) {
+      const start = css.indexOf(`${selector} {`)
+      const block = css.slice(start, css.indexOf('}', start))
+      for (const role of roles) expect(block, `${selector} ${role}`).toContain(`--pf-${role}: var(--pf-dark-${role});`)
     }
-    expect(contrastRatio(paper['rule-strong']!, paper.sheet!)).toBeGreaterThanOrEqual(NON_TEXT)
   })
 
   for (const [themeName, tokens] of Object.entries(themes)) {

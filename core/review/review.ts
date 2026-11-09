@@ -96,9 +96,10 @@ export class Review {
     this.history.push(() => this.restore(key, previous))
   }
 
-  /** Removes every finding nobody decided on yet, as one step that can be undone. */
-  removeAllLeft(): number {
-    const pending = [...new Set(this.list.filter(finding => !this.decisions.has(finding.key)).map(finding => finding.key))]
+  /** Removes every finding nobody decided on yet, optionally of one type only, as one step that can be undone. */
+  removeAllLeft(type?: PiiType): number {
+    const left = this.list.filter(finding => !this.decisions.has(finding.key) && (!type || finding.type === type))
+    const pending = [...new Set(left.map(finding => finding.key))]
     if (pending.length === 0) return 0
     for (const key of pending) this.decisions.set(key, 'remove')
     this.history.push(() => pending.forEach(key => this.decisions.delete(key)))
