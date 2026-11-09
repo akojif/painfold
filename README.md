@@ -16,6 +16,25 @@ The first release (v0.1, Clean) removes personal data from a CSV or XLSX file in
 - Nothing is sent to an AI until you have reviewed what was removed.
 - Numbers are counted by code, and quotes are checked against your data.
 
+## Development
+
+Requires Node 24 (see `.nvmrc`).
+
+```sh
+npm install
+npm run dev          # local development server
+npm run generate     # static build in .output/public
+npm run serve        # serve the static build on http://localhost:4173
+npm run lint
+npm run typecheck
+npm test             # unit tests (Vitest)
+npm run test:e2e     # end-to-end tests against the static build (Playwright)
+```
+
+Run `npm run generate` before `npm run test:e2e`. The first time, install the test browser with `npx playwright install chromium`.
+
+Every end-to-end test fails if the page contacts any origin other than the app itself.
+
 ## License
 
 [MIT](LICENSE)
