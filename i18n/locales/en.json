@@ -403,5 +403,20 @@
         ]
       }
     }
+  },
+  "error": {
+    "notFound": {
+      "title": "Page not found",
+      "heading": "Nothing to clean here.",
+      "body": "This page doesn’t exist. Maybe the link is old, or there’s a typo. No harm done: nothing was uploaded."
+    },
+    "other": {
+      "title": "Something went wrong",
+      "heading": "Something went wrong.",
+      "body": "Reload the page and try again. Your file never left this browser."
+    },
+    "home": "Back to the start",
+    "roadmap": "See the roadmap",
+    "path": "The address {path} was not found."
   }
 }
