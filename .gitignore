@@ -1,0 +1,7 @@
+# Local AI tooling, never committed
+CLAUDE.md
+.claude/
+
+# Secrets
+.env
+.env.*
