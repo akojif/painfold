@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { detect } from '../../core/detect'
 import { detectTable } from '../../core/detect/table'
 import { handleDetectRequest, type DetectResponse } from '../../core/detect/worker-protocol'
-import { normalizeValue, PlaceholderMap, redact } from '../../core/redact/placeholders'
+import { normalizeValue, PlaceholderMap, placeholderLabel, redact } from '../../core/redact/placeholders'
 
 describe('PlaceholderMap', () => {
   it('numbers values per type in the order they are first seen', () => {
@@ -16,9 +16,14 @@ describe('PlaceholderMap', () => {
     const map = new PlaceholderMap()
     expect(map.placeholderFor('EMAIL', 'Anna@Example.com')).toBe('[EMAIL_1]')
     expect(map.placeholderFor('EMAIL', 'anna@example.com')).toBe('[EMAIL_1]')
-    expect(map.placeholderFor('URL', 'HTTPS://Example.com/Invoice/7')).toBe('[URL_1]')
-    expect(map.placeholderFor('URL', 'https://example.com/Invoice/7')).toBe('[URL_1]')
+    expect(map.placeholderFor('URL', 'HTTPS://Example.com/Invoice/7')).toBe('[LINK_1]')
+    expect(map.placeholderFor('URL', 'https://example.com/Invoice/7')).toBe('[LINK_1]')
     expect(map.size).toBe(2)
+  })
+
+  it('labels links as LINK and everything else by its type', () => {
+    expect(placeholderLabel('URL')).toBe('LINK')
+    expect(placeholderLabel('EMAIL')).toBe('EMAIL')
   })
 
   it('keeps URL paths case-sensitive, since they can point to different things', () => {

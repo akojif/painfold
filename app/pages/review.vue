@@ -20,11 +20,13 @@ const heading = computed(() => t('review.heading', {
 
 <template>
   <ClientOnly>
-    <h1
-      v-if="findings"
-      class="text-2xl font-semibold"
-    >
-      {{ heading }}
-    </h1>
+    <div v-if="findings && table">
+      <h1 class="font-serif text-3xl font-semibold">
+        {{ heading }}
+      </h1>
+      <p class="mt-1 text-sm text-ink-muted">
+        {{ table.fileName }}
+      </p>
+    </div>
   </ClientOnly>
 </template>

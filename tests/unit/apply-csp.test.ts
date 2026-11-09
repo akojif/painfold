@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto'
 import { describe, expect, it } from 'vitest'
-import { externalReferences, inlineScriptHashes, withPolicyMeta } from '../../scripts/apply-csp'
+import { externalReferences, inlineScriptHashes, styleAttributes, withPolicyMeta } from '../../scripts/apply-csp'
 
 const sha256 = (text: string) => createHash('sha256').update(text, 'utf8').digest('base64')
 
@@ -45,6 +45,16 @@ describe('externalReferences', () => {
 
   it('ignores the app\'s own files and data URLs', () => {
     expect(externalReferences('<script src="/_nuxt/a.js"></script><img src="data:image/png;base64,AA">url(../fonts/a.woff2)')).toEqual([])
+  })
+})
+
+describe('styleAttributes', () => {
+  it('finds style attributes, including the empty one Vue renders for an undefined binding', () => {
+    expect(styleAttributes('<span class="a" style="">x</span><div style="width: 2px">')).toHaveLength(2)
+  })
+
+  it('ignores the word style elsewhere', () => {
+    expect(styleAttributes('<p class="style">style="x" in text</p><link rel="stylesheet" href="/a.css">')).toEqual([])
   })
 })
 

@@ -5,30 +5,29 @@
   },
   "nav": {
     "label": "Steps",
-    "stepOf": "Step {current} of {total}, {name}",
+    "done": "done",
     "steps": {
       "import": "Import",
       "review": "Review",
       "download": "Download"
     }
   },
-  "privacy": {
-    "notice": "Your file is never uploaded. It stays in this browser."
-  },
   "footer": {
+    "promise": "Open source. No cookies, no accounts, no tracking.",
     "source": "Source code"
   },
   "start": {
-    "title": "Remove personal data from customer feedback, before you share it.",
-    "drop": "Drop a CSV or XLSX file here, or",
-    "choose": "Choose a file",
-    "dropActive": "Drop the file to read it.",
+    "headline": "Take the names out. Keep the feedback.",
+    "lead": "Painfold removes {types} from support tickets and surveys. Your file is never uploaded. It stays in this browser.",
+    "choose": "Choose a CSV or Excel file",
     "reading": "Reading {name}…",
-    "sampleLead": "No file at hand?",
     "sampleButton": "Try the sample file",
-    "sampleNote": "200 made-up support tickets. Fake data, no real people.",
-    "finds": "Finds {types}.",
-    "namesNotYet": "Names are not detected yet."
+    "sampleNote": "200 made-up tickets, no real people",
+    "removedHeading": "What gets removed",
+    "nameNext": "{token} in v0.2",
+    "dropAnywhere": "Or drop a file anywhere on this page.",
+    "dropActive": "Drop the file to read it.",
+    "stamp": "Stays in this browser"
   },
   "types": {
     "EMAIL": "email addresses",
@@ -90,5 +89,23 @@
   "review": {
     "heading": "{findings} in {rows}",
     "findings": "No findings | 1 finding | {n} findings"
+  },
+  "header": {
+    "outbound": "What leaves your browser",
+    "bytes": "0 bytes | 1 byte | {n} bytes"
+  },
+  "specimen": {
+    "description": "Example: a support ticket in which a phone number and an email address are replaced by placeholders.",
+    "ticket": "Ticket 4172, support",
+    "date": "12 March 2026",
+    "before": "Hallo, seit dem letzten Update kann ich keine Rechnungen mehr als PDF exportieren. Bitte rufen Sie mich unter",
+    "phone": "+49 30 23125 417",
+    "middle": "zurück oder schreiben Sie an",
+    "email": "anna.huber{'@'}example.com",
+    "after": ".",
+    "closing": "Danke!"
+  },
+  "privacy": {
+    "notice": "Your file is never uploaded. It stays in this browser."
   }
 }

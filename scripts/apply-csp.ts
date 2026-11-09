@@ -1,6 +1,8 @@
 // Runs after `nuxt generate`. For every HTML page it:
 // 1. refuses absolute http(s) references in src, href, srcset and CSS url(),
-//    so no page or stylesheet can load anything from another origin;
+//    so no page or stylesheet can load anything from another origin, and
+//    style attributes, which the policy blocks (Vue writes an empty one for a
+//    :style binding that starts undefined);
 // 2. hashes the page's executable inline scripts;
 // 3. inserts the Content-Security-Policy from deploy/headers.ts as a <meta> tag
 //    before any script runs.
@@ -48,6 +50,11 @@ export function externalReferences(text: string): string[] {
   return [...inTags, ...inCss].map(match => match[1]!)
 }
 
+/** Tags with a style attribute; the CSP (style-src 'self') blocks every one of them. */
+export function styleAttributes(html: string): string[] {
+  return [...html.matchAll(/<[a-z][\w-]*\b[^>]*\sstyle\s*=[^>]*>/gi)].map(([tag]) => tag)
+}
+
 export function withPolicyMeta(html: string, policy: string): string {
   if (html.includes('http-equiv="Content-Security-Policy"')) throw new Error('Page already has a CSP meta tag')
   const meta = `<meta http-equiv="Content-Security-Policy" content="${policy}">`
@@ -69,11 +76,12 @@ async function main() {
   for (const file of pages) {
     const html = await readFile(file, 'utf8')
     for (const reference of externalReferences(html)) problems.push(`${file}: ${reference}`)
+    for (const tag of styleAttributes(html)) problems.push(`${file}: style attribute in ${tag.slice(0, 80)}`)
     await writeFile(file, withPolicyMeta(html, documentPolicy(inlineScriptHashes(html))))
   }
 
   if (problems.length > 0) {
-    console.error('References to other origins found in the build:\n' + problems.join('\n'))
+    console.error('The build would break the Content-Security-Policy:\n' + problems.join('\n'))
     process.exit(1)
   }
   console.log(`Content-Security-Policy added to ${pages.length} pages.`)

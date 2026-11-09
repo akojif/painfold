@@ -14,7 +14,7 @@ const reading = ref<string>()
 const error = ref<ImportErrorCode>()
 const detectionFailed = ref(false)
 const detecting = ref(false)
-const fileDrop = useTemplateRef<{ open: () => void }>('fileDrop')
+const input = useTemplateRef<HTMLInputElement>('input')
 const summary = useTemplateRef<HTMLElement>('summary')
 
 // The file's bytes stay in memory so another sheet of a workbook can be read.
@@ -44,6 +44,16 @@ async function onFile(file: File) {
   await read({ name: file.name, bytes: new Uint8Array(await file.arrayBuffer()) })
 }
 
+function onInputChange(event: Event) {
+  const target = event.target as HTMLInputElement
+  const file = target.files?.[0]
+  target.value = ''
+  if (file) onFile(file)
+}
+
+// Drop a file anywhere on the page while no file is open.
+const { dragging } = useFileDrop(onFile, () => !table.value)
+
 async function onSample() {
   // Bundled with the app and loaded on demand: no request leaves this site.
   const { default: text } = await import('~~/data/sample/support-tickets.csv?raw')
@@ -54,10 +64,11 @@ async function onSheet(event: Event) {
   if (lastFile) await read(lastFile, { sheetName: (event.target as HTMLSelectElement).value, sample: isSample.value })
 }
 
-function chooseAnother() {
+async function chooseAnother() {
   session.clear()
   lastFile = undefined
-  fileDrop.value?.open()
+  await nextTick()
+  input.value?.click()
 }
 
 async function findPersonalData() {
@@ -78,56 +89,85 @@ async function findPersonalData() {
 </script>
 
 <template>
-  <div class="max-w-measure space-y-8">
+  <div>
     <template v-if="!table">
-      <h1 class="text-2xl font-semibold">
-        {{ $t('start.title') }}
-      </h1>
-      <FileDrop
-        ref="fileDrop"
-        @file="onFile"
-      />
-      <p
-        v-if="reading"
-        aria-live="polite"
-      >
-        {{ $t('start.reading', { name: reading }) }}
-      </p>
-      <div
-        v-if="error"
-        role="alert"
-        class="flex gap-3 border-l-4 border-alert pl-4 text-alert"
-      >
-        <svg
-          aria-hidden="true"
-          viewBox="0 0 16 16"
-          class="mt-1 size-4 shrink-0 fill-current"
-        ><path d="M8 1 15 14H1Z M7.25 6v4h1.5V6Zm0 5v1.5h1.5V11Z" /></svg>
-        <p>{{ $t(`importErrors.${error}`) }}</p>
-      </div>
-      <PrivacyNotice />
-      <div>
-        <p>
-          {{ $t('start.sampleLead') }}
-          <button
-            type="button"
-            class="font-semibold text-signal underline underline-offset-4 outline-signal focus-visible:outline-2 focus-visible:outline-offset-2"
-            @click="onSample"
+      <section class="grid items-center gap-x-16 gap-y-14 lg:grid-cols-[minmax(0,32rem)_minmax(0,1fr)]">
+        <div>
+          <h1 class="max-w-[12ch] font-serif text-display-sm font-semibold md:text-display">
+            {{ $t('start.headline') }}
+          </h1>
+          <p class="mt-6 max-w-[44ch] text-lg text-ink-muted">
+            {{ $t('start.lead', { types }) }}
+          </p>
+          <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
+            <button
+              type="button"
+              class="rounded-control bg-ink px-5 py-3 font-semibold text-desk outline-signal hover:underline hover:underline-offset-4 focus-visible:outline-2 focus-visible:outline-offset-2"
+              @click="input?.click()"
+            >
+              {{ $t('start.choose') }}
+            </button>
+            <div>
+              <button
+                type="button"
+                class="font-semibold text-signal underline underline-offset-4 outline-signal focus-visible:outline-2 focus-visible:outline-offset-2"
+                @click="onSample"
+              >
+                {{ $t('start.sampleButton') }}
+              </button>
+              <p class="text-sm text-ink-muted">
+                {{ $t('start.sampleNote') }}
+              </p>
+            </div>
+          </div>
+          <input
+            ref="input"
+            type="file"
+            accept=".csv,.tsv,.txt,.xlsx,text/csv,text/tab-separated-values,text/plain,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            class="hidden"
+            data-testid="file-input"
+            @change="onInputChange"
           >
-            {{ $t('start.sampleButton') }}
-          </button>
-        </p>
-        <p class="text-sm text-ink-muted">
-          {{ $t('start.sampleNote') }}
-        </p>
-      </div>
-      <div class="text-ink-muted">
-        <p>{{ $t('start.finds', { types }) }}</p>
-        <p>{{ $t('start.namesNotYet') }}</p>
-      </div>
+          <p
+            v-if="reading"
+            class="mt-6"
+            aria-live="polite"
+          >
+            {{ $t('start.reading', { name: reading }) }}
+          </p>
+          <div
+            v-if="error"
+            role="alert"
+            class="mt-6 flex gap-3 border-l-4 border-alert pl-4 text-alert"
+          >
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 16 16"
+              class="mt-1 size-4 shrink-0 fill-current"
+            ><path d="M8 1 15 14H1Z M7.25 6v4h1.5V6Zm0 5v1.5h1.5V11Z" /></svg>
+            <p>{{ $t(`importErrors.${error}`) }}</p>
+          </div>
+          <div class="mt-10 border-t border-rule pt-5">
+            <RemovedTypes />
+          </div>
+        </div>
+
+        <div>
+          <SpecimenSheet :lifted="dragging" />
+          <p
+            class="mt-6 text-center text-sm text-ink-muted"
+            aria-live="polite"
+          >
+            {{ dragging ? $t('start.dropActive') : $t('start.dropAnywhere') }}
+          </p>
+        </div>
+      </section>
     </template>
 
-    <template v-else>
+    <div
+      v-else
+      class="max-w-3xl space-y-8"
+    >
       <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
         <div>
           <h1
@@ -221,6 +261,6 @@ async function findPersonalData() {
           {{ $t('find.button', { rows: rowCount }) }}
         </button>
       </div>
-    </template>
+    </div>
   </div>
 </template>
