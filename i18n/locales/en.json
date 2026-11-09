@@ -194,6 +194,53 @@
     "PLACE": "Place"
   },
   "download": {
-    "heading": "Download the cleaned file"
+    "heading": "Your cleaned file is ready.",
+    "removed": "Replaced with placeholders",
+    "nothingRemoved": "Nothing was found or marked, so the text is unchanged.",
+    "notReviewed": "Includes 1 finding that was not reviewed. | Includes {n} findings that were not reviewed.",
+    "kept": "1 finding was kept. | {n} findings were kept.",
+    "dropped": "Left out: {columns}.",
+    "unchecked": "Copied without checking: {columns}.",
+    "button": "Download {name}",
+    "back": "Back to review",
+    "startOver": "Clean another file",
+    "noteInFile": "The file ends with a note on the limits of automatic detection.",
+    "mapStays": "The list of original values behind each placeholder stays in this browser and is gone when you close the tab.",
+    "fileNote": "Note from Painfold: {limits}"
+  },
+  "typeMany": {
+    "EMAIL": "Email addresses",
+    "PHONE": "Phone numbers",
+    "IBAN": "IBANs",
+    "CARD": "Card numbers",
+    "SVNR": "Social security numbers",
+    "VAT_ID": "VAT IDs",
+    "URL": "Links",
+    "IP": "IP addresses",
+    "DATE_OF_BIRTH": "Dates of birth",
+    "ADDRESS": "Street addresses",
+    "POSTCODE": "Postcodes",
+    "NAME": "Names",
+    "PLACE": "Places"
+  },
+  "network": {
+    "none": "No data has left this browser.",
+    "foreign": "1 request went to another site. | {n} requests went to other sites.",
+    "explain": "Every request this page has made since it opened. Your file is read, checked and cleaned here, and never sent anywhere.",
+    "destination": "Destination",
+    "what": "What",
+    "size": "Size",
+    "kind": {
+      "code": "App code",
+      "style": "Styles",
+      "font": "Font",
+      "data": "App data",
+      "other": "Other"
+    },
+    "otherSite": "Another site",
+    "allOwn": "All requests went to this site ({host}): the app's own code, fonts and text.",
+    "bytes": "{n} B",
+    "kilobytes": "{n} kB",
+    "close": "Close"
   }
 }
