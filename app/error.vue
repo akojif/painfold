@@ -75,10 +75,11 @@ const leave = (to: string) => clearError({ redirect: to })
         <a
           v-if="kind === 'notFound'"
           href="/roadmap"
-          class="focus-ring rounded-sm text-sm text-accent underline-offset-4 hover:underline"
+          class="group focus-ring inline-flex items-center gap-1 rounded-sm text-sm text-accent underline-offset-4 hover:underline"
           @click.prevent="leave('/roadmap')"
         >
           {{ $t('error.roadmap') }}
+          <LinkArrow />
         </a>
       </div>
     </section>
