@@ -1,11 +1,15 @@
-import { detectEmails } from './email.ts'
-import { detectIps } from './ip.ts'
-import { detectUrls } from './url.ts'
+import type { PiiType } from '../pii-types.ts'
+import { emailDetector } from './email.ts'
+import { ipDetector } from './ip.ts'
+import { urlDetector } from './url.ts'
 import type { Detection, Detector } from './types.ts'
 
 export type { Detection, Detector } from './types.ts'
 
-export const DETECTORS: readonly Detector[] = [detectEmails, detectUrls, detectIps]
+export const DETECTORS: readonly Detector[] = [emailDetector, urlDetector, ipDetector]
+
+/** The types Painfold can find today; the interface lists exactly these. */
+export const DETECTED_TYPES: readonly PiiType[] = DETECTORS.map(detector => detector.type)
 
 /**
  * Runs every detector and resolves overlaps: the longer span wins, so an email
@@ -13,7 +17,7 @@ export const DETECTORS: readonly Detector[] = [detectEmails, detectUrls, detectI
  * never overlap.
  */
 export function detect(text: string, detectors: readonly Detector[] = DETECTORS): Detection[] {
-  const candidates = detectors.flatMap(run => run(text))
+  const candidates = detectors.flatMap(detector => detector.detect(text))
     .sort((a, b) => (b.end - b.start) - (a.end - a.start) || a.start - b.start)
 
   const kept: Detection[] = []

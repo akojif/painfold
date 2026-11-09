@@ -20,6 +20,7 @@
     "core/**/*.ts",
     "deploy/**/*.ts",
     "tests/unit/**/*.ts",
+    "tests/fixtures/**/*.ts",
     "tests/e2e/**/*.ts",
     "scripts/**/*.ts",
     "vitest.config.ts",

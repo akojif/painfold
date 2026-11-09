@@ -16,8 +16,10 @@ function trimEnd(candidate: string): string {
   return url
 }
 
-export const detectUrls: Detector = text =>
-  [...text.matchAll(URL_CANDIDATE)].flatMap((match) => {
+export const urlDetector: Detector = {
+  type: 'URL',
+  detect: text => [...text.matchAll(URL_CANDIDATE)].flatMap((match) => {
     const url = trimEnd(match[0])
     return /[\p{L}\d]\.[\p{L}]{2,}/u.test(url) ? [detection('URL', text, match.index, match.index + url.length)] : []
-  })
+  }),
+}

@@ -2,5 +2,93 @@
   "app": {
     "name": "Painfold",
     "tagline": "Find what hurts your customers, without exposing who they are."
+  },
+  "nav": {
+    "label": "Steps",
+    "stepOf": "Step {current} of {total}, {name}",
+    "steps": {
+      "import": "Import",
+      "review": "Review",
+      "download": "Download"
+    }
+  },
+  "privacy": {
+    "notice": "Your file is never uploaded. It stays in this browser."
+  },
+  "footer": {
+    "source": "Source code"
+  },
+  "start": {
+    "title": "Remove personal data from customer feedback, before you share it.",
+    "drop": "Drop a CSV or XLSX file here, or",
+    "choose": "Choose a file",
+    "dropActive": "Drop the file to read it.",
+    "reading": "Reading {name}…",
+    "sampleLead": "No file at hand?",
+    "sampleButton": "Try the sample file",
+    "sampleNote": "200 made-up support tickets. Fake data, no real people.",
+    "finds": "Finds {types}.",
+    "namesNotYet": "Names are not detected yet."
+  },
+  "types": {
+    "EMAIL": "email addresses",
+    "PHONE": "phone numbers",
+    "IBAN": "IBANs",
+    "CARD": "card numbers",
+    "SVNR": "Austrian social security numbers",
+    "VAT_ID": "VAT IDs",
+    "URL": "links",
+    "IP": "IP addresses",
+    "DATE_OF_BIRTH": "dates of birth",
+    "ADDRESS": "street addresses",
+    "POSTCODE": "postcodes",
+    "NAME": "names",
+    "PLACE": "places"
+  },
+  "importErrors": {
+    "empty-file": "This file is empty. Choose a file with a header row and at least one row of feedback.",
+    "file-too-large": "This file is larger than 50 MB. Split it into smaller files and clean them one at a time.",
+    "no-rows": "This file only has a header row. Add rows of feedback, or choose another file.",
+    "too-many-rows": "This file has more than 50,000 rows. Split it into smaller files and clean them one at a time.",
+    "unsupported-format": "Painfold reads CSV and XLSX files. Export your data in one of those formats and choose it again.",
+    "legacy-excel": "This is an old Excel file (.xls). Open it in Excel, save it as .xlsx or .csv, then choose it again.",
+    "unreadable": "This file could not be read. It may be damaged or password-protected. Try exporting it again."
+  },
+  "file": {
+    "summary": "{name}, {rows}",
+    "rows": "no rows | 1 row | {n} rows",
+    "chooseAnother": "Choose another file",
+    "sheet": "Sheet",
+    "sample": "Sample file with fake data.",
+    "ragged": "1 row had a different number of cells than the header and was filled in. | {n} rows had a different number of cells than the header and were filled in."
+  },
+  "columns": {
+    "feedback": "Feedback column",
+    "heading": "What happens to each column",
+    "isFeedback": "Feedback column, always checked",
+    "roleLabel": "What happens to {column}",
+    "roles": {
+      "scan": "Check",
+      "keep": "Keep as is",
+      "drop": "Drop"
+    },
+    "keepHelp": "Keep as is: copied to the cleaned file without checking.",
+    "personal": "Looks like personal data (“{term}”), so it is left out of the cleaned file.",
+    "empty": "(empty)"
+  },
+  "preview": {
+    "heading": "First {n} rows",
+    "dropped": "Dropped columns are struck through.",
+    "label": "Preview of the first rows"
+  },
+  "find": {
+    "button": "Find personal data in {rows}",
+    "progress": "Checking row {done} of {total}",
+    "progressLabel": "Progress",
+    "failed": "Something went wrong while checking the file. Try again, or reload the page."
+  },
+  "review": {
+    "heading": "{findings} in {rows}",
+    "findings": "No findings | 1 finding | {n} findings"
   }
 }

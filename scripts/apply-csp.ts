@@ -29,13 +29,23 @@ export function inlineScriptHashes(html: string): string[] {
   return hashes
 }
 
+/**
+ * References that make the browser load something from another origin by
+ * itself. Ordinary links (<a href>) are left out: nothing is requested until
+ * someone follows one, and Referrer-Policy: no-referrer keeps the page private.
+ */
 export function externalReferences(text: string): string[] {
-  const patterns = [
-    /\b(?:src|href|srcset|action|poster|data)\s*=\s*["']?\s*((?:https?:)?\/\/[^"'\s>]+)/gi,
-    /url\(\s*["']?((?:https?:)?\/\/[^"')\s]+)/gi,
-    /@import\s+["']((?:https?:)?\/\/[^"']+)/gi,
+  const external = '((?:https?:)?\\/\\/[^"\'\\s>)]+)'
+  const tags = [...text.matchAll(/<([a-z][\w-]*)\b[^>]*>/gi)]
+    .filter(([, name]) => name!.toLowerCase() !== 'a')
+    .map(([tag]) => tag)
+  const inTags = tags.flatMap(tag =>
+    [...tag.matchAll(new RegExp(`\\b(?:src|href|srcset|action|poster|data|formaction)\\s*=\\s*["']?\\s*${external}`, 'gi'))])
+  const inCss = [
+    ...text.matchAll(new RegExp(`url\\(\\s*["']?${external}`, 'gi')),
+    ...text.matchAll(new RegExp(`@import\\s+["']${external}`, 'gi')),
   ]
-  return patterns.flatMap(pattern => [...text.matchAll(pattern)].map(match => match[1]!))
+  return [...inTags, ...inCss].map(match => match[1]!)
 }
 
 export function withPolicyMeta(html: string, policy: string): string {

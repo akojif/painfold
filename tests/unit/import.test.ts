@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import { utils, write } from 'xlsx'
 import { importFile, ImportError, MAX_FILE_BYTES, MAX_ROWS, type ImportErrorCode } from '../../core/import'
+import { GERMAN_EXCEL_ROWS, GERMAN_EXCEL_TEXT, windows1252 } from '../fixtures/german-excel'
 
 const bytes = (text: string) => new TextEncoder().encode(text)
 const csv = (text: string, name = 'feedback.csv') => importFile({ name, bytes: bytes(text) })
@@ -42,6 +43,13 @@ describe('CSV import', () => {
     const table = await csv('id;betrag;text\n1;12,50;Hallo\n2;3,99;Servus')
     expect(table.columns).toEqual(['id', 'betrag', 'text'])
     expect(table.rows[0]).toEqual(['1', '12,50', 'Hallo'])
+  })
+
+  it('reads a CSV exactly as German Excel on Windows saves it', async () => {
+    const table = await importFile({ name: 'Rückmeldungen.csv', bytes: windows1252(GERMAN_EXCEL_TEXT) })
+    expect(table).toMatchObject({ encoding: 'windows-1252', delimiter: ';', raggedRows: 0 })
+    expect(table.columns).toEqual(GERMAN_EXCEL_ROWS[0])
+    expect(table.rows).toEqual(GERMAN_EXCEL_ROWS.slice(1))
   })
 
   it('strips a UTF-8 byte order mark', async () => {

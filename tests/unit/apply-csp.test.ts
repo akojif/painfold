@@ -32,6 +32,17 @@ describe('externalReferences', () => {
     ])
   })
 
+  it('allows ordinary links, which load nothing until followed', () => {
+    expect(externalReferences('<a href="https://github.com/akojif/painfold" class="x">Source code</a>')).toEqual([])
+  })
+
+  it('still finds other-origin references on tags that load by themselves', () => {
+    expect(externalReferences('<iframe src="https://example.com/embed"></iframe><img srcset="https://example.com/a.png 2x">')).toEqual([
+      'https://example.com/embed',
+      'https://example.com/a.png',
+    ])
+  })
+
   it('ignores the app\'s own files and data URLs', () => {
     expect(externalReferences('<script src="/_nuxt/a.js"></script><img src="data:image/png;base64,AA">url(../fonts/a.woff2)')).toEqual([])
   })
