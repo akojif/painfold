@@ -1,52 +1,63 @@
 <script setup lang="ts">
 const route = useRoute()
+const { table } = useSession()
 const step = computed(() => (route.meta.step as number | undefined) ?? 1)
+// The empty start screen explains the product instead; steps appear once a file is open.
+const showSteps = computed(() => step.value > 1 || Boolean(table.value))
 // Catch file drops everywhere, so a browser never opens a dropped file and leaves the app.
 useFileDrop()
 </script>
 
 <template>
-  <div class="flex min-h-screen flex-col">
-    <header class="border-b border-rule">
-      <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4 md:px-8">
+  <div class="flex min-h-dvh flex-col">
+    <header class="sticky top-0 z-20 border-b border-line bg-canvas">
+      <div class="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
         <NuxtLink
           to="/"
-          class="flex items-center gap-2.5 outline-signal focus-visible:outline-2 focus-visible:outline-offset-4"
+          class="focus-ring flex items-center gap-2.5 rounded-sm text-md font-semibold tracking-tight"
         >
-          <svg
+          <span
             aria-hidden="true"
-            viewBox="0 0 20 20"
-            class="size-5 fill-none stroke-ink stroke-[1.5]"
-          ><path d="M4.5 2.5h7l4 4v11h-11Z M11.5 2.5v4h4" /><path
-            d="M7 10.5h6"
-            class="stroke-2"
-          /><path d="M7 13.5h4" /></svg>
-          <span class="font-serif text-xl font-semibold">{{ $t('app.name') }}</span>
+            class="relative size-[18px] rounded-[5px] bg-fg after:absolute after:inset-x-1 after:top-[7.5px] after:h-[3px] after:rounded-[1px] after:bg-canvas"
+          />
+          {{ $t('app.name') }}
         </NuxtLink>
-        <OutboundIndicator />
+        <div class="flex items-center gap-2">
+          <ThemeToggle />
+          <OutboundIndicator />
+        </div>
       </div>
     </header>
 
-    <div class="mx-auto w-full max-w-6xl flex-1 px-4 pt-6 pb-16 md:px-8">
-      <AppStepper :current="step" />
-      <main class="mt-10 md:mt-16">
+    <div class="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 sm:px-6">
+      <AppStepper
+        v-if="showSteps"
+        class="pt-6"
+        :current="step"
+      />
+      <main class="flex flex-1 flex-col py-8 sm:py-10">
         <slot />
       </main>
     </div>
 
-    <footer class="border-t border-rule">
-      <div class="mx-auto flex max-w-6xl flex-wrap items-baseline justify-between gap-x-6 gap-y-2 px-4 py-4 text-sm text-ink-muted md:px-8">
+    <footer class="border-t border-line">
+      <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-6 gap-y-2 px-4 py-4 text-sm text-fg-muted sm:px-6">
         <p>
-          <!-- The start screen says this in its lead; every other step says it here. -->
-          <template v-if="step > 1">
+          <!-- The start screen states this once in its own content; every other step states it here. -->
+          <template v-if="step > 1 || table">
             {{ $t('privacy.notice') }}
           </template>
-          {{ $t('footer.promise') }}
         </p>
-        <a
-          href="https://github.com/akojif/painfold"
-          class="text-signal underline underline-offset-4 outline-signal focus-visible:outline-2 focus-visible:outline-offset-2"
-        >{{ $t('footer.source') }}</a>
+        <nav class="flex gap-5">
+          <a
+            href="https://github.com/akojif/painfold/blob/main/ROADMAP.md"
+            class="focus-ring rounded-sm hover:text-fg"
+          >{{ $t('footer.roadmap') }}</a>
+          <a
+            href="https://github.com/akojif/painfold"
+            class="focus-ring rounded-sm hover:text-fg"
+          >{{ $t('footer.source') }}</a>
+        </nav>
       </div>
     </footer>
   </div>

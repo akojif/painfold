@@ -3,8 +3,10 @@ import { PII_TYPES, type PiiType } from '~~/core/pii-types'
 import type { Finding } from '~~/core/review/review'
 import type { CellSelection } from '~/utils/selection'
 
-const props = defineProps<{ finding?: Finding, marking?: CellSelection & { text: string }, problem?: string }>()
-const emit = defineEmits<{ remove: [], keep: [], undo: [], startMark: [], confirmMark: [type: PiiType], cancelMark: [] }>()
+// docked: stays in view beside the rows while they scroll (desktop). On small
+// screens it is always a bar fixed to the bottom.
+const props = defineProps<{ finding?: Finding, marking?: CellSelection & { text: string }, problem?: string, docked?: boolean }>()
+const emit = defineEmits<{ remove: [event: MouseEvent], keep: [], undo: [], startMark: [], confirmMark: [type: PiiType], cancelMark: [] }>()
 const { review, revision } = useSession()
 const { t } = useI18n()
 
@@ -25,6 +27,7 @@ const copyRows = computed(() => {
   if (!props.finding || !current) return 0
   return new Set(current.copiesOf(props.finding.key).map(copy => copy.row)).size
 })
+const hasFindings = computed(() => (revision.value, (review.value?.findings.length ?? 0) > 0))
 const canUndo = computed(() => (revision.value, review.value?.canUndo ?? false))
 const copiesText = computed(() => {
   if (!props.finding || !review.value) return ''
@@ -36,7 +39,8 @@ const copiesText = computed(() => {
 
 <template>
   <aside
-    class="border-rule bg-desk max-lg:fixed max-lg:inset-x-0 max-lg:bottom-0 max-lg:z-10 max-lg:border-t max-lg:px-4 max-lg:py-4 lg:sticky lg:top-6"
+    class="max-lg:fixed max-lg:inset-x-0 max-lg:bottom-0 max-lg:z-10 max-lg:border-t max-lg:border-line max-lg:bg-canvas max-lg:px-4 max-lg:py-4 max-lg:shadow-overlay"
+    :class="{ 'lg:sticky lg:top-20': docked }"
     aria-labelledby="margin-note-title"
   >
     <form
@@ -46,16 +50,16 @@ const copiesText = computed(() => {
     >
       <p
         id="margin-note-title"
-        class="font-semibold"
+        class="font-medium"
       >
         {{ $t('review.mark.heading', { text: marking.text }) }}
       </p>
       <label class="block text-sm">
-        <span class="block text-ink-muted">{{ $t('review.mark.type') }}</span>
+        <span class="block text-fg-muted">{{ $t('review.mark.type') }}</span>
         <select
           ref="markSelect"
           v-model="markType"
-          class="mt-1 w-full rounded-control border border-rule-strong bg-sheet px-3 py-1.5 outline-signal focus-visible:outline-2 focus-visible:outline-offset-2"
+          class="focus-ring mt-1 h-9 w-full rounded-md border border-line-strong bg-canvas px-2.5"
         >
           <option
             v-for="type in markTypes"
@@ -69,13 +73,13 @@ const copiesText = computed(() => {
       <div class="flex flex-wrap gap-2">
         <button
           type="submit"
-          class="rounded-control bg-ink px-4 py-2 font-semibold text-desk outline-signal focus-visible:outline-2 focus-visible:outline-offset-2"
+          class="focus-ring press h-9 rounded-md bg-fg px-3.5 font-medium text-canvas"
         >
           {{ $t('review.mark.confirm') }}
         </button>
         <button
           type="button"
-          class="rounded-control border border-rule-strong bg-sheet px-4 py-2 outline-signal focus-visible:outline-2 focus-visible:outline-offset-2"
+          class="focus-ring press h-9 rounded-md border border-line px-3.5 hover:border-line-strong"
           @click="emit('cancelMark')"
         >
           {{ $t('review.mark.cancel') }}
@@ -87,30 +91,30 @@ const copiesText = computed(() => {
       <template v-if="finding">
         <p
           id="margin-note-title"
-          class="text-sm text-ink-muted"
+          class="text-sm text-fg-muted"
         >
           {{ $t('review.note.title', { type: $t(`typeOne.${finding.type}`), row: finding.row + 1 }) }}
         </p>
-        <p class="mt-1 font-mono text-lg break-all">
+        <p class="mt-1 font-mono text-md wrap-anywhere max-lg:line-clamp-2">
           {{ finding.value }}
         </p>
-        <p class="mt-1 text-sm text-ink-muted">
+        <p class="mt-1 text-sm text-fg-muted">
           {{ decision === 'remove' ? $t('review.note.removed') : decision === 'keep' ? $t('review.note.kept') : copiesText }}
         </p>
         <div class="mt-4 grid grid-cols-2 gap-2">
           <button
             type="button"
-            class="flex items-center justify-center gap-3 rounded-control px-4 py-2.5 font-semibold outline-signal focus-visible:outline-2 focus-visible:outline-offset-2"
-            :class="decision === 'remove' ? 'border border-ink bg-sheet text-ink' : 'bg-ink text-desk'"
+            class="focus-ring press flex h-9 items-center justify-center gap-2 rounded-md font-medium"
+            :class="decision === 'remove' ? 'border border-line-strong text-fg' : 'bg-fg text-canvas'"
             :aria-pressed="decision === 'remove'"
-            @click="emit('remove')"
+            @click="emit('remove', $event)"
           >
             {{ $t('review.remove') }} <KeyCap>{{ SHORTCUTS.remove }}</KeyCap>
           </button>
           <button
             type="button"
-            class="flex items-center justify-center gap-3 rounded-control border px-4 py-2.5 outline-signal focus-visible:outline-2 focus-visible:outline-offset-2"
-            :class="decision === 'keep' ? 'border-ink bg-ink font-semibold text-desk' : 'border-rule-strong bg-sheet text-ink'"
+            class="focus-ring press flex h-9 items-center justify-center gap-2 rounded-md border"
+            :class="decision === 'keep' ? 'border-fg bg-fg font-medium text-canvas' : 'border-line hover:border-line-strong'"
             :aria-pressed="decision === 'keep'"
             @click="emit('keep')"
           >
@@ -119,9 +123,9 @@ const copiesText = computed(() => {
         </div>
       </template>
       <p
-        v-else
+        v-else-if="hasFindings"
         id="margin-note-title"
-        class="text-sm text-ink-muted"
+        class="text-sm text-fg-muted"
       >
         {{ $t('review.note.nothingSelected') }}
       </p>
@@ -129,15 +133,15 @@ const copiesText = computed(() => {
       <p
         v-if="problem"
         role="alert"
-        class="mt-3 border-l-4 border-alert pl-3 text-sm text-alert"
+        class="mt-3 text-sm text-danger"
       >
         {{ problem }}
       </p>
 
-      <div class="mt-5 flex flex-wrap gap-x-4 gap-y-2 border-t border-rule pt-4 text-sm">
+      <div class="mt-4 flex flex-wrap gap-x-4 gap-y-2 border-t border-line pt-4 text-sm">
         <button
           type="button"
-          class="text-signal underline underline-offset-4 outline-signal focus-visible:outline-2 focus-visible:outline-offset-2"
+          class="focus-ring rounded-sm text-accent underline-offset-4 hover:underline"
           @click="emit('startMark')"
         >
           {{ $t('review.mark.button') }}
@@ -145,7 +149,7 @@ const copiesText = computed(() => {
         <button
           v-if="canUndo"
           type="button"
-          class="text-signal underline underline-offset-4 outline-signal focus-visible:outline-2 focus-visible:outline-offset-2"
+          class="focus-ring rounded-sm text-accent underline-offset-4 hover:underline"
           @click="emit('undo')"
         >
           {{ $t('review.undo') }}
@@ -153,7 +157,7 @@ const copiesText = computed(() => {
       </div>
 
       <dl
-        class="mt-4 space-y-1.5 text-sm text-ink-muted max-lg:hidden"
+        class="mt-4 space-y-1.5 text-xs text-fg-muted max-lg:hidden"
         :aria-label="$t('review.keys.label')"
       >
         <div class="flex items-center gap-2">

@@ -41,6 +41,18 @@ test('no cookies are set', async ({ page, context }) => {
   expect(await context.cookies()).toEqual([])
 })
 
+test('the theme choice is the only thing stored in the browser', async ({ page, context }) => {
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Dark' }).click()
+  await page.getByRole('button', { name: 'Try the sample file' }).click()
+  await page.getByRole('button', { name: /Find personal data/ }).click()
+  await expect(page).toHaveURL(/\/review$/)
+  await page.keyboard.press('r')
+  const stored = await page.evaluate(() => ({ local: { ...localStorage }, session: sessionStorage.length }))
+  expect(stored).toEqual({ local: { 'painfold-theme': 'dark' }, session: 0 })
+  expect(await context.cookies()).toEqual([])
+})
+
 for (const path of ['/', '/200.html', '/404.html']) {
   test(`the CSP meta tag on ${path} comes before everything but the charset`, async ({ request }) => {
     const html = await (await request.get(path)).text()

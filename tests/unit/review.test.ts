@@ -49,6 +49,15 @@ describe('Review', () => {
     expect(review.counts()).toEqual({ total: 4, reviewed: 1, left: 3 })
   })
 
+  it('removes everything left of one type in one step that can be undone', () => {
+    const review = fresh()
+    expect(review.removeAllLeft('EMAIL')).toBe(1)
+    expect(review.findings.map(finding => review.decisionFor(finding.key))).toEqual(['remove', undefined, 'remove', undefined])
+    expect(review.removeAllLeft('EMAIL')).toBe(0)
+    review.undo()
+    expect(review.counts().reviewed).toBe(0)
+  })
+
   it('undoes decisions in reverse order', () => {
     const review = fresh()
     const [email, ip] = review.findings

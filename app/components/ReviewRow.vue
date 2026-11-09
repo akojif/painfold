@@ -1,8 +1,13 @@
 <script setup lang="ts">
 import type { Finding } from '~~/core/review/review'
 
-const props = defineProps<{ row: number, cells: { column: number, label?: string, text: string, findings: Finding[] }[], selectedId?: number, sweepKeys: ReadonlySet<string> }>()
-const emit = defineEmits<{ select: [id: number] }>()
+const props = defineProps<{
+  row: number
+  cells: { column: number, label?: string, text: string, findings: Finding[] }[]
+  selectedId?: number
+  motions: ReadonlyMap<string, RemovalMotion>
+}>()
+const emit = defineEmits<{ select: [id: number, event: MouseEvent | KeyboardEvent] }>()
 const { review, revision } = useSession()
 
 type Piece = { kind: 'text', start: number, text: string } | { kind: 'finding', finding: Finding }
@@ -26,26 +31,23 @@ const decisionFor = (finding: Finding) => (revision.value, review.value?.decisio
 </script>
 
 <template>
-  <li
-    class="grid grid-cols-[4.5rem_minmax(0,1fr)] gap-x-4 border-b border-rule px-5 py-5 last:border-b-0 sm:grid-cols-[5.5rem_minmax(0,1fr)] sm:px-7"
-    :class="{ 'bg-highlighter/25': isCurrent }"
-  >
+  <li class="grid grid-cols-[3.5rem_minmax(0,1fr)] gap-x-4 border-b border-line py-4 last:border-b-0 sm:grid-cols-[4.5rem_minmax(0,1fr)]">
     <span
-      class="pt-1 font-mono text-xs text-ink-muted"
-      :class="{ 'font-semibold text-ink': isCurrent }"
+      class="pt-px font-mono text-xs tabular-nums"
+      :class="isCurrent ? 'text-fg' : 'text-fg-muted'"
     >{{ $t('review.row', { n: row + 1 }) }}</span>
-    <div class="space-y-2">
+    <div class="max-w-measure space-y-2">
       <div
         v-for="cell in cells"
         :key="cell.column"
       >
         <p
           v-if="cell.label"
-          class="text-xs text-ink-muted"
+          class="text-xs text-fg-muted"
         >
           {{ cell.label }}
         </p>
-        <p class="font-serif text-voice break-words whitespace-pre-wrap">
+        <p class="break-words whitespace-pre-wrap">
           <template
             v-for="piece in pieces(cell.text, cell.findings)"
             :key="piece.kind === 'text' ? `t${piece.start}` : `f${piece.finding.id}`"
@@ -62,15 +64,15 @@ const decisionFor = (finding: Finding) => (revision.value, review.value?.decisio
               :decision="decisionFor(piece.finding)"
               :placeholder="review!.placeholderFor(piece.finding)"
               :selected="piece.finding.id === selectedId"
-              :sweep="sweepKeys.has(piece.finding.key)"
-              @select="emit('select', piece.finding.id)"
+              :motion="motions.get(piece.finding.key)"
+              @select="emit('select', piece.finding.id, $event)"
             />
           </template>
         </p>
       </div>
       <p
         v-if="!hasFindings"
-        class="text-xs text-ink-muted"
+        class="text-xs text-fg-muted"
       >
         {{ $t('review.nothingFound') }}
       </p>

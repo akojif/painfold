@@ -14,15 +14,16 @@ function upload(page: import('@playwright/test').Page, name: string, buffer: Buf
 }
 
 test.describe('start screen', () => {
-  test('promises the file stays local, offers the sample file and lists what is removed', async ({ page }) => {
+  test('leads with the headline, one primary action, the sample file and the privacy line', async ({ page }) => {
     await page.goto('/')
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Take the personal data out. Keep the feedback.')
-    await expect(page.getByText('Painfold removes email addresses, phone numbers, IBANs, and 8 more kinds of personal data from support tickets and surveys. Your file is never uploaded. It stays in this browser.')).toBeVisible()
-    await expect(page.getByText('Stays in this browser', { exact: true })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Find what hurts your customers. Without exposing who they are.')
+    await expect(page.getByText('Start by cleaning your feedback file: emails, phone numbers, IBANs and more are removed right here in your browser.')).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Choose a CSV or Excel file' })).toBeVisible()
     await expect(page.getByRole('button', { name: 'Try the sample file' })).toBeVisible()
     await expect(page.getByText('200 made-up tickets, no real people')).toBeVisible()
-    const removed = page.getByRole('list', { name: 'What gets removed' })
-    await expect(removed.getByRole('listitem')).toHaveText(['[EMAIL]email addresses', '[PHONE]phone numbers', '[IBAN]IBANs', '[CARD]card numbers', '[SVNR]Austrian social security numbers', '[VAT]VAT IDs', '[ADDRESS]street addresses', '[POSTCODE]postcodes', '[DATE_OF_BIRTH]dates of birth', '[LINK]links', '[IP]IP addresses', '[NAME] in v0.2names in v0.2'])
+    await expect(page.getByText('Your file is never uploaded. It stays in this browser.')).toHaveCount(1)
+    await expect(page.getByRole('list', { name: 'What Painfold does' }).getByRole('listitem')).toHaveText([/^Now\s*Clean your file$/, /^v0\.3\s*Find jobs, pains and gains$/, /^v0\.4\s*Decide what to build$/])
+    await expect(page.getByRole('list', { name: 'About Painfold' }).getByRole('listitem')).toHaveText(['Open source', 'No cookies', 'No account'])
   })
 
   test('shows that nothing has left the browser', async ({ page }) => {
@@ -30,15 +31,20 @@ test.describe('start screen', () => {
     await expect(page.getByRole('button', { name: /What leaves your browser/ })).toHaveText(/0 bytes/)
   })
 
-  test('marks the current step in the stepper', async ({ page }) => {
+  test('the stepper appears once a file is open, with Import as the current step', async ({ page }) => {
     await page.goto('/')
+    await expect(page.getByRole('navigation', { name: 'Steps' })).toHaveCount(0)
+    await page.getByRole('button', { name: 'Try the sample file' }).click()
     await expect(page.getByRole('navigation', { name: 'Steps' }).locator('[aria-current="step"]')).toHaveText(/Import/)
   })
 
   test('the example ticket ends with its values replaced by placeholders', async ({ page }) => {
     await page.goto('/')
-    await expect(page.locator('[data-stage]')).toHaveCount(2)
-    await expect(page.locator('[data-stage="done"]')).toHaveCount(2, { timeout: 5000 })
+    const example = page.getByRole('figure')
+    await expect(example).toContainText('anna.huber@example.com')
+    await expect(page.locator('figure[data-cleaned]')).toHaveCount(1, { timeout: 5000 })
+    await expect(example).toContainText('[EMAIL_1]')
+    await expect(example).toContainText('[PHONE_1]')
   })
 
   test.describe('with reduced motion', () => {
@@ -46,13 +52,13 @@ test.describe('start screen', () => {
 
     test('the example ticket shows its end state at once', async ({ page }) => {
       await page.goto('/')
-      await expect(page.locator('[data-stage="done"]')).toHaveCount(2, { timeout: 500 })
+      await expect(page.locator('figure[data-cleaned]')).toHaveCount(1, { timeout: 500 })
     })
   })
 
   test('a file dropped anywhere on the page is read', async ({ page }) => {
     await page.goto('/')
-    await page.locator('[data-stage]').first().waitFor()
+    await page.getByRole('figure').waitFor()
     await page.evaluate(async (text) => {
       const data = new DataTransfer()
       data.items.add(new File([text], 'dropped.csv', { type: 'text/csv' }))
@@ -60,6 +66,17 @@ test.describe('start screen', () => {
       for (const type of ['dragenter', 'dragover', 'drop']) target.dispatchEvent(new DragEvent(type, { dataTransfer: data, bubbles: true, cancelable: true }))
     }, 'id,message\n1,Bitte an anna@example.com antworten, danke für die Hilfe\n')
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('dropped.csv, 1 row')
+  })
+
+  test('dragging a file over the page shows the drop overlay', async ({ page }) => {
+    await page.goto('/')
+    await page.getByRole('figure').waitFor()
+    await page.evaluate(() => {
+      const data = new DataTransfer()
+      data.items.add(new File(['x'], 'a.csv', { type: 'text/csv' }))
+      document.body.dispatchEvent(new DragEvent('dragenter', { dataTransfer: data, bubbles: true, cancelable: true }))
+    })
+    await expect(page.getByText('Drop to open. Nothing is uploaded.')).toBeVisible()
   })
 })
 
@@ -187,7 +204,7 @@ test.describe('small screens', () => {
   test('never scroll sideways, before or after a file is chosen', async ({ page }) => {
     const overflow = () => page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)
     await page.goto('/')
-    await expect(page.locator('[data-stage="done"]')).toHaveCount(2, { timeout: 5000 })
+    await expect(page.locator('figure[data-cleaned]')).toHaveCount(1, { timeout: 5000 })
     expect(await overflow()).toBeLessThanOrEqual(0)
     await upload(page, 'support-tickets.csv', sampleCsv)
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('support-tickets.csv, 200 rows')

@@ -38,6 +38,7 @@ async function cleanFile(page: Page, file: { name: string, mimeType: string, buf
   await expect(note.getByRole('radio', { name: 'Keep as is' })).toBeChecked()
   await page.getByRole('button', { name: /Find personal data/ }).click()
   await expect(page).toHaveURL(/\/review$/)
+  await page.getByRole('tab', { name: 'By row' }).click()
 
   await page.keyboard.press('r') // the email: removed
   await expect(page.locator('[data-finding][aria-current="true"]')).toContainText('192.0.2.7')
@@ -55,7 +56,7 @@ async function cleanFile(page: Page, file: { name: string, mimeType: string, buf
   await page.getByRole('button', { name: 'Mark as personal data' }).click()
   await expect(page.getByText('1 not reviewed will be removed.')).toBeVisible() // the link
 
-  await page.getByRole('button', { name: 'Continue to download' }).click()
+  await page.getByRole('link', { name: 'Continue to download' }).click()
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Your cleaned file is ready.')
   const [download] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: /^Download tickets_cleaned/ }).click()])
   const [reportDownload] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: 'Download cleaning report (.txt)' }).click()])
@@ -132,7 +133,7 @@ test('a semicolon file is downloaded with semicolons', async ({ page }) => {
   await page.goto('/')
   await page.getByTestId('file-input').setInputFiles({ name: 'de.csv', mimeType: 'text/csv', buffer: Buffer.from('Nr;Rückmeldung\n1;Bitte an anna@example.com schreiben, danke\n') })
   await page.getByRole('button', { name: /Find personal data/ }).click()
-  await page.getByRole('button', { name: 'Continue to download' }).click()
+  await page.getByRole('link', { name: 'Continue to download' }).click()
   const [download] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: /^Download de_cleaned/ }).click()])
   const lines = (await text(download)).slice(1).split('\r\n')
   expect(lines.slice(0, 2)).toEqual(['Nr;Rückmeldung', '1;Bitte an [EMAIL_1] schreiben, danke'])
@@ -155,9 +156,9 @@ test('"Clean another file" starts over with nothing kept', async ({ page }) => {
   await page.goto('/')
   await page.getByRole('button', { name: 'Try the sample file' }).click()
   await page.getByRole('button', { name: /Find personal data/ }).click()
-  await page.getByRole('button', { name: 'Continue to download' }).click()
+  await page.getByRole('link', { name: 'Continue to download' }).click()
   await page.getByRole('button', { name: 'Clean another file' }).click()
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Take the personal data out. Keep the feedback.')
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Find what hurts your customers. Without exposing who they are.')
   await page.goto('/review')
   await expect(page).toHaveURL(/\/$/)
 })

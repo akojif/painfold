@@ -1,6 +1,6 @@
 <script setup lang="ts">
 useHead({
-  bodyAttrs: { class: 'bg-desk text-ink font-sans antialiased' },
+  bodyAttrs: { class: 'bg-canvas text-fg font-sans text-base antialiased' },
 })
 </script>
 

@@ -16,6 +16,7 @@ The first release (v0.1, Clean) removes personal data from a CSV or XLSX file in
 - Nothing is sent to an AI until you have reviewed what was removed.
 - Numbers are counted by code, and quotes are checked against your data.
 - No cookies, no analytics, no tracking. An end-to-end test checks that no cookies are set.
+- The only thing Painfold stores is your theme choice (Light or Dark), in `localStorage` under `painfold-theme`. Choosing System removes it. Your file, the findings and your decisions are never stored; they are gone when you close the tab. An end-to-end test checks this too.
 
 ## What you download
 
@@ -95,4 +96,4 @@ If a new dependency brings an install script, `npm install` warns about it. Revi
 
 Code: [MIT](LICENSE).
 
-Fonts in `app/assets/fonts/` (Atkinson Hyperlegible Next, Atkinson Hyperlegible Mono, Source Serif 4) are self-hosted under the SIL Open Font License 1.1; each folder contains its license.
+Fonts in `app/assets/fonts/` (Geist and Geist Mono, by Vercel) are self-hosted under the SIL Open Font License 1.1; each folder contains its license.
