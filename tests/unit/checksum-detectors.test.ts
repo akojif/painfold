@@ -67,11 +67,50 @@ describe('Austrian social insurance number (SV-Nummer)', () => {
   it.each([
     'Die Kundennummer 1238 010180 hat nichts damit zu tun.',
     'Invoice 0237 010180 starts with zero',
-    'Birth date 32 is impossible: 1235 320180',
     'Amount 1.237.010.180 is not a number like that',
     'Phone 06641 234567',
   ])('finds nothing in %j', (text) => {
     expect(svnrDetector.detect(text)).toEqual([])
+  })
+})
+
+describe('SV-Nummer: every officially valid number', () => {
+  // Builds a number with a correct check digit for a serial and a date part,
+  // moving to the next serial when the remainder is 10 (never issued).
+  function svnr(datePart: string, serial = 123): string {
+    const weights = [3, 7, 9, 5, 8, 4, 2, 1, 6]
+    for (let s = serial; ; s++) {
+      const digits = `${s}${datePart}`
+      const check = [...digits].reduce((sum, d, i) => sum + weights[i]! * Number(d), 0) % 11
+      if (check !== 10) return `${s}${check}${datePart}`
+    }
+  }
+
+  it('matches the official example 7829 280755', () => {
+    expect(isValidSvnr('7829280755')).toBe(true)
+  })
+
+  it.each([
+    ['an artificial birth date in month 13 (official example 5.13.1947)', '051347'],
+    ['month 14', '011450'],
+    ['month 15', '011560'],
+    ['a higher month ("usw.")', '012070'],
+    ['day 00', '000180'],
+    ['month 00', '150080'],
+    ['day 32', '320180'],
+  ])('accepts %s, since the date part is not always a real date', (_, datePart) => {
+    const number = svnr(datePart)
+    expect(isValidSvnr(number), number).toBe(true)
+    expect(values(svnrDetector, `SV-Nr. ${number.slice(0, 4)} ${number.slice(4)}`)).toEqual([`${number.slice(0, 4)} ${number.slice(4)}`])
+  })
+
+  it('never accepts a number whose check computation leaves remainder 10', () => {
+    const weights = [3, 7, 9, 5, 8, 4, 2, 1, 6]
+    for (let serial = 100; serial < 200; serial++) {
+      const digits = `${serial}010180`
+      if ([...digits].reduce((sum, d, i) => sum + weights[i]! * Number(d), 0) % 11 !== 10) continue
+      for (let check = 0; check <= 9; check++) expect(isValidSvnr(`${serial}${check}010180`)).toBe(false)
+    }
   })
 })
 
