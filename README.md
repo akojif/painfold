@@ -15,6 +15,7 @@ The first release (v0.1, Clean) removes personal data from a CSV or XLSX file in
 - Your file is never uploaded. It stays in your browser.
 - Nothing is sent to an AI until you have reviewed what was removed.
 - Numbers are counted by code, and quotes are checked against your data.
+- No cookies, no analytics, no tracking. An end-to-end test checks that no cookies are set.
 
 ## Development
 
@@ -36,6 +37,10 @@ npm run licenses     # fail on dependency licenses outside the allowlist
 Run `npm run generate` before `npm run test:e2e`. The first time, install the test browser with `npx playwright install chromium`.
 
 Every end-to-end test fails if the page contacts any origin other than the app itself.
+
+### Test data
+
+All test data is fake and generated: see [data/README.md](data/README.md) for what is in it and where each kind of value comes from. Never add real customer data to the repository.
 
 ### Continuous integration
 

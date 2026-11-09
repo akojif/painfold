@@ -1,0 +1,211 @@
+id,created_at,channel,rating,plan,country,customer_name,customer_email,message
+1,2026-01-04,Email,,Solo,GB,Chloe Merriweather-Stone,c.merriweatherstone@example.com,"Hi, I'm Chloe Merriweather-Stone and I accidentally created two accounts. Can you merge them? My email is chloe.merriweatherstone+support@example.net."
+2,2026-01-04,NPS survey,5,Free,GB,Oliver Quillfeather,oliver.quillfeather@example.com,"Billing address changed to 59 Willow Lane, Bristol BS1 4DJ but old invoices still show the previous one."
+3,2026-01-04,Email,,Solo,DE,Felix Steinwander,felixsteinwander@example.org,"Versicherungsnummer 8733280691, bitte im Personalstamm hinterlegen."
+4,2026-01-07,Chat,,Free,AT,Jonas Kranzbichler,jonas.kranzbichler+support@example.org,Ticket #20437: Die Synchronisierung mit dem Bankkonto bricht nach 90 Tagen ab und ich muss mich neu anmelden.
+5,2026-01-07,Email,,Solo,IE,Hannah Merriweather-Stone,hannah.merriweatherstone+support@example.net,"Contact: Hannah Merriweather-Stone, hannah.merriweatherstone@example.org, 020 7946 0114. Please get back to us this week or we'll cancel."
+6,2026-01-07,App review,4,Business,AT,Katharina Ötzlinger,katharina.oetzlinger+support@example.net,Abbuchung bitte künftig von der Karte 5555 5555 5555 4444 statt per Überweisung.
+7,2026-01-09,NPS survey,7,Team,IE,Oliver Ashworth-Penn,oliver.ashworthpenn+support@mail.example.com,"Good value. Reports could use more filters though, like by project and month."
+8,2026-01-09,Chat,,Team,AT,Sophie Kranzbichler,sophiekranzbichler@example.com,"Kontakt: Sophie Kranzbichler, s.kranzbichler@example.org, +43 660 234 2972. Bitte bis Ende der Woche melden, sonst kündigen wir."
+9,2026-01-10,Email,,Solo,IE,Oliver Ashworth-Penn,oliverashworthpenn@example.net,"Clicking ""Send"" does nothing. The console shows an error; my IP at the time was 203.0.113.14."
+10,2026-01-12,Email,,Business,IE,Grace Quillfeather,G.quillfeather@example.com,I'd love to pull hours straight from my calendar instead of typing everything twice.
+11,2026-01-12,Chat,,Free,AT,Matthias Steinwander,m.steinwander@example.org,"Lieferadresse: Waldrandweg 100, 6020 Innsbruck. Bitte die Belege dorthin schicken, nicht ins Büro. Danke, Matthias Steinwander"
+12,2026-01-14,NPS survey,6,Free,AT,Tobias Mühlhofer,Tobias.muehlhofer@mail.example.com,"Ich würde gern Stunden direkt aus dem Kalender übernehmen, statt alles doppelt einzutragen."
+13,2026-01-21,NPS survey,3,Free,AT,Jürgen Birkenreiter,juergen_birkenreiter95@example.net,Wir sind ein Team von acht Leuten und die Rechteverwaltung reicht nicht. Jeder sieht alle Kundendaten.
+14,2026-01-21,Chat,,Team,AT,Jonas Haselsteiner,jonashaselsteiner@example.net,"Ich vermisse eine Englisch-Version der Rechnungsvorlage für internationale Kunden.
+Das ist für uns ein Grund zu wechseln."
+15,2026-01-22,Email,,Team,AT,Julia Grubenhofer,j.grubenhofer@mail.example.com,"Für die Steuerberatung brauche ich unsere UID DE844531135 auf jeder Rechnung, das Feld wird aber nicht gedruckt."
+16,2026-01-24,NPS survey,0,Free,AT,Theresa Steinwander,theresa_steinwander67@example.org,"Rechnungsadresse geändert auf Ahornweg 37/1, 50667 Köln, die alte Adresse erscheint aber weiter auf den PDFs."
+17,2026-01-26,App review,3,Free,IE,Hannah Pendleworth,hannah.pendleworth+support@example.org,Please charge 4012 8888 8888 1881 from next month instead of invoicing us.
+18,2026-01-28,Email,,Team,DE,Lena Brunnthaler,lena.brunnthaler@example.org,"Versicherungsnummer 1909 151083, bitte im Personalstamm hinterlegen."
+19,2026-02-03,Email,,Team,AT,Sabine Feldmoser,sabine.feldmoser+support@example.org,"Mein Mann Sabine Feldmoser (geboren am 03.07.1985) soll als Mitarbeiter angelegt werden, die Personalnummer ist seine SV-Nummer 2933 220397."
+20,2026-02-06,Email,,Team,DE,Tobias Haselsteiner,Tobias_haselsteiner31@example.org,"Exportiert man den Monatsbericht als Excel, fehlen die Fahrtkosten. In der Ansicht sind sie da."
+21,2026-02-07,NPS survey,6,Team,IE,Amelia Dunmore,amelia.dunmore+support@mail.example.com,"Missing an English invoice template for international customers.
+Honestly this is the main reason we are looking at alternatives."
+22,2026-02-07,Chat,,Solo,AT,Elias Ahornegger,elias.ahornegger+support@mail.example.com,Abbuchung bitte künftig von der Karte 4111-1111-1111-1111 statt per Überweisung.
+23,2026-02-08,NPS survey,3,Team,IE,Chloe Brindlecombe,chloe.brindlecombe@example.org,"Since yesterday I can't log in, the two-factor SMS never arrives. My number is +44 (0)7700 900 362."
+24,2026-02-09,Email,,Team,AT,Jürgen Winterquell,Juergenwinterquell@example.net,"Ich vermisse eine Englisch-Version der Rechnungsvorlage für internationale Kunden.
+Das ist für uns ein Grund zu wechseln."
+25,2026-02-11,Chat,,Free,AT,Tobias Kranzbichler,t.kranzbichler@mail.example.com,"Für den Kreditantrag: Tobias Kranzbichler, geb. 6.6.2004, Waldrandweg 38/2, 10115 Berlin."
+26,2026-02-13,Email,,Solo,GB,Hannah Quillfeather,hannah.quillfeather@example.net,"Missing an English invoice template for international customers.
+Honestly this is the main reason we are looking at alternatives."
+27,2026-02-14,NPS survey,4,Business,DE,Elias Lindgruber,elias.lindgruber@mail.example.com,"Funktioniert, aber die Ladezeiten im Dashboard sind morgens unerträglich langsam."
+28,2026-02-15,App review,2,Team,IE,Chloe Quillfeather,C.quillfeather@example.net,Exporting invoices to PDF got really slow after the 8.10.6 update. Forty invoices take almost two minutes.
+29,2026-02-16,Chat,,Free,AT,Tobias Haselsteiner,tobias.haselsteiner+support@mail.example.com,"Exportiert man den Monatsbericht als Excel, fehlen die Fahrtkosten. In der Ansicht sind sie da."
+30,2026-02-18,Chat,,Solo,DE,Lukas Weidenauer,lukas.weidenauer@example.org,"Exportiert man den Monatsbericht als Excel, fehlen die Fahrtkosten. In der Ansicht sind sie da."
+31,2026-02-19,App review,5,Team,GB,Samuel Hollinsby,samuel.hollinsby@example.net,"Dashboard takes forever to load in the morning, sometimes 20 seconds."
+32,2026-02-20,Chat,,Team,AT,Stefan Weidenauer,stefan.weidenauer@example.net,Der PDF-Export der Rechnungen dauert seit dem Update auf 7.0.3 ewig. Bei 40 Rechnungen warte ich fast zwei Minuten.
+33,2026-02-23,Email,,Business,DE,Sabine Talbacher,sabinetalbacher@example.org,"Mein Mann Sabine (geb. 26.6.1997) soll als Mitarbeiter angelegt werden, die Personalnummer ist seine SV-Nummer 6535070694."
+34,2026-02-24,App review,3,Business,AT,Julia Lindgruber,julia.lindgruber@example.org,"Super Tool, spart mir jeden Monat einen halben Tag Buchhaltung. Danke!"
+35,2026-02-25,NPS survey,9,Free,AT,Sophie Talbacher,s.talbacher@example.org,"Für die Steuerberatung brauche ich unsere UID ATU42697015 auf jeder Rechnung, das Feld wird aber nicht gedruckt."
+36,2026-02-26,Chat,,Solo,GB,Henry Ashworth-Penn,henry_ashworthpenn77@example.net,I'm an accountant with twelve clients. Switching between them without logging out would save me so much time.
+37,2026-03-01,Email,,Free,AT,Matthias Rosenpichler,matthias.rosenpichler+support@example.net,"Mein Account läuft auf matthias_rosenpichler32@example.org, die Rechnungen sollen aber an die Buchhaltung gehen."
+38,2026-03-01,NPS survey,5,Team,IE,Daniel Ashworth-Penn,daniel.ashworthpenn@mail.example.com,"The card field rejects 5105 1051 0510 5101, is that a bug or did I mistype?"
+39,2026-03-01,NPS survey,7,Business,AT,Katharina Ötzlinger,katharina.oetzlinger+support@example.org,"Super Tool, spart mir jeden Monat einen halben Tag Buchhaltung. Danke!"
+40,2026-03-02,NPS survey,5,Team,IE,George Ashworth-Penn,george.ashworthpenn+support@mail.example.com,Reminder emails end up in my clients' spam folders. Could you check the sender setup?
+41,2026-03-02,Chat,,Team,GB,Emily Pendleworth,emilypendleworth@mail.example.com,"Solid product, but invoice numbers should be able to restart each year."
+42,2026-03-03,App review,3,Free,AT,Stefan Birkenreiter,stefan_birkenreiter82@mail.example.com,"Seit gestern kann ich mich nicht mehr einloggen, die Zwei-Faktor-SMS kommt nicht an. Meine Nummer: 030/23125-190"
+43,2026-03-06,App review,3,Business,DE,Matthias Haselsteiner,matthias.haselsteiner+support@example.net,Mahnungen automatisch verschicken wäre ein Traum. Momentan mache ich das jeden Freitag händisch.
+44,2026-03-09,App review,2,Free,GB,Emily Fenwick-Lowe,emily.fenwicklowe@mail.example.com,"Dashboard takes forever to load in the morning, sometimes 20 seconds."
+45,2026-03-11,Email,,Solo,DE,Stefan Feldmoser,stefanfeldmoser@example.org,"Fehler beim Import der CSV: Umlaute werden zu Fragezeichen. Das betrifft alle Kunden mit ä, ö, ü."
+46,2026-03-13,Email,,Business,AT,Hannah Ahornegger,h.ahornegger@example.com,"Die App stürzt auf dem iPad ab, sobald ich ein Foto vom Beleg anhängen will. Version 2.10.3.70."
+47,2026-03-14,App review,3,Solo,AT,Sophie Feldmoser,sophie.feldmoser+support@example.com,Mahnungen automatisch verschicken wäre ein Traum. Momentan mache ich das jeden Freitag händisch.
+48,2026-03-16,Chat,,Team,AT,Stefan Feldmoser,stefanfeldmoser@mail.example.com,"Preis-Leistung passt. Einzig die Berichte könnten mehr Filter haben, z. B. nach Projekt und Monat."
+49,2026-03-16,Chat,,Solo,IE,Lucy Thistlewood,l.thistlewood@example.net,We're a team of eight and the permissions are too coarse. Everyone can see every client.
+50,2026-03-17,App review,1,Free,AT,Tobias Grubenhofer,tobiasgrubenhofer@example.org,"Warum kostet der Team-Tarif plötzlich € 2 298,00 mehr? Darüber wurden wir nicht informiert."
+51,2026-03-19,NPS survey,8,Business,AT,Matthias Steinwander,matthias.steinwander@example.org,"Die Bankverbindung auf der Rechnung ist falsch. Richtig wäre AT70 9723 3019 4740 3849, bitte korrigieren."
+52,2026-03-19,App review,4,Free,IE,Megan Hollinsby,megan.hollinsby+support@example.com,"Please send the receipts to 50 Mill Row, Bristol BS1 4DJ, not the office. Thanks, Megan Hollinsby"
+53,2026-03-22,NPS survey,5,Business,IE,Oliver Dunmore,oliver_dunmore43@example.net,"Great tool, saves me half a day of bookkeeping every month."
+54,2026-03-25,Chat,,Free,DE,Jürgen Brunnthaler,juergen.brunnthaler+support@example.net,Abbuchung bitte künftig von der Karte 5105-1051-0510-5100 statt per Überweisung.
+55,2026-03-30,Chat,,Solo,DE,Jürgen Ahornegger,juergen_ahornegger8@example.com,Mahnungen automatisch verschicken wäre ein Traum. Momentan mache ich das jeden Freitag händisch.
+56,2026-03-30,NPS survey,7,Business,AT,Elias Winterquell,elias.winterquell+support@example.org,"Ich habe meine Kreditkarte 5105-1051-0510-5100 hinterlegt, trotzdem steht im Konto „Zahlung fehlgeschlagen“."
+57,2026-04-01,Email,,Free,IE,Amelia Hollinsby,Amelia.hollinsby@example.net,"Please send the receipts to 125 Elmfield Close, Bristol BS1 4DJ, not the office. Thanks, Amelia"
+58,2026-04-03,NPS survey,10,Solo,IE,Samuel Brindlecombe,samuel_brindlecombe28@mail.example.com,Exporting invoices to PDF got really slow after the 3.5.3 update. Forty invoices take almost two minutes.
+59,2026-04-04,Chat,,Team,DE,Lukas Weidenauer,l.weidenauer@example.com,"Kontakt: Lukas Weidenauer, lukasweidenauer@example.net, 0660/5096152. Bitte bis Ende der Woche melden, sonst kündigen wir."
+60,2026-04-05,NPS survey,9,Free,AT,Jürgen Haselsteiner,juergen.haselsteiner@example.org,"Die Bankverbindung auf der Rechnung ist falsch. Richtig wäre DE44 5306 5907 1189 6277 31, bitte korrigieren."
+61,2026-04-06,NPS survey,2,Free,AT,Elias Kranzbichler,e.kranzbichler@example.net,"Lieferadresse: Waldrandweg 59, 1070 Wien. Bitte die Belege dorthin schicken, nicht ins Büro. Danke, Elias"
+62,2026-04-09,App review,4,Free,GB,George Hollinsby,georgehollinsby@mail.example.com,"Please send the receipts to 124 Quarry Road, Manchester M1 2WD, not the office. Thanks, George Hollinsby"
+63,2026-04-12,Chat,,Free,IE,Henry Ashworth-Penn,henry.ashworthpenn@example.com,CSV import breaks accented characters: é and ë turn into question marks. Affects about a third of our clients.
+64,2026-04-13,Email,,Free,AT,Hannah Birkenreiter,h.birkenreiter@mail.example.com,"Hallo, ich bin Hannah Birkenreiter und habe zwei Konten angelegt. Können Sie die zusammenführen? Meine E-Mail ist h.birkenreiter@example.com."
+65,2026-04-16,Chat,,Team,IE,Lucy Hollinsby,lucy.hollinsby@mail.example.com,"Good value. Reports could use more filters though, like by project and month."
+66,2026-04-17,Chat,,Business,IE,Grace Merriweather-Stone,grace.merriweatherstone@example.org,"Order B-06159576 was charged twice (€1,299.00). I'd like a refund please."
+67,2026-04-17,App review,3,Business,GB,George Ashworth-Penn,georgeashworthpenn@example.com,"For the Austrian branch, use UID ATU66726938 on all invoices please."
+68,2026-04-17,Email,,Business,IE,Emily Fenwick-Lowe,emilyfenwicklowe@example.org,Reminder emails end up in my clients' spam folders. Could you check the sender setup?
+69,2026-04-19,App review,2,Business,DE,Marie Rosenpichler,marie_rosenpichler45@example.com,"Unsere neue UID lautet ATU52170412, die alte bitte löschen."
+70,2026-04-19,Email,,Business,IE,Daniel Hollinsby,danielhollinsby@mail.example.com,"Please call me back on +44 7700 900581, it's about the invoice from 9 June 2026."
+71,2026-04-19,Email,,Team,IE,Henry Hollinsby,henryhollinsby@example.org,We're a team of eight and the permissions are too coarse. Everyone can see every client.
+72,2026-04-21,Email,,Business,DE,Lukas Lindgruber,Lukas.lindgruber+support@example.net,"Exportiert man den Monatsbericht als Excel, fehlen die Fahrtkosten. In der Ansicht sind sie da."
+73,2026-04-22,App review,2,Solo,IE,Oliver Quillfeather,oliver_quillfeather98@example.net,"Billing address changed to 101 Willow Lane, Leeds LS1 5AB but old invoices still show the previous one."
+74,2026-04-22,App review,1,Free,AT,Lukas Talbacher,lukas.talbacher+support@example.net,"Mein Mann Lukas Talbacher (Geburtsdatum: 16.08.1992) soll als Mitarbeiter angelegt werden, die Personalnummer ist seine SV-Nummer 8287170491."
+75,2026-04-22,Chat,,Solo,GB,Amelia Dunmore,a.dunmore@example.com,"Missing an English invoice template for international customers.
+Honestly this is the main reason we are looking at alternatives."
+76,2026-04-23,Email,,Business,AT,Hannah Talbacher,hannah_talbacher55@mail.example.com,"Bitte rufen Sie mich unter +49 30 23125 135 zurück, es geht um die Rechnung vom 27.07.2026."
+77,2026-04-27,Email,,Team,DE,Matthias Birkenreiter,matthias.birkenreiter@mail.example.com,"Die Bankverbindung auf der Rechnung ist falsch. Richtig wäre AT796051804650086026, bitte korrigieren."
+78,2026-04-27,App review,1,Free,AT,Matthias Grubenhofer,m.grubenhofer@example.org,Der PDF-Export der Rechnungen dauert seit dem Update auf 6.15.7 ewig. Bei 40 Rechnungen warte ich fast zwei Minuten.
+79,2026-04-29,Email,,Team,GB,Daniel Hollinsby,daniel.hollinsby@example.org,"The card field rejects 5555 5555 5555 4445, is that a bug or did I mistype?"
+80,2026-05-02,Chat,,Business,GB,Daniel Pendleworth,daniel.pendleworth+support@example.org,"Billing address changed to 11 Willow Lane, Bristol BS1 4DJ but old invoices still show the previous one."
+81,2026-05-02,Chat,,Solo,GB,Emily Quillfeather,emilyquillfeather@example.org,"Missing an English invoice template for international customers.
+Honestly this is the main reason we are looking at alternatives."
+82,2026-05-02,Email,,Solo,GB,Hannah Fenwick-Lowe,hannah.fenwicklowe@example.com,I'm an accountant with twelve clients. Switching between them without logging out would save me so much time.
+83,2026-05-03,App review,2,Team,GB,Lucy Brindlecombe,lucy.brindlecombe@mail.example.com,"Since yesterday I can't log in, the two-factor SMS never arrives. My number is 07700 900513."
+84,2026-05-03,Email,,Solo,IE,Lucy Thistlewood,l.thistlewood@mail.example.com,Automatic payment reminders would be amazing. Right now I chase late payers by hand every Friday.
+85,2026-05-05,Email,,Solo,GB,Olivia Ashworth-Penn,oliviaashworthpenn@example.net,"Clicking ""Send"" does nothing. The console shows an error; my IP at the time was 2001:db8::f590."
+86,2026-05-06,NPS survey,5,Free,AT,Julia Talbacher,juliatalbacher@mail.example.com,"Fehler beim Import der CSV: Umlaute werden zu Fragezeichen. Das betrifft alle Kunden mit ä, ö, ü."
+87,2026-05-07,App review,2,Solo,AT,Florian Brunnthaler,florian.brunnthaler+support@example.com,"Preis-Leistung passt. Einzig die Berichte könnten mehr Filter haben, z. B. nach Projekt und Monat."
+88,2026-05-14,Chat,,Free,IE,Emily Quillfeather,emily.quillfeather@example.org,"I added my card 5105-1051-0510-5100 but the account still says ""payment failed""."
+89,2026-05-16,Email,,Business,DE,Hannah Lindgruber,hannah.lindgruber@example.net,"Überweisung von DE40979954905858711814 ist laut Bank raus, im System steht die Rechnung aber noch offen."
+90,2026-05-19,Chat,,Solo,DE,Tobias Kranzbichler,tobiaskranzbichler@example.net,"Seit gestern kann ich mich nicht mehr einloggen, die Zwei-Faktor-SMS kommt nicht an. Meine Nummer: +49 (0)30 23125975"
+91,2026-05-23,NPS survey,2,Team,AT,Felix Lindgruber,felix_lindgruber22@example.org,Login-Versuche von 2001:db8::45fd und 192.0.2.183 waren nicht von mir!
+92,2026-05-24,App review,2,Solo,AT,Florian Ötzlinger,florian.oetzlinger+support@example.com,"Exportiert man den Monatsbericht als Excel, fehlen die Fahrtkosten. In der Ansicht sind sie da."
+93,2026-05-25,App review,2,Solo,GB,James Merriweather-Stone,j.merriweatherstone@mail.example.com,Order 20 776 0696 was charged twice (€863.00). I'd like a refund please.
+94,2026-05-27,App review,4,Business,IE,George Brindlecombe,george.brindlecombe@example.org,Why did the Team plan go up by €952.50? Nobody told us.
+95,2026-05-27,Chat,,Business,IE,Lucy Pendleworth,lucy_pendleworth77@example.org,"Our Austrian employee's social insurance number is 5115 200259, where do I enter it?"
+96,2026-06-01,Chat,,Business,GB,Lucy Hollinsby,lucy.hollinsby+support@example.net,The time tracker on mobile sometimes resets to zero when the app goes to the background.
+97,2026-06-01,Email,,Free,GB,Grace Thistlewood,gracethistlewood@example.net,The new interface is cleaner but the font in the invoice preview is far too small.
+98,2026-06-01,App review,2,Team,AT,Florian Brunnthaler,Florian.brunnthaler@example.net,"Exportiert man den Monatsbericht als Excel, fehlen die Fahrtkosten. In der Ansicht sind sie da."
+99,2026-06-02,App review,4,Team,IE,James Brindlecombe,j.brindlecombe@example.org,"Great tool, saves me half a day of bookkeeping every month."
+100,2026-06-02,NPS survey,10,Team,DE,Theresa Winterquell,theresawinterquell@example.org,"Bestellung B-18244223 wurde doppelt abgebucht (€ 1 058,99). Ich möchte eine Gutschrift."
+101,2026-06-03,Chat,,Free,DE,Elisabeth Haselsteiner,elisabeth_haselsteiner85@example.com,"Mein Mann Elisabeth Haselsteiner (geboren am 1. Juli 1963) soll als Mitarbeiter angelegt werden, die Personalnummer ist seine SV-Nummer 7753 041298."
+102,2026-06-06,NPS survey,5,Team,AT,Katharina Ötzlinger,katharina.oetzlinger+support@example.com,Für die Anmeldung bei der Krankenkasse brauche ich meine SV-Nummer 1590 170388 auf dem Lohnzettel.
+103,2026-06-11,App review,4,Team,AT,Sophie Kranzbichler,sophiekranzbichler@example.com,"Rechnungsadresse geändert auf Rosenhügelstraße 55, 10115 Berlin, die alte Adresse erscheint aber weiter auf den PDFs."
+104,2026-06-12,Chat,,Free,AT,Stefan Ötzlinger,Stefan.oetzlinger+support@example.org,"Überweisung von DE49 0576 1152 1800 6313 63 ist laut Bank raus, im System steht die Rechnung aber noch offen."
+105,2026-06-13,App review,2,Business,AT,Lukas Ahornegger,lukas.ahornegger@example.com,"Warum kostet der Team-Tarif plötzlich € 1 379,00 mehr? Darüber wurden wir nicht informiert."
+106,2026-06-13,Chat,,Team,DE,Tobias Rosenpichler,tobias.rosenpichler+support@example.net,"Den Link https://app.example.org/invoices/18179?view=pdf hat mir der Support geschickt, er führt aber nur auf eine leere Seite."
+107,2026-06-15,App review,2,Team,AT,Julia Feldmoser,julia.feldmoser+support@example.net,"Die Zeiterfassung auf dem Handy springt manchmal auf 0 zurück, wenn ich die App im Hintergrund habe."
+108,2026-06-16,App review,3,Free,IE,Olivia Quillfeather,oliviaquillfeather@example.org,"Two logins from 203.0.113.161 were not me, please lock the account."
+109,2026-06-19,Chat,,Business,IE,Thomas Quillfeather,thomasquillfeather@mail.example.com,"Contact: Thomas Quillfeather, Thomas.quillfeather@example.com, +44 (0)7700 900 137. Please get back to us this week or we'll cancel."
+110,2026-06-20,App review,2,Team,DE,Tobias Winterquell,tobias_winterquell57@mail.example.com,Wir sind ein Team von acht Leuten und die Rechteverwaltung reicht nicht. Jeder sieht alle Kundendaten.
+111,2026-06-23,NPS survey,5,Free,DE,Theresa Feldmoser,theresafeldmoser@example.net,"Unsere neue UID lautet ATU98330225, die alte bitte löschen."
+112,2026-06-23,App review,1,Team,DE,Stefan Grubenhofer,s.grubenhofer@example.com,"Ich habe meine Kreditkarte 5105105105105100 hinterlegt, trotzdem steht im Konto „Zahlung fehlgeschlagen“."
+113,2026-06-23,NPS survey,10,Team,GB,Samuel Ashworth-Penn,samuel_ashworthpenn82@example.org,Ticket #97629: the bank feed disconnects every 90 days and I have to sign in again.
+114,2026-06-24,App review,4,Business,DE,Felix Brunnthaler,f.brunnthaler@example.net,"Funktioniert, aber die Ladezeiten im Dashboard sind morgens unerträglich langsam."
+115,2026-06-25,Email,,Team,AT,Sabine Winterquell,sabinewinterquell@example.net,"Kontakt: Sabine, sabine.winterquell@example.org, 0049 30 23125 200. Bitte bis Ende der Woche melden, sonst kündigen wir."
+116,2026-06-25,Email,,Team,AT,Marie Haselsteiner,marie.haselsteiner@example.org,Abbuchung bitte künftig von der Karte 4111-1111-1111-1111 statt per Überweisung.
+117,2026-06-26,Email,,Free,DE,Julia Grubenhofer,julia.grubenhofer@example.com,"Mein Account läuft auf julia_grubenhofer23@example.net, die Rechnungen sollen aber an die Buchhaltung gehen."
+118,2026-06-28,Email,,Team,GB,James Merriweather-Stone,james_merriweatherstone64@example.org,"Missing an English invoice template for international customers.
+Honestly this is the main reason we are looking at alternatives."
+119,2026-06-29,NPS survey,2,Solo,AT,Julia Grubenhofer,julia_grubenhofer40@example.com,"Wenn ich auf „Senden“ klicke, passiert nichts. Browser-Log zeigt einen Fehler, meine IP war 203.0.113.180."
+120,2026-06-29,NPS survey,4,Business,AT,Lena Birkenreiter,Lena.birkenreiter+support@example.com,"Bestellung B-51219847 wurde doppelt abgebucht (€ 779,50). Ich möchte eine Gutschrift."
+121,2026-07-03,Email,,Free,AT,Jonas Feldmoser,jonas_feldmoser66@example.net,Abbuchung bitte künftig von der Karte 4012 8888 8888 1881 statt per Überweisung.
+122,2026-07-06,Email,,Business,IE,Henry Brindlecombe,henry.brindlecombe@example.org,CSV import breaks accented characters: é and ë turn into question marks. Affects about a third of our clients.
+123,2026-07-07,Email,,Business,DE,Matthias Steinwander,matthias.steinwander@mail.example.com,"Für die Steuerberatung brauche ich unsere UID ATU34875025 auf jeder Rechnung, das Feld wird aber nicht gedruckt."
+124,2026-07-09,NPS survey,10,Solo,AT,Maximilian Talbacher,m.talbacher@example.org,Für die Anmeldung bei der Krankenkasse brauche ich meine SV-Nummer 7714161094 auf dem Lohnzettel.
+125,2026-07-10,App review,1,Team,GB,Samuel Quillfeather,samuelquillfeather@example.com,Refund went to DE81 9309 8740 1082 9514 79 according to your email but nothing has arrived yet.
+126,2026-07-12,Email,,Free,AT,Julia Steinwander,julia.steinwander@example.net,"Überweisung von AT69 9730 6290 4896 1099 ist laut Bank raus, im System steht die Rechnung aber noch offen."
+127,2026-07-13,Chat,,Team,AT,Maximilian Talbacher,maximilian_talbacher80@example.net,"Die App stürzt auf dem iPad ab, sobald ich ein Foto vom Beleg anhängen will. Version 2.4.1."
+128,2026-07-14,Email,,Team,IE,Thomas Fenwick-Lowe,t.fenwicklowe@example.com,"Two logins from 198.51.100.9 were not me, please lock the account."
+129,2026-07-18,NPS survey,9,Business,AT,Anna Grubenhofer,annagrubenhofer@mail.example.com,"Im Exportlink https://example.com/account/20176 steht meine Kundennummer drin, ist das sicher?"
+130,2026-07-19,Email,,Solo,IE,Chloe Thistlewood,chloe.thistlewood@example.com,"Two logins from 198.51.100.84 were not me, please lock the account."
+131,2026-07-20,App review,2,Solo,AT,Sophie Grubenhofer,sophie_grubenhofer34@example.com,"Für die Steuerberatung brauche ich unsere UID ATU77754994 auf jeder Rechnung, das Feld wird aber nicht gedruckt."
+132,2026-07-21,Chat,,Solo,IE,Lucy Calloway-Hart,Lucy.callowayhart@mail.example.com,The new interface is cleaner but the font in the invoice preview is far too small.
+133,2026-07-24,NPS survey,2,Business,IE,Oliver Quillfeather,Oliverquillfeather@example.com,Automatic payment reminders would be amazing. Right now I chase late payers by hand every Friday.
+134,2026-07-26,Email,,Business,AT,Julia Birkenreiter,juliabirkenreiter@example.com,"Die neue Oberfläche ist übersichtlicher, aber die Schrift im Rechnungsentwurf ist viel zu klein."
+135,2026-07-26,Chat,,Solo,GB,Chloe Fenwick-Lowe,chloe.fenwicklowe@example.net,Reminder emails end up in my clients' spam folders. Could you check the sender setup?
+136,2026-07-29,NPS survey,6,Solo,IE,Daniel Thistlewood,danielthistlewood@example.com,CSV import breaks accented characters: é and ë turn into question marks. Affects about a third of our clients.
+137,2026-08-03,App review,4,Free,GB,Henry Ashworth-Penn,h.ashworthpenn@example.net,"Please send the receipts to 25 Elmfield Close, Bristol BS1 4DJ, not the office. Thanks, Henry Ashworth-Penn"
+138,2026-08-04,Chat,,Team,IE,Megan Merriweather-Stone,megan.merriweatherstone@example.com,I'm an accountant with twelve clients. Switching between them without logging out would save me so much time.
+139,2026-08-06,Email,,Team,GB,Megan Dunmore,megan.dunmore+support@example.net,I can't find where to change the payment terms. The default is 14 days but we need 30.
+140,2026-08-06,App review,3,Free,AT,Elias Mühlhofer,e.muehlhofer@example.net,"Kontakt: Elias Mühlhofer, eliasmuehlhofer@mail.example.com, +43 (0) 660 737 72 81. Bitte bis Ende der Woche melden, sonst kündigen wir."
+141,2026-08-07,Chat,,Free,AT,Maximilian Weidenauer,maximilian_weidenauer85@example.com,"Ich würde gern Stunden direkt aus dem Kalender übernehmen, statt alles doppelt einzutragen."
+142,2026-08-08,Email,,Business,AT,Jonas Mühlhofer,jonas.muehlhofer+support@example.org,"Sehr freundlicher Support, Jonas Mühlhofer hat mir am Telefon super geholfen!"
+143,2026-08-12,Chat,,Team,DE,Hannah Ötzlinger,hannahoetzlinger@example.com,"Kontakt: Hannah Ötzlinger, hannah.oetzlinger@example.net, +43 699 847 1088. Bitte bis Ende der Woche melden, sonst kündigen wir."
+144,2026-08-14,Email,,Team,AT,Matthias Ötzlinger,matthias.oetzlinger@mail.example.com,"Ich habe meine Kreditkarte 5555-5555-5555-4444 hinterlegt, trotzdem steht im Konto „Zahlung fehlgeschlagen“."
+145,2026-08-15,NPS survey,5,Free,IE,Megan Ashworth-Penn,meganashworthpenn@example.com,"Hi, I'm Megan and I accidentally created two accounts. Can you merge them? My email is megan.ashworthpenn+support@example.org."
+146,2026-08-16,Email,,Team,IE,Megan Quillfeather,m.quillfeather@mail.example.com,"Contact: Megan, megan.quillfeather@example.net, 07700 900182. Please get back to us this week or we'll cancel."
+147,2026-08-16,Email,,Free,IE,Daniel Ashworth-Penn,daniel.ashworthpenn+support@example.com,Refund went to AT68 5455 7531 4565 8297 according to your email but nothing has arrived yet.
+148,2026-08-17,App review,2,Business,GB,Olivia Brindlecombe,olivia.brindlecombe@example.com,"Solid product, but invoice numbers should be able to restart each year."
+149,2026-08-18,Chat,,Business,DE,Katharina Weidenauer,k.weidenauer@mail.example.com,"Bestellung 35 560 0351 wurde doppelt abgebucht (€ 2 482,00). Ich möchte eine Gutschrift."
+150,2026-08-18,App review,1,Free,AT,Marie Winterquell,marie_winterquell88@example.com,"Gutes Produkt, aber die Rechnungsnummern sollten fortlaufend pro Jahr beginnen dürfen."
+151,2026-08-19,Email,,Solo,AT,Stefan Grubenhofer,stefan_grubenhofer31@example.com,"Funktioniert, aber die Ladezeiten im Dashboard sind morgens unerträglich langsam."
+152,2026-08-22,App review,3,Solo,AT,Katharina Brunnthaler,k.brunnthaler@example.com,"Im Exportlink http://example.com/u/38723 steht meine Kundennummer drin, ist das sicher?"
+153,2026-08-22,Email,,Team,IE,Lucy Pendleworth,lucy_pendleworth29@example.net,Exporting invoices to PDF got really slow after the 8.20.0 update. Forty invoices take almost two minutes.
+154,2026-08-22,NPS survey,8,Business,AT,Jürgen Ötzlinger,j.oetzlinger@example.org,"Preis-Leistung passt. Einzig die Berichte könnten mehr Filter haben, z. B. nach Projekt und Monat."
+155,2026-08-23,App review,3,Free,GB,James Ashworth-Penn,james.ashworthpenn+support@example.net,CSV import breaks accented characters: é and ë turn into question marks. Affects about a third of our clients.
+156,2026-08-23,App review,5,Team,AT,Theresa Talbacher,Theresa.talbacher+support@example.com,"Bitte rufen Sie mich unter 0049 30 23125 696 zurück, es geht um die Rechnung vom 18.09.2023."
+157,2026-08-24,Chat,,Solo,DE,Elisabeth Mühlhofer,elisabeth.muehlhofer@example.net,"Sehr freundlicher Support, Elisabeth Mühlhofer hat mir am Telefon super geholfen!"
+158,2026-08-25,NPS survey,5,Team,IE,Samuel Dunmore,samuel.dunmore@example.com,Our German VAT number changed to DE957043963.
+159,2026-08-25,NPS survey,4,Free,AT,Elisabeth Rosenpichler,elisabethrosenpichler@example.net,"Fehler beim Import der CSV: Umlaute werden zu Fragezeichen. Das betrifft alle Kunden mit ä, ö, ü."
+160,2026-08-27,NPS survey,10,Team,AT,Sophie Ötzlinger,sophie.oetzlinger@example.com,"Ich würde gern Stunden direkt aus dem Kalender übernehmen, statt alles doppelt einzutragen."
+161,2026-08-27,App review,1,Free,GB,Henry Dunmore,henry.dunmore+support@mail.example.com,Support sent me https://example.com/account/83310 but it only shows a blank page.
+162,2026-08-28,NPS survey,1,Business,IE,Emily Dunmore,emily_dunmore81@mail.example.com,"For the Austrian branch, use UID DE503647847 on all invoices please."
+163,2026-08-31,Chat,,Free,GB,Amelia Brindlecombe,ameliabrindlecombe@example.org,"Our payroll needs each employee's born on 10 November 1992, there's no field for it."
+164,2026-09-02,Email,,Business,AT,Jürgen Haselsteiner,j.haselsteiner@example.com,Wir sind ein Team von acht Leuten und die Rechteverwaltung reicht nicht. Jeder sieht alle Kundendaten.
+165,2026-09-05,Chat,,Business,AT,Lukas Lindgruber,L.lindgruber@example.org,"Für die Steuerberatung brauche ich unsere UID ATU42972734 auf jeder Rechnung, das Feld wird aber nicht gedruckt."
+166,2026-09-05,NPS survey,5,Business,AT,Katharina Mühlhofer,katharina.muehlhofer+support@example.org,"Mein Account läuft auf katharinamuehlhofer@example.com, die Rechnungen sollen aber an die Buchhaltung gehen."
+167,2026-09-07,NPS survey,5,Business,AT,Julia Grubenhofer,julia.grubenhofer@mail.example.com,Mahnungen automatisch verschicken wäre ein Traum. Momentan mache ich das jeden Freitag händisch.
+168,2026-09-08,App review,5,Team,DE,Maximilian Rosenpichler,m.rosenpichler@example.org,"Hallo, ich bin Maximilian Rosenpichler und habe zwei Konten angelegt. Können Sie die zusammenführen? Meine E-Mail ist m.rosenpichler@example.com."
+169,2026-09-08,Email,,Team,GB,Samuel Dunmore,Samuel.dunmore@example.net,Exporting invoices to PDF got really slow after the 3.19.2 update. Forty invoices take almost two minutes.
+170,2026-09-09,App review,5,Free,AT,Stefan Birkenreiter,stefan_birkenreiter61@mail.example.com,"Die Zeiterfassung auf dem Handy springt manchmal auf 0 zurück, wenn ich die App im Hintergrund habe."
+171,2026-09-10,Email,,Business,AT,Julia Feldmoser,j.feldmoser@example.net,"Versicherungsnummer 3900 270587, bitte im Personalstamm hinterlegen."
+172,2026-09-11,Email,,Team,IE,Hannah Thistlewood,hannahthistlewood@mail.example.com,"The card field rejects 5555 5555 5555 4445, is that a bug or did I mistype?"
+173,2026-09-13,NPS survey,8,Business,DE,Katharina Steinwander,k.steinwander@example.com,"Bitte rufen Sie mich unter +43 (0) 664 794 39 62 zurück, es geht um die Rechnung vom 18.12.2024."
+174,2026-09-14,Email,,Team,DE,Theresa Grubenhofer,t.grubenhofer@example.com,"Ich vermisse eine Englisch-Version der Rechnungsvorlage für internationale Kunden.
+Das ist für uns ein Grund zu wechseln."
+175,2026-09-16,Email,,Team,AT,Julia Birkenreiter,j.birkenreiter@example.com,"Gutes Produkt, aber die Rechnungsnummern sollten fortlaufend pro Jahr beginnen dürfen."
+176,2026-09-16,NPS survey,3,Business,AT,Jonas Weidenauer,jonasweidenauer@example.com,"Lieferadresse: Mühlbachstraße 121, 10115 Berlin. Bitte die Belege dorthin schicken, nicht ins Büro. Danke, Jonas"
+177,2026-09-17,Chat,,Free,DE,Katharina Talbacher,katharina_talbacher95@example.org,"Im Exportlink http://example.com/u/59743 steht meine Kundennummer drin, ist das sicher?"
+178,2026-09-22,Email,,Solo,DE,Tobias Ötzlinger,Tobias.oetzlinger+support@example.net,"Ich habe meine Kreditkarte 5105105105105100 hinterlegt, trotzdem steht im Konto „Zahlung fehlgeschlagen“."
+179,2026-09-24,Chat,,Team,DE,Elias Ötzlinger,elias.oetzlinger@example.net,Ich bin Steuerberaterin und betreue zwölf Mandanten. Ein Mandantenwechsel ohne Ausloggen würde viel Zeit sparen.
+180,2026-09-26,NPS survey,5,Team,AT,Tobias Steinwander,tobias.steinwander+support@example.com,"Preis-Leistung passt. Einzig die Berichte könnten mehr Filter haben, z. B. nach Projekt und Monat."
+181,2026-09-27,App review,2,Team,AT,Julia Steinwander,julia_steinwander45@example.com,"Den Link www.example.net/profile/89329 hat mir der Support geschickt, er führt aber nur auf eine leere Seite."
+182,2026-09-28,App review,5,Free,DE,Katharina Ahornegger,katharina.ahornegger+support@example.org,"Seit gestern kann ich mich nicht mehr einloggen, die Zwei-Faktor-SMS kommt nicht an. Meine Nummer: 0049 30 23125 456"
+183,2026-10-01,Email,,Solo,GB,Daniel Ashworth-Penn,daniel.ashworthpenn@mail.example.com,"Missing an English invoice template for international customers.
+Honestly this is the main reason we are looking at alternatives."
+184,2026-10-03,Chat,,Business,IE,Emily Dunmore,e.dunmore@example.net,"Why did the Team plan go up by €1,185.99? Nobody told us."
+185,2026-10-08,Email,,Business,DE,Katharina Ahornegger,katharina_ahornegger23@mail.example.com,"Im Exportlink https://example.com/account/88388 steht meine Kundennummer drin, ist das sicher?"
+186,2026-10-09,NPS survey,0,Free,IE,Emily Thistlewood,emily.thistlewood+support@example.com,"Order B-54741923 was charged twice (€1,845.99). I'd like a refund please."
+187,2026-10-11,Email,,Free,GB,Thomas Ashworth-Penn,thomas.ashworthpenn@example.org,Our German VAT number changed to DE136502591.
+188,2026-10-13,Email,,Team,AT,Stefan Winterquell,stefan.winterquell@example.org,"Wenn ich auf „Senden“ klicke, passiert nichts. Browser-Log zeigt einen Fehler, meine IP war 198.51.100.14."
+189,2026-10-15,Chat,,Team,IE,Megan Ashworth-Penn,megan.ashworthpenn+support@example.org,"Missing an English invoice template for international customers.
+Honestly this is the main reason we are looking at alternatives."
+190,2026-10-15,App review,1,Business,DE,Marie Birkenreiter,marie.birkenreiter@example.com,Wir sind ein Team von acht Leuten und die Rechteverwaltung reicht nicht. Jeder sieht alle Kundendaten.
+191,2026-10-17,Email,,Solo,DE,Theresa Ahornegger,t.ahornegger@mail.example.com,Ich bin Steuerberaterin und betreue zwölf Mandanten. Ein Mandantenwechsel ohne Ausloggen würde viel Zeit sparen.
+192,2026-10-17,Email,,Free,GB,Grace Thistlewood,g.thistlewood@mail.example.com,Reminder emails end up in my clients' spam folders. Could you check the sender setup?
+193,2026-10-20,Chat,,Solo,IE,Grace Brindlecombe,Gracebrindlecombe@example.com,"Solid product, but invoice numbers should be able to restart each year."
+194,2026-10-23,Email,,Free,IE,Henry Merriweather-Stone,Henrymerriweatherstone@example.com,"For the Austrian branch, use UID ATU16215496 on all invoices please."
+195,2026-10-23,Chat,,Solo,AT,Felix Mühlhofer,f.muehlhofer@mail.example.com,"Für den Kreditantrag: Felix Mühlhofer, Geburtsdatum: 13.07.1956, Am Steinfeld 21, 80331 München."
+196,2026-10-24,App review,2,Free,DE,Anna Winterquell,annawinterquell@mail.example.com,"Ich habe meine Kreditkarte 5105-1051-0510-5100 hinterlegt, trotzdem steht im Konto „Zahlung fehlgeschlagen“."
+197,2026-10-25,Email,,Team,AT,Stefan Weidenauer,stefan_weidenauer89@mail.example.com,"Fehler beim Import der CSV: Umlaute werden zu Fragezeichen. Das betrifft alle Kunden mit ä, ö, ü."
+198,2026-10-25,NPS survey,5,Team,AT,Matthias Grubenhofer,matthiasgrubenhofer@mail.example.com,"Die App stürzt auf dem iPad ab, sobald ich ein Foto vom Beleg anhängen will. Version 1.16.2."
+199,2026-10-30,Email,,Business,AT,Theresa Lindgruber,theresa.lindgruber@example.com,Mahnungen automatisch verschicken wäre ein Traum. Momentan mache ich das jeden Freitag händisch.
+200,2026-10-30,Email,,Solo,GB,Emily Ashworth-Penn,emily_ashworthpenn98@example.net,The iPad app crashes when I attach a photo of a receipt. Version 8.7.6.90.
