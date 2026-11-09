@@ -18,9 +18,10 @@ The first release (v0.1, Clean) removes personal data from a CSV or XLSX file in
 
 ## Development
 
-Requires Node 24 (see `.nvmrc`).
+Requires Node 24 and npm 11. The version is pinned in `.nvmrc`; with [nvm](https://github.com/nvm-sh/nvm), run `nvm use` in the project folder (or `nvm install` the first time) before any npm command. If your shell still reports another version with `node -v`, run `hash -r` or open a new terminal.
 
 ```sh
+nvm use
 npm install
 npm run dev          # local development server
 npm run generate     # static build in .output/public
@@ -34,6 +35,15 @@ npm run test:e2e     # end-to-end tests against the static build (Playwright)
 Run `npm run generate` before `npm run test:e2e`. The first time, install the test browser with `npx playwright install chromium`.
 
 Every end-to-end test fails if the page contacts any origin other than the app itself.
+
+### Dependency install scripts
+
+npm 11 does not run dependency install scripts unless they are allowed. The `allowScripts` field in `package.json` records the decision for each package that has one:
+
+- `esbuild`: denied. Its postinstall only verifies the platform binary, which npm already installs as an optional dependency.
+- `fsevents`: denied. It ships prebuilt; the script is a build-from-source fallback.
+
+If a new dependency brings an install script, `npm install` warns about it. Review it with `npm install-scripts ls`, then allow or deny it explicitly.
 
 ## License
 
