@@ -74,6 +74,30 @@ describe('Austrian social insurance number (SV-Nummer)', () => {
   })
 })
 
+describe('SV-Nummer: order and invoice numbers that pass the check digit', () => {
+  // Each of these passes the SV-Nummer check digit; the word before it says it is not one.
+  it.each([
+    'Rechnung 4711190056 ist doppelt abgebucht.',
+    'Rechnungsnummer: 4711229651',
+    'Bestellung 4711253408 kam nicht an.',
+    'Bestell-Nr. 4711451383',
+    'Auftrag 4711514735 vom März',
+    'Kunden-Nr. 4711546411',
+    'Kundennummer 4711190056 bitte angeben',
+    'Order 4711229651 was shipped twice.',
+    'Invoice no. 4711253408 is wrong.',
+    'Ticket #4711451383 is still open.',
+  ])('finds nothing in %j', (text) => {
+    expect(svnrDetector.detect(text)).toEqual([])
+  })
+
+  it('still finds the same digits with SV context, or with no context at all', () => {
+    expect(values(svnrDetector, 'SV-Nr. 4711190056')).toEqual(['4711190056'])
+    expect(values(svnrDetector, 'Versicherungsnummer 4711 190056, danke')).toEqual(['4711 190056'])
+    expect(values(svnrDetector, 'Bitte 4711190056 eintragen.')).toEqual(['4711190056'])
+  })
+})
+
 describe('SV-Nummer: every officially valid number', () => {
   // Builds a number with a correct check digit for a serial and a date part,
   // moving to the next serial when the remainder is 10 (never issued).
