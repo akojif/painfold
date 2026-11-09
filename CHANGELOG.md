@@ -16,10 +16,10 @@ The first release: remove personal data from a feedback file in the browser and 
 - **Privacy:** a strict Content-Security-Policy, no cookies, no analytics, and a "What leaves your browser" panel that lists every network request. The only stored setting is the theme.
 - **Interface:** light and dark themes (or follow the system), full keyboard operation of the review, reduced motion respected, tested at 320px wide.
 - **Roadmap page** in the app: what v0.1 does and what comes next, kept in step with ROADMAP.md by a test.
-- **Measured quality:** detection recall and precision per type and language on a generated set and on hand-written hard cases, published in the README and checked in CI; a 5,000-row file is cleaned in about 1.5 seconds.
+- **Measured quality:** detection recall and precision per type and language on a generated set and on hand-written hard cases, published in docs/accuracy.md and checked in CI; a 5,000-row file is cleaned in about 1.5 seconds.
 
 ### Known limits
 
 - Names and places are not detected yet (v0.2). Look for them in the review and mark them with M.
-- Email addresses spelled out to fool spam filters and English addresses that start with a flat number are missed; see the Accuracy section of the README.
+- Email addresses spelled out to fool spam filters and English addresses that start with a flat number are missed; see docs/accuracy.md.
 - Rarely, a document number written like an SV-Nummer with a dash (`2024-010106`) is removed as one.
