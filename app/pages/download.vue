@@ -71,17 +71,26 @@ async function startOver() {
       <h1 class="text-xl font-semibold">
         {{ $t('download.heading') }}
       </h1>
-      <p class="mt-1 truncate text-sm text-fg-muted">
-        {{ table.fileName }}
-      </p>
+      <MiddleTruncate
+        class="mt-1 text-sm text-fg-muted"
+        :text="table.fileName"
+      />
 
       <div class="mt-6 flex flex-wrap gap-2">
         <button
           type="button"
-          class="focus-ring press h-10 max-w-full truncate rounded-md bg-fg px-4 font-medium text-canvas"
+          class="focus-ring press flex h-10 max-w-full min-w-0 items-center rounded-md bg-fg px-4 font-medium whitespace-pre text-canvas"
+          :aria-label="$t('download.button', { name: fileName })"
           @click="download"
         >
-          {{ $t('download.button', { name: fileName }) }}
+          <i18n-t
+            keypath="download.button"
+            scope="global"
+          >
+            <template #name>
+              <MiddleTruncate :text="fileName" />
+            </template>
+          </i18n-t>
         </button>
         <button
           type="button"

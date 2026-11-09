@@ -166,7 +166,7 @@
       "byRow": "By row"
     },
     "valuesLabel": "Values found",
-    "removeAllOfType": "Remove all {n} {type}",
+    "removeAllOfType": "Remove 1 {one} | Remove all {n} {many}",
     "valueLabel": "{type}, {state}: {text}",
     "inRows": "In 1 row. Removing it replaces it with {placeholder}. | In {n} rows. Removing it replaces every copy with {placeholder}.",
     "finished": {
@@ -174,11 +174,11 @@
       "body": "{removed} removed, {kept} kept. Next: download the cleaned file and the cleaning report.",
       "action": "Continue to download"
     },
-    "removeAllShort": "Remove all {n}",
+    "removeAllShort": "Remove 1 | Remove all {n}",
     "keptTag": "Kept",
     "moreRows": "And 1 more row. | And {n} more rows.",
-    "showMore": "Show {n} more",
-    "noRows": "No rows with findings."
+    "noRows": "No rows with findings.",
+    "showMoreOfType": "Show {n} more"
   },
   "header": {
     "outbound": "What leaves your browser",
@@ -312,5 +312,20 @@
     "POSTCODE": "postcodes",
     "NAME": "names",
     "PLACE": "places"
+  },
+  "typeOneLower": {
+    "EMAIL": "email address",
+    "PHONE": "phone number",
+    "IBAN": "IBAN",
+    "CARD": "card number",
+    "SVNR": "SV-Nummer",
+    "VAT_ID": "VAT ID",
+    "URL": "link",
+    "IP": "IP address",
+    "DATE_OF_BIRTH": "date of birth",
+    "ADDRESS": "address",
+    "POSTCODE": "postcode",
+    "NAME": "name",
+    "PLACE": "place"
   }
 }

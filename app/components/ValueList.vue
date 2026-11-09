@@ -3,7 +3,7 @@ import type { PiiType } from '~~/core/pii-types'
 import type { ValueEntry, ValueGroup } from '~/utils/value-list'
 
 defineProps<{ groups: ValueGroup[], selectedKey?: string, motions: ReadonlyMap<string, RemovalMotion> }>()
-const emit = defineEmits<{ select: [id: number], removeType: [type: PiiType] }>()
+const emit = defineEmits<{ select: [id: number], removeType: [type: PiiType], showMore: [type: PiiType] }>()
 const { t } = useI18n()
 const { number } = useFormat()
 const { review, revision } = useSession()
@@ -35,10 +35,10 @@ const label = (entry: ValueEntry) => t('review.valueLabel', {
           v-if="group.pending > 0"
           type="button"
           class="focus-ring rounded-sm text-xs text-accent underline-offset-4 hover:underline"
-          :aria-label="$t('review.removeAllOfType', { n: number(group.pending), type: $t(`typeManyLower.${group.type}`) })"
+          :aria-label="$t('review.removeAllOfType', { n: number(group.pending), one: $t(`typeOneLower.${group.type}`), many: $t(`typeManyLower.${group.type}`) }, group.pending)"
           @click="emit('removeType', group.type)"
         >
-          {{ $t('review.removeAllShort', { n: number(group.pending) }) }}
+          {{ $t('review.removeAllShort', { n: number(group.pending) }, group.pending) }}
         </button>
       </div>
       <ul class="p-1">
@@ -60,17 +60,37 @@ const label = (entry: ValueEntry) => t('review.valueLabel', {
               :placeholder="review!.placeholderFor(entry.finding)"
               :motion="motions.get(entry.key)"
             />
+            <!-- Links differ at the end, so they are cut in the middle; other values at the end. -->
             <span
               v-else
-              class="min-w-0 truncate font-mono text-sm"
+              class="flex min-w-0 font-mono text-sm"
               :class="decisionFor(entry.key) === 'keep'
                 ? 'text-fg-muted underline decoration-line-strong decoration-dotted underline-offset-4'
                 : 'rounded-sm bg-pending px-1 text-on-pending underline decoration-pending-line underline-offset-4'"
-            >{{ entry.finding.value }}</span>
+            >
+              <MiddleTruncate
+                v-if="entry.type === 'URL'"
+                :text="entry.finding.value"
+                :tail="16"
+              />
+              <span
+                v-else
+                class="truncate"
+              >{{ entry.finding.value }}</span>
+            </span>
             <span class="flex shrink-0 items-center gap-2 text-xs text-fg-muted">
               <span v-if="decisionFor(entry.key) === 'keep'">{{ $t('review.keptTag') }}</span>
               <span class="font-mono tabular-nums">{{ number(entry.rows) }}</span>
             </span>
+          </button>
+        </li>
+        <li v-if="group.more > 0">
+          <button
+            type="button"
+            class="focus-ring rounded-sm px-2 py-1 text-sm text-accent underline-offset-4 hover:underline"
+            @click="emit('showMore', group.type)"
+          >
+            {{ $t('review.showMoreOfType', { n: number(group.more) }) }}
           </button>
         </li>
       </ul>

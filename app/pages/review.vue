@@ -13,7 +13,8 @@ definePageMeta({
 })
 
 const BATCH = 100
-const VALUE_BATCH = 300
+// Values shown per type before "Show more", so every type and its bulk removal stay in view.
+const VALUE_BATCH = 100
 const SNIPPETS = 5
 const { t } = useI18n()
 const { number } = useFormat()
@@ -29,7 +30,7 @@ const marking = ref<CellSelection & { text: string }>()
 const problem = ref<string>()
 const announcement = ref('')
 const visibleCount = ref(BATCH)
-const visibleValues = ref(VALUE_BATCH)
+const shownPerType = ref<Partial<Record<PiiType, number>>>({})
 const sentinel = useTemplateRef<HTMLElement>('sentinel')
 
 // A fresh array per revision: marking text adds findings to the same list, and
@@ -52,15 +53,29 @@ const values = computed<ValueEntry[]>(() => {
     .map(({ finding, rows }) => ({ key: finding.key, type: finding.type, finding, rows: rows.size }))
     .sort((a, b) => PII_TYPES.indexOf(a.type) - PII_TYPES.indexOf(b.type))
 })
+const valuesByType = computed(() => {
+  const byType = new Map<PiiType, ValueEntry[]>()
+  for (const entry of values.value) {
+    const entries = byType.get(entry.type)
+    if (entries) entries.push(entry)
+    else byType.set(entry.type, [entry])
+  }
+  return byType
+})
 const groups = computed<ValueGroup[]>(() => {
   const pending = new Map<PiiType, number>()
   for (const finding of all.value) {
     if (!review.value?.decisionFor(finding.key)) pending.set(finding.type, (pending.get(finding.type) ?? 0) + 1)
   }
-  const byType = new Map<PiiType, ValueEntry[]>()
-  for (const entry of values.value.slice(0, visibleValues.value)) byType.set(entry.type, [...(byType.get(entry.type) ?? []), entry])
-  return [...byType].map(([type, entries]) => ({ type, pending: pending.get(type) ?? 0, values: entries }))
+  return [...valuesByType.value].map(([type, entries]) => {
+    const limit = shownPerType.value[type] ?? VALUE_BATCH
+    return { type, pending: pending.get(type) ?? 0, values: entries.slice(0, limit), more: Math.max(0, Math.min(VALUE_BATCH, entries.length - limit)) }
+  })
 })
+
+function showMore(type: PiiType) {
+  shownPerType.value = { ...shownPerType.value, [type]: (shownPerType.value[type] ?? VALUE_BATCH) + VALUE_BATCH }
+}
 
 // N and P step through values in the By value view and through findings in the By row view.
 const navigable = computed(() => (view.value === 'value' ? values.value.map(entry => entry.finding) : all.value))
@@ -124,9 +139,10 @@ async function select(id: number | undefined, focus = true) {
   if (!finding) return
   let target = `[data-finding="${finding.id}"]`
   if (view.value === 'value') {
-    const index = values.value.findIndex(entry => entry.key === finding.key)
-    if (index >= visibleValues.value) visibleValues.value = index + VALUE_BATCH
-    target = `[data-value="${values.value[index]?.finding.id}"]`
+    const ofType = valuesByType.value.get(finding.type) ?? []
+    const index = ofType.findIndex(entry => entry.key === finding.key)
+    if (index >= (shownPerType.value[finding.type] ?? VALUE_BATCH)) shownPerType.value = { ...shownPerType.value, [finding.type]: index + VALUE_BATCH }
+    target = `[data-value="${ofType[index]?.finding.id}"]`
   }
   else {
     const index = rowIndices.value.indexOf(finding.row)
@@ -282,9 +298,10 @@ onBeforeUnmount(() => {
           <h1 class="text-xl font-semibold">
             {{ heading }}
           </h1>
-          <p class="mt-1 truncate text-sm text-fg-muted">
-            {{ table.fileName }}
-          </p>
+          <MiddleTruncate
+            class="mt-1 text-sm text-fg-muted"
+            :text="table.fileName"
+          />
         </div>
         <i18n-t
           keypath="review.progress"
@@ -398,20 +415,19 @@ onBeforeUnmount(() => {
           class="overflow-y-auto rounded-md border border-line bg-surface max-lg:max-h-[50vh] lg:sticky lg:top-20 lg:max-h-[calc(100dvh-7rem)]"
         >
           <ValueList
+            class="pb-6"
             :groups="groups"
             :selected-key="selected?.key"
             :motions="motions"
             @select="select($event, false)"
             @remove-type="removeLeft($event)"
+            @show-more="showMore"
           />
-          <button
-            v-if="visibleValues < values.length"
-            type="button"
-            class="focus-ring m-1 rounded-sm px-2 py-1 text-sm text-accent hover:underline"
-            @click="visibleValues += VALUE_BATCH"
-          >
-            {{ $t('review.showMore', { n: number(Math.min(VALUE_BATCH, values.length - visibleValues)) }) }}
-          </button>
+          <!-- Fades the last visible values, so the list reads as scrollable. -->
+          <div
+            aria-hidden="true"
+            class="pointer-events-none sticky bottom-0 -mt-6 h-6 bg-linear-to-t from-surface to-transparent"
+          />
         </div>
         <div class="min-w-0">
           <MarginNote

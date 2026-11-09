@@ -6,7 +6,7 @@ defineProps<{ placeholder: string, motion?: RemovalMotion }>()
 
 <template>
   <span
-    class="inline-block rounded-sm bg-token px-1 font-mono text-[0.85em] leading-snug text-on-token"
+    class="rounded-sm bg-token box-decoration-clone px-1 font-mono text-[0.85em] leading-snug text-on-token"
     :class="{ 'animate-token-wipe': motion === 'wipe', 'animate-token-fade': motion === 'fade' }"
   >{{ placeholder }}</span>
 </template>

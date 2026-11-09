@@ -5,7 +5,7 @@ const steps = ['import', 'review', 'download'] as const
 
 <template>
   <nav :aria-label="$t('nav.label')">
-    <ol class="flex flex-wrap items-center gap-x-2.5 gap-y-2 text-sm">
+    <ol class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm sm:gap-x-2.5">
       <li
         v-for="(step, index) in steps"
         :key="step"
@@ -15,7 +15,7 @@ const steps = ['import', 'review', 'download'] as const
         <span
           v-if="index > 0"
           aria-hidden="true"
-          class="h-px w-5 bg-line"
+          class="h-px w-5 bg-line max-sm:hidden"
         />
         <span
           class="grid size-5 place-items-center rounded-full text-xs font-semibold tabular-nums"

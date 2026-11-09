@@ -25,7 +25,7 @@ function size(bytes: number) {
       />
       <span class="max-sm:sr-only">{{ $t('header.outbound') }}</span>
       <span
-        class="font-mono text-xs"
+        class="font-mono text-xs whitespace-nowrap"
         :class="foreign.length > 0 ? 'text-danger' : 'text-fg'"
       >{{ label }}</span>
     </button>

@@ -7,7 +7,7 @@ const props = defineProps<{
   selectedId?: number
   motions: ReadonlyMap<string, RemovalMotion>
 }>()
-const emit = defineEmits<{ select: [id: number, event: MouseEvent] }>()
+const emit = defineEmits<{ select: [id: number, event: MouseEvent | KeyboardEvent] }>()
 const { review, revision } = useSession()
 
 type Piece = { kind: 'text', start: number, text: string } | { kind: 'finding', finding: Finding }

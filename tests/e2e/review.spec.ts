@@ -104,7 +104,7 @@ test.describe('review step', () => {
     await values(page).getByRole('button', { name: 'Remove all 2 email addresses' }).click()
     await expect(progress(page)).toHaveText('2 reviewed, 1 left')
     await expect(values(page).getByRole('button', { name: /Remove all .* email addresses/ })).toHaveCount(0)
-    await expect(values(page).getByRole('button', { name: 'Remove all 1 IP addresses' })).toBeVisible()
+    await expect(values(page).getByRole('button', { name: 'Remove 1 IP address' })).toBeVisible()
     await page.keyboard.press('z')
     await expect(progress(page)).toHaveText('0 reviewed, 3 left')
   })

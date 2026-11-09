@@ -27,6 +27,7 @@ const copyRows = computed(() => {
   if (!props.finding || !current) return 0
   return new Set(current.copiesOf(props.finding.key).map(copy => copy.row)).size
 })
+const hasFindings = computed(() => (revision.value, (review.value?.findings.length ?? 0) > 0))
 const canUndo = computed(() => (revision.value, review.value?.canUndo ?? false))
 const copiesText = computed(() => {
   if (!props.finding || !review.value) return ''
@@ -94,7 +95,7 @@ const copiesText = computed(() => {
         >
           {{ $t('review.note.title', { type: $t(`typeOne.${finding.type}`), row: finding.row + 1 }) }}
         </p>
-        <p class="mt-1 font-mono text-md break-all">
+        <p class="mt-1 font-mono text-md wrap-anywhere max-lg:line-clamp-2">
           {{ finding.value }}
         </p>
         <p class="mt-1 text-sm text-fg-muted">
@@ -122,7 +123,7 @@ const copiesText = computed(() => {
         </div>
       </template>
       <p
-        v-else
+        v-else-if="hasFindings"
         id="margin-note-title"
         class="text-sm text-fg-muted"
       >
