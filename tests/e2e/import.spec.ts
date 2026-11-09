@@ -27,7 +27,7 @@ test.describe('start screen', () => {
 
   test('shows that nothing has left the browser', async ({ page }) => {
     await page.goto('/')
-    await expect(page.getByRole('status').filter({ hasText: 'What leaves your browser' })).toHaveText(/0 bytes/)
+    await expect(page.getByRole('button', { name: /What leaves your browser/ })).toHaveText(/0 bytes/)
   })
 
   test('marks the current step in the stepper', async ({ page }) => {

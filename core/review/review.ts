@@ -56,6 +56,8 @@ export class Review {
   private readonly history: Array<() => void> = []
   private readonly placeholders = new PlaceholderMap()
   private nextId = 1
+  /** Findings by cell, rebuilt when findings change, so cleaning a large file stays fast. */
+  private cellIndex?: Map<string, Finding[]>
 
   constructor(rows: readonly (readonly string[])[], columns: readonly number[], cells: readonly CellDetections[]) {
     this.rows = rows
@@ -146,6 +148,7 @@ export class Review {
     const ids = new Set(added.map(finding => finding.id))
     this.history.push(() => {
       this.list = this.list.filter(finding => !ids.has(finding.id))
+      this.cellIndex = undefined
       this.restore(key, previous)
     })
     return added
@@ -167,8 +170,7 @@ export class Review {
     const text = this.rows[row]?.[column] ?? ''
     let result = ''
     let last = 0
-    for (const finding of this.list) {
-      if (finding.row !== row || finding.column !== column) continue
+    for (const finding of this.findingsIn(row, column)) {
       if (this.decisions.get(finding.key) === 'keep') continue
       result += text.slice(last, finding.start) + this.placeholderFor(finding)
       last = finding.end
@@ -196,7 +198,21 @@ export class Review {
     else this.decisions.delete(key)
   }
 
+  private findingsIn(row: number, column: number): readonly Finding[] {
+    if (!this.cellIndex) {
+      this.cellIndex = new Map()
+      for (const finding of this.list) {
+        const key = `${finding.row}:${finding.column}`
+        const cell = this.cellIndex.get(key)
+        if (cell) cell.push(finding)
+        else this.cellIndex.set(key, [finding])
+      }
+    }
+    return this.cellIndex.get(`${row}:${column}`) ?? []
+  }
+
   private sort() {
+    this.cellIndex = undefined
     this.list.sort((a, b) => a.row - b.row || a.column - b.column || a.start - b.start)
   }
 }
