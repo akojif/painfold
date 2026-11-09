@@ -9,6 +9,15 @@ import { expect, test } from './fixtures'
 const sampleCsv = readFileSync(new URL('../../data/sample/support-tickets.csv', import.meta.url))
 const fileInput = (page: import('@playwright/test').Page) => page.getByTestId('file-input')
 
+async function expectLoaded(page: import('@playwright/test').Page, name: string, rows: string) {
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Choose what to check')
+  await expect(page.getByTitle(name, { exact: true })).toBeVisible()
+  await expect(page.getByText(rows, { exact: true })).toBeVisible()
+}
+
+const columnRow = (page: import('@playwright/test').Page, column: string) =>
+  page.getByRole('region', { name: 'Columns' }).locator(':scope > ul > li').filter({ has: page.getByRole('group', { name: `What happens to ${column}`, exact: true }) })
+
 function upload(page: import('@playwright/test').Page, name: string, buffer: Buffer | Uint8Array, mimeType = 'text/csv') {
   return fileInput(page).setInputFiles({ name, mimeType, buffer: Buffer.from(buffer) })
 }
@@ -65,7 +74,7 @@ test.describe('start screen', () => {
       const target = document.querySelector('footer')!
       for (const type of ['dragenter', 'dragover', 'drop']) target.dispatchEvent(new DragEvent(type, { dataTransfer: data, bubbles: true, cancelable: true }))
     }, 'id,message\n1,Bitte an anna@example.com antworten, danke für die Hilfe\n')
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText('dropped.csv, 1 row')
+    await expectLoaded(page, 'dropped.csv', '1 row')
   })
 
   test('dragging a file over the page shows the drop overlay', async ({ page }) => {
@@ -85,43 +94,106 @@ test.describe('choosing a file', () => {
     await page.goto('/')
     await upload(page, 'support-tickets.csv', sampleCsv)
 
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText('support-tickets.csv, 200 rows')
+    await expectLoaded(page, 'support-tickets.csv', '200 rows')
     await expect(page.getByRole('heading', { level: 1 })).toBeFocused()
-    await expect(page.getByLabel('Feedback column')).toHaveValue('8')
+    await expect(page.getByRole('radio', { name: 'Use message as the feedback column' })).toBeChecked()
+    await expect(page.getByText('Feedback column, always checked')).toBeVisible()
 
     const email = page.getByRole('group', { name: 'What happens to customer_email' })
     await expect(email.getByRole('radio', { name: 'Drop' })).toBeChecked()
-    await expect(page.getByText('Looks like personal data (“email”), so it is left out of the cleaned file.')).toBeVisible()
+    await expect(columnRow(page, 'customer_email')).toContainText('Looks like email addresses')
     await expect(page.getByRole('group', { name: 'What happens to channel' }).getByRole('radio', { name: 'Check' })).toBeChecked()
     await expect(page.getByRole('group', { name: 'What happens to rating' }).getByRole('radio', { name: 'Keep as is' })).toBeChecked()
-    await expect(page.getByText('Keep as is: copied to the cleaned file without checking.').first()).toBeVisible()
-    await expect(page.getByRole('columnheader', { name: 'customer_email' })).toHaveClass(/line-through/)
+    await expect(columnRow(page, 'rating')).toContainText('Only numbers and dates')
   })
 
-  test('roles can be changed with the arrow keys', async ({ page }) => {
+  test('the feedback column comes first, then columns that look personal, then the rest', async ({ page }) => {
     await page.goto('/')
     await upload(page, 'support-tickets.csv', sampleCsv)
+    const names = page.getByRole('region', { name: 'Columns' }).locator(':scope > ul > li > div:first-of-type > p:first-child')
+    await expect(names).toHaveText(['message', 'customer_name', 'customer_email', 'id', 'created_at', 'channel', 'rating', 'plan', 'country'])
+  })
+
+  test('sample values of dropped columns are masked, the same length for every value', async ({ page }) => {
+    await page.goto('/')
+    await upload(page, 'support-tickets.csv', sampleCsv)
+    const email = columnRow(page, 'customer_email')
+    await expect(email).toContainText('Values hidden because this column is dropped')
+    await expect(email).not.toContainText('@')
+    const masks = await email.locator('[aria-hidden="true"]').allTextContents()
+    expect(new Set(masks).size).toBe(1)
+    await email.getByText('Check', { exact: true }).click()
+    await expect(email).toContainText('@example.')
+  })
+
+  test('roles can be changed with the arrow keys, and the summary follows', async ({ page }) => {
+    await page.goto('/')
+    await upload(page, 'support-tickets.csv', sampleCsv)
+    await expect(page.getByText('Cleaned file: 7 columns, 4 checked, 3 kept as is, 2 dropped')).toBeVisible()
     const channel = page.getByRole('group', { name: 'What happens to channel' })
     await channel.getByRole('radio', { name: 'Check' }).focus()
     await page.keyboard.press('ArrowRight')
     await page.keyboard.press('ArrowRight')
     await expect(channel.getByRole('radio', { name: 'Drop' })).toBeChecked()
-    await expect(page.getByRole('columnheader', { name: 'channel' })).toHaveClass(/line-through/)
+    await expect(page.getByText('Cleaned file: 6 columns, 3 checked, 3 kept as is, 3 dropped')).toBeVisible()
   })
 
-  test('choosing another feedback column gives the old one its suggested role back', async ({ page }) => {
+  test('another feedback column is chosen in place and the old one gets its suggested role back', async ({ page }) => {
     await page.goto('/')
     await upload(page, 'support-tickets.csv', sampleCsv)
-    await page.getByLabel('Feedback column').selectOption('channel')
+    await page.getByRole('radio', { name: 'Use channel as the feedback column' }).check()
     await expect(page.getByRole('group', { name: 'What happens to message' }).getByRole('radio', { name: 'Check' })).toBeChecked()
     await expect(page.getByRole('group', { name: 'What happens to channel' })).toHaveCount(0)
+    await expect(page.getByRole('region', { name: 'Columns' }).locator(':scope > ul > li').first()).toContainText('message')
+  })
+
+  test('the feedback column can be chosen with the arrow keys', async ({ page }) => {
+    await page.goto('/')
+    await upload(page, 'support-tickets.csv', sampleCsv)
+    await page.getByRole('radio', { name: 'Use message as the feedback column' }).focus()
+    await page.keyboard.press('ArrowDown')
+    const next = page.getByRole('radio', { name: 'Use customer_name as the feedback column' })
+    await expect(next).toBeChecked()
+    await expect(next).toBeFocused()
+  })
+
+  test('a column kept as is that holds personal data is flagged with a count and fixed in one click', async ({ page }) => {
+    await page.goto('/')
+    await upload(page, 'refs.csv', Buffer.from([
+      'message,callback,notes',
+      '"Bitte zurückrufen, der Export bricht nach 90 Tagen ab",+43 660 234 2972,',
+      '"Please call me back about the invoice next week",+49 30 23125 417,',
+      '"Die App stürzt beim Öffnen der Rechnungen ab, bitte prüfen",2026-01-04,',
+    ].join('\n')))
+    const callback = columnRow(page, 'callback')
+    await expect(callback.getByRole('radio', { name: 'Keep as is' })).toBeChecked()
+    await expect(callback).toContainText('Contains 2 phone numbers.')
+    await callback.getByRole('button', { name: 'Check it instead' }).click()
+    await expect(callback.getByRole('radio', { name: 'Check' })).toBeChecked()
+    await expect(callback.getByRole('radio', { name: 'Check' })).toBeFocused()
+    await expect(callback).not.toContainText('Contains')
+
+    const notes = columnRow(page, 'notes')
+    await expect(notes).toContainText('Empty column')
+    await expect(notes.getByRole('radio', { name: 'Keep as is' })).toBeChecked()
+  })
+
+  test('the preview is collapsed and shows only the columns of the cleaned file, without scrolling sideways', async ({ page }) => {
+    await page.goto('/')
+    await upload(page, 'support-tickets.csv', sampleCsv)
+    const preview = page.getByRole('region', { name: 'Preview of the first rows' })
+    await expect(preview).toBeHidden()
+    await page.getByText('Show first 5 rows').click()
+    await expect(preview.getByRole('columnheader')).toHaveText(['id', 'created_at', 'channel', 'rating', 'plan', 'country', 'message'])
+    expect(await preview.evaluate(element => element.scrollWidth - element.clientWidth)).toBeLessThanOrEqual(0)
   })
 
   test('a CSV saved by German Excel keeps its umlauts', async ({ page }) => {
     await page.goto('/')
     await upload(page, 'Rückmeldungen.csv', windows1252(GERMAN_EXCEL_TEXT))
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Rückmeldungen.csv, 3 rows')
-    await expect(page.getByLabel('Feedback column')).toHaveValue('3')
+    await expectLoaded(page, 'Rückmeldungen.csv', '3 rows')
+    await expect(page.getByRole('radio', { name: 'Use Rückmeldung as the feedback column' })).toBeChecked()
+    await page.getByText('Show first 3 rows').click()
     const preview = page.getByRole('region', { name: 'Preview of the first rows' })
     await expect(preview.getByRole('columnheader', { name: 'Rückmeldung' })).toBeVisible()
     await expect(preview.getByText('Größere Schrift wäre schön; sonst top.')).toBeVisible()
@@ -141,7 +213,7 @@ test.describe('choosing a file', () => {
   test('the sample file is labelled as fake data', async ({ page }) => {
     await page.goto('/')
     await page.getByRole('button', { name: 'Try the sample file' }).click()
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText('support-tickets.csv, 200 rows')
+    await expectLoaded(page, 'support-tickets.csv', '200 rows')
     await expect(page.getByText('Sample file with fake data.')).toBeVisible()
   })
 
@@ -165,7 +237,7 @@ test.describe('import errors', () => {
       await upload(page, name, Buffer.from(content))
       await expect(page.getByRole('alert')).toHaveText(message)
       await upload(page, 'support-tickets.csv', sampleCsv)
-      await expect(page.getByRole('heading', { level: 1 })).toHaveText('support-tickets.csv, 200 rows')
+      await expectLoaded(page, 'support-tickets.csv', '200 rows')
     })
   }
 })
@@ -207,7 +279,7 @@ test.describe('small screens', () => {
     await expect(page.locator('figure[data-cleaned]')).toHaveCount(1, { timeout: 5000 })
     expect(await overflow()).toBeLessThanOrEqual(0)
     await upload(page, 'support-tickets.csv', sampleCsv)
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText('support-tickets.csv, 200 rows')
+    await expectLoaded(page, 'support-tickets.csv', '200 rows')
     expect(await overflow()).toBeLessThanOrEqual(0)
   })
 })

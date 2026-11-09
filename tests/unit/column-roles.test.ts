@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { guessFeedbackColumn, headerWords, personalHeaderTerm, suggestRole, suggestRoles } from '../../core/columns/roles'
+import { guessFeedbackColumn, headerWords, isStructuredValue, personalHeaderTerm, personalKind, suggestRole, suggestRoles } from '../../core/columns/roles'
 
 describe('headerWords', () => {
   it('splits camelCase, separators and E-Mail spellings into plain words', () => {
@@ -34,7 +34,26 @@ describe('personalHeaderTerm', () => {
   })
 })
 
+describe('personalKind', () => {
+  it.each([
+    ['customer_name', 'names'], ['Vorname', 'names'], ['Kunde', 'names'], ['customer', 'names'], ['assignee', 'names'], ['Benutzername', 'names'],
+    ['E-Mail', 'emails'], ['customer_email', 'emails'], ['Kunden-E-Mail', 'emails'],
+    ['Telefonnummer', 'phones'], ['Tel.', 'phones'], ['mobile', 'phones'], ['Handy', 'phones'],
+    ['Geburtsdatum', 'birthDates'], ['dob', 'birthDates'], ['date_of_birth', 'birthDates'],
+    ['Straße', 'addresses'], ['PLZ', 'addresses'], ['Wohnort', 'addresses'], ['zip', 'addresses'], ['Anschrift', 'addresses'],
+    ['Kundennummer', 'ids'], ['customer_id', 'ids'], ['SV-Nummer', 'ids'], ['IBAN', 'ids'], ['ip_address', 'ids'],
+  ])('%s holds %s', (header, kind) => {
+    expect(personalHeaderTerm(header)).toBeDefined()
+    expect(personalKind(header)).toBe(kind)
+  })
+})
+
 describe('suggestRole', () => {
+  it('keeps empty columns as they are, whatever the header says', () => {
+    expect(suggestRole('notes', ['', '  ', ''])).toEqual({ role: 'keep', reason: 'empty' })
+    expect(suggestRole('customer_email', ['', ''])).toEqual({ role: 'keep', reason: 'empty' })
+  })
+
   it('drops columns with personal headers and names the word that matched', () => {
     expect(suggestRole('customer_email', ['a@example.com'])).toEqual({ role: 'drop', reason: 'personal-header', term: 'email' })
   })
@@ -69,5 +88,34 @@ describe('suggestRoles and guessFeedbackColumn', () => {
 
   it('makes no guess when no column holds sentences', () => {
     expect(guessFeedbackColumn({ columns: ['plan'], rows: [['Team'], ['Free']] })).toBeUndefined()
+  })
+
+  it('ranks by words, so a column of long links does not win over sentences', () => {
+    const rows = [1, 2, 3].map(i => [
+      `Der Export nach DATEV bricht seit dem Update ab, Ticket ${i}`,
+      `https://support.northwind-industries-holdings.example.com/tickets/2026/09/ZD-448192${i}?utm_source=newsletter`,
+    ])
+    expect(guessFeedbackColumn({ columns: ['Rückmeldung', 'source'], rows })).toBe(0)
+  })
+
+  it('leaves out columns where most values are links, email addresses or numbers', () => {
+    const rows = [1, 2, 3].map(i => [
+      `https://support.example.com/tickets/2026/09/ZD-448192${i}`,
+      `bartholomew.fitzgerald${i}@northwind-industries-holdings.example.com`,
+    ])
+    expect(guessFeedbackColumn({ columns: ['link', 'reply_to'], rows })).toBeUndefined()
+  })
+})
+
+describe('isStructuredValue', () => {
+  it.each([
+    ['+43 660 234 2972', true],
+    ['2026-01-04', true],
+    ['https://support.example.com/tickets/2026/09/ZD-4481920', true],
+    ['bartholomew.fitzgerald@northwind-industries-holdings.example.com', true],
+    ['Bitte an anna@example.com schreiben, der Export bricht ab', false],
+    ['Der Link https://example.com/x funktioniert nicht mehr seit gestern', false],
+  ])('%s is structured: %s', (value, expected) => {
+    expect(isStructuredValue(value)).toBe(expected)
   })
 })

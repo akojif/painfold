@@ -1,9 +1,12 @@
+import { detect } from '../detect/index.ts'
+
 // Default roles for the columns of an imported file:
 //   scan  check the text for personal data and replace it
 //   keep  export unchanged
 //   drop  leave out of the export
 // A column whose header looks personal (name, email, Kunde, Vorname, ...) is
-// dropped by default; the user can change any role before anything is exported.
+// dropped by default, and an empty column is kept as is; the user can change
+// any role before anything is exported.
 
 export type ColumnRole = 'scan' | 'keep' | 'drop'
 
@@ -11,6 +14,7 @@ export type RoleSuggestion
   = | { role: 'drop', reason: 'personal-header', term: string }
     | { role: 'scan', reason: 'text' }
     | { role: 'keep', reason: 'no-text' }
+    | { role: 'keep', reason: 'empty' }
 
 // Header words that identify a person or their contact details, in English and German.
 const PERSONAL_WORDS = new Set([
@@ -82,7 +86,27 @@ export function personalHeaderTerm(header: string): string | undefined {
   return undefined
 }
 
+/** What a personal header most likely holds, for a short reason next to its role. */
+export type PersonalKind = 'emails' | 'phones' | 'birthDates' | 'addresses' | 'ids' | 'names'
+
+// Tried in order against the header's words joined together ("customerid").
+const KIND_PATTERNS: Array<[PersonalKind, RegExp]> = [
+  ['emails', /mail/],
+  ['phones', /phone|^tel|telefon|mobil|handy|^cell$|^fax$/],
+  ['ids', /^ip(?:address)?$/],
+  ['birthDates', /birth|^dob$|geburt|geboren/],
+  ['addresses', /address|adress|anschrift|street|strasse|hausn|zip|post|plz|city|town|ort$|stadt/],
+  ['ids', /ssn|svnr|nummer|number|iban|konto|steuer|taxid|uid$|(?:id|nr|no|num)$/],
+]
+
+/** For a header that looks personal: what it most likely holds. */
+export function personalKind(header: string): PersonalKind {
+  const joined = headerWords(header).join('')
+  return KIND_PATTERNS.find(([, pattern]) => pattern.test(joined))?.[0] ?? 'names'
+}
+
 export function suggestRole(header: string, values: readonly string[]): RoleSuggestion {
+  if (values.every(value => !value.trim())) return { role: 'keep', reason: 'empty' }
   const term = personalHeaderTerm(header)
   if (term) return { role: 'drop', reason: 'personal-header', term }
   if (values.some(value => /\p{L}/u.test(value))) return { role: 'scan', reason: 'text' }
@@ -94,20 +118,43 @@ export function suggestRoles(table: { columns: string[], rows: string[][] }): Ro
 }
 
 const MIN_FEEDBACK_LENGTH = 20
+// Values looked at per column when judging what it holds; enough to be sure, cheap on large files.
+const STRUCTURED_SAMPLE = 200
+// A detection covering this much of a value means the value is that data, not text around it.
+const MOSTLY = 0.8
+
+/**
+ * A value that is data rather than prose: no letters at all (numbers, dates,
+ * phone numbers), or a link, email address or other detected value that
+ * makes up most of it.
+ */
+export function isStructuredValue(value: string): boolean {
+  const text = value.trim()
+  if (!/\p{L}/u.test(text)) return true
+  return detect(text).some(found => found.end - found.start >= text.length * MOSTLY)
+}
+
+const words = (value: string) => value.split(/\s+/).filter(Boolean).length
 
 /**
  * The column most likely to hold the feedback: the non-personal text column
- * with the longest average entry, if that average is at least a short sentence.
+ * whose entries have the most words on average, if they are at least a short
+ * sentence long. Columns where most values are links, email addresses or
+ * numbers are left out, however long they are.
  */
 export function guessFeedbackColumn(table: { columns: string[], rows: string[][] }): number | undefined {
   const suggestions = suggestRoles(table)
-  let best: { index: number, average: number } | undefined
+  let best: { index: number, words: number } | undefined
   for (const [index, suggestion] of suggestions.entries()) {
     if (suggestion.role !== 'scan') continue
     const filled = table.rows.map(row => row[index]?.trim() ?? '').filter(Boolean)
     if (filled.length === 0) continue
-    const average = filled.reduce((sum, value) => sum + value.length, 0) / filled.length
-    if (average >= MIN_FEEDBACK_LENGTH && (!best || average > best.average)) best = { index, average }
+    const length = filled.reduce((sum, value) => sum + value.length, 0) / filled.length
+    if (length < MIN_FEEDBACK_LENGTH) continue
+    const sample = filled.slice(0, STRUCTURED_SAMPLE)
+    if (sample.filter(isStructuredValue).length > sample.length / 2) continue
+    const average = filled.reduce((sum, value) => sum + words(value), 0) / filled.length
+    if (!best || average > best.words) best = { index, words: average }
   }
   return best?.index
 }

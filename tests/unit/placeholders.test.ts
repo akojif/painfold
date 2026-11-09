@@ -82,6 +82,14 @@ describe('detection worker protocol', () => {
     expect(result.kind === 'result' && result.cells[0]!.detections[0]!.value).toBe('a@example.com')
   })
 
+  it('surveys columns as counts per type, without any values', () => {
+    const sent: DetectResponse[] = []
+    const rows = [['a@example.com, b@example.com', '+43 660 234 2972'], ['c@example.com', 'nothing here']]
+    handleDetectRequest({ kind: 'survey', id: 3, rows, columns: [0, 1] }, response => sent.push(response))
+    expect(sent.at(-1)).toEqual({ kind: 'survey', id: 3, columns: [{ column: 0, counts: { EMAIL: 3 } }, { column: 1, counts: { PHONE: 1 } }] })
+    expect(JSON.stringify(sent)).not.toContain('example.com')
+  })
+
   it('reports a failure without echoing the text that was scanned', () => {
     const sent: DetectResponse[] = []
     const broken = { kind: 'detect' as const, id: 1, rows: null as unknown as string[][], columns: [0] }

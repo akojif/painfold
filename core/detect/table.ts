@@ -1,7 +1,11 @@
+import type { PiiType } from '../pii-types.ts'
 import { detect, DETECTORS } from './index.ts'
 import type { Detection, Detector } from './types.ts'
 
 export type CellDetections = { row: number, column: number, detections: Detection[] }
+
+/** How much of each type of personal data a column holds. */
+export type ColumnCounts = { column: number, counts: Partial<Record<PiiType, number>> }
 
 /**
  * Runs detection over the given columns of every row, reporting progress after
@@ -22,4 +26,15 @@ export function detectTable(
     if (onProgress && ((row + 1) % batchSize === 0 || row + 1 === rows.length)) onProgress(row + 1, rows.length)
   }
   return results
+}
+
+/** Adds up detections per column and type: only counts, never the values themselves. */
+export function countByColumn(cells: readonly CellDetections[]): ColumnCounts[] {
+  const byColumn = new Map<number, Partial<Record<PiiType, number>>>()
+  for (const { column, detections } of cells) {
+    const counts = byColumn.get(column) ?? {}
+    for (const { type } of detections) counts[type] = (counts[type] ?? 0) + 1
+    byColumn.set(column, counts)
+  }
+  return [...byColumn].map(([column, counts]) => ({ column, counts }))
 }
