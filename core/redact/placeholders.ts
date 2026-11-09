@@ -26,6 +26,11 @@ export function placeholderLabel(type: PiiType): string {
   return LABELS[type] ?? type
 }
 
+/** Identifies a value for decisions and placeholders: the same key means the same value. */
+export function valueKey(type: PiiType, value: string): string {
+  return `${type}\u0000${normalizeValue(type, value)}`
+}
+
 /**
  * Hands out placeholders such as [EMAIL_3]: numbered per type in the order
  * values are first seen, and the same for every occurrence of the same value.
@@ -36,7 +41,7 @@ export class PlaceholderMap {
   private readonly counts = new Map<PiiType, number>()
 
   placeholderFor(type: PiiType, value: string): string {
-    const key = `${type}\u0000${normalizeValue(type, value)}`
+    const key = valueKey(type, value)
     let placeholder = this.byKey.get(key)
     if (!placeholder) {
       const next = (this.counts.get(type) ?? 0) + 1

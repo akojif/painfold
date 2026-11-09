@@ -17,7 +17,7 @@
     "source": "Source code"
   },
   "start": {
-    "headline": "Take the names out. Keep the feedback.",
+    "headline": "Take the personal data out. Keep the feedback.",
     "lead": "Painfold removes {types} from support tickets and surveys. Your file is never uploaded. It stays in this browser.",
     "choose": "Choose a CSV or Excel file",
     "reading": "Reading {name}…",
@@ -88,7 +88,60 @@
   },
   "review": {
     "heading": "{findings} in {rows}",
-    "findings": "No findings | 1 finding | {n} findings"
+    "findings": "No findings | 1 finding | {n} findings",
+    "progress": "{reviewed} reviewed, {left} left",
+    "progressLabel": "Reviewed",
+    "filterLabel": "Show findings",
+    "all": "All {n}",
+    "onlyWithFindings": "Only rows with findings",
+    "row": "Row {n}",
+    "nothingFound": "Nothing found in this row",
+    "noFindings": "No findings. Select any text that should be removed and press M, or continue.",
+    "noRows": "No rows match this filter.",
+    "state": {
+      "pending": "not reviewed",
+      "remove": "removed",
+      "keep": "kept"
+    },
+    "markLabel": "{type}, {state}: {text}",
+    "note": {
+      "title": "{type}, row {row}",
+      "copies": "Appears in 1 row. Removing it replaces it with {placeholder}. | Appears in {n} rows. Removing it replaces every copy with {placeholder}.",
+      "removed": "Removed in every copy.",
+      "kept": "Kept in every copy.",
+      "nothingSelected": "Select a finding to review it."
+    },
+    "remove": "Remove",
+    "keep": "Keep",
+    "undo": "Undo",
+    "keys": {
+      "label": "Keyboard shortcuts",
+      "next": "next and previous finding",
+      "mark": "mark selected text as missed",
+      "undo": "undo"
+    },
+    "mark": {
+      "button": "Mark selected text as missed",
+      "heading": "Mark “{text}” as personal data",
+      "type": "Type",
+      "confirm": "Mark as personal data",
+      "cancel": "Cancel",
+      "noSelection": "Select the missed text in a row first, then press M.",
+      "oneCell": "Select text within one cell.",
+      "overlap": "The selection overlaps a finding. Select only the missed text.",
+      "done": "{type} marked in 1 row. | {type} marked in {n} rows."
+    },
+    "removeAll": "Remove all {n} left",
+    "continue": "Continue to download",
+    "willRemove": "1 not reviewed will be removed. | {n} not reviewed will be removed.",
+    "limits": "Automatic detection can miss personal data. Review the results before sharing the cleaned file. Painfold helps with data protection but is not legal advice and does not by itself make your processing GDPR compliant.",
+    "announce": {
+      "remove": "{type} removed, {left} left.",
+      "keep": "{type} kept, {left} left.",
+      "removeAll": "All findings left are removed.",
+      "undo": "Undone.",
+      "nothingToUndo": "Nothing to undo."
+    }
   },
   "header": {
     "outbound": "What leaves your browser",
@@ -107,5 +160,38 @@
   },
   "privacy": {
     "notice": "Your file is never uploaded. It stays in this browser."
+  },
+  "typeOne": {
+    "EMAIL": "Email address",
+    "PHONE": "Phone number",
+    "IBAN": "IBAN",
+    "CARD": "Card number",
+    "SVNR": "Social security number",
+    "VAT_ID": "VAT ID",
+    "URL": "Link",
+    "IP": "IP address",
+    "DATE_OF_BIRTH": "Date of birth",
+    "ADDRESS": "Street address",
+    "POSTCODE": "Postcode",
+    "NAME": "Name",
+    "PLACE": "Place"
+  },
+  "typeShort": {
+    "EMAIL": "Email",
+    "PHONE": "Phone",
+    "IBAN": "IBAN",
+    "CARD": "Card",
+    "SVNR": "SV number",
+    "VAT_ID": "VAT ID",
+    "URL": "Link",
+    "IP": "IP",
+    "DATE_OF_BIRTH": "Birth date",
+    "ADDRESS": "Address",
+    "POSTCODE": "Postcode",
+    "NAME": "Name",
+    "PLACE": "Place"
+  },
+  "download": {
+    "heading": "Download the cleaned file"
   }
 }
