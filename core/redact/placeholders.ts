@@ -13,6 +13,9 @@ export function normalizeValue(type: PiiType, value: string): string {
       return value.toLowerCase()
     case 'URL':
       return value.replace(/^(?:https?:\/\/)?[^/?#]+/i, origin => origin.toLowerCase().replace(/^https?:\/\//, ''))
+    case 'PHONE':
+      // "+43 (0)664 …", "0043 664 …" and "+43664…" are the same number.
+      return value.replace(/\(0\)/g, '').replace(/^00/, '+').replace(/(?!^\+)\D/g, '')
     case 'IBAN':
     case 'CARD':
     case 'SVNR':

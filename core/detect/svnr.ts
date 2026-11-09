@@ -4,7 +4,7 @@ import { detection, type Detector } from './types.ts'
 // Serial and check digit, an optional space, then the birth date: "1237 010180" or "1237010180".
 const CANDIDATE = /(?<![\d.,/-])[1-9]\d{3}[ \u00A0]?\d{6}(?![\d/-]|[.,]\d)/g
 
-/** Austrian social insurance numbers (Sozialversicherungsnummer) with a valid check digit and birth date. */
+/** Austrian social insurance numbers (Sozialversicherungsnummer) with a valid check digit; see isValidSvnr. */
 export const svnrDetector: Detector = {
   type: 'SVNR',
   detect: text => [...text.matchAll(CANDIDATE)].flatMap(match =>

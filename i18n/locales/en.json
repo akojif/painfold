@@ -27,7 +27,8 @@
     "nameNext": "{token} in v0.2",
     "dropAnywhere": "Or drop a file anywhere on this page.",
     "dropActive": "Drop the file to read it.",
-    "stamp": "Stays in this browser"
+    "stamp": "Stays in this browser",
+    "moreTypes": "1 more kind of personal data | {n} more kinds of personal data"
   },
   "types": {
     "EMAIL": "email addresses",

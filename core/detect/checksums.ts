@@ -46,18 +46,24 @@ export function isValidCardNumber(digits: string): boolean {
   return CARD_NETWORKS.some(network => network.prefix.test(digits) && network.lengths.includes(digits.length)) && passesLuhn(digits)
 }
 
+// Weights for digits 1-3 and 5-10; digit 4 is the check digit.
 const SVNR_WEIGHTS = [3, 7, 9, 0, 5, 8, 4, 2, 1, 6]
 
 /**
- * Austrian social insurance number: 3-digit serial, check digit, birth date
- * DDMMYY. The check digit is the weighted sum mod 11 (10 is never issued).
+ * Austrian social insurance number (Versicherungsnummer, SV-Nummer): a 3-digit
+ * serial that never starts with 0, a check digit, then six digits that are
+ * usually, but not always, the birth date DDMMYY. The check digit is the
+ * weighted sum mod 11; numbers whose remainder is 10 are never issued.
+ *
+ * The last six digits are deliberately not checked as a date: when the numbers
+ * for a date run out, "artificial birth dates" such as 1.13. or 1.14. are
+ * issued, and the official description lists no complete set of values. Every
+ * officially valid number is detected, at the cost of some look-alikes.
+ * Source: Dachverband der Sozialversicherungsträger, "Was ist die
+ * Versicherungsnummer?", https://www.sozialversicherung.at/cdscontent/?contentid=10007.820902
  */
 export function isValidSvnr(digits: string): boolean {
   if (!/^[1-9]\d{9}$/.test(digits)) return false
-  const day = Number(digits.slice(4, 6))
-  const month = Number(digits.slice(6, 8))
-  // Months 13 to 15 are used when the birth date is unknown or a number ran out.
-  if (day < 1 || day > 31 || month < 1 || month > 15) return false
   const check = SVNR_WEIGHTS.reduce((sum, weight, i) => sum + weight * Number(digits[i]), 0) % 11
   return check !== 10 && check === Number(digits[3])
 }

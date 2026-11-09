@@ -86,7 +86,7 @@ describe('ipDetector', () => {
 
 describe('DETECTED_TYPES', () => {
   it('lists the type of every detector, once', () => {
-    expect(DETECTED_TYPES).toEqual(['EMAIL', 'IBAN', 'CARD', 'SVNR', 'VAT_ID', 'URL', 'IP'])
+    expect(DETECTED_TYPES).toEqual(['EMAIL', 'PHONE', 'IBAN', 'CARD', 'SVNR', 'VAT_ID', 'ADDRESS', 'POSTCODE', 'DATE_OF_BIRTH', 'URL', 'IP'])
   })
 })
 
