@@ -89,3 +89,16 @@
 {"id":"hard-089","lang":"de","text":"Lieferadresse Am Graben 3-5, 1010 Wien","spans":[{"start":14,"end":27,"type":"ADDRESS","text":"Am Graben 3-5"},{"start":29,"end":33,"type":"POSTCODE","text":"1010"},{"start":34,"end":38,"type":"PLACE","text":"Wien"}]}
 {"id":"hard-090","lang":"en","text":"Please send it to Flat 2, 14 Market Street, Leeds LS1 6DT.","spans":[{"start":18,"end":42,"type":"ADDRESS","text":"Flat 2, 14 Market Street"},{"start":44,"end":49,"type":"PLACE","text":"Leeds"},{"start":50,"end":57,"type":"POSTCODE","text":"LS1 6DT"}]}
 {"id":"hard-091","lang":"de","text":"Wir sind auf der Messe in Halle 3, Stand 12.","spans":[]}
+{"id":"hard-092","lang":"de","text":"Überweisung bitte auf AT73-7917-3019-7877-8826.","spans":[{"start":22,"end":46,"type":"IBAN","text":"AT73-7917-3019-7877-8826"}]}
+{"id":"hard-093","lang":"en","text":"iban at61-4491-2176-6286-4827 (copied from my bank)","spans":[{"start":5,"end":29,"type":"IBAN","text":"at61-4491-2176-6286-4827"}]}
+{"id":"hard-094","lang":"de","text":"Referenz AT73-7917-3019-7877-8827 aus dem alten System.","spans":[]}
+{"id":"hard-095","lang":"en","text":"Card 4012.8888.8888.1881, please delete it.","spans":[{"start":5,"end":24,"type":"CARD","text":"4012.8888.8888.1881"}]}
+{"id":"hard-096","lang":"de","text":"MC 5105.1051.0510.5100 wurde abgelehnt.","spans":[{"start":3,"end":22,"type":"CARD","text":"5105.1051.0510.5100"}]}
+{"id":"hard-097","lang":"de","text":"Seriennummer 4012.8888.8888.1882 steht am Gerät.","spans":[]}
+{"id":"hard-098","lang":"de","text":"SV-Nummer 9076-011073 für die Anmeldung.","spans":[{"start":10,"end":21,"type":"SVNR","text":"9076-011073"}]}
+{"id":"hard-099","lang":"de","text":"Versicherungsnummer: 9803-150353","spans":[{"start":21,"end":32,"type":"SVNR","text":"9803-150353"}]}
+{"id":"hard-100","lang":"de","text":"Vorgang 2024-010106 ist abgeschlossen.","spans":[]}
+{"id":"hard-101","lang":"de","text":"USt-IdNr. DE 735 402 677 bitte auf die Rechnung.","spans":[{"start":10,"end":24,"type":"VAT_ID","text":"DE 735 402 677"}]}
+{"id":"hard-102","lang":"en","text":"Our VAT ID is DE 111 840 966.","spans":[{"start":14,"end":28,"type":"VAT_ID","text":"DE 111 840 966"}]}
+{"id":"hard-103","lang":"de","text":"UID-Nummer ATU 6133 1053","spans":[{"start":11,"end":24,"type":"VAT_ID","text":"ATU 6133 1053"}]}
+{"id":"hard-104","lang":"de","text":"Kundennr. DE 735 402 678 (keine UID)","spans":[]}
