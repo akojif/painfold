@@ -17,6 +17,7 @@
     "typecheck": "nuxt typecheck",
     "test": "vitest run",
     "test:e2e": "playwright test",
+    "bench": "BENCH=1 playwright test performance --reporter=line",
     "postinstall": "nuxt prepare",
     "licenses": "license-checker-rseidelsohn --excludePrivatePackages --excludePackages \"tosource@2.0.0-alpha.3\" --onlyAllow \"MIT;Apache-2.0;ISC;BSD-2-Clause;BSD-3-Clause;0BSD;BlueOak-1.0.0;CC0-1.0;Python-2.0;MPL-2.0;CC-BY-4.0;CC-BY-3.0\" --summary",
     "headers:vercel": "node scripts/write-vercel-config.ts"
