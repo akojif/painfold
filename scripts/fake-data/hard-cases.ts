@@ -75,4 +75,56 @@ export const HARD_CASES: Array<{ lang: Lang, source: string }> = [
   { lang: 'en', source: 'Thanks to [[NAME:Grace]] from your support team.' },
   { lang: 'de', source: 'Feature request: export für unseren Steuerberater as Excel, bitte.' },
   { lang: 'en', source: 'Works fine. No complaints.' },
+
+  // Messy real-world forms: how people actually write, paste and forward data.
+  // Emails: mailto links, quoted replies, capitals, a missing space after the full stop.
+  { lang: 'de', source: 'Bitte an <a href="mailto:[[EMAIL:lena.gruber@example.com]]">Lena</a> weiterleiten.' },
+  { lang: 'en', source: 'Sent from my iPhone\n\n> On 3 Mar 2026, at 09:14, [[EMAIL:m.okonkwo@example.org]] wrote:\n> The export is broken.' },
+  { lang: 'en', source: 'EMAIL: [[EMAIL:MARK.OKONKWO@EXAMPLE.ORG]] (please update)' },
+  { lang: 'de', source: 'Antwort bitte an [[EMAIL:anna.feldmoser@example.com]].Danke!' },
+  { lang: 'en', source: 'Write to [[EMAIL:j.dunmore AT example DOT net]], the form eats my messages.' },
+
+  // Phone numbers: 00 and (0) prefixes, slashes, extensions, non-breaking spaces.
+  { lang: 'de', source: 'Rückruf bitte unter [[PHONE:0043 664 1234567]], ich bin den ganzen Tag erreichbar.' },
+  { lang: 'de', source: 'Tel.: [[PHONE:+49 (0)30 23125-418]]' },
+  { lang: 'de', source: 'mobil [[PHONE:0664/2345678]] oder per Mail' },
+  { lang: 'en', source: 'ph. [[PHONE:020 7946 0321]] ext. 12' },
+  { lang: 'de', source: 'Handy: [[PHONE:+43 676 123 45 67]] (abends)' },
+  { lang: 'en', source: 'Call me on [[PHONE:+44 (0) 7700 900 123]] before noon.' },
+  { lang: 'de', source: 'Tel.\u00A0[[PHONE:030\u00A023125\u00A0419]] (Zentrale)' },
+  // Numbers that are not phone numbers.
+  { lang: 'de', source: 'Zeitraum 2025-01-01 bis 2025-12-31, Belegnummer 2025-000417.' },
+  { lang: 'de', source: 'Betrag: EUR 1.234.567,89 brutto, fällig am 15.04.2026.' },
+  { lang: 'en', source: 'Build 20260312.1422 failed on the CI server.' },
+  { lang: 'de', source: 'ISBN 978-3-16-148410-0 steht falsch im Literaturverzeichnis.' },
+  { lang: 'de', source: 'EAN 4006381333931 ist im Katalog doppelt.' },
+
+  // IBANs, cards, SV-Nummern and VAT IDs written with dashes, dots or without spaces.
+  { lang: 'de', source: 'IBAN: [[IBAN:AT61-1904-3002-3457-3201]]' },
+  { lang: 'de', source: 'Konto: [[IBAN:DE89 3704 0044 0532 0130 00]], BIC COBADEFFXXX' },
+  { lang: 'de', source: 'Kreditkarte [[CARD:5555.5555.5555.4444]] bitte löschen.' },
+  { lang: 'en', source: 'Visa [[CARD:4111 1111 1111 1111]], exp 04/27, please remove it from my account.' },
+  { lang: 'de', source: 'SVNR: [[SVNR:1237-010180]]' },
+  { lang: 'de', source: 'Versicherungsnr.:[[SVNR:1237010180]] (für die Lohnverrechnung)' },
+  { lang: 'de', source: 'UID-Nr.: [[VAT_ID:ATU 13585627]]' },
+  { lang: 'en', source: 'VAT [[VAT_ID:DE 136 695 976]] on the invoice is ours.' },
+
+  // URLs and IP addresses inside brackets, before punctuation, with ports.
+  { lang: 'en', source: 'The help page (see [[URL:https://example.com/help/export]]) is outdated.' },
+  { lang: 'de', source: 'Link: [[URL:https://example.org/a?b=1&c=2]].' },
+  { lang: 'en', source: 'Screenshot at [[URL:http://203.0.113.9/upload/x.png]] shows the error.' },
+  { lang: 'en', source: 'Requests from [[IP:198.51.100.23]]:8080 time out.' },
+
+  // Dates of birth in other formats, and ordinary dates written the same way.
+  { lang: 'de', source: 'geb. am [[DATE_OF_BIRTH:3.7.88]], falls Sie das brauchen' },
+  { lang: 'en', source: 'DOB: [[DATE_OF_BIRTH:1985-07-21]]' },
+  { lang: 'de', source: 'Geburtsdatum: [[DATE_OF_BIRTH:12. März 1979]]' },
+  { lang: 'de', source: 'Termin am 12. März 2026 um 10 Uhr passt.' },
+
+  // Addresses with abbreviations, letters, ranges and flats.
+  { lang: 'de', source: 'Adresse: [[ADDRESS:Hauptstr. 5a]], [[POSTCODE:80331]] [[PLACE:München]]' },
+  { lang: 'de', source: 'Ich wohne jetzt in der [[ADDRESS:Wiedner Hauptstraße 12/4/9]].' },
+  { lang: 'de', source: 'Lieferadresse [[ADDRESS:Am Graben 3-5]], [[POSTCODE:1010]] [[PLACE:Wien]]' },
+  { lang: 'en', source: 'Please send it to [[ADDRESS:Flat 2, 14 Market Street]], [[PLACE:Leeds]] [[POSTCODE:LS1 6DT]].' },
+  { lang: 'de', source: 'Wir sind auf der Messe in Halle 3, Stand 12.' },
 ]

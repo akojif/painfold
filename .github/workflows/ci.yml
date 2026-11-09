@@ -33,6 +33,10 @@ jobs:
       - run: npm run lint
       - run: npm run typecheck
       - run: npm test
+      - name: Detection accuracy
+        run: |
+          echo "## Detection accuracy" >> "$GITHUB_STEP_SUMMARY"
+          npm run --silent eval >> "$GITHUB_STEP_SUMMARY"
       - run: npm run generate
 
   e2e:
