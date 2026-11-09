@@ -130,7 +130,7 @@ async function findPersonalData() {
 
     <section
       v-if="!table"
-      class="grid content-start items-start gap-x-16 gap-y-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,27rem)] lg:pt-6"
+      class="grid flex-1 items-center gap-x-16 gap-y-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,27rem)]"
     >
       <div class="max-w-xl">
         <h1 class="text-2xl font-semibold text-balance sm:text-3xl">
