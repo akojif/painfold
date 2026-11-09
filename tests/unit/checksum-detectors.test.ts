@@ -20,6 +20,7 @@ describe('IBAN', () => {
     ['IBAN: CH93 0076 2011 6238 5295 7, danke', 'CH93 0076 2011 6238 5295 7'],
     ['Konto AT61 1904 3002 3457 3201 bitte belasten', 'AT61 1904 3002 3457 3201'],
     ['(GB29 NWBK 6016 1331 9268 19)', 'GB29 NWBK 6016 1331 9268 19'],
+    ['IBAN: AT61-1904-3002-3457-3201', 'AT61-1904-3002-3457-3201'],
   ])('finds the IBAN in %j', (text, expected) => {
     expect(values(ibanDetector, text)).toEqual([expected])
   })
@@ -29,6 +30,7 @@ describe('IBAN', () => {
     'Version DE89 ist veraltet.',
     'AT61 1904 3002 3457 32019 has a digit too many',
     'Order XX12 3456 7890 1234 5678',
+    'Ref AT61-1904-3002-3457-3202 is not an IBAN',
   ])('finds nothing in %j', (text) => {
     expect(ibanDetector.detect(text)).toEqual([])
   })
@@ -40,6 +42,7 @@ describe('card numbers', () => {
     ['Amex 3782 822463 10005 wurde abgelehnt', '3782 822463 10005'],
     ['Karte 5555555555554444, bitte', '5555555555554444'],
     ['Mastercard 5105 1051 0510 5100.', '5105 1051 0510 5100'],
+    ['Kreditkarte 5555.5555.5555.4444 bitte löschen.', '5555.5555.5555.4444'],
   ])('finds the card number in %j', (text, expected) => {
     expect(values(cardDetector, text)).toEqual([expected])
   })
@@ -51,6 +54,10 @@ describe('card numbers', () => {
     'Order 4711-0815-2231 is open',
     'Tracking 1Z 999 AA1 01 2345 6784',
     'Batch 41111111111111110000 is longer than any card',
+    // Dots also separate IP addresses and amounts; only groups of four count.
+    'Server 51.105.105.105.100 is not a card',
+    'Betrag 5.555.555.555.554,44 Euro',
+    'Version 4111.1111.1111.1112 fails Luhn',
   ])('finds nothing in %j', (text) => {
     expect(cardDetector.detect(text)).toEqual([])
   })
@@ -60,6 +67,7 @@ describe('Austrian social insurance number (SV-Nummer)', () => {
   it.each([
     ['Meine Sozialversicherungsnummer ist 1237 010180.', '1237 010180'],
     ['SV-Nr. 1237010180 für die Lohnverrechnung', '1237010180'],
+    ['SVNR: 1237-010180', '1237-010180'],
   ])('finds the number in %j', (text, expected) => {
     expect(values(svnrDetector, text)).toEqual([expected])
   })
@@ -69,6 +77,9 @@ describe('Austrian social insurance number (SV-Nummer)', () => {
     'Invoice 0237 010180 starts with zero',
     'Amount 1.237.010.180 is not a number like that',
     'Phone 06641 234567',
+    // Written with a dash, the date part must look like a date: these are document numbers.
+    'Belegnummer 2025-000417',
+    'Beleg 4711-000013 (passes the check digit)',
   ])('finds nothing in %j', (text) => {
     expect(svnrDetector.detect(text)).toEqual([])
   })
@@ -143,6 +154,7 @@ describe('VAT IDs (UID, USt-IdNr.)', () => {
     ['UID ATU13585627 fehlt auf der Rechnung.', 'ATU13585627'],
     ['UID: ATU 13585627', 'ATU 13585627'],
     ['USt-IdNr. DE136695976, bitte übernehmen.', 'DE136695976'],
+    ['VAT DE 136 695 976 on the invoice', 'DE 136 695 976'],
   ])('finds the ID in %j', (text, expected) => {
     expect(values(vatDetector, text)).toEqual([expected])
   })
@@ -152,6 +164,7 @@ describe('VAT IDs (UID, USt-IdNr.)', () => {
     'DE136695977 has a wrong check digit.',
     'DE12345678 is too short',
     'NATU13585627 is part of another word',
+    'DE 136 695 976 1 has a digit too many',
   ])('finds nothing in %j', (text) => {
     expect(vatDetector.detect(text)).toEqual([])
   })

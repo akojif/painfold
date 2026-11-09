@@ -127,4 +127,20 @@ export const HARD_CASES: Array<{ lang: Lang, source: string }> = [
   { lang: 'de', source: 'Lieferadresse [[ADDRESS:Am Graben 3-5]], [[POSTCODE:1010]] [[PLACE:Wien]]' },
   { lang: 'en', source: 'Please send it to [[ADDRESS:Flat 2, 14 Market Street]], [[PLACE:Leeds]] [[POSTCODE:LS1 6DT]].' },
   { lang: 'de', source: 'Wir sind auf der Messe in Halle 3, Stand 12.' },
+
+  // Added after the separator fix for IBANs, cards, SV-Nummern and VAT IDs, with
+  // values the fix was not written against, to check that it generalises.
+  { lang: 'de', source: 'Überweisung bitte auf [[IBAN:AT73-7917-3019-7877-8826]].' },
+  { lang: 'en', source: 'iban [[IBAN:at61-4491-2176-6286-4827]] (copied from my bank)' },
+  { lang: 'de', source: 'Referenz AT73-7917-3019-7877-8827 aus dem alten System.' },
+  { lang: 'en', source: 'Card [[CARD:4012.8888.8888.1881]], please delete it.' },
+  { lang: 'de', source: 'MC [[CARD:5105.1051.0510.5100]] wurde abgelehnt.' },
+  { lang: 'de', source: 'Seriennummer 4012.8888.8888.1882 steht am Gerät.' },
+  { lang: 'de', source: 'SV-Nummer [[SVNR:9076-011073]] für die Anmeldung.' },
+  { lang: 'de', source: 'Versicherungsnummer: [[SVNR:9803-150353]]' },
+  { lang: 'de', source: 'Vorgang 2024-010106 ist abgeschlossen.' },
+  { lang: 'de', source: 'USt-IdNr. [[VAT_ID:DE 735 402 677]] bitte auf die Rechnung.' },
+  { lang: 'en', source: 'Our VAT ID is [[VAT_ID:DE 111 840 966]].' },
+  { lang: 'de', source: 'UID-Nummer [[VAT_ID:ATU 6133 1053]]' },
+  { lang: 'de', source: 'Kundennr. DE 735 402 678 (keine UID)' },
 ]
