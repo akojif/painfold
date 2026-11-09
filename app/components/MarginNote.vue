@@ -26,9 +26,12 @@ const copyRows = computed(() => {
   return new Set(current.copiesOf(props.finding.key).map(copy => copy.row)).size
 })
 const canUndo = computed(() => (revision.value, review.value?.canUndo ?? false))
-const copiesText = computed(() => props.finding && review.value
-  ? t('review.note.copies', { n: copyRows.value, placeholder: review.value.placeholderFor(props.finding) }, copyRows.value)
-  : '')
+const copiesText = computed(() => {
+  if (!props.finding || !review.value) return ''
+  const placeholder = review.value.placeholderFor(props.finding)
+  if (props.finding.formOf) return t('review.note.formOf', { marked: props.finding.formOf, placeholder })
+  return t('review.note.copies', { n: copyRows.value, placeholder }, copyRows.value)
+})
 </script>
 
 <template>

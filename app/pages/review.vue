@@ -151,8 +151,13 @@ function confirmMark(type: PiiType) {
   if (!mark) return
   try {
     const added = session.change(current => current.markMissed(mark.row, mark.column, mark.start, mark.end, type)) ?? []
-    const rows = new Set(added.map(finding => finding.row)).size
-    announcement.value = t('review.mark.done', { type: t(`typeOne.${type}`), n: rows }, rows)
+    const marked = added.filter(finding => finding.source === 'marked')
+    const forms = added.length - marked.length
+    const rows = new Set(marked.map(finding => finding.row)).size
+    announcement.value = [
+      t('review.mark.done', { type: t(`typeOne.${type}`), n: rows }, rows),
+      ...(forms > 0 ? [t('review.mark.forms', { n: forms }, forms)] : []),
+    ].join(' ')
     window.getSelection()?.removeAllRanges()
     marking.value = undefined
     sweepKeys.value = new Set()

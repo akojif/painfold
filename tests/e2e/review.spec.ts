@@ -123,6 +123,28 @@ test.describe('review step', () => {
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('5 findings in 4 rows')
   })
 
+  test('possible forms of marked text are flagged for review, not removed', async ({ page }) => {
+    await openReview(page, [
+      'id,message',
+      '1,"Anna rief wegen der Rechnung an, bitte zurückrufen"',
+      '2,"Annas Rechnung ist doppelt abgebucht worden"',
+      '3,"Anna\'s invoice was charged twice last month"',
+    ].join('\n'))
+    await selectText(page, 1, 'Anna')
+    await page.keyboard.press('m')
+    await page.getByRole('button', { name: 'Mark as personal data' }).click()
+    await expect(page.locator('[aria-live="polite"]').last()).toHaveText('Name marked in 1 row. 2 possible forms to review.')
+    await expect(row(page, 1)).toContainText('[NAME_1]')
+    await expect(row(page, 2).getByRole('button', { name: 'Name, not reviewed: Anna' })).toBeVisible()
+    await expect(row(page, 3).getByRole('button', { name: 'Name, not reviewed: Anna' })).toBeVisible()
+    await expect(progress(page)).toHaveText('1 reviewed, 2 left')
+
+    await row(page, 2).getByRole('button', { name: 'Name, not reviewed: Anna' }).click()
+    await expect(page.getByText('Looks like a form of “Anna”, which you marked. Removing it replaces it with [NAME_1].')).toBeVisible()
+    await page.keyboard.press('r')
+    await expect(row(page, 2)).toContainText('[NAME_1]s Rechnung')
+  })
+
   test('marking without a selection explains what to do', async ({ page }) => {
     await openReview(page)
     await page.keyboard.press('m')
