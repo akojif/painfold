@@ -76,7 +76,7 @@ async function findPersonalData() {
   detecting.value = true
   detectionFailed.value = false
   try {
-    session.findings.value = await detection.run(table.value.rows, scanColumns.value)
+    session.startReview(await detection.run(table.value.rows, scanColumns.value))
     await navigateTo('/review')
   }
   catch {

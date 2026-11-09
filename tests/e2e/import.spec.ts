@@ -16,7 +16,7 @@ function upload(page: import('@playwright/test').Page, name: string, buffer: Buf
 test.describe('start screen', () => {
   test('promises the file stays local, offers the sample file and lists what is removed', async ({ page }) => {
     await page.goto('/')
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Take the names out. Keep the feedback.')
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Take the personal data out. Keep the feedback.')
     await expect(page.getByText('Painfold removes email addresses, links, and IP addresses from support tickets and surveys. Your file is never uploaded. It stays in this browser.')).toBeVisible()
     await expect(page.getByText('Stays in this browser', { exact: true })).toBeVisible()
     await expect(page.getByRole('button', { name: 'Try the sample file' })).toBeVisible()
