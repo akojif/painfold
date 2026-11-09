@@ -7,6 +7,7 @@
 import { mkdir, writeFile } from 'node:fs/promises'
 import { dirname } from 'node:path'
 import { parseArgs } from 'node:util'
+import { utils, write as writeWorkbook } from 'xlsx'
 import { HARD_CASES } from './fake-data/hard-cases.ts'
 import { mark, parseMarkup, type LabelledText } from './fake-data/markup.ts'
 import { seededRandom, type Random } from './fake-data/random.ts'
@@ -20,6 +21,7 @@ export const SAMPLE_ROWS = 200
 export const EVAL_ITEMS = 1200
 
 export const SAMPLE_PATH = 'data/sample/support-tickets.csv'
+export const SAMPLE_XLSX_PATH = 'data/sample/support-tickets.xlsx'
 export const EVAL_GENERATED_PATH = 'data/eval/generated.jsonl'
 export const EVAL_HARD_CASES_PATH = 'data/eval/hard-cases.jsonl'
 
@@ -61,9 +63,11 @@ function csvCell(value: string): string {
   return /[",\n]/.test(value) ? `"${value.replaceAll('"', '""')}"` : value
 }
 
-export function buildSample(seed: number, rows: number): string {
+export const SAMPLE_HEADER = ['id', 'created_at', 'channel', 'rating', 'plan', 'country', 'customer_name', 'customer_email', 'message']
+
+/** The sample as rows of cells, header first. */
+export function buildSampleRows(seed: number, rows: number): string[][] {
   const random = seededRandom(seed)
-  const header = ['id', 'created_at', 'channel', 'rating', 'plan', 'country', 'customer_name', 'customer_email', 'message']
   const start = Date.UTC(2026, 0, 1)
   const span = Date.UTC(2026, 9, 31) - start
   const records = Array.from({ length: rows }, () => {
@@ -83,10 +87,21 @@ export function buildSample(seed: number, rows: number): string {
     }
   }).sort((a, b) => a.date.localeCompare(b.date))
 
-  const lines = records.map((record, i) => [
+  return [SAMPLE_HEADER, ...records.map((record, i) => [
     String(i + 1), record.date, record.channel, record.rating, record.plan, record.country, record.name, record.email, record.text,
-  ].map(csvCell).join(','))
-  return `${[header.join(','), ...lines].join('\n')}\n`
+  ])]
+}
+
+export function buildSample(seed: number, rows: number): string {
+  return `${buildSampleRows(seed, rows).map(row => row.map(csvCell).join(',')).join('\n')}\n`
+}
+
+/** The same sample as an XLSX workbook, every cell stored as text. */
+export function buildSampleXlsx(seed: number, rows: number): Uint8Array {
+  const workbook = utils.book_new()
+  utils.book_append_sheet(workbook, utils.aoa_to_sheet(buildSampleRows(seed, rows)), 'Tickets')
+  workbook.Props = { Title: 'Painfold sample (fake data)', CreatedDate: new Date(Date.UTC(2026, 10, 1)) }
+  return writeWorkbook(workbook, { type: 'buffer', bookType: 'xlsx', compression: true }) as Uint8Array
 }
 
 // ---- Evaluation set ----
@@ -121,7 +136,7 @@ export function buildEvalHardCases(): string {
   })))
 }
 
-async function write(path: string, content: string) {
+async function write(path: string, content: string | Uint8Array) {
   await mkdir(dirname(path), { recursive: true })
   await writeFile(path, content)
   console.log(`Wrote ${path}`)
@@ -135,6 +150,7 @@ async function main() {
     return
   }
   await write(SAMPLE_PATH, buildSample(SAMPLE_SEED, SAMPLE_ROWS))
+  await write(SAMPLE_XLSX_PATH, buildSampleXlsx(SAMPLE_SEED, SAMPLE_ROWS))
   await write(EVAL_GENERATED_PATH, buildEvalGenerated(EVAL_SEED, EVAL_ITEMS))
   await write(EVAL_HARD_CASES_PATH, buildEvalHardCases())
 }
