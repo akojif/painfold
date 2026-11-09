@@ -14,7 +14,8 @@
   },
   "footer": {
     "source": "Source code",
-    "roadmap": "Roadmap"
+    "roadmap": "Roadmap",
+    "credit": "Built with love by {name}"
   },
   "start": {
     "headline": "Find what hurts your customers. Without exposing who they are.",
@@ -346,5 +347,64 @@
     "POSTCODE": "postcode",
     "NAME": "name",
     "PLACE": "place"
+  },
+  "roadmap": {
+    "title": "Roadmap",
+    "intro": "Painfold helps you understand what hurts your customers. Cleaning your feedback privately is the first step.",
+    "current": "Current stage",
+    "status": {
+      "available": "Available",
+      "inProgress": "In progress",
+      "planned": "Planned"
+    },
+    "stagesLabel": "Stages",
+    "full": "Read the full roadmap on GitHub",
+    "stages": {
+      "clean": {
+        "name": "Clean",
+        "summary": "Remove personal data from a feedback file in your browser and download the cleaned file.",
+        "points": [
+          "Emails, phone numbers, IBANs and eight more kinds of personal data",
+          "Review and correct every finding before you download",
+          "Nothing is uploaded"
+        ]
+      },
+      "names": {
+        "name": "Names",
+        "summary": "Also find names and places, with a model that runs in your browser.",
+        "points": [
+          "People and places in German and English",
+          "Warnings for details that identify someone indirectly",
+          "Published accuracy for every kind of personal data"
+        ]
+      },
+      "jobs": {
+        "name": "Jobs, pains and gains",
+        "summary": "See what your customers are trying to get done, what frustrates them and what they wish for.",
+        "points": [
+          "Use your own AI key or a local model",
+          "See exactly what is sent before analysis starts",
+          "Every quote checked against your data"
+        ]
+      },
+      "report": {
+        "name": "Report",
+        "summary": "A report your team can act on in one meeting.",
+        "points": [
+          "The three most important findings first",
+          "Segments and trends, when your file has them",
+          "Opportunities framed as “How might we…” questions"
+        ]
+      },
+      "launch": {
+        "name": "Launch",
+        "summary": "Try Painfold in 30 seconds, or run it on your own servers.",
+        "points": [
+          "A demo with ready-made results, no API key needed",
+          "A Docker image for self-hosting with a local model",
+          "Documentation for teams"
+        ]
+      }
+    }
   }
 }

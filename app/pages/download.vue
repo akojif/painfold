@@ -185,12 +185,12 @@ async function startOver() {
         <p class="mt-1 text-fg-muted">
           {{ $t('download.next.body') }}
         </p>
-        <a
-          href="https://github.com/akojif/painfold/blob/main/ROADMAP.md"
+        <NuxtLink
+          to="/roadmap"
           class="focus-ring mt-2 inline-block rounded-sm text-sm text-accent underline-offset-4 hover:underline"
         >
           {{ $t('download.next.link') }}
-        </a>
+        </NuxtLink>
       </section>
     </div>
   </ClientOnly>
