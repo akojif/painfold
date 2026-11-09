@@ -44,7 +44,7 @@ How it is counted:
 - **Precision:** the share of detections that overlap a labelled value of their type.
 - **Removed by any type:** the share of labelled values that are fully removed by any detection. This is what matters for the cleaned file; an IBAN caught as something else is still removed. It is shown with and without names and places.
 
-Names and places are labelled but not detected until v0.2. The Stage 2 target is name recall of at least 0.90, in German and in English separately.
+The hard cases have only a few values per type and language, so one miss moves a number a lot: read them together with the list of known gaps below. Names and places are labelled but not detected until v0.2. The Stage 2 target is name recall of at least 0.90, in German and in English separately.
 
 <!-- accuracy:start -->
 **Generated**
