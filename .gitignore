@@ -5,3 +5,20 @@ CLAUDE.md
 # Secrets
 .env
 .env.*
+
+# Dependencies and build output
+node_modules/
+.nuxt/
+.output/
+.data/
+dist
+*.tsbuildinfo
+
+# Test output
+test-results/
+playwright-report/
+coverage/
+
+# OS and editor files
+.DS_Store
+*.log

@@ -1,0 +1,41 @@
+{
+  "name": "painfold",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Find what hurts your customers, without exposing who they are.",
+  "license": "MIT",
+  "author": "Francis Akoji",
+  "type": "module",
+  "engines": {
+    "node": ">=24.15.0"
+  },
+  "scripts": {
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "serve": "node scripts/serve-static.ts",
+    "lint": "eslint .",
+    "typecheck": "nuxt typecheck",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@nuxtjs/i18n": "10.6.0",
+    "nuxt": "4.6.4",
+    "vue": "3.5.45",
+    "vue-router": "5.4.0"
+  },
+  "devDependencies": {
+    "@nuxt/eslint": "1.17.0",
+    "@playwright/test": "1.65.0",
+    "@types/node": "24.19.2",
+    "eslint": "10.14.0",
+    "typescript": "6.0.3",
+    "vitest": "5.1.0",
+    "vue-tsc": "3.3.14"
+  },
+  "allowScripts": {
+    "esbuild": false,
+    "fsevents": false
+  }
+}
