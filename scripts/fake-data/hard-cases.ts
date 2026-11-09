@@ -38,6 +38,13 @@ export const HARD_CASES: Array<{ lang: Lang, source: string }> = [
   { lang: 'de', source: 'Meine Sozialversicherungsnummer ist [[SVNR:1237 010180]].' },
   { lang: 'de', source: 'SV-Nr. [[SVNR:1237010180]] für die Lohnverrechnung.' },
   { lang: 'de', source: 'Die Kundennummer 1238 010180 hat nichts mit der Versicherung zu tun.' },
+  // Ten-digit order and invoice numbers whose digits pass the SV-Nummer check digit.
+  { lang: 'de', source: 'Rechnung 4711190056 wurde doppelt abgebucht.' },
+  { lang: 'de', source: 'Bestell-Nr. 4711253408 ist nie angekommen.' },
+  { lang: 'de', source: 'Auftrag 4711514735 vom 4. März ist noch offen.' },
+  { lang: 'de', source: 'Kunden-Nr. 4711546411, bitte bei Rückfragen angeben.' },
+  { lang: 'en', source: 'Order 4711229651 was shipped twice.' },
+  { lang: 'en', source: 'Invoice no. 4711451383 shows the wrong amount.' },
   { lang: 'de', source: 'UID [[VAT_ID:ATU13585627]] fehlt auf der Rechnung.' },
   { lang: 'de', source: 'USt-IdNr. [[VAT_ID:DE136695976]], bitte übernehmen.' },
   { lang: 'en', source: 'ATU13585628 was rejected by the VIES check, so it is probably a typo.' },
