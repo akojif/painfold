@@ -1,6 +1,8 @@
 // Runs after `nuxt generate`. For every HTML page it:
 // 1. refuses absolute http(s) references in src, href, srcset and CSS url(),
-//    so no page or stylesheet can load anything from another origin;
+//    so no page or stylesheet can load anything from another origin, and
+//    style attributes, which the policy blocks (Vue writes an empty one for a
+//    :style binding that starts undefined);
 // 2. hashes the page's executable inline scripts;
 // 3. inserts the Content-Security-Policy from deploy/headers.ts as a <meta> tag
 //    before any script runs.
@@ -29,13 +31,28 @@ export function inlineScriptHashes(html: string): string[] {
   return hashes
 }
 
+/**
+ * References that make the browser load something from another origin by
+ * itself. Ordinary links (<a href>) are left out: nothing is requested until
+ * someone follows one, and Referrer-Policy: no-referrer keeps the page private.
+ */
 export function externalReferences(text: string): string[] {
-  const patterns = [
-    /\b(?:src|href|srcset|action|poster|data)\s*=\s*["']?\s*((?:https?:)?\/\/[^"'\s>]+)/gi,
-    /url\(\s*["']?((?:https?:)?\/\/[^"')\s]+)/gi,
-    /@import\s+["']((?:https?:)?\/\/[^"']+)/gi,
+  const external = '((?:https?:)?\\/\\/[^"\'\\s>)]+)'
+  const tags = [...text.matchAll(/<([a-z][\w-]*)\b[^>]*>/gi)]
+    .filter(([, name]) => name!.toLowerCase() !== 'a')
+    .map(([tag]) => tag)
+  const inTags = tags.flatMap(tag =>
+    [...tag.matchAll(new RegExp(`\\b(?:src|href|srcset|action|poster|data|formaction)\\s*=\\s*["']?\\s*${external}`, 'gi'))])
+  const inCss = [
+    ...text.matchAll(new RegExp(`url\\(\\s*["']?${external}`, 'gi')),
+    ...text.matchAll(new RegExp(`@import\\s+["']${external}`, 'gi')),
   ]
-  return patterns.flatMap(pattern => [...text.matchAll(pattern)].map(match => match[1]!))
+  return [...inTags, ...inCss].map(match => match[1]!)
+}
+
+/** Tags with a style attribute; the CSP (style-src 'self') blocks every one of them. */
+export function styleAttributes(html: string): string[] {
+  return [...html.matchAll(/<[a-z][\w-]*\b[^>]*\sstyle\s*=[^>]*>/gi)].map(([tag]) => tag)
 }
 
 export function withPolicyMeta(html: string, policy: string): string {
@@ -59,11 +76,12 @@ async function main() {
   for (const file of pages) {
     const html = await readFile(file, 'utf8')
     for (const reference of externalReferences(html)) problems.push(`${file}: ${reference}`)
+    for (const tag of styleAttributes(html)) problems.push(`${file}: style attribute in ${tag.slice(0, 80)}`)
     await writeFile(file, withPolicyMeta(html, documentPolicy(inlineScriptHashes(html))))
   }
 
   if (problems.length > 0) {
-    console.error('References to other origins found in the build:\n' + problems.join('\n'))
+    console.error('The build would break the Content-Security-Policy:\n' + problems.join('\n'))
     process.exit(1)
   }
   console.log(`Content-Security-Policy added to ${pages.length} pages.`)

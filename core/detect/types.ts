@@ -8,7 +8,10 @@ export type Detection = {
   value: string
 }
 
-export type Detector = (text: string) => Detection[]
+export type Detector = {
+  type: PiiType
+  detect: (text: string) => Detection[]
+}
 
 export function detection(type: PiiType, text: string, start: number, end: number): Detection {
   return { type, start, end, value: text.slice(start, end) }

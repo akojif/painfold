@@ -1,13 +1,13 @@
 import { describe, expect, it } from 'vitest'
-import { detect } from '../../core/detect'
-import { detectEmails } from '../../core/detect/email'
-import { detectIps } from '../../core/detect/ip'
-import { detectUrls } from '../../core/detect/url'
+import { detect, DETECTED_TYPES } from '../../core/detect'
+import { emailDetector } from '../../core/detect/email'
+import { ipDetector } from '../../core/detect/ip'
+import { urlDetector } from '../../core/detect/url'
 import type { Detector } from '../../core/detect/types'
 
-const values = (detector: Detector, text: string) => detector(text).map(found => found.value)
+const values = (detector: Detector, text: string) => detector.detect(text).map(found => found.value)
 
-describe('detectEmails', () => {
+describe('emailDetector', () => {
   it.each([
     ['Schreiben Sie an anna.feldmoser@example.com.', 'anna.feldmoser@example.com'],
     ['Reach me at <j.dunmore@mail.example.com>, thanks', 'j.dunmore@mail.example.com'],
@@ -16,14 +16,14 @@ describe('detectEmails', () => {
     ['Mail an jürgen@müller-beispiel.example', 'jürgen@müller-beispiel.example'],
     ['(o\'brien@example.com)', 'o\'brien@example.com'],
   ])('finds the address in %j', (text, expected) => {
-    expect(values(detectEmails, text)).toEqual([expected])
+    expect(values(emailDetector, text)).toEqual([expected])
   })
 
   it.each([
     ['olivia (at) example (dot) net', 'olivia (at) example (dot) net'],
     ['anna [ät] beispiel [punkt] at', 'anna [ät] beispiel [punkt] at'],
   ])('finds the obfuscated address in %j', (text, expected) => {
-    expect(values(detectEmails, text)).toEqual([expected])
+    expect(values(emailDetector, text)).toEqual([expected])
   })
 
   it.each([
@@ -33,11 +33,11 @@ describe('detectEmails', () => {
     'Version 2.0@beta',
     'we meet at (at) noon',
   ])('finds nothing in %j', (text) => {
-    expect(detectEmails(text)).toEqual([])
+    expect(emailDetector.detect(text)).toEqual([])
   })
 })
 
-describe('detectUrls', () => {
+describe('urlDetector', () => {
   it.each([
     ['My invoice link: https://example.com/i/88213?token=ab12cd.', 'https://example.com/i/88213?token=ab12cd'],
     ['Siehe www.example.org/rechnung/88213, da ist der Fehler.', 'www.example.org/rechnung/88213'],
@@ -45,7 +45,7 @@ describe('detectUrls', () => {
     ['https://en.example.org/wiki/Thing_(disambiguation) is the page', 'https://en.example.org/wiki/Thing_(disambiguation)'],
     ['Link: HTTP://EXAMPLE.COM/U/1!', 'HTTP://EXAMPLE.COM/U/1'],
   ])('finds the link in %j', (text, expected) => {
-    expect(values(detectUrls, text)).toEqual([expected])
+    expect(values(urlDetector, text)).toEqual([expected])
   })
 
   it.each([
@@ -54,11 +54,11 @@ describe('detectUrls', () => {
     'Visit https:// later',
     'www.',
   ])('finds nothing in %j', (text) => {
-    expect(detectUrls(text)).toEqual([])
+    expect(urlDetector.detect(text)).toEqual([])
   })
 })
 
-describe('detectIps', () => {
+describe('ipDetector', () => {
   it.each([
     ['Our office IP is 203.0.113.42 if you need it.', '203.0.113.42'],
     ['Two logins from 198.51.100.7 were not me', '198.51.100.7'],
@@ -66,7 +66,7 @@ describe('detectIps', () => {
     ['Connection from 2001:db8::8a2e:370:7334 was blocked.', '2001:db8::8a2e:370:7334'],
     ['IPv6 2001:0db8:0000:0000:0000:ff00:0042:8329 full', '2001:0db8:0000:0000:0000:ff00:0042:8329'],
   ])('finds the address in %j', (text, expected) => {
-    expect(values(detectIps, text)[0]).toBe(expected)
+    expect(values(ipDetector, text)[0]).toBe(expected)
   })
 
   it.each([
@@ -80,7 +80,13 @@ describe('detectIps', () => {
     'Opening hours are 08:30 to 17:00:00.',
     'MAC 00:1A:2B:3C:4D:5E',
   ])('finds nothing in %j', (text) => {
-    expect(detectIps(text)).toEqual([])
+    expect(ipDetector.detect(text)).toEqual([])
+  })
+})
+
+describe('DETECTED_TYPES', () => {
+  it('lists the type of every detector, once', () => {
+    expect(DETECTED_TYPES).toEqual(['EMAIL', 'URL', 'IP'])
   })
 })
 

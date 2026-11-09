@@ -18,6 +18,14 @@ export function normalizeValue(type: PiiType, value: string): string {
   }
 }
 
+// Placeholder labels read as plain words where the internal type name does not.
+const LABELS: Partial<Record<PiiType, string>> = { URL: 'LINK' }
+
+/** The word inside a placeholder, e.g. EMAIL in [EMAIL_3] or LINK for a URL. */
+export function placeholderLabel(type: PiiType): string {
+  return LABELS[type] ?? type
+}
+
 /**
  * Hands out placeholders such as [EMAIL_3]: numbered per type in the order
  * values are first seen, and the same for every occurrence of the same value.
@@ -33,7 +41,7 @@ export class PlaceholderMap {
     if (!placeholder) {
       const next = (this.counts.get(type) ?? 0) + 1
       this.counts.set(type, next)
-      placeholder = `[${type}_${next}]`
+      placeholder = `[${placeholderLabel(type)}_${next}]`
       this.byKey.set(key, placeholder)
     }
     return placeholder

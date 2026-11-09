@@ -19,11 +19,14 @@ function isIpv6(candidate: string): boolean {
   return halves.length === 2 ? groups.length <= 7 : groups.length === 8
 }
 
-export const detectIps: Detector = (text) => {
-  const v4 = [...text.matchAll(IPV4)].filter(match =>
-    !VERSION_BEFORE.test(text.slice(Math.max(0, match.index - 24), match.index))
-    && !VERSION_AFTER.test(text.slice(match.index + match[0].length)),
-  )
-  const v6 = [...text.matchAll(IPV6_CANDIDATE)].filter(match => isIpv6(match[0]))
-  return [...v4, ...v6].map(match => detection('IP', text, match.index, match.index + match[0].length))
+export const ipDetector: Detector = {
+  type: 'IP',
+  detect: (text) => {
+    const v4 = [...text.matchAll(IPV4)].filter(match =>
+      !VERSION_BEFORE.test(text.slice(Math.max(0, match.index - 24), match.index))
+      && !VERSION_AFTER.test(text.slice(match.index + match[0].length)),
+    )
+    const v6 = [...text.matchAll(IPV6_CANDIDATE)].filter(match => isIpv6(match[0]))
+    return [...v4, ...v6].map(match => detection('IP', text, match.index, match.index + match[0].length))
+  },
 }

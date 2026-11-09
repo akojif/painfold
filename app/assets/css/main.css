@@ -83,6 +83,7 @@
   --pf-on-highlighter: #1B2433;
   --pf-redaction: #1B2433;     /* the bar over removed data */
   --pf-on-redaction: #DDE3EA;  /* placeholder text on the bar */
+  --pf-sheet-edge: #C9D0D8;    /* the hard edge under a sheet of paper */
 }
 
 @media (prefers-color-scheme: dark) {
@@ -102,6 +103,28 @@
     --pf-on-highlighter: #11161F;
     --pf-redaction: #05070A;   /* redaction stays black in both themes */
     --pf-on-redaction: #DDE3EA;
+    --pf-sheet-edge: #05080D;
+  }
+
+  /*
+   * Night desk: the desk goes dark, but sheets of paper (.paper) keep their
+   * light colours, like pages under a desk lamp. The colour utilities read
+   * --color-*, so the paper roles are set on those directly.
+   */
+  .paper {
+    color-scheme: light;
+
+    --color-sheet: #F1F3F6;
+    --color-ink: #1B2433;
+    --color-ink-muted: #4B5566;
+    --color-rule: #C9D0D8;
+    --color-rule-strong: #7D8896;
+    --color-signal: #28706A;
+    --color-on-signal: #F8F9FB;
+    --color-highlighter: #F2E05C;
+    --color-on-highlighter: #1B2433;
+    --color-redaction: #1B2433;
+    --color-on-redaction: #DDE3EA;
   }
 }
 
@@ -139,6 +162,12 @@
   --font-mono: "Atkinson Hyperlegible Mono", ui-monospace, monospace;
 
   /* Type scale, ratio 1.2 from a 16px base. Line heights land on a 2px grid. */
+  --text-display: 3.5rem;          /* 56px serif, the start screen's headline */
+  --text-display--line-height: 1.04;
+  --text-display--letter-spacing: -0.02em;
+  --text-display-sm: 2.5rem;       /* 40px, the same headline on small screens */
+  --text-display-sm--line-height: 1.08;
+  --text-display-sm--letter-spacing: -0.015em;
   --text-xs: 0.8125rem;            /* 13px, the smallest size used */
   --text-xs--line-height: 1.125rem;
   --text-sm: 0.875rem;             /* 14px, dense UI and table cells */
@@ -147,6 +176,8 @@
   --text-base--line-height: 1.5rem;
   --text-voice: 1.125rem;          /* 18px serif, customer feedback text */
   --text-voice--line-height: 1.75rem;
+  --text-specimen: 1.25rem;        /* 20px serif, the example ticket on the start screen */
+  --text-specimen--line-height: 2.0625rem;
   --text-lg: 1.1875rem;            /* 19px, lead text */
   --text-lg--line-height: 1.75rem;
   --text-xl: 1.4375rem;            /* 23px, section headings */
@@ -159,6 +190,11 @@
   /* Paper has square corners; controls get a hint of rounding. */
   --radius-none: 0;
   --radius-control: 2px;
+  --radius-full: 9999px;           /* step markers only */
+
+  /* Paper on a desk: hard edges, never soft blurred shadows. */
+  --shadow-sheet: 0 2px 0 0 var(--pf-sheet-edge);
+  --shadow-lift: 0 10px 0 -2px var(--pf-sheet-edge);
 
   /* Prose never runs wider than this (max-w-measure). */
   --container-measure: 68ch;
@@ -170,10 +206,16 @@
    */
   --animate-ink-sweep: ink-sweep 240ms cubic-bezier(0.22, 1, 0.36, 1) both;
   --animate-ink-reveal: ink-reveal 240ms linear both;
+  --animate-highlight-in: highlight-in 260ms ease-out both;
 
   @keyframes ink-sweep {
     from { transform: scaleX(0); transform-origin: left center; }
     to { transform: scaleX(1); transform-origin: left center; }
+  }
+
+  @keyframes highlight-in {
+    from { background-color: transparent; }
+    to { background-color: var(--color-highlighter); }
   }
 
   @keyframes ink-reveal {
@@ -187,5 +229,6 @@
   :root {
     --animate-ink-sweep: none;
     --animate-ink-reveal: none;
+    --animate-highlight-in: none;
   }
 }

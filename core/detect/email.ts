@@ -9,7 +9,10 @@ const EMAIL = /(?<![\p{L}\p{N}_.!#$%&'*+/=?^`{|}~-])[\p{L}\p{N}_!#$%&'*+/=?^`{|}
 // "anna [ät] example [punkt] at". Both the at and the dot must be bracketed.
 const OBFUSCATED = /(?<![\w.-])[\w.+-]+\s*[([{]\s*(?:at|ät|@)\s*[)\]}]\s*[\p{L}\d-]+(?:\s*[([{]\s*(?:dot|punkt|\.)\s*[)\]}]\s*[\p{L}\d-]+)+/giu
 
-export const detectEmails: Detector = (text) => {
-  const found = [...text.matchAll(EMAIL), ...text.matchAll(OBFUSCATED)]
-  return found.map(match => detection('EMAIL', text, match.index, match.index + match[0].length))
+export const emailDetector: Detector = {
+  type: 'EMAIL',
+  detect: (text) => {
+    const found = [...text.matchAll(EMAIL), ...text.matchAll(OBFUSCATED)]
+    return found.map(match => detection('EMAIL', text, match.index, match.index + match[0].length))
+  },
 }
