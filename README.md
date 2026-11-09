@@ -4,19 +4,44 @@ Find what hurts your customers, without exposing who they are.
 
 Painfold turns customer feedback into an evidence-backed customer profile: the jobs customers are trying to get done, their pains and their gains. Personal data is removed in your own browser before any AI sees it, including German-language and Austrian data.
 
+**[Try it at painfold.vercel.app](https://painfold.vercel.app)**, with your own file or the built-in sample of 200 made-up support tickets.
+
+![Painfold cleaning the sample file: the column step, finding personal data, reviewing values by value and by row, and the download step](docs/media/demo.gif)
+
 ## Status
 
-Early development. Nothing is usable yet.
+**v0.1 (Clean)** removes personal data from a CSV or XLSX file in your browser and lets you download the cleaned file:
 
-The first release (v0.1, Clean) removes personal data from a CSV or XLSX file in the browser and lets you download the cleaned file. See [ROADMAP.md](ROADMAP.md) for all stages and what "done" means for each.
+- Detects email addresses, phone numbers (Austrian, German and international), IBANs, card numbers, Austrian social security numbers (SV-Nummer), VAT IDs, links, IP addresses, dates of birth, street addresses and postcodes.
+- Lets you choose per column what is checked, kept as is or dropped, and warns when a kept column holds personal data.
+- Lets you review every finding, by value or by row, and mark anything that was missed.
+- Gives every value a consistent placeholder: the same email becomes the same `[EMAIL_3]` everywhere.
+
+Names and places follow in v0.2; finding customer jobs, pains and gains in v0.3. See [ROADMAP.md](ROADMAP.md) for all stages and what "done" means for each, and [CHANGELOG.md](CHANGELOG.md) for what changed.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/media/review-dark.png">
+  <img alt="The review step: values grouped by type on the left, the selected value with Remove and Keep on the right, and the rows it appears in" src="docs/media/review-light.png">
+</picture>
+
+<details>
+<summary>More screenshots, in light and dark</summary>
+
+| | Light | Dark |
+| --- | --- | --- |
+| Start | ![Start screen, light](docs/media/start-light.png) | ![Start screen, dark](docs/media/start-dark.png) |
+| Columns | ![Column step, light](docs/media/columns-light.png) | ![Column step, dark](docs/media/columns-dark.png) |
+| Review | ![Review step, light](docs/media/review-light.png) | ![Review step, dark](docs/media/review-dark.png) |
+
+</details>
 
 ## The promise
 
-- Your file is never uploaded. It stays in your browser.
-- Nothing is sent to an AI until you have reviewed what was removed.
-- Numbers are counted by code, and quotes are checked against your data.
+- Your file is never uploaded. It stays in your browser, and an end-to-end test checks that no request leaves it while you import, check and download.
 - No cookies, no analytics, no tracking. An end-to-end test checks that no cookies are set.
 - The only thing Painfold stores is your theme choice (Light or Dark), in `localStorage` under `painfold-theme`. Choosing System removes it. Your file, the findings and your decisions are never stored; they are gone when you close the tab. An end-to-end test checks this too.
+
+From v0.3, when analysis arrives: nothing is sent to an AI until you have reviewed what was removed, the AI is your choice (your own API key or a local model), numbers are counted by code, and quotes are checked against your data.
 
 ## What you download
 
@@ -146,6 +171,14 @@ Every pull request runs three jobs: lint, typecheck, unit tests, the detection a
 - `npm run generate` builds the site, then `scripts/apply-csp.ts` adds the full policy to every page as a `<meta>` tag, with hashes of that build's inline scripts. It also fails the build if any page or stylesheet references another origin.
 - Static headers (framing, `nosniff`, referrer, permissions, and the full policy for app files and Web Workers) come from `headersFor()`. The local preview server sends them, so the end-to-end tests run under the real policy.
 - `vercel.json` is generated from the same file with `npm run headers:vercel`; a unit test fails if it is out of date.
+
+### Hosting
+
+The live site is a static build on Vercel. `vercel.json` (generated from `deploy/headers.ts`) sets the install and build commands, so Vercel runs the same `npm run generate` as CI, including the CSP check, and serves `.output/public` with the security headers. No Vercel framework preset, server functions or analytics are used.
+
+- `main` deploys to https://painfold.vercel.app; every pull request gets a preview deployment.
+- Turn off the Vercel Toolbar for preview deployments (Project Settings, General): it injects a script from another origin, which the CSP blocks.
+- Any static host works the same way: serve `.output/public` with the headers from `headersFor()`.
 
 ### Dependency updates
 
