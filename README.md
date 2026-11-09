@@ -73,10 +73,10 @@ The hard cases have only a few values per type and language, so one miss moves a
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | Email addresses | 1.00 | 1.00 | 5 | 0.80 | 1.00 | 5 |
 | Phone numbers | 1.00 | 1.00 | 7 | 1.00 | 1.00 | 4 |
-| IBANs | 0.75 | 1.00 | 4 | 1.00 | 1.00 | 1 |
-| Card numbers | 0.50 | 1.00 | 2 | 1.00 | 1.00 | 2 |
-| Social security numbers | 0.75 | 1.00 | 4 | – | – | 0 |
-| VAT IDs | 1.00 | 1.00 | 3 | 0.00 | – | 1 |
+| IBANs | 1.00 | 1.00 | 5 | 1.00 | 1.00 | 2 |
+| Card numbers | 1.00 | 1.00 | 3 | 1.00 | 1.00 | 3 |
+| Social security numbers | 1.00 | 0.86 | 6 | – | – | 0 |
+| VAT IDs | 1.00 | 1.00 | 5 | 1.00 | 1.00 | 2 |
 | Links | 1.00 | 1.00 | 2 | 1.00 | 1.00 | 3 |
 | IP addresses | – | – | 0 | 1.00 | 1.00 | 3 |
 | Dates of birth | 1.00 | 1.00 | 4 | 1.00 | 1.00 | 2 |
@@ -84,13 +84,13 @@ The hard cases have only a few values per type and language, so one miss moves a
 | Postcodes | 1.00 | 1.00 | 4 | 1.00 | 1.00 | 2 |
 | Names (from v0.2) | 0.00 | – | 1 | 0.00 | – | 1 |
 | Places (from v0.2) | 0.00 | – | 5 | 0.00 | – | 2 |
-| **Removed by any type** | 0.80 | 1.00 | 46 | 0.79 | 1.00 | 28 |
-| **Removed by any type, without names and places** | 0.93 | 1.00 | 40 | 0.88 | 1.00 | 25 |
+| **Removed by any type** | 0.88 | 0.98 | 52 | 0.84 | 1.00 | 31 |
+| **Removed by any type, without names and places** | 1.00 | 0.98 | 46 | 0.93 | 1.00 | 28 |
 <!-- accuracy:end -->
 
 Known gaps in v0.1, from the hand-written cases:
 
-- Values with unusual separators: an IBAN with dashes (`AT61-1904-…`), a card number with dots, an SV-Nummer with a dash, a German VAT ID with spaces (`DE 136 695 976`).
+- Document numbers written like an SV-Nummer with a dash, whose second part looks like a date and happens to pass the check digit (`Vorgang 2024-010106`), are removed as SV-Nummern. Most are left alone: a dash form needs a date-like second part, and order, invoice and customer words before the number rule it out.
 - Email addresses spelled out to fool spam filters (`name AT example DOT net`).
 - English addresses that start with a flat number (`Flat 2, 14 Market Street`).
 - Names and places, from v0.2. Until then, look for them in the review step and mark them with M.

@@ -5,8 +5,8 @@ const START = /(?<![\p{L}\d])[A-Za-z]{2}\d{2}/gu
 const isAlphanumeric = (char: string | undefined) => char !== undefined && /[A-Za-z0-9]/.test(char)
 
 /**
- * IBANs in any common spelling: with or without spaces between groups, in
- * upper or lower case. Each country has a fixed length, so exactly that many
+ * IBANs in any common spelling: with or without spaces or dashes between
+ * groups, in upper or lower case. Each country has a fixed length, so exactly that many
  * characters are read from the start, which keeps a following word out of the
  * match; then the mod-97 check decides.
  */
@@ -22,7 +22,7 @@ export const ibanDetector: Detector = {
       while (end < text.length && compact.length < length) {
         const char = text[end]!
         if (isAlphanumeric(char)) compact += char
-        else if (!((char === ' ' || char === '\u00A0') && isAlphanumeric(text[end + 1]) && compact.length >= 4)) break
+        else if (!((char === ' ' || char === '\u00A0' || char === '-') && isAlphanumeric(text[end + 1]) && compact.length >= 4)) break
         end++
       }
       if (compact.length === length && !isAlphanumeric(text[end]) && isValidIban(compact)) found.push(detection('IBAN', text, match.index, end))
