@@ -62,7 +62,8 @@ describe('committed fake data', () => {
   it('contains no email address outside the reserved example domains', () => {
     for (const path of [SAMPLE_PATH, EVAL_GENERATED_PATH, EVAL_HARD_CASES_PATH]) {
       for (const [address] of read(path).matchAll(/[\w.+-]+@[\w-]+(?:\.[\w-]+)+/g)) {
-        expect(address.toLowerCase(), path).toMatch(/@(?:mail\.)?example\.(?:com|org|net)$/)
+        // \b, not $: a hard case leaves out the space after the full stop ("example.com.Danke").
+        expect(address.toLowerCase(), path).toMatch(/@(?:mail\.)?example\.(?:com|org|net)\b/)
       }
     }
   })
@@ -114,15 +115,17 @@ describe('evaluation set', () => {
   })
 
   it('labels only checksum-valid IBANs, cards, SV-Nummern and VAT IDs', () => {
-    for (const span of spansOf('IBAN')) expect(isValidIban(span.text), span.text).toBe(true)
-    for (const span of spansOf('CARD')) expect(isValidLuhn(span.text), span.text).toBe(true)
-    for (const span of spansOf('SVNR')) expect(isValidSvnr(span.text), span.text).toBe(true)
-    for (const span of spansOf('VAT_ID')) expect(isValidVatId(span.text), span.text).toBe(true)
+    // Hard cases write some of them with dashes, dots or spaces, as people do.
+    const plain = (text: string) => text.replace(/[\s.-]/g, '')
+    for (const span of spansOf('IBAN')) expect(isValidIban(plain(span.text)), span.text).toBe(true)
+    for (const span of spansOf('CARD')) expect(isValidLuhn(plain(span.text)), span.text).toBe(true)
+    for (const span of spansOf('SVNR')) expect(isValidSvnr(plain(span.text)), span.text).toBe(true)
+    for (const span of spansOf('VAT_ID')) expect(isValidVatId(plain(span.text)), span.text).toBe(true)
   })
 
   it('uses only documentation IP ranges and example domains in URLs', () => {
     for (const span of spansOf('IP')) expect(span.text).toMatch(/^(?:192\.0\.2\.|198\.51\.100\.|203\.0\.113\.|2001:db8:)/)
-    for (const span of spansOf('URL')) expect(span.text).toMatch(/^(?:https?:\/\/)?(?:[\w-]+\.)?example\.(?:com|org|net)\//)
+    for (const span of spansOf('URL')) expect(span.text).toMatch(/^(?:https?:\/\/)?(?:(?:[\w-]+\.)?example\.(?:com|org|net)|(?:192\.0\.2|198\.51\.100|203\.0\.113)\.\d+)\//)
   })
 
   it('uses fictional ranges for German and UK phone numbers', () => {
