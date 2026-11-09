@@ -74,9 +74,16 @@ function toVercelHeaders(headers: Record<string, string>) {
 }
 
 /** vercel.json content; the two sources split paths exactly as headersFor() does. */
-export function vercelConfig(): { $schema: string, headers: VercelHeaderRule[] } {
+// Vercel builds the static site the same way as everywhere else: no framework
+// preset (which would run its own Nuxt build without the CSP step), our own
+// build command, and the generated folder as the output.
+export function vercelConfig(): { $schema: string, framework: null, installCommand: string, buildCommand: string, outputDirectory: string, headers: VercelHeaderRule[] } {
   return {
     $schema: 'https://openapi.vercel.sh/vercel.json',
+    framework: null,
+    installCommand: 'npm ci',
+    buildCommand: 'NUXT_TELEMETRY_DISABLED=1 npm run generate',
+    outputDirectory: '.output/public',
     headers: [
       { source: '/((?!_nuxt/).*)', headers: toVercelHeaders(headersFor('/')) },
       { source: '/_nuxt/(.*)', headers: toVercelHeaders(headersFor(`${ASSET_PREFIX}entry.js`)) },
