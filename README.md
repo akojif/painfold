@@ -41,6 +41,20 @@ Every end-to-end test fails if the page contacts any origin other than the app i
 
 Every pull request runs three jobs: lint, typecheck, unit tests and the static build; end-to-end tests; and a dependency check (`npm audit --audit-level=high` and the license allowlist). All must pass before review.
 
+### Security headers
+
+`deploy/headers.ts` is the single source of truth for the Content-Security-Policy and the other security headers.
+
+- `npm run generate` builds the site, then `scripts/apply-csp.ts` adds the full policy to every page as a `<meta>` tag, with hashes of that build's inline scripts. It also fails the build if any page or stylesheet references another origin.
+- Static headers (framing, `nosniff`, referrer, permissions, and the full policy for app files and Web Workers) come from `headersFor()`. The local preview server sends them, so the end-to-end tests run under the real policy.
+- `vercel.json` is generated from the same file with `npm run headers:vercel`; a unit test fails if it is out of date.
+
+### Dependency updates
+
+Dependabot opens one weekly pull request with grouped minor and patch updates, a separate pull request for each major update, and weekly updates for the pinned GitHub Actions.
+
+SheetJS (XLSX import) is installed from the official SheetJS tarball, not the npm registry, so Dependabot does not see it. Check https://cdn.sheetjs.com for new versions and security notes by hand, at least before each release.
+
 ### Dependency licenses
 
 `npm run licenses` allows only permissive licenses: MIT, Apache-2.0, ISC, BSD-2-Clause, BSD-3-Clause, 0BSD, BlueOak-1.0.0, CC0-1.0 and Python-2.0. Three more are allowed for specific build-time packages:

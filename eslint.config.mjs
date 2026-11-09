@@ -5,6 +5,8 @@ export default withNuxt(
     rules: {
       // Feedback text and detected values must never reach the console.
       'no-console': 'error',
+      // Lets CSP keywords read as "'self'" instead of '\'self\''.
+      '@stylistic/quotes': ['error', 'single', { avoidEscape: true }],
     },
   },
   {
