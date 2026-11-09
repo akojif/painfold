@@ -1,10 +1,12 @@
-// Serves the generated site from .output/public for local preview and end-to-end tests.
+// Serves the generated site from .output/public for local preview and end-to-end tests,
+// with the same security headers as production (deploy/headers.ts).
 // Uses only Node built-ins, so it adds no dependency.
 import { createReadStream } from 'node:fs'
 import { stat } from 'node:fs/promises'
 import { createServer } from 'node:http'
 import { extname, join, normalize, resolve } from 'node:path'
 import { parseArgs } from 'node:util'
+import { headersFor } from '../deploy/headers.ts'
 
 const { values } = parseArgs({ options: { port: { type: 'string', default: '4173' } } })
 const root = resolve('.output/public')
@@ -44,7 +46,10 @@ createServer(async (request, response) => {
   }
 
   const status = file.endsWith('404.html') && url.pathname !== '/404.html' ? 404 : 200
-  response.writeHead(status, { 'Content-Type': contentTypes[extname(file)] ?? 'application/octet-stream' })
+  response.writeHead(status, {
+    ...headersFor(url.pathname),
+    'Content-Type': contentTypes[extname(file)] ?? 'application/octet-stream',
+  })
   createReadStream(file).pipe(response)
 }).listen(Number(values.port), () => {
   console.log(`Serving ${root} at http://localhost:${values.port}`)

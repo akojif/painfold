@@ -18,6 +18,7 @@
   },
   "include": [
     "core/**/*.ts",
+    "deploy/**/*.ts",
     "tests/unit/**/*.ts",
     "tests/e2e/**/*.ts",
     "scripts/**/*.ts",

@@ -1,0 +1,23 @@
+version: 2
+updates:
+  # Actions are pinned to commit SHAs; Dependabot proposes the new SHA.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      github-actions:
+        patterns: ["*"]
+
+  # Minor and patch updates arrive together in one weekly pull request.
+  # Major updates get their own pull request each.
+  # SheetJS is installed from its own tarball, not the npm registry, so
+  # Dependabot does not see it; check it by hand (see README).
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
+    open-pull-requests-limit: 5
