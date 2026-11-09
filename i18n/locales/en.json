@@ -109,7 +109,8 @@
       "copies": "Appears in 1 row. Removing it replaces it with {placeholder}. | Appears in {n} rows. Removing it replaces every copy with {placeholder}.",
       "removed": "Removed in every copy.",
       "kept": "Kept in every copy.",
-      "nothingSelected": "Select a finding to review it."
+      "nothingSelected": "Select a finding to review it.",
+      "formOf": "Looks like a form of “{marked}”, which you marked. Removing it replaces it with {placeholder}."
     },
     "remove": "Remove",
     "keep": "Keep",
@@ -129,7 +130,8 @@
       "noSelection": "Select the missed text in a row first, then press M.",
       "oneCell": "Select text within one cell.",
       "overlap": "The selection overlaps a finding. Select only the missed text.",
-      "done": "{type} marked in 1 row. | {type} marked in {n} rows."
+      "done": "{type} marked in 1 row. | {type} marked in {n} rows.",
+      "forms": "1 possible form to review. | {n} possible forms to review."
     },
     "removeAll": "Remove all {n} left",
     "continue": "Continue to download",

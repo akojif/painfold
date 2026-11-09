@@ -94,3 +94,70 @@ describe('Review', () => {
     expect(review.findings).toHaveLength(1)
   })
 })
+
+describe('Review: possible forms of marked text', () => {
+  const mark = (rows: string[][], value: string, at = { row: 0 }) => {
+    const review = new Review(rows, [0], [])
+    const start = rows[at.row]![0]!.indexOf(value)
+    review.markMissed(at.row, 0, start, start + value.length, 'NAME')
+    return review
+  }
+  const forms = (review: Review) => review.findings.filter(finding => finding.source === 'form')
+
+  it.each([
+    ['German genitive', 'Annas Rechnung ist falsch.'],
+    ['English possessive', "Anna's invoice is wrong."],
+    ['typographic apostrophe', 'Anna’s invoice is wrong.'],
+    ['plural possessive', "The Annas' accounts were merged."],
+  ])('flags the %s for review', (_, sentence) => {
+    const review = mark([['Anna rief an.'], [sentence]], 'Anna')
+    expect(forms(review)).toHaveLength(1)
+    const [form] = forms(review)
+    expect(form).toMatchObject({ row: 1, value: 'Anna', formOf: 'Anna' })
+    expect(review.decisionFor(form!.key)).toBeUndefined()
+  })
+
+  it('flags forms of names ending in s, x or z with a bare apostrophe', () => {
+    const review = mark([['Hans hat geschrieben.'], ["Hans' Auto steht noch da."], ['Max’ Antwort fehlt.']], 'Hans')
+    expect(forms(review).map(form => form.row)).toEqual([1])
+    expect(forms(mark([['Max fragt.'], ['Max’ Antwort fehlt.']], 'Max')).map(form => form.row)).toEqual([1])
+  })
+
+  it('flags a form of a marked full name', () => {
+    const review = mark([['Anna Huber rief an.'], ['Anna Hubers Vertrag läuft aus.']], 'Anna Huber')
+    expect(forms(review).map(form => form.value)).toEqual(['Anna Huber'])
+  })
+
+  it('leaves forms pending while exact copies are removed', () => {
+    const review = mark([['Anna rief an.'], ['Anna und Annas Team.']], 'Anna')
+    const copies = review.findings.filter(finding => finding.source === 'marked')
+    expect(copies).toHaveLength(2)
+    expect(copies.every(copy => review.decisionFor(copy.key) === 'remove')).toBe(true)
+    expect(review.counts()).toEqual({ total: 3, reviewed: 2, left: 1 })
+  })
+
+  it('gives a form the placeholder of the marked text and keeps its ending', () => {
+    const review = mark([['Anna rief an.'], ['Annas Rechnung.'], ["Anna's invoice."]], 'Anna')
+    expect(review.cleanedCell(1, 0)).toBe('[NAME_1]s Rechnung.')
+    expect(review.cleanedCell(2, 0)).toBe("[NAME_1]'s invoice.")
+  })
+
+  it('reviews a form on its own: keeping it leaves the marked text removed', () => {
+    const review = mark([['Anna rief an.'], ['Annas Rechnung.']], 'Anna')
+    review.decide(forms(review)[0]!.key, 'keep')
+    expect(review.cleanedCell(1, 0)).toBe('Annas Rechnung.')
+    expect(review.cleanedCell(0, 0)).toBe('[NAME_1] rief an.')
+  })
+
+  it('does not flag longer words or compounds', () => {
+    const review = mark([['Anna rief an.'], ['Annabel und die Annastraße, Annalena.']], 'Anna')
+    expect(forms(review)).toEqual([])
+    expect(review.findings).toHaveLength(1)
+  })
+
+  it('removes the forms again when the mark is undone', () => {
+    const review = mark([['Anna rief an.'], ['Annas Rechnung.']], 'Anna')
+    review.undo()
+    expect(review.findings).toEqual([])
+  })
+})
