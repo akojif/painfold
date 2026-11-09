@@ -30,11 +30,25 @@ npm run lint
 npm run typecheck
 npm test             # unit tests (Vitest)
 npm run test:e2e     # end-to-end tests against the static build (Playwright)
+npm run licenses     # fail on dependency licenses outside the allowlist
 ```
 
 Run `npm run generate` before `npm run test:e2e`. The first time, install the test browser with `npx playwright install chromium`.
 
 Every end-to-end test fails if the page contacts any origin other than the app itself.
+
+### Continuous integration
+
+Every pull request runs three jobs: lint, typecheck, unit tests and the static build; end-to-end tests; and a dependency check (`npm audit --audit-level=high` and the license allowlist). All must pass before review.
+
+### Dependency licenses
+
+`npm run licenses` allows only permissive licenses: MIT, Apache-2.0, ISC, BSD-2-Clause, BSD-3-Clause, 0BSD, BlueOak-1.0.0, CC0-1.0 and Python-2.0. Three more are allowed for specific build-time packages:
+
+- MPL-2.0: `lightningcss`, the CSS compiler behind Tailwind, used unmodified.
+- CC-BY-4.0 and CC-BY-3.0: data packages (`caniuse-lite`, `spdx-exceptions`).
+
+`tosource` is excluded by exact version because its `package.json` has no license field; its LICENSE file is the permissive zlib license. A new version is checked again.
 
 ### Dependency install scripts
 

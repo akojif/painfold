@@ -17,7 +17,8 @@
     "typecheck": "nuxt typecheck",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "licenses": "license-checker-rseidelsohn --excludePrivatePackages --excludePackages \"tosource@2.0.0-alpha.3\" --onlyAllow \"MIT;Apache-2.0;ISC;BSD-2-Clause;BSD-3-Clause;0BSD;BlueOak-1.0.0;CC0-1.0;Python-2.0;MPL-2.0;CC-BY-4.0;CC-BY-3.0\" --summary"
   },
   "dependencies": {
     "@nuxtjs/i18n": "10.6.0",
@@ -31,6 +32,7 @@
     "@tailwindcss/vite": "4.3.5",
     "@types/node": "24.19.2",
     "eslint": "10.14.0",
+    "license-checker-rseidelsohn": "5.0.1",
     "tailwindcss": "4.3.5",
     "typescript": "6.0.3",
     "vitest": "5.1.0",
