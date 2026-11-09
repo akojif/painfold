@@ -1,3 +1,5 @@
+import tailwindcss from '@tailwindcss/vite'
+
 // Painfold is a fully static site: everything that touches a user's file runs
 // in the browser. There are no server routes, so there is nowhere for data to go.
 export default defineNuxtConfig({
@@ -12,10 +14,16 @@ export default defineNuxtConfig({
     },
   },
 
+  css: ['~/assets/css/main.css'],
+
   compatibilityDate: '2026-11-01',
 
   nitro: {
     preset: 'static',
+  },
+
+  vite: {
+    plugins: [tailwindcss()],
   },
 
   typescript: {
