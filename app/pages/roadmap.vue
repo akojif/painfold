@@ -10,6 +10,7 @@ const points = (id: StageId) => (tm(`roadmap.stages.${id}.points`) as unknown[])
 const badge: Record<StageStatus, string> = {
   available: 'bg-accent text-on-accent',
   inProgress: 'border border-accent text-accent',
+  next: 'border border-line-strong text-fg',
   planned: 'border border-line text-fg-muted',
 }
 </script>

@@ -54,6 +54,12 @@ test.describe('start screen', () => {
     await expect(page.locator('figure[data-cleaned]')).toHaveCount(1, { timeout: 5000 })
     await expect(example).toContainText('[EMAIL_1]')
     await expect(example).toContainText('[PHONE_1]')
+    // Every found value shows both sides of the change: the original and its placeholder.
+    const found = example.getByRole('listitem')
+    await expect(found).toHaveCount(5)
+    for (const [original, placeholder] of [['anna.huber@example.com', '[EMAIL_1]'], ['+49 30 23125 417', '[PHONE_1]'], ['AT61 1904 3002 3457 3201', '[IBAN_1]'], ['Lindengasse 5/2/7', '[ADDRESS_1]'], ['12.03.1987', '[DATE_OF_BIRTH_1]']]) {
+      await expect(found.filter({ hasText: original })).toContainText(placeholder!)
+    }
   })
 
   test.describe('with reduced motion', () => {

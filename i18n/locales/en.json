@@ -315,7 +315,6 @@
     "phone": "+49 30 23125 417",
     "email": "anna.huber{'@'}example.com",
     "found": "Found in the file",
-    "rows": "1 row | {n} rows",
     "description": "Example: in a support ticket, a phone number and an email address are replaced by the placeholders [PHONE_1] and [EMAIL_1]."
   },
   "typeManyLower": {
@@ -355,7 +354,8 @@
     "status": {
       "available": "Available",
       "inProgress": "In progress",
-      "planned": "Planned"
+      "planned": "Planned",
+      "next": "Next"
     },
     "stagesLabel": "Stages",
     "full": "Read the full roadmap on GitHub",
