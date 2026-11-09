@@ -13,9 +13,12 @@
     }
   },
   "footer": {
-    "source": "Source code",
+    "source": "Open source",
     "roadmap": "Roadmap",
-    "credit": "Built with love by {name}"
+    "credit": "Built with love by {name}",
+    "factsLabel": "About Painfold",
+    "noCookies": "No cookies",
+    "noAccount": "No account"
   },
   "start": {
     "headline": "Find what hurts your customers. Without exposing who they are.",
@@ -39,12 +42,6 @@
         "title": "Decide what to build",
         "when": "v0.4"
       }
-    },
-    "trustLabel": "About Painfold",
-    "trust": {
-      "openSource": "Open source",
-      "noCookies": "No cookies",
-      "noAccount": "No account"
     },
     "dropOverlay": "Drop to open. Nothing is uploaded."
   },

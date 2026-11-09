@@ -21,7 +21,6 @@ const summary = useTemplateRef<HTMLElement>('summary')
 let lastFile: { name: string, bytes: Uint8Array } | undefined
 
 const journey = [['clean', true], ['find', false], ['decide', false]] as const
-const trust = ['openSource', 'noCookies', 'noAccount'] as const
 const columnCounts = shallowRef<readonly ColumnCounts[]>()
 const cleanedSummary = computed(() => {
   const count = (role: string) => roles.value.filter(current => current === role).length
@@ -216,24 +215,6 @@ async function findPersonalData() {
             >{{ $t(`start.journey.${key}.title`) }}</span>
           </li>
         </ol>
-
-        <ul
-          :aria-label="$t('start.trustLabel')"
-          class="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-sm text-fg-muted"
-        >
-          <li
-            v-for="item in trust"
-            :key="item"
-            class="flex items-center gap-1.5"
-          >
-            <svg
-              aria-hidden="true"
-              viewBox="0 0 16 16"
-              class="size-3.5 fill-none stroke-accent stroke-2"
-            ><path d="M3.5 8.5 6.5 11.5 12.5 4.5" /></svg>
-            {{ $t(`start.trust.${item}`) }}
-          </li>
-        </ul>
       </div>
 
       <ExamplePanel />
