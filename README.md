@@ -31,6 +31,70 @@ The first release (v0.1, Clean) removes personal data from a CSV or XLSX file in
 
 The list of original values behind each placeholder is never exported. It stays in the browser tab and is gone when you close it.
 
+## Accuracy
+
+Detection is measured on the evaluation set in [data/eval/](data/README.md), with `npm run eval`. Two sets are reported separately:
+
+- **Generated:** 1,200 messages built from the same templates as the sample file. The detectors could be tuned to these sentences, so treat these numbers as a check that nothing broke.
+- **Hand-written hard cases:** written separately to catch what templates don't: obfuscated and pasted values, numbers written with dashes, dots or non-breaking spaces, and look-alikes that must not be removed (order and invoice numbers, ISBNs, EANs, versions, ordinary dates).
+
+How it is counted:
+
+- **Recall:** the share of labelled values that detections of the same type cover completely. A value that is only partly removed counts as missed.
+- **Precision:** the share of detections that overlap a labelled value of their type.
+- **Removed by any type:** the share of labelled values that are fully removed by any detection. This is what matters for the cleaned file; an IBAN caught as something else is still removed. It is shown with and without names and places.
+
+The hard cases have only a few values per type and language, so one miss moves a number a lot: read them together with the list of known gaps below. Names and places are labelled but not detected until v0.2. The Stage 2 target is name recall of at least 0.90, in German and in English separately.
+
+<!-- accuracy:start -->
+**Generated**
+
+| Data type | DE recall | DE precision | DE values | EN recall | EN precision | EN values |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Email addresses | 1.00 | 1.00 | 82 | 1.00 | 1.00 | 88 |
+| Phone numbers | 1.00 | 1.00 | 74 | 1.00 | 1.00 | 83 |
+| IBANs | 1.00 | 1.00 | 50 | 1.00 | 1.00 | 50 |
+| Card numbers | 1.00 | 1.00 | 50 | 1.00 | 1.00 | 50 |
+| Social security numbers | 1.00 | 1.00 | 91 | 1.00 | 1.00 | 50 |
+| VAT IDs | 1.00 | 1.00 | 50 | 1.00 | 1.00 | 50 |
+| Links | 1.00 | 1.00 | 50 | 1.00 | 1.00 | 50 |
+| IP addresses | 1.00 | 1.00 | 75 | 1.00 | 1.00 | 50 |
+| Dates of birth | 1.00 | 1.00 | 92 | 1.00 | 1.00 | 75 |
+| Street addresses | 1.00 | 1.00 | 82 | 1.00 | 1.00 | 94 |
+| Postcodes | 1.00 | 1.00 | 82 | 1.00 | 1.00 | 94 |
+| Names (from v0.2) | 0.00 | – | 189 | 0.00 | – | 172 |
+| Places (from v0.2) | 0.00 | – | 82 | 0.00 | – | 94 |
+| **Removed by any type** | 0.74 | 1.00 | 1049 | 0.73 | 1.00 | 1000 |
+| **Removed by any type, without names and places** | 1.00 | 1.00 | 778 | 1.00 | 1.00 | 734 |
+
+**Hand-written hard cases**
+
+| Data type | DE recall | DE precision | DE values | EN recall | EN precision | EN values |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Email addresses | 1.00 | 1.00 | 5 | 0.80 | 1.00 | 5 |
+| Phone numbers | 1.00 | 1.00 | 7 | 1.00 | 1.00 | 4 |
+| IBANs | 0.75 | 1.00 | 4 | 1.00 | 1.00 | 1 |
+| Card numbers | 0.50 | 1.00 | 2 | 1.00 | 1.00 | 2 |
+| Social security numbers | 0.75 | 1.00 | 4 | – | – | 0 |
+| VAT IDs | 1.00 | 1.00 | 3 | 0.00 | – | 1 |
+| Links | 1.00 | 1.00 | 2 | 1.00 | 1.00 | 3 |
+| IP addresses | – | – | 0 | 1.00 | 1.00 | 3 |
+| Dates of birth | 1.00 | 1.00 | 4 | 1.00 | 1.00 | 2 |
+| Street addresses | 1.00 | 1.00 | 5 | 0.50 | 1.00 | 2 |
+| Postcodes | 1.00 | 1.00 | 4 | 1.00 | 1.00 | 2 |
+| Names (from v0.2) | 0.00 | – | 1 | 0.00 | – | 1 |
+| Places (from v0.2) | 0.00 | – | 5 | 0.00 | – | 2 |
+| **Removed by any type** | 0.80 | 1.00 | 46 | 0.79 | 1.00 | 28 |
+| **Removed by any type, without names and places** | 0.93 | 1.00 | 40 | 0.88 | 1.00 | 25 |
+<!-- accuracy:end -->
+
+Known gaps in v0.1, from the hand-written cases:
+
+- Values with unusual separators: an IBAN with dashes (`AT61-1904-…`), a card number with dots, an SV-Nummer with a dash, a German VAT ID with spaces (`DE 136 695 976`).
+- Email addresses spelled out to fool spam filters (`name AT example DOT net`).
+- English addresses that start with a flat number (`Flat 2, 14 Market Street`).
+- Names and places, from v0.2. Until then, look for them in the review step and mark them with M.
+
 ## Performance
 
 A 5,000-row file is cleaned in about 1.5 seconds: import, column step, detection, review and export, clicked straight through in a real browser. Stage 1 asks for under 10 seconds on a normal laptop.
@@ -60,6 +124,7 @@ npm test             # unit tests (Vitest)
 npm run test:e2e     # end-to-end tests against the static build (Playwright)
 npm run bench        # time a 5,000-row file from import to download
 npm run licenses     # fail on dependency licenses outside the allowlist
+npm run eval         # detection recall and precision; --write updates the numbers under Accuracy
 ```
 
 Run `npm run generate` before `npm run test:e2e`. The first time, install the test browser with `npx playwright install chromium`.
@@ -72,7 +137,7 @@ All test data is fake and generated: see [data/README.md](data/README.md) for wh
 
 ### Continuous integration
 
-Every pull request runs three jobs: lint, typecheck, unit tests and the static build; end-to-end tests; and a dependency check (`npm audit --audit-level=high` and the license allowlist). All must pass before review.
+Every pull request runs three jobs: lint, typecheck, unit tests, the detection accuracy (shown in the job summary) and the static build; end-to-end tests; and a dependency check (`npm audit --audit-level=high` and the license allowlist). All must pass before review.
 
 ### Security headers
 

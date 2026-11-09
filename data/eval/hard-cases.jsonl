@@ -51,3 +51,41 @@
 {"id":"hard-051","lang":"en","text":"Thanks to Grace from your support team.","spans":[{"start":10,"end":15,"type":"NAME","text":"Grace"}]}
 {"id":"hard-052","lang":"de","text":"Feature request: export für unseren Steuerberater as Excel, bitte.","spans":[]}
 {"id":"hard-053","lang":"en","text":"Works fine. No complaints.","spans":[]}
+{"id":"hard-054","lang":"de","text":"Bitte an <a href=\"mailto:lena.gruber@example.com\">Lena</a> weiterleiten.","spans":[{"start":25,"end":48,"type":"EMAIL","text":"lena.gruber@example.com"}]}
+{"id":"hard-055","lang":"en","text":"Sent from my iPhone\n\n> On 3 Mar 2026, at 09:14, m.okonkwo@example.org wrote:\n> The export is broken.","spans":[{"start":48,"end":69,"type":"EMAIL","text":"m.okonkwo@example.org"}]}
+{"id":"hard-056","lang":"en","text":"EMAIL: MARK.OKONKWO@EXAMPLE.ORG (please update)","spans":[{"start":7,"end":31,"type":"EMAIL","text":"MARK.OKONKWO@EXAMPLE.ORG"}]}
+{"id":"hard-057","lang":"de","text":"Antwort bitte an anna.feldmoser@example.com.Danke!","spans":[{"start":17,"end":43,"type":"EMAIL","text":"anna.feldmoser@example.com"}]}
+{"id":"hard-058","lang":"en","text":"Write to j.dunmore AT example DOT net, the form eats my messages.","spans":[{"start":9,"end":37,"type":"EMAIL","text":"j.dunmore AT example DOT net"}]}
+{"id":"hard-059","lang":"de","text":"Rückruf bitte unter 0043 664 1234567, ich bin den ganzen Tag erreichbar.","spans":[{"start":20,"end":36,"type":"PHONE","text":"0043 664 1234567"}]}
+{"id":"hard-060","lang":"de","text":"Tel.: +49 (0)30 23125-418","spans":[{"start":6,"end":25,"type":"PHONE","text":"+49 (0)30 23125-418"}]}
+{"id":"hard-061","lang":"de","text":"mobil 0664/2345678 oder per Mail","spans":[{"start":6,"end":18,"type":"PHONE","text":"0664/2345678"}]}
+{"id":"hard-062","lang":"en","text":"ph. 020 7946 0321 ext. 12","spans":[{"start":4,"end":17,"type":"PHONE","text":"020 7946 0321"}]}
+{"id":"hard-063","lang":"de","text":"Handy: +43 676 123 45 67 (abends)","spans":[{"start":7,"end":24,"type":"PHONE","text":"+43 676 123 45 67"}]}
+{"id":"hard-064","lang":"en","text":"Call me on +44 (0) 7700 900 123 before noon.","spans":[{"start":11,"end":31,"type":"PHONE","text":"+44 (0) 7700 900 123"}]}
+{"id":"hard-065","lang":"de","text":"Tel. 030 23125 419 (Zentrale)","spans":[{"start":5,"end":18,"type":"PHONE","text":"030 23125 419"}]}
+{"id":"hard-066","lang":"de","text":"Zeitraum 2025-01-01 bis 2025-12-31, Belegnummer 2025-000417.","spans":[]}
+{"id":"hard-067","lang":"de","text":"Betrag: EUR 1.234.567,89 brutto, fällig am 15.04.2026.","spans":[]}
+{"id":"hard-068","lang":"en","text":"Build 20260312.1422 failed on the CI server.","spans":[]}
+{"id":"hard-069","lang":"de","text":"ISBN 978-3-16-148410-0 steht falsch im Literaturverzeichnis.","spans":[]}
+{"id":"hard-070","lang":"de","text":"EAN 4006381333931 ist im Katalog doppelt.","spans":[]}
+{"id":"hard-071","lang":"de","text":"IBAN: AT61-1904-3002-3457-3201","spans":[{"start":6,"end":30,"type":"IBAN","text":"AT61-1904-3002-3457-3201"}]}
+{"id":"hard-072","lang":"de","text":"Konto: DE89 3704 0044 0532 0130 00, BIC COBADEFFXXX","spans":[{"start":7,"end":34,"type":"IBAN","text":"DE89 3704 0044 0532 0130 00"}]}
+{"id":"hard-073","lang":"de","text":"Kreditkarte 5555.5555.5555.4444 bitte löschen.","spans":[{"start":12,"end":31,"type":"CARD","text":"5555.5555.5555.4444"}]}
+{"id":"hard-074","lang":"en","text":"Visa 4111 1111 1111 1111, exp 04/27, please remove it from my account.","spans":[{"start":5,"end":24,"type":"CARD","text":"4111 1111 1111 1111"}]}
+{"id":"hard-075","lang":"de","text":"SVNR: 1237-010180","spans":[{"start":6,"end":17,"type":"SVNR","text":"1237-010180"}]}
+{"id":"hard-076","lang":"de","text":"Versicherungsnr.:1237010180 (für die Lohnverrechnung)","spans":[{"start":17,"end":27,"type":"SVNR","text":"1237010180"}]}
+{"id":"hard-077","lang":"de","text":"UID-Nr.: ATU 13585627","spans":[{"start":9,"end":21,"type":"VAT_ID","text":"ATU 13585627"}]}
+{"id":"hard-078","lang":"en","text":"VAT DE 136 695 976 on the invoice is ours.","spans":[{"start":4,"end":18,"type":"VAT_ID","text":"DE 136 695 976"}]}
+{"id":"hard-079","lang":"en","text":"The help page (see https://example.com/help/export) is outdated.","spans":[{"start":19,"end":50,"type":"URL","text":"https://example.com/help/export"}]}
+{"id":"hard-080","lang":"de","text":"Link: https://example.org/a?b=1&c=2.","spans":[{"start":6,"end":35,"type":"URL","text":"https://example.org/a?b=1&c=2"}]}
+{"id":"hard-081","lang":"en","text":"Screenshot at http://203.0.113.9/upload/x.png shows the error.","spans":[{"start":14,"end":45,"type":"URL","text":"http://203.0.113.9/upload/x.png"}]}
+{"id":"hard-082","lang":"en","text":"Requests from 198.51.100.23:8080 time out.","spans":[{"start":14,"end":27,"type":"IP","text":"198.51.100.23"}]}
+{"id":"hard-083","lang":"de","text":"geb. am 3.7.88, falls Sie das brauchen","spans":[{"start":8,"end":14,"type":"DATE_OF_BIRTH","text":"3.7.88"}]}
+{"id":"hard-084","lang":"en","text":"DOB: 1985-07-21","spans":[{"start":5,"end":15,"type":"DATE_OF_BIRTH","text":"1985-07-21"}]}
+{"id":"hard-085","lang":"de","text":"Geburtsdatum: 12. März 1979","spans":[{"start":14,"end":27,"type":"DATE_OF_BIRTH","text":"12. März 1979"}]}
+{"id":"hard-086","lang":"de","text":"Termin am 12. März 2026 um 10 Uhr passt.","spans":[]}
+{"id":"hard-087","lang":"de","text":"Adresse: Hauptstr. 5a, 80331 München","spans":[{"start":9,"end":21,"type":"ADDRESS","text":"Hauptstr. 5a"},{"start":23,"end":28,"type":"POSTCODE","text":"80331"},{"start":29,"end":36,"type":"PLACE","text":"München"}]}
+{"id":"hard-088","lang":"de","text":"Ich wohne jetzt in der Wiedner Hauptstraße 12/4/9.","spans":[{"start":23,"end":49,"type":"ADDRESS","text":"Wiedner Hauptstraße 12/4/9"}]}
+{"id":"hard-089","lang":"de","text":"Lieferadresse Am Graben 3-5, 1010 Wien","spans":[{"start":14,"end":27,"type":"ADDRESS","text":"Am Graben 3-5"},{"start":29,"end":33,"type":"POSTCODE","text":"1010"},{"start":34,"end":38,"type":"PLACE","text":"Wien"}]}
+{"id":"hard-090","lang":"en","text":"Please send it to Flat 2, 14 Market Street, Leeds LS1 6DT.","spans":[{"start":18,"end":42,"type":"ADDRESS","text":"Flat 2, 14 Market Street"},{"start":44,"end":49,"type":"PLACE","text":"Leeds"},{"start":50,"end":57,"type":"POSTCODE","text":"LS1 6DT"}]}
+{"id":"hard-091","lang":"de","text":"Wir sind auf der Messe in Halle 3, Stand 12.","spans":[]}
