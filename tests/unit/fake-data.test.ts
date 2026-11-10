@@ -141,8 +141,10 @@ describe('evaluation set', () => {
 })
 
 describe('hand-written name set', () => {
-  type NameItem = Item & { group: string, split: 'dev' | 'test' }
-  const items = read(EVAL_NAMES_PATH).trim().split('\n').map(line => JSON.parse(line) as NameItem)
+  type NameItem = Item & { group?: string, split: 'dev' | 'test' }
+  const all = read(EVAL_NAMES_PATH).trim().split('\n').map(line => JSON.parse(line) as NameItem)
+  // Look-alikes (greetings followed by words that are not names) belong to no group.
+  const items = all.filter(item => item.group !== undefined)
   const names = (filter: (item: NameItem) => boolean) => items.filter(filter).flatMap(item => item.spans.filter(span => span.type === 'NAME'))
 
   it('covers every name-origin group in German and English sentences', () => {
@@ -157,6 +159,13 @@ describe('hand-written name set', () => {
       expect(names(item => item.group === group && item.split === 'test').length, group).toBeGreaterThanOrEqual(25)
       expect(names(item => item.group === group && item.split === 'dev').length, group).toBeGreaterThanOrEqual(3)
     }
+  })
+
+  it('has dev-only look-alikes in both languages, after the grouped cases', () => {
+    const lookAlikes = all.filter(item => item.group === undefined)
+    expect(lookAlikes.every(item => item.split === 'dev')).toBe(true)
+    for (const lang of ['de', 'en']) expect(lookAlikes.filter(item => item.lang === lang).length, lang).toBeGreaterThanOrEqual(10)
+    expect(all.slice(-lookAlikes.length)).toEqual(lookAlikes)
   })
 
   it('includes diacritics, transliteration variants, multi-part and particle names', () => {
