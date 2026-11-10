@@ -1,10 +1,11 @@
-export type FileFormat = 'csv' | 'xlsx'
+/** The table formats Painfold reads; every format it knows is listed in formats.ts. */
+export type TableFormat = 'csv' | 'xlsx'
 export type TextEncoding = 'utf-8' | 'utf-16le' | 'utf-16be' | 'windows-1252'
 
 /** A file read into memory: one header row turned into column names, then data rows. */
 export type ImportedTable = {
   fileName: string
-  format: FileFormat
+  format: TableFormat
   columns: string[]
   rows: string[][]
   /** CSV only. */
