@@ -30,6 +30,15 @@ async function show() {
 
 const hide = () => (open.value = false)
 
+// Hover is for a mouse only: a tap also fires emulated mouse events, and some
+// browsers send a mouse-out right after it, which would close the tooltip again.
+function onPointerEnter(event: PointerEvent) {
+  if (event.pointerType === 'mouse') void show()
+}
+function onPointerLeave(event: PointerEvent) {
+  if (event.pointerType === 'mouse') hide()
+}
+
 // Touch has no hover: a tap toggles. A mouse click or Enter keeps it open.
 let pointerType = ''
 let wasOpen = false
@@ -54,8 +63,8 @@ onBeforeUnmount(() => document.removeEventListener('pointerdown', onDocumentPoin
   <span
     ref="root"
     class="relative inline-block"
-    @mouseenter="show"
-    @mouseleave="hide"
+    @pointerenter="onPointerEnter"
+    @pointerleave="onPointerLeave"
   >
     <button
       type="button"
