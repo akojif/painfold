@@ -1,4 +1,6 @@
 import tailwindcss from '@tailwindcss/vite'
+import { MODEL_PATH, ORT_PREFIX } from './deploy/model'
+import { ortVersion } from './deploy/ort-version'
 import { version } from './package.json'
 
 // Painfold is a fully static site: everything that touches a user's file runs
@@ -26,8 +28,9 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
 
   // The cleaning report names the Painfold version that produced it.
+  // The name model and its runtime are served from this site, never from Hugging Face or a CDN.
   runtimeConfig: {
-    public: { version },
+    public: { version, modelPath: MODEL_PATH, ortPath: `${ORT_PREFIX}${ortVersion()}/` },
   },
 
   compatibilityDate: '2026-11-01',
@@ -39,6 +42,11 @@ export default defineNuxtConfig({
 
   vite: {
     plugins: [tailwindcss()],
+    resolve: {
+      // transformers.js imports the WebGPU build of ONNX Runtime; the plain WebAssembly
+      // build is the same API without the WebGPU kernels, half the download (14 MB).
+      alias: { 'onnxruntime-web/webgpu': 'onnxruntime-web/wasm' },
+    },
   },
 
   typescript: {

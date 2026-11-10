@@ -43,6 +43,27 @@ describe('headersFor', () => {
     expect(headersFor('/')['Content-Security-Policy']).toBe("frame-ancestors 'none'")
   })
 
+  it('makes every page cross-origin isolated, for WebAssembly threads', () => {
+    for (const path of ['/', '/de/review', '/_nuxt/entry.js', '/ort/1.0.0/ort-wasm-simd-threaded.mjs', '/models/m/r/onnx/model_int8.onnx']) {
+      expect(headersFor(path)['Cross-Origin-Embedder-Policy'], path).toBe('require-corp')
+      expect(headersFor(path)['Cross-Origin-Opener-Policy'], path).toBe('same-origin')
+    }
+  })
+
+  it('allows compiling WebAssembly only in app code and the runtime, never on pages, and never eval', () => {
+    expect(directive(assetPolicy(), 'script-src')).toEqual(["'self'", "'wasm-unsafe-eval'"])
+    expect(headersFor('/ort/1.0.0/ort-wasm-simd-threaded.mjs')['Content-Security-Policy']).toBe(assetPolicy())
+    expect(directive(documentPolicy([]), 'script-src')).toEqual(["'self'"])
+    expect(assetPolicy()).not.toContain("'unsafe-eval'")
+  })
+
+  it('lets browsers keep the model and the runtime for good, under their versioned paths', () => {
+    expect(headersFor('/models/m/r/onnx/model_int8.onnx')['Cache-Control']).toBe('public, max-age=31536000, immutable')
+    expect(headersFor('/ort/1.0.0/ort-wasm-simd-threaded.wasm')['Cache-Control']).toBe('public, max-age=31536000, immutable')
+    expect(headersFor('/')['Cache-Control']).toBeUndefined()
+    expect(headersFor('/_nuxt/entry.js')['Cache-Control']).toBeUndefined()
+  })
+
   it('gives app files the full policy, which Web Workers inherit from their response', () => {
     expect(headersFor('/_nuxt/worker.js')['Content-Security-Policy']).toBe(assetPolicy())
     expect(directive(assetPolicy(), 'connect-src')).toEqual(["'self'"])
@@ -58,11 +79,11 @@ describe('vercel.json', () => {
 
   it('splits paths the same way as headersFor', () => {
     const rules = vercelConfig().headers.map(rule => ({ pattern: new RegExp(`^${rule.source}$`), rule }))
-    for (const path of ['/', '/index.html', '/200.html', '/_payload.json', '/_nuxt/entry.js', '/_nuxt/fonts/a.woff2']) {
+    for (const path of ['/', '/index.html', '/de/roadmap', '/_payload.json', '/_nuxt/entry.js', '/_nuxt/fonts/a.woff2', '/ort/1.0.0/ort-wasm-simd-threaded.wasm', '/models/m/r/onnx/model_int8.onnx']) {
       const matching = rules.filter(({ pattern }) => pattern.test(path))
       expect(matching, path).toHaveLength(1)
-      const csp = matching[0]!.rule.headers.find(header => header.key === 'Content-Security-Policy')!.value
-      expect(csp, path).toBe(headersFor(path)['Content-Security-Policy'])
+      const headers = Object.fromEntries(matching[0]!.rule.headers.map(header => [header.key, header.value]))
+      expect(headers, path).toEqual(headersFor(path))
     }
   })
 })

@@ -7,10 +7,12 @@ import type { DetectRequest, DetectResponse } from '../../core/detect/worker-pro
  */
 export function useDetection() {
   const progress = ref<{ done: number, total: number }>()
+  // Bytes of the name model downloaded so far, while it loads.
+  const modelProgress = ref<{ loaded: number, total: number }>()
   let worker: Worker | undefined
   let lastId = 0
 
-  function request(kind: DetectRequest['kind'], rows: string[][], columns: number[]): Promise<DetectResponse> {
+  function request(kind: DetectRequest['kind'], rows: string[][], columns: number[], extra: Partial<Extract<DetectRequest, { kind: 'names' }>> = {}): Promise<DetectResponse> {
     worker ??= new Worker(new URL('../workers/detect.worker.ts', import.meta.url), { type: 'module' })
     const active = worker
     const id = ++lastId
@@ -19,8 +21,12 @@ export function useDetection() {
       const onMessage = ({ data }: MessageEvent<DetectResponse>) => {
         if (data.id !== id) return
         if (data.kind === 'progress') {
-          // Only a run for review shows progress; a survey runs quietly.
-          if (kind === 'detect') progress.value = { done: data.done, total: data.total }
+          // Only runs for review show progress; a survey runs quietly.
+          if (kind !== 'survey') progress.value = { done: data.done, total: data.total }
+          return
+        }
+        if (data.kind === 'model-progress') {
+          modelProgress.value = { loaded: data.loaded, total: data.total }
           return
         }
         active.removeEventListener('message', onMessage)
@@ -28,7 +34,7 @@ export function useDetection() {
         else resolve(data)
       }
       active.addEventListener('message', onMessage)
-      active.postMessage({ kind, id, rows, columns } satisfies DetectRequest)
+      active.postMessage({ kind, id, rows, columns, ...extra } as DetectRequest)
     })
   }
 
@@ -45,7 +51,14 @@ export function useDetection() {
     return response.kind === 'survey' ? response.columns : []
   }
 
+  /** Names and places in the given columns, found by the name model, which the worker loads on first use. */
+  async function names(rows: string[][], columns: number[]): Promise<CellDetections[]> {
+    progress.value = { done: 0, total: rows.length }
+    const response = await request('names', rows, columns, { ortPath: useRuntimeConfig().public.ortPath })
+    return response.kind === 'result' ? response.cells : []
+  }
+
   onScopeDispose(() => worker?.terminate())
 
-  return { run, survey, progress: readonly(progress) }
+  return { run, survey, names, progress: readonly(progress), modelProgress: readonly(modelProgress) }
 }
