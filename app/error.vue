@@ -28,7 +28,8 @@ onMounted(() => {
 onBeforeUnmount(() => clearTimeout(timer))
 
 // Leaving the error page has to clear the error, or it stays on screen.
-const leave = (to: string) => clearError({ redirect: to })
+const localePath = useLocalePath()
+const leave = (to: string) => clearError({ redirect: localePath(to) })
 </script>
 
 <template>
@@ -66,7 +67,7 @@ const leave = (to: string) => clearError({ redirect: to })
 
       <div class="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-4">
         <a
-          href="/"
+          :href="localePath('/')"
           class="press focus-ring inline-flex h-10 items-center rounded-md bg-fg px-4 font-medium text-canvas hover:opacity-90"
           @click.prevent="leave('/')"
         >
@@ -74,7 +75,7 @@ const leave = (to: string) => clearError({ redirect: to })
         </a>
         <a
           v-if="kind === 'notFound'"
-          href="/roadmap"
+          :href="localePath('/roadmap')"
           class="group focus-ring inline-flex items-center gap-1 rounded-sm text-sm text-accent underline-offset-4 hover:underline"
           @click.prevent="leave('/roadmap')"
         >

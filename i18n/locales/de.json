@@ -1,0 +1,427 @@
+{
+  "app": {
+    "name": "Painfold",
+    "tagline": "Finden Sie, was Ihren Kunden wehtut, ohne preiszugeben, wer sie sind."
+  },
+  "nav": {
+    "label": "Schritte",
+    "done": "erledigt",
+    "steps": {
+      "import": "Importieren",
+      "review": "Prüfen",
+      "download": "Herunterladen"
+    }
+  },
+  "footer": {
+    "source": "Open Source",
+    "roadmap": "Roadmap",
+    "credit": "Mit Liebe gemacht von {name}",
+    "factsLabel": "Über Painfold",
+    "noCookies": "Keine Cookies",
+    "noAccount": "Kein Konto"
+  },
+  "start": {
+    "headline": "Finden Sie, was Ihren Kunden wehtut. Ohne preiszugeben, wer sie sind.",
+    "subline": "Bereinigen Sie zuerst Ihre Feedback-Datei: E-Mail-Adressen, Telefonnummern, IBANs und mehr werden direkt hier in Ihrem Browser entfernt.",
+    "choose": "CSV- oder Excel-Datei auswählen",
+    "sampleButton": "Beispieldatei ausprobieren",
+    "sampleNote": "200 erfundene Tickets, keine echten Personen",
+    "privacy": "Ihre Datei wird nie hochgeladen. Sie bleibt in diesem Browser.",
+    "reading": "{name} wird gelesen…",
+    "journeyLabel": "Was Painfold macht",
+    "journey": {
+      "clean": {
+        "title": "Datei bereinigen",
+        "when": "Jetzt"
+      },
+      "find": {
+        "title": "Aufgaben, Probleme und Wünsche finden",
+        "when": "v0.3"
+      },
+      "decide": {
+        "title": "Entscheiden, was gebaut wird",
+        "when": "v0.4"
+      }
+    },
+    "dropOverlay": "Zum Öffnen loslassen. Nichts wird hochgeladen."
+  },
+  "types": {
+    "EMAIL": "E-Mail-Adressen",
+    "PHONE": "Telefonnummern",
+    "IBAN": "IBANs",
+    "CARD": "Kartennummern",
+    "SVNR": "österreichische Sozialversicherungsnummern",
+    "VAT_ID": "UID-Nummern",
+    "URL": "Links",
+    "IP": "IP-Adressen",
+    "DATE_OF_BIRTH": "Geburtsdaten",
+    "ADDRESS": "Adressen",
+    "POSTCODE": "Postleitzahlen",
+    "NAME": "Namen",
+    "PLACE": "Orte"
+  },
+  "importErrors": {
+    "empty-file": "Diese Datei ist leer. Wählen Sie eine Datei mit einer Kopfzeile und mindestens einer Zeile Feedback.",
+    "file-too-large": "Diese Datei ist größer als 50 MB. Teilen Sie sie in kleinere Dateien auf und bereinigen Sie sie einzeln.",
+    "no-rows": "Diese Datei enthält nur eine Kopfzeile. Fügen Sie Feedback-Zeilen hinzu oder wählen Sie eine andere Datei.",
+    "too-many-rows": "Diese Datei hat mehr als 50.000 Zeilen. Teilen Sie sie in kleinere Dateien auf und bereinigen Sie sie einzeln.",
+    "unsupported-format": "Painfold liest CSV- und XLSX-Dateien. Exportieren Sie Ihre Daten in einem dieser Formate und wählen Sie die Datei erneut aus.",
+    "legacy-excel": "Das ist eine alte Excel-Datei (.xls). Öffnen Sie sie in Excel, speichern Sie sie als .xlsx oder .csv und wählen Sie sie dann erneut aus.",
+    "unreadable": "Diese Datei konnte nicht gelesen werden. Sie ist vielleicht beschädigt oder mit einem Passwort geschützt. Exportieren Sie sie bitte noch einmal."
+  },
+  "file": {
+    "rows": "keine Zeilen | 1 Zeile | {n} Zeilen",
+    "chooseAnother": "Andere Datei wählen",
+    "sheet": "Tabellenblatt",
+    "sample": "Beispieldatei mit erfundenen Daten.",
+    "ragged": "1 Zeile hatte eine andere Anzahl an Zellen als die Kopfzeile und wurde aufgefüllt. | {n} Zeilen hatten eine andere Anzahl an Zellen als die Kopfzeile und wurden aufgefüllt."
+  },
+  "columns": {
+    "heading": "Wählen Sie, was geprüft wird",
+    "help": "Prüfen: wird nach personenbezogenen Daten durchsucht. Unverändert: wird ohne Prüfung in die bereinigte Datei übernommen. Weglassen: kommt nicht in die bereinigte Datei.",
+    "listLabel": "Spalten",
+    "headers": {
+      "column": "Spalte",
+      "samples": "Beispielwerte",
+      "choice": "Was passiert"
+    },
+    "roleLabel": "Was mit {column} passiert",
+    "roles": {
+      "scan": "Prüfen",
+      "keep": "Unverändert",
+      "drop": "Weglassen"
+    },
+    "useAsFeedback": "{column} als Feedback-Spalte verwenden",
+    "isFeedback": "Feedback-Spalte, wird immer geprüft",
+    "reason": {
+      "names": "Sieht nach Namen aus",
+      "emails": "Sieht nach E-Mail-Adressen aus",
+      "phones": "Sieht nach Telefonnummern aus",
+      "birthDates": "Sieht nach Geburtsdaten aus",
+      "addresses": "Sieht nach Adressen aus",
+      "ids": "Sieht nach persönlichen Kennnummern aus",
+      "noText": "Nur Zahlen und Datumsangaben"
+    },
+    "empty": "Leere Spalte",
+    "masked": "Werte ausgeblendet, weil diese Spalte weggelassen wird",
+    "warning": "Enthält {found}.",
+    "checkInstead": "Stattdessen prüfen",
+    "summary": "Bereinigte Datei: {columns}, {checked} geprüft, {kept} unverändert, {dropped} weggelassen",
+    "columnCount": "1 Spalte | {n} Spalten",
+    "noFeedback": "Keine Spalte sieht nach Feedback aus. Markieren Sie die richtige mit dem Kreis am Anfang ihrer Zeile."
+  },
+  "preview": {
+    "heading": "Erste {n} Zeilen anzeigen",
+    "note": "Nur die Spalten, die in der bereinigten Datei bleiben.",
+    "label": "Vorschau der ersten Zeilen"
+  },
+  "find": {
+    "button": "Personenbezogene Daten in {rows} finden",
+    "progress": "Zeile {done} von {total} wird geprüft",
+    "progressLabel": "Fortschritt",
+    "failed": "Beim Prüfen der Datei ist etwas schiefgelaufen. Versuchen Sie es noch einmal oder laden Sie die Seite neu."
+  },
+  "review": {
+    "heading": "{findings} in {rows}",
+    "findings": "Keine Treffer | 1 Treffer | {n} Treffer",
+    "progress": "{reviewed} geprüft, {left} offen",
+    "progressLabel": "Geprüft",
+    "onlyWithFindings": "Nur Zeilen mit Treffern",
+    "row": "Zeile {n}",
+    "nothingFound": "In dieser Zeile wurde nichts gefunden",
+    "noFindings": "Keine Treffer. Markieren Sie Text, der entfernt werden soll, und drücken Sie M, oder fahren Sie fort.",
+    "state": {
+      "pending": "nicht geprüft",
+      "remove": "entfernt",
+      "keep": "behalten"
+    },
+    "markLabel": "{type}, {state}: {text}",
+    "note": {
+      "title": "{type}, Zeile {row}",
+      "copies": "Kommt in 1 Zeile vor. Beim Entfernen wird der Wert durch {placeholder} ersetzt. | Kommt in {n} Zeilen vor. Beim Entfernen wird jedes Vorkommen durch {placeholder} ersetzt.",
+      "removed": "In jedem Vorkommen entfernt.",
+      "kept": "In jedem Vorkommen behalten.",
+      "nothingSelected": "Wählen Sie einen Treffer aus, um ihn zu prüfen.",
+      "formOf": "Sieht aus wie eine Form von „{marked}“, das Sie markiert haben. Beim Entfernen wird es durch {placeholder} ersetzt."
+    },
+    "remove": "Entfernen",
+    "keep": "Behalten",
+    "undo": "Rückgängig",
+    "keys": {
+      "label": "Tastenkürzel",
+      "next": "nächster und vorheriger Treffer",
+      "mark": "markierten Text als übersehen kennzeichnen",
+      "undo": "rückgängig machen"
+    },
+    "mark": {
+      "button": "Markierten Text als übersehen kennzeichnen",
+      "heading": "„{text}“ als personenbezogene Daten kennzeichnen",
+      "type": "Art",
+      "confirm": "Als personenbezogene Daten kennzeichnen",
+      "cancel": "Abbrechen",
+      "noSelection": "Markieren Sie zuerst den übersehenen Text in einer Zeile und drücken Sie dann M.",
+      "oneCell": "Markieren Sie Text innerhalb einer Zelle.",
+      "overlap": "Die Auswahl überschneidet sich mit einem Treffer. Markieren Sie nur den übersehenen Text.",
+      "done": "{type} in 1 Zeile gekennzeichnet. | {type} in {n} Zeilen gekennzeichnet.",
+      "forms": "1 mögliche Form zu prüfen. | {n} mögliche Formen zu prüfen."
+    },
+    "removeAll": "Alle {n} offenen entfernen",
+    "continue": "Weiter zum Download",
+    "willRemove": "1 nicht geprüfter Treffer wird entfernt. | {n} nicht geprüfte Treffer werden entfernt.",
+    "limits": "Die automatische Erkennung kann personenbezogene Daten übersehen. Prüfen Sie die Ergebnisse, bevor Sie die bereinigte Datei weitergeben. Painfold unterstützt Sie beim Datenschutz, ist aber keine Rechtsberatung und macht Ihre Verarbeitung nicht von sich aus DSGVO-konform.",
+    "announce": {
+      "remove": "{type} entfernt, {left} offen.",
+      "keep": "{type} behalten, {left} offen.",
+      "removeAll": "Alle offenen Treffer wurden entfernt.",
+      "removeType": "Alle {type} entfernt.",
+      "undo": "Rückgängig gemacht.",
+      "nothingToUndo": "Nichts rückgängig zu machen."
+    },
+    "views": {
+      "label": "Ansicht",
+      "byValue": "Nach Wert",
+      "byRow": "Nach Zeile"
+    },
+    "valuesLabel": "Gefundene Werte",
+    "removeAllOfType": "1 {one} entfernen | Alle {n} {many} entfernen",
+    "valueLabel": "{type}, {state}: {text}",
+    "inRows": "In 1 Zeile. Beim Entfernen wird der Wert durch {placeholder} ersetzt. | In {n} Zeilen. Beim Entfernen wird jedes Vorkommen durch {placeholder} ersetzt.",
+    "finished": {
+      "title": "Alle Treffer sind geprüft.",
+      "body": "{removed} entfernt, {kept} behalten. Als Nächstes: die bereinigte Datei und den Bereinigungsbericht herunterladen.",
+      "action": "Weiter zum Download"
+    },
+    "removeAllShort": "1 entfernen | Alle {n} entfernen",
+    "keptTag": "Behalten",
+    "moreRows": "Und 1 weitere Zeile. | Und {n} weitere Zeilen.",
+    "noRows": "Keine Zeilen mit Treffern.",
+    "showMoreOfType": "{n} weitere anzeigen"
+  },
+  "header": {
+    "outbound": "Was Ihren Browser verlässt",
+    "bytes": "0 Bytes | 1 Byte | {n} Bytes"
+  },
+  "privacy": {
+    "notice": "Ihre Datei wird nie hochgeladen. Sie bleibt in diesem Browser."
+  },
+  "typeOne": {
+    "EMAIL": "E-Mail-Adresse",
+    "PHONE": "Telefonnummer",
+    "IBAN": "IBAN",
+    "CARD": "Kartennummer",
+    "SVNR": "Sozialversicherungsnummer",
+    "VAT_ID": "UID-Nummer",
+    "URL": "Link",
+    "IP": "IP-Adresse",
+    "DATE_OF_BIRTH": "Geburtsdatum",
+    "ADDRESS": "Adresse",
+    "POSTCODE": "Postleitzahl",
+    "NAME": "Name",
+    "PLACE": "Ort"
+  },
+  "typeShort": {
+    "EMAIL": "E-Mail",
+    "PHONE": "Telefon",
+    "IBAN": "IBAN",
+    "CARD": "Karte",
+    "SVNR": "SV-Nummer",
+    "VAT_ID": "UID",
+    "URL": "Link",
+    "IP": "IP",
+    "DATE_OF_BIRTH": "Geburtsdatum",
+    "ADDRESS": "Adresse",
+    "POSTCODE": "PLZ",
+    "NAME": "Name",
+    "PLACE": "Ort"
+  },
+  "download": {
+    "heading": "Ihre bereinigte Datei ist fertig.",
+    "removed": "Durch Platzhalter ersetzt",
+    "nothingRemoved": "Es wurde nichts gefunden oder markiert, der Text ist unverändert.",
+    "notReviewed": "Enthält 1 Treffer, der nicht geprüft wurde. | Enthält {n} Treffer, die nicht geprüft wurden.",
+    "kept": "1 Treffer wurde behalten. | {n} Treffer wurden behalten.",
+    "dropped": "Weggelassen: {columns}.",
+    "unchecked": "Ohne Prüfung übernommen: {columns}.",
+    "button": "{name} herunterladen",
+    "back": "Zurück zur Prüfung",
+    "startOver": "Andere Datei bereinigen",
+    "mapStays": "Die Liste der Originalwerte hinter den Platzhaltern bleibt in diesem Browser und ist weg, sobald Sie den Tab schließen.",
+    "reportButton": "Bereinigungsbericht herunterladen (.txt)",
+    "reportExplain": "Die bereinigte Datei enthält nur Ihre Daten. Der Bereinigungsbericht listet auf, was ersetzt wurde, mit Datum, Painfold-Version und den Grenzen der automatischen Erkennung.",
+    "next": {
+      "title": "Ihre Datei ist bereinigt.",
+      "body": "Als Nächstes in Painfold: daraus eine Rangliste der Kundenprobleme machen (kommt in v0.3).",
+      "link": "Zur Roadmap"
+    }
+  },
+  "typeMany": {
+    "EMAIL": "E-Mail-Adressen",
+    "PHONE": "Telefonnummern",
+    "IBAN": "IBANs",
+    "CARD": "Kartennummern",
+    "SVNR": "Sozialversicherungsnummern",
+    "VAT_ID": "UID-Nummern",
+    "URL": "Links",
+    "IP": "IP-Adressen",
+    "DATE_OF_BIRTH": "Geburtsdaten",
+    "ADDRESS": "Adressen",
+    "POSTCODE": "Postleitzahlen",
+    "NAME": "Namen",
+    "PLACE": "Orte"
+  },
+  "network": {
+    "none": "Keine Daten haben diesen Browser verlassen.",
+    "foreign": "1 Anfrage ging an eine andere Website. | {n} Anfragen gingen an andere Websites.",
+    "explain": "Jede Anfrage, die diese Seite seit dem Öffnen gestellt hat. Ihre Datei wird hier gelesen, geprüft und bereinigt und nie irgendwohin gesendet.",
+    "destination": "Ziel",
+    "what": "Was",
+    "size": "Größe",
+    "kind": {
+      "code": "App-Code",
+      "style": "Stile",
+      "font": "Schrift",
+      "data": "App-Daten",
+      "other": "Sonstiges"
+    },
+    "otherSite": "Andere Website",
+    "allOwn": "Alle Anfragen gingen an diese Website ({host}): der eigene Code, die Schriften und die Texte der App.",
+    "bytes": "{n} B",
+    "kilobytes": "{n} kB",
+    "close": "Schließen"
+  },
+  "report": {
+    "title": "Painfold-Bereinigungsbericht",
+    "original": "Originaldatei",
+    "cleaned": "Bereinigte Datei",
+    "date": "Bereinigt am",
+    "version": "Painfold-Version",
+    "rows": "Zeilen",
+    "removedHeading": "Durch Platzhalter ersetzt",
+    "nothingRemoved": "Es wurde nichts gefunden oder markiert.",
+    "limitsHeading": "Grenzen"
+  },
+  "theme": {
+    "label": "Darstellung",
+    "system": "Systemeinstellung verwenden",
+    "light": "Hell",
+    "dark": "Dunkel"
+  },
+  "example": {
+    "caption": "Ein Support-Ticket, vor und nach der Bereinigung",
+    "ticket": "Bitte rufen Sie mich unter {phone} zurück oder schreiben Sie an {email}.",
+    "phone": "+49 30 23125 417",
+    "email": "anna.huber{'@'}example.com",
+    "found": "In der Datei gefunden",
+    "description": "Beispiel: In einem Support-Ticket werden eine Telefonnummer und eine E-Mail-Adresse durch die Platzhalter [PHONE_1] und [EMAIL_1] ersetzt."
+  },
+  "typeManyLower": {
+    "EMAIL": "E-Mail-Adressen",
+    "PHONE": "Telefonnummern",
+    "IBAN": "IBANs",
+    "CARD": "Kartennummern",
+    "SVNR": "SV-Nummern",
+    "VAT_ID": "UID-Nummern",
+    "URL": "Links",
+    "IP": "IP-Adressen",
+    "DATE_OF_BIRTH": "Geburtsdaten",
+    "ADDRESS": "Adressen",
+    "POSTCODE": "Postleitzahlen",
+    "NAME": "Namen",
+    "PLACE": "Orte"
+  },
+  "typeOneLower": {
+    "EMAIL": "E-Mail-Adresse",
+    "PHONE": "Telefonnummer",
+    "IBAN": "IBAN",
+    "CARD": "Kartennummer",
+    "SVNR": "SV-Nummer",
+    "VAT_ID": "UID-Nummer",
+    "URL": "Link",
+    "IP": "IP-Adresse",
+    "DATE_OF_BIRTH": "Geburtsdatum",
+    "ADDRESS": "Adresse",
+    "POSTCODE": "Postleitzahl",
+    "NAME": "Name",
+    "PLACE": "Ort"
+  },
+  "roadmap": {
+    "title": "Roadmap",
+    "intro": "Painfold hilft Ihnen zu verstehen, was Ihren Kunden wehtut. Der erste Schritt: Ihr Feedback vertraulich bereinigen.",
+    "current": "Aktuelle Phase",
+    "status": {
+      "available": "Verfügbar",
+      "inProgress": "In Arbeit",
+      "planned": "Geplant",
+      "next": "Als Nächstes"
+    },
+    "stagesLabel": "Phasen",
+    "full": "Die ganze Roadmap auf GitHub lesen",
+    "stages": {
+      "clean": {
+        "name": "Bereinigen",
+        "summary": "Personenbezogene Daten in Ihrem Browser aus einer Feedback-Datei entfernen und die bereinigte Datei herunterladen.",
+        "points": [
+          "E-Mail-Adressen, Telefonnummern, IBANs und acht weitere Arten personenbezogener Daten",
+          "Jeden Treffer vor dem Download prüfen und korrigieren",
+          "Nichts wird hochgeladen"
+        ]
+      },
+      "names": {
+        "name": "Namen",
+        "summary": "Auch Namen und Orte finden, mit einem Modell, das in Ihrem Browser läuft.",
+        "points": [
+          "Personen und Orte auf Deutsch und Englisch",
+          "Hinweise auf Angaben, die jemanden indirekt erkennbar machen",
+          "Veröffentlichte Genauigkeit für jede Art personenbezogener Daten"
+        ]
+      },
+      "jobs": {
+        "name": "Aufgaben, Probleme und Wünsche",
+        "summary": "Sehen, was Ihre Kunden erledigen wollen, was sie stört und was sie sich wünschen.",
+        "points": [
+          "Ihr eigener KI-Schlüssel oder ein lokales Modell",
+          "Vor der Analyse genau sehen, was gesendet wird",
+          "Jedes Zitat wird mit Ihren Daten abgeglichen"
+        ]
+      },
+      "report": {
+        "name": "Bericht",
+        "summary": "Ein Bericht, mit dem Ihr Team in einem Meeting arbeiten kann.",
+        "points": [
+          "Die drei wichtigsten Erkenntnisse zuerst",
+          "Segmente und Trends, wenn Ihre Datei sie hergibt",
+          "Chancen als „Wie könnten wir …“-Fragen"
+        ]
+      },
+      "launch": {
+        "name": "Start",
+        "summary": "Painfold in 30 Sekunden ausprobieren oder auf Ihren eigenen Servern betreiben.",
+        "points": [
+          "Eine Demo mit fertigen Ergebnissen, ohne API-Schlüssel",
+          "Ein Docker-Image zum Selbst-Hosten mit einem lokalen Modell",
+          "Dokumentation für Teams"
+        ]
+      }
+    }
+  },
+  "error": {
+    "notFound": {
+      "title": "Seite nicht gefunden",
+      "heading": "Hier gibt es nichts zu bereinigen.",
+      "body": "Diese Seite gibt es nicht. Vielleicht ist der Link veraltet oder es hat sich ein Tippfehler eingeschlichen. Kein Problem: Es wurde nichts hochgeladen."
+    },
+    "other": {
+      "title": "Etwas ist schiefgelaufen",
+      "heading": "Etwas ist schiefgelaufen.",
+      "body": "Laden Sie die Seite neu und versuchen Sie es noch einmal. Ihre Datei hat diesen Browser nie verlassen."
+    },
+    "home": "Zurück zum Start",
+    "roadmap": "Zur Roadmap",
+    "path": "Die Adresse {path} wurde nicht gefunden."
+  },
+  "language": {
+    "label": "Sprache",
+    "en": "Englisch",
+    "de": "Deutsch"
+  }
+}

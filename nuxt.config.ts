@@ -10,12 +10,15 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      htmlAttrs: { lang: 'en' },
       title: 'Painfold',
       script: [
         // Applies a saved Light or Dark choice before first paint, so the page
         // never flashes the wrong theme. scripts/apply-csp.ts hashes it into the CSP.
         { innerHTML: "try{var t=localStorage.getItem('painfold-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}" },
+        // Only the root decides the language: it opens /de/ before first paint if
+        // German was chosen, or if nothing was chosen and the browser prefers German.
+        // Every other address keeps its language, so a shared /de/ link stays German.
+        { innerHTML: "try{if(location.pathname==='/'){var l=localStorage.getItem('painfold-language');if(l==='de'||(!l&&/^de\\b/i.test(navigator.language)))location.replace('/de'+location.search+location.hash)}}catch(e){}" },
       ],
     },
   },
@@ -31,7 +34,7 @@ export default defineNuxtConfig({
 
   nitro: {
     preset: 'static',
-    prerender: { routes: ['/roadmap'] },
+    prerender: { routes: ['/roadmap', '/de', '/de/roadmap'] },
   },
 
   vite: {
@@ -50,11 +53,18 @@ export default defineNuxtConfig({
     },
   },
 
+  // English at /, German under /de/, so German pages can be shared and indexed.
+  // German uses de-AT, so numbers, lists and dates follow Austrian conventions.
+  // Nuxt i18n's own detection would set a cookie; the inline script above and
+  // the language switch (localStorage) choose the language instead.
   i18n: {
-    strategy: 'no_prefix',
+    strategy: 'prefix_except_default',
     defaultLocale: 'en',
-    locales: [{ code: 'en', language: 'en', file: 'en.json' }],
-    // One language for now, and no cookie: nothing to detect or remember.
+    baseUrl: 'https://painfold.vercel.app',
+    locales: [
+      { code: 'en', language: 'en', name: 'English', file: 'en.json' },
+      { code: 'de', language: 'de-AT', name: 'Deutsch', file: 'de.json' },
+    ],
     detectBrowserLanguage: false,
   },
 })

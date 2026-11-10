@@ -3,6 +3,13 @@
 useHead({
   bodyAttrs: { class: 'bg-canvas text-fg font-sans text-base antialiased' },
 })
+// <html lang> and the hreflang links to the same page in the other language.
+const localeHead = useLocaleHead()
+useHead(() => ({
+  htmlAttrs: { lang: localeHead.value.htmlAttrs.lang },
+  link: localeHead.value.link,
+}))
+const localePath = useLocalePath()
 const route = useRoute()
 // A name and a URL, the same in every language, so they are not in the locale files.
 const author = { name: 'Francis Akoji', url: 'https://francisakoji.com' }
@@ -21,18 +28,20 @@ useFileDrop()
 <template>
   <div class="flex min-h-dvh flex-col">
     <header class="sticky top-0 z-20 border-b border-line bg-canvas">
-      <div class="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
+      <div class="mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 px-4 sm:gap-4 sm:px-6">
         <NuxtLink
-          to="/"
+          :to="localePath('/')"
           class="focus-ring flex items-center gap-2.5 rounded-sm text-md font-semibold tracking-tight"
         >
           <span
             aria-hidden="true"
             class="relative size-[18px] rounded-[5px] bg-fg after:absolute after:inset-x-1 after:top-[7.5px] after:h-[3px] after:rounded-[1px] after:bg-canvas"
           />
-          {{ $t('app.name') }}
+          <!-- On the narrowest screens the mark alone leaves room for the switches; screen readers still hear the name. -->
+          <span class="max-[399px]:sr-only">{{ $t('app.name') }}</span>
         </NuxtLink>
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-1.5 sm:gap-2">
+          <LanguageToggle />
           <ThemeToggle />
           <OutboundIndicator />
         </div>
@@ -72,7 +81,7 @@ useFileDrop()
         <div class="flex flex-wrap items-center gap-x-5 gap-y-2">
           <nav class="flex gap-5">
             <NuxtLink
-              to="/roadmap"
+              :to="localePath('/roadmap')"
               class="focus-ring rounded-sm hover:text-fg"
             >
               {{ $t('footer.roadmap') }}

@@ -5,6 +5,7 @@ import { ImportError, importFile, type ImportErrorCode } from '~~/core/import'
 definePageMeta({ step: 1 })
 
 const { t } = useI18n()
+const localePath = useLocalePath()
 const { number } = useFormat()
 const session = useSession()
 const { table, isSample, roles, scanColumns } = session
@@ -104,7 +105,7 @@ async function findPersonalData() {
   detectionFailed.value = false
   try {
     session.startReview(await detection.run(table.value.rows, scanColumns.value))
-    await navigateTo('/review')
+    await navigateTo(localePath('/review'))
   }
   catch {
     detectionFailed.value = true

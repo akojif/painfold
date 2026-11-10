@@ -418,5 +418,10 @@
     "home": "Back to the start",
     "roadmap": "See the roadmap",
     "path": "The address {path} was not found."
+  },
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "de": "German"
   }
 }

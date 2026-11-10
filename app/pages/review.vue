@@ -8,7 +8,7 @@ definePageMeta({
   step: 2,
   // Nothing to review without a checked file; this runs in the browser only.
   middleware: () => {
-    if (import.meta.client && !useSession().review.value) return navigateTo('/')
+    if (import.meta.client && !useSession().review.value) return navigateTo(useLocalePath()('/'))
   },
 })
 
@@ -17,6 +17,7 @@ const BATCH = 100
 const VALUE_BATCH = 100
 const SNIPPETS = 5
 const { t } = useI18n()
+const localePath = useLocalePath()
 const { number } = useFormat()
 const session = useSession()
 const { table, review, revision, feedbackColumn, scanColumns } = session
@@ -353,7 +354,7 @@ onBeforeUnmount(() => {
           </div>
         </div>
         <NuxtLink
-          to="/download"
+          :to="localePath('/download')"
           class="focus-ring press inline-flex h-9 items-center rounded-md bg-fg px-3.5 font-medium text-canvas"
         >
           {{ $t('review.finished.action') }}
@@ -532,7 +533,7 @@ onBeforeUnmount(() => {
               {{ $t('review.removeAll', { n: number(counts.left) }) }}
             </button>
             <NuxtLink
-              to="/download"
+              :to="localePath('/download')"
               class="focus-ring press inline-flex h-9 items-center rounded-md bg-fg px-3.5 font-medium text-canvas"
             >
               {{ $t('review.continue') }}
