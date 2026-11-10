@@ -52,6 +52,8 @@
 :root {
   --pf-light-canvas: #FFFFFF;        /* page */
   --pf-light-surface: #F7F8FA;       /* panels, lists, the side of a split view */
+  --pf-light-raised: #FFFFFF;        /* things that float above the page: toasts (the page is already white) */
+  --pf-light-raised-line: #CDD3DC;   /* their border, stronger than a hairline */
   --pf-light-line: #E4E7EC;          /* hairline borders and dividers */
   --pf-light-line-strong: #7D8796;   /* borders of inputs and controls (3:1) */
   --pf-light-fg: #111827;            /* text */
@@ -68,6 +70,8 @@
 
   --pf-dark-canvas: #11161F;
   --pf-dark-surface: #161C27;
+  --pf-dark-raised: #222A37;
+  --pf-dark-raised-line: #3A4556;
   --pf-dark-line: #232B38;
   --pf-dark-line-strong: #6B7789;
   --pf-dark-fg: #E6EAF0;
@@ -89,6 +93,8 @@
   color-scheme: light;
   --pf-canvas: var(--pf-light-canvas);
   --pf-surface: var(--pf-light-surface);
+  --pf-raised: var(--pf-light-raised);
+  --pf-raised-line: var(--pf-light-raised-line);
   --pf-line: var(--pf-light-line);
   --pf-line-strong: var(--pf-light-line-strong);
   --pf-fg: var(--pf-light-fg);
@@ -110,6 +116,8 @@
     color-scheme: dark;
     --pf-canvas: var(--pf-dark-canvas);
     --pf-surface: var(--pf-dark-surface);
+    --pf-raised: var(--pf-dark-raised);
+    --pf-raised-line: var(--pf-dark-raised-line);
     --pf-line: var(--pf-dark-line);
     --pf-line-strong: var(--pf-dark-line-strong);
     --pf-fg: var(--pf-dark-fg);
@@ -131,6 +139,8 @@
   color-scheme: dark;
   --pf-canvas: var(--pf-dark-canvas);
   --pf-surface: var(--pf-dark-surface);
+  --pf-raised: var(--pf-dark-raised);
+  --pf-raised-line: var(--pf-dark-raised-line);
   --pf-line: var(--pf-dark-line);
   --pf-line-strong: var(--pf-dark-line-strong);
   --pf-fg: var(--pf-dark-fg);
@@ -162,6 +172,8 @@
 
   --color-canvas: var(--pf-canvas);
   --color-surface: var(--pf-surface);
+  --color-raised: var(--pf-raised);
+  --color-raised-line: var(--pf-raised-line);
   --color-line: var(--pf-line);
   --color-line-strong: var(--pf-line-strong);
   --color-fg: var(--pf-fg);
@@ -210,6 +222,8 @@
   /* Depth only where something is raised: a selected item, a dialog, the drop overlay. */
   --shadow-raised: 0 0 0 1px rgb(var(--pf-shadow-color) / 0.06), 0 1px 2px rgb(var(--pf-shadow-color) / 0.06);
   --shadow-overlay: 0 0 0 1px rgb(var(--pf-shadow-color) / 0.08), 0 8px 16px rgb(var(--pf-shadow-color) / 0.08), 0 24px 48px rgb(var(--pf-shadow-color) / 0.12);
+  /* A toast floating above the page: soft, but visible on the dark theme too. */
+  --shadow-float: 0 2px 6px rgb(var(--pf-shadow-color) / 0.10), 0 12px 32px rgb(var(--pf-shadow-color) / 0.18);
 
   /* Only these two curves exist, so ease-in cannot be used. */
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);

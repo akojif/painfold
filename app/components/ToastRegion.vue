@@ -1,11 +1,13 @@
 <script setup lang="ts">
-// Where toasts appear: bottom centre on larger screens, full width on small
-// ones, lifted above any bar docked to the bottom of the screen (marked
-// data-toast-avoid), so a toast never covers the main actions. One live
-// region (role="status") that is always there, so screen readers announce
-// what appears in it. A toast pauses while it is hovered or has focus.
-// Enter in 200 ms, leave faster; transform and opacity only; none with
-// reduced motion.
+// Where toasts appear: floating 28 px above the bottom on larger screens
+// (centred) and on small ones (full width), and lifted above anything docked
+// to the bottom of the screen that is in view, marked data-toast-avoid (the
+// footer, the column step's action bar, the review's panel on small screens),
+// so a toast never covers them. Above everything except dialogs, which sit in
+// the browser's top layer. One live region (role="status") that is always
+// there, so screen readers announce what appears in it. A toast pauses while
+// it is hovered or has focus. It rises in 200 ms with a slight scale and leaves
+// faster; transform and opacity only; none with reduced motion.
 import type { Toast } from '~/composables/useToast'
 
 const { toasts, close } = useToast()
@@ -33,17 +35,26 @@ function resume(toast: Toast, event?: FocusEvent) {
   if (!timers.get(toast.id)?.handle) run(toast)
 }
 
-// How far a bar docked to the bottom of the screen reaches up, so the toast sits above it.
+// The gap between a toast and the bottom of the screen, or what it floats above.
+const GAP = 28
+
+// How far anything marked data-toast-avoid reaches up from the bottom of the
+// screen (a docked bar, or the footer once it scrolls into view), so the
+// toast floats above it.
 function measure() {
   let height = 0
   for (const element of document.querySelectorAll<HTMLElement>('[data-toast-avoid]')) {
     const rect = element.getBoundingClientRect()
-    if (rect.height > 0 && rect.bottom >= window.innerHeight - 1) height = Math.max(height, window.innerHeight - rect.top)
+    // Only what reaches the bottom of the screen: a bar docked there, or the footer once it is in view.
+    if (rect.height > 0 && rect.top < window.innerHeight && rect.bottom >= window.innerHeight - 1) height = Math.max(height, window.innerHeight - rect.top)
   }
   lift.value = height
 }
 watch(lift, (height) => {
-  if (region.value) region.value.style.bottom = `${height}px`
+  if (region.value) region.value.style.bottom = `${height + GAP}px`
+}, { immediate: true })
+onMounted(() => {
+  if (region.value) region.value.style.bottom = `${lift.value + GAP}px`
 })
 
 watch(toasts, (now, before = []) => {
@@ -72,18 +83,18 @@ onBeforeUnmount(() => {
     ref="region"
     role="status"
     aria-live="polite"
-    class="pointer-events-none fixed inset-x-0 bottom-0 z-40 flex flex-col items-center gap-2 px-4 pb-4 sm:px-6"
+    class="pointer-events-none fixed inset-x-0 bottom-7 z-[60] flex flex-col items-center gap-2 px-4 sm:px-6"
   >
     <TransitionGroup
       enter-active-class="transition-[transform,opacity] duration-200 ease-out motion-reduce:transition-none"
-      enter-from-class="translate-y-2 opacity-0"
+      enter-from-class="translate-y-3 scale-[0.96] opacity-0"
       leave-active-class="transition-[transform,opacity] duration-150 ease-out motion-reduce:transition-none"
-      leave-to-class="translate-y-1 opacity-0"
+      leave-to-class="translate-y-1 scale-[0.98] opacity-0"
     >
       <div
         v-for="toast in toasts"
         :key="toast.id"
-        class="pointer-events-auto flex w-full items-start gap-3 rounded-md border border-line bg-canvas px-4 py-3 text-sm shadow-overlay sm:w-auto sm:max-w-lg"
+        class="pointer-events-auto flex w-full items-start gap-3 rounded-md border border-raised-line bg-raised px-4 py-3 text-sm shadow-float sm:w-auto sm:max-w-lg"
         data-testid="toast"
         @mouseenter="pause(toast)"
         @mouseleave="resume(toast)"

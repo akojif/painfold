@@ -108,11 +108,41 @@ test.describe('during a review', () => {
   })
 })
 
+test.describe('a dropped file that does not open', () => {
+  test('shows its message on the drop sheet first, then the sheet shrinks into the toast', async ({ page }) => {
+    await page.goto('/')
+    await drop(page, 'interview.docx', docx())
+    const sheet = page.getByTestId('drop-sheet')
+    await expect(sheet).toHaveText(DOCUMENT_NOTE)
+    await expect(toast(page)).toHaveCount(0)
+    await expect(toast(page)).toContainText(DOCUMENT_NOTE, { timeout: 4000 })
+    await expect(toast(page).getByRole('link', { name: 'See the roadmap' })).toBeVisible()
+    await expect(page.getByTestId('drop-overlay')).toHaveCount(0)
+  })
+
+  test('a file chosen in the picker goes straight to the toast', async ({ page }) => {
+    await page.goto('/')
+    await page.getByTestId('file-input').setInputFiles({ name: 'photo.png', mimeType: 'image/png', buffer: Buffer.from([0x89, 0x50, 0x4E, 0x47]) })
+    await expect(toast(page)).toBeVisible({ timeout: 1000 })
+    await expect(page.getByTestId('drop-overlay')).toHaveCount(0)
+  })
+
+  test.describe('with reduced motion', () => {
+    test.use({ reducedMotion: 'reduce' })
+    test('the toast simply appears', async ({ page }) => {
+      await page.goto('/')
+      await drop(page, 'interview.docx', docx())
+      await expect(toast(page)).toContainText(DOCUMENT_NOTE, { timeout: 1000 })
+      await expect(page.getByTestId('drop-sheet')).toHaveCount(0)
+    })
+  })
+})
+
 test.describe('the toast', () => {
   test('leaves after about 8 seconds, but not while hovered or focused', async ({ page }) => {
     await page.clock.install()
     await page.goto('/')
-    await drop(page, 'interview.docx', docx())
+    await page.getByTestId('file-input').setInputFiles({ name: 'interview.docx', mimeType: 'application/octet-stream', buffer: docx() })
     await expect(toast(page)).toBeVisible()
     await toast(page).hover()
     await page.clock.runFor(10_000)
@@ -121,7 +151,7 @@ test.describe('the toast', () => {
     await page.clock.runFor(9_000)
     await expect(toast(page)).toHaveCount(0)
 
-    await drop(page, 'interview.docx', docx())
+    await page.getByTestId('file-input').setInputFiles({ name: 'interview.docx', mimeType: 'application/octet-stream', buffer: docx() })
     await toast(page).getByRole('link', { name: 'See the roadmap' }).focus()
     await page.clock.runFor(10_000)
     await expect(toast(page)).toBeVisible()
@@ -138,6 +168,17 @@ test.describe('the toast', () => {
     const bar = (await page.locator('[data-toast-avoid]').first().boundingBox())!
     const shown = (await toast(page).boundingBox())!
     expect(shown.y + shown.height).toBeLessThanOrEqual(bar.y + 1)
+  })
+
+  test('floats above the footer, on its own raised surface', async ({ page }) => {
+    await page.goto('/')
+    await drop(page, 'photo.png', Buffer.from([0x89, 0x50, 0x4E, 0x47]))
+    await expect(toast(page)).toBeVisible({ timeout: 4000 })
+    const footer = (await page.locator('footer').boundingBox())!
+    const shown = (await toast(page).boundingBox())!
+    expect(shown.y + shown.height).toBeLessThanOrEqual(footer.y - 24)
+    const colours = await toast(page).evaluate(element => [getComputedStyle(element).backgroundColor, getComputedStyle(element).boxShadow])
+    expect(colours[1]).not.toBe('none')
   })
 
   test.describe('on a phone', () => {

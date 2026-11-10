@@ -26,7 +26,7 @@ const facts = computed(() => [...(showNotice.value ? ['privacy.notice'] : []), '
 // A file can be dropped anywhere, on every step. Without this a browser would
 // open a dropped file itself and leave the app, losing everything in memory.
 const { openPicked } = useOpenFile()
-const { dragging } = useFileDrop(file => void openPicked(file))
+const { dragging } = useFileDrop(file => void openPicked(file, { dropped: true }))
 
 /** Back to the start screen with nothing open, after asking if work would be lost. */
 async function startOver() {
@@ -100,7 +100,10 @@ onBeforeUnmount(() => window.removeEventListener('beforeunload', onBeforeUnload)
       </main>
     </div>
 
-    <footer class="border-t border-line">
+    <footer
+      class="border-t border-line"
+      data-toast-avoid
+    >
       <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-6 gap-y-2 px-4 py-4 text-sm text-fg-muted sm:px-6">
         <!-- What Painfold promises, each with a teal dot like the header's network indicator. -->
         <ul
