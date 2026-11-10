@@ -281,13 +281,17 @@
       "style": "Styles",
       "font": "Font",
       "data": "App data",
-      "other": "Other"
+      "other": "Other",
+      "model": "Name model",
+      "runtime": "Model runtime"
     },
     "otherSite": "Another site",
-    "allOwn": "All requests went to this site ({host}): the app's own code, fonts and text.",
+    "allOwn": "All requests went to this site ({host}): the app's own code, fonts and text, and the name model if you downloaded it.",
     "bytes": "{n} B",
     "kilobytes": "{n} kB",
-    "close": "Close"
+    "close": "Close",
+    "stored": "From this browser",
+    "megabytes": "{n} MB"
   },
   "report": {
     "title": "Painfold cleaning report",
@@ -430,5 +434,34 @@
     "label": "Language",
     "en": "English",
     "de": "German"
+  },
+  "nameModel": {
+    "heading": "Names and places",
+    "explain": "Names and places need a name model: {size}, downloaded once from this site and kept in this browser. Your file is not sent anywhere.",
+    "download": "Download name model ({size})",
+    "downloadInline": "Download the name model ({size})",
+    "notChecked": "Names aren't checked.",
+    "costly": "This is a large download. Consider Wi-Fi.",
+    "progress": "Downloading the name model: {loaded} of {total} MB",
+    "progressLabel": "Name model download",
+    "background": "You can start the review now. The download goes on in the background.",
+    "cancel": "Cancel",
+    "stored": "Name model stored in this browser ({size}).",
+    "notStored": "This browser had no room to keep the name model. It works for this visit and downloads again next time.",
+    "remove": "Remove",
+    "failed": "The download stopped at {loaded} of {total} MB. Check the connection and try again.",
+    "withoutIt": "Everything else is checked without it.",
+    "retry": "Try again",
+    "offline": "You're offline. The name model can be downloaded once you're back online; everything else works now.",
+    "offlineInline": "Names aren't checked. You're offline.",
+    "megabytes": "{n} MB",
+    "announce": {
+      "started": "Downloading the name model.",
+      "done": "Name model downloaded.",
+      "failed": "The name model download stopped.",
+      "cancelled": "Download cancelled.",
+      "removed": "Name model removed from this browser.",
+      "offline": "You're offline."
+    }
   }
 }

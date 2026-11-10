@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { nameDetections, type ModelToken } from '../../core/detect/names'
-import { handleNamesRequest, type DetectResponse, type NameModel } from '../../core/detect/worker-protocol'
+import { handleNameRequest, type NameModel, type NameResponse } from '../../core/detect/worker-protocol'
 
 // Token sequences as the name model (DistilBERT multilingual NER) returns them.
 const tokens = (spec: string): ModelToken[] => spec.split(' ').map((pair) => {
@@ -49,11 +49,11 @@ describe('nameDetections', () => {
   })
 })
 
-describe('handleNamesRequest', () => {
+describe('handleNameRequest', () => {
   const fakeModel = (labelled: string[]): NameModel => ({
     async load(onProgress) {
-      onProgress(50, 100)
-      onProgress(100, 100)
+      onProgress(50)
+      onProgress(100)
     },
     async label(text) {
       labelled.push(text)
@@ -61,30 +61,36 @@ describe('handleNamesRequest', () => {
     },
   })
 
+  it('loads the model on its own, reporting the bytes downloaded', async () => {
+    const sent: NameResponse[] = []
+    await handleNameRequest({ kind: 'load', id: 3, ortPath: '/ort/x/' }, response => sent.push(response), fakeModel([]))
+    expect(sent).toEqual([{ kind: 'model-progress', id: 3, loaded: 50 }, { kind: 'model-progress', id: 3, loaded: 100 }, { kind: 'loaded', id: 3 }])
+  })
+
   it('reports the model download, then finds names cell by cell', async () => {
-    const sent: DetectResponse[] = []
+    const sent: NameResponse[] = []
     const rows = [['1', 'Anna rief an'], ['2', 'Alles gut'], ['3', '2026-01-04']]
-    await handleNamesRequest({ kind: 'names', id: 4, rows, columns: [1], ortPath: '/ort/x/' }, response => sent.push(response), fakeModel([]))
-    expect(sent.filter(r => r.kind === 'model-progress')).toEqual([{ kind: 'model-progress', id: 4, loaded: 50, total: 100 }, { kind: 'model-progress', id: 4, loaded: 100, total: 100 }])
+    await handleNameRequest({ kind: 'names', id: 4, rows, columns: [1], ortPath: '/ort/x/' }, response => sent.push(response), fakeModel([]))
+    expect(sent.filter(r => r.kind === 'model-progress')).toEqual([{ kind: 'model-progress', id: 4, loaded: 50 }, { kind: 'model-progress', id: 4, loaded: 100 }])
     expect(sent.at(-1)).toEqual({ kind: 'result', id: 4, cells: [{ row: 0, column: 1, detections: [{ type: 'NAME', start: 0, end: 4, value: 'Anna' }] }] })
   })
 
   it('labels each distinct text once and skips cells without letters', async () => {
     const labelled: string[] = []
     const rows = [['Anna rief an'], ['Anna rief an'], ['12345'], ['']]
-    await handleNamesRequest({ kind: 'names', id: 1, rows, columns: [0], ortPath: '/ort/x/' }, () => {}, fakeModel(labelled))
+    await handleNameRequest({ kind: 'names', id: 1, rows, columns: [0], ortPath: '/ort/x/' }, () => {}, fakeModel(labelled))
     expect(labelled).toEqual(['Anna rief an'])
   })
 
   it('reports a failure without echoing the text', async () => {
-    const sent: DetectResponse[] = []
+    const sent: NameResponse[] = []
     const failing: NameModel = {
       load: async () => {
         throw new Error('Model files missing')
       },
       label: async () => [],
     }
-    await handleNamesRequest({ kind: 'names', id: 2, rows: [['Anna aus Wien']], columns: [0], ortPath: '/ort/x/' }, response => sent.push(response), failing)
+    await handleNameRequest({ kind: 'names', id: 2, rows: [['Anna aus Wien']], columns: [0], ortPath: '/ort/x/' }, response => sent.push(response), failing)
     expect(sent).toEqual([{ kind: 'error', id: 2, message: 'Model files missing' }])
   })
 })

@@ -1,29 +1,48 @@
-// Messages between the page and the detection worker. The handlers are plain
-// code so they can be tested without a browser; app/workers/detect.worker.ts
-// only connects them to the worker's message events.
+// Messages between the page and the two detection workers. The handlers are
+// plain code so they can be tested without a browser; app/workers/ only
+// connects them to the workers' message events.
+//
+// The rules run in detect.worker.ts. The name model runs in names.worker.ts on
+// its own, so a download can be cancelled by stopping that worker while the
+// rules keep working.
 import { nameDetections, type ModelToken } from './names.ts'
 import { countByColumn, detectTable, type CellDetections, type ColumnCounts } from './table.ts'
 
 // detect: every finding in the given columns, for review.
 // survey: only how much personal data each column holds, so a column kept
 // as is can be flagged before anything is reviewed.
-// names: names and places in the given columns, found by the name model.
-// ortPath is where this build serves the ONNX Runtime WebAssembly files.
-export type DetectRequest
-  = | { kind: 'detect' | 'survey', id: number, rows: string[][], columns: number[] }
-    | { kind: 'names', id: number, rows: string[][], columns: number[], ortPath: string }
+export type DetectRequest = { kind: 'detect' | 'survey', id: number, rows: string[][], columns: number[] }
 
 export type DetectResponse
   = | { kind: 'progress', id: number, done: number, total: number }
-    | { kind: 'model-progress', id: number, loaded: number, total: number }
     | { kind: 'result', id: number, cells: CellDetections[] }
     | { kind: 'survey', id: number, columns: ColumnCounts[] }
     | { kind: 'error', id: number, message: string }
 
+// load: download the name model (or open it from the browser's cache).
+// names: names and places in the given columns, loading the model first if needed.
+// ortPath is where this build serves the ONNX Runtime WebAssembly files.
+export type NameRequest
+  = | { kind: 'load', id: number, ortPath: string }
+    | { kind: 'names', id: number, rows: string[][], columns: number[], ortPath: string }
+
+// resources: the requests the worker made, for the "What leaves your browser"
+// panel, which cannot see a worker's requests on its own.
+export type NameResponse
+  = | { kind: 'model-progress', id: number, loaded: number }
+    | { kind: 'loaded', id: number }
+    | { kind: 'progress', id: number, done: number, total: number }
+    | { kind: 'result', id: number, cells: CellDetections[] }
+    | { kind: 'error', id: number, message: string }
+    | { kind: 'resources', entries: ResourceRecord[] }
+
+/** A request from the browser's Resource Timing, reduced to what the network panel shows. */
+export type ResourceRecord = { name: string, initiatorType: string, transferSize: number, encodedBodySize: number }
+
 // Only the error message is sent back, never the text that was being scanned.
 const errorMessage = (error: unknown) => (error instanceof Error ? error.message : 'Detection failed')
 
-export function handleDetectRequest(request: Extract<DetectRequest, { kind: 'detect' | 'survey' }>, send: (response: DetectResponse) => void): void {
+export function handleDetectRequest(request: DetectRequest, send: (response: DetectResponse) => void): void {
   try {
     const cells = detectTable(request.rows, request.columns, {
       onProgress: (done, total) => send({ kind: 'progress', id: request.id, done, total }),
@@ -36,21 +55,26 @@ export function handleDetectRequest(request: Extract<DetectRequest, { kind: 'det
   }
 }
 
-/** The name model as the worker sees it: load it once (reporting download progress), then label texts. */
+/** The name model as the worker sees it: load it once (reporting bytes downloaded so far), then label texts. */
 export type NameModel = {
-  load: (onProgress: (loaded: number, total: number) => void) => Promise<void>
+  load: (onProgress: (loaded: number) => void) => Promise<void>
   label: (text: string) => Promise<ModelToken[]>
 }
 
 const PROGRESS_EVERY = 50
 
 /**
- * Finds names and places in the given columns. Identical texts are labelled
- * once, and cells without letters are skipped: they cannot hold a name.
+ * Loads the name model; for a names request, then finds names and places in
+ * the given columns. Identical texts are labelled once, and cells without
+ * letters are skipped: they cannot hold a name.
  */
-export async function handleNamesRequest(request: Extract<DetectRequest, { kind: 'names' }>, send: (response: DetectResponse) => void, model: NameModel): Promise<void> {
+export async function handleNameRequest(request: NameRequest, send: (response: NameResponse) => void, model: NameModel): Promise<void> {
   try {
-    await model.load((loaded, total) => send({ kind: 'model-progress', id: request.id, loaded, total }))
+    await model.load(loaded => send({ kind: 'model-progress', id: request.id, loaded }))
+    if (request.kind === 'load') {
+      send({ kind: 'loaded', id: request.id })
+      return
+    }
     const cells: CellDetections[] = []
     const seen = new Map<string, ReturnType<typeof nameDetections>>()
     for (const [row, values] of request.rows.entries()) {

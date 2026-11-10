@@ -1,6 +1,6 @@
 import tailwindcss from '@tailwindcss/vite'
-import { MODEL_PATH, ORT_PREFIX } from './deploy/model'
-import { ortVersion } from './deploy/ort-version'
+import { MODEL_BYTES, MODEL_PATH, ORT_PREFIX } from './deploy/model'
+import { ortBytes, ortVersion } from './deploy/ort-version'
 import { version } from './package.json'
 
 // Painfold is a fully static site: everything that touches a user's file runs
@@ -29,8 +29,17 @@ export default defineNuxtConfig({
 
   // The cleaning report names the Painfold version that produced it.
   // The name model and its runtime are served from this site, never from Hugging Face or a CDN.
+  // downloadBytes is what a first download costs (model and runtime), shown before it starts.
+  // nameModel hides the download on the production site until names are used in the review
+  // (ROADMAP Stage 2, #65); previews, CI and local builds show it.
   runtimeConfig: {
-    public: { version, modelPath: MODEL_PATH, ortPath: `${ORT_PREFIX}${ortVersion()}/` },
+    public: {
+      version,
+      modelPath: MODEL_PATH,
+      ortPath: `${ORT_PREFIX}${ortVersion()}/`,
+      downloadBytes: MODEL_BYTES + ortBytes(),
+      nameModel: process.env.VERCEL_ENV !== 'production',
+    },
   },
 
   compatibilityDate: '2026-11-01',

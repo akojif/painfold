@@ -19,12 +19,16 @@ const PUBLIC = 'public'
 
 export const sha256 = (bytes: Uint8Array) => createHash('sha256').update(bytes).digest('hex')
 
-async function readIfValid(path: string, expected: string): Promise<Uint8Array | undefined> {
+type Expected = { sha256: string, bytes: number }
+
+const matches = (bytes: Uint8Array, expected: Expected) => bytes.byteLength === expected.bytes && sha256(bytes) === expected.sha256
+
+async function readIfValid(path: string, expected: Expected): Promise<Uint8Array | undefined> {
   const bytes = await readFile(path).catch(() => undefined)
-  return bytes && sha256(bytes) === expected ? bytes : undefined
+  return bytes && matches(bytes, expected) ? bytes : undefined
 }
 
-async function cachedFile(file: string, expected: string): Promise<string> {
+async function cachedFile(file: string, expected: Expected): Promise<string> {
   const path = join(CACHE, file)
   if (await readIfValid(path, expected)) return path
 
@@ -32,8 +36,7 @@ async function cachedFile(file: string, expected: string): Promise<string> {
   const response = await fetch(url)
   if (!response.ok) throw new Error(`Downloading ${url} failed: ${response.status}`)
   const bytes = new Uint8Array(await response.arrayBuffer())
-  const actual = sha256(bytes)
-  if (actual !== expected) throw new Error(`${file} has SHA-256 ${actual}, expected ${expected}. Not using it.`)
+  if (!matches(bytes, expected)) throw new Error(`${file} has SHA-256 ${sha256(bytes)} and ${bytes.byteLength} bytes, expected ${expected.sha256} and ${expected.bytes}. Not using it.`)
 
   await mkdir(dirname(path), { recursive: true })
   await writeFile(`${path}.part`, bytes)

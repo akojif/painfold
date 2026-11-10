@@ -74,7 +74,7 @@ test('the name model is served from this site, exactly the pinned file, cached f
   expect(response.status()).toBe(200)
   expect(response.headers()['cache-control']).toBe('public, max-age=31536000, immutable')
   const { createHash } = await import('node:crypto')
-  expect(createHash('sha256').update(await response.body()).digest('hex')).toBe(NAME_MODEL.files['onnx/model_int8.onnx'])
+  expect(createHash('sha256').update(await response.body()).digest('hex')).toBe(NAME_MODEL.files['onnx/model_int8.onnx']!.sha256)
 })
 
 test('the ONNX Runtime WebAssembly files are served from this site with a policy that allows WebAssembly', async ({ request }) => {

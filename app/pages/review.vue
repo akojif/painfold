@@ -330,6 +330,10 @@ onBeforeUnmount(() => {
           :style="{ transform: `scaleX(${progress})` }"
         />
       </div>
+      <NameModelDownload
+        compact
+        class="mt-3"
+      />
 
       <div
         v-if="finished"
