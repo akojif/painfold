@@ -22,7 +22,7 @@ describe('roadmap page', () => {
   })
 
   it('highlights the stage in progress, or else the latest available one', () => {
-    expect(currentStage()?.id).toBe('clean')
+    expect(currentStage()?.id).toBe('names')
     expect(currentStage([
       { id: 'clean', version: 'v0.1', status: 'available' },
       { id: 'names', version: 'v0.2', status: 'inProgress' },
