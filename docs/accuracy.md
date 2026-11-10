@@ -1,6 +1,6 @@
 # Accuracy and performance
 
-How well Painfold finds personal data, and how fast it is. The tables are written by `npm run eval -- --write`, and a unit test fails when they are out of date.
+How well Painfold finds personal data, and how fast it is. The tables are written by `npm run eval -- --write`, which also writes `data/eval/accuracy.json` for the [Accuracy page](https://painfold.vercel.app/accuracy) in the app; a unit test fails when either is out of date.
 
 ## How it is measured
 

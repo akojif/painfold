@@ -1,0 +1,950 @@
+{
+  "target": 0.9,
+  "sets": {
+    "generated": {
+      "types": {
+        "EMAIL": {
+          "de": {
+            "labelled": 82,
+            "found": 82,
+            "detected": 82,
+            "correct": 82
+          },
+          "en": {
+            "labelled": 88,
+            "found": 88,
+            "detected": 88,
+            "correct": 88
+          }
+        },
+        "PHONE": {
+          "de": {
+            "labelled": 74,
+            "found": 74,
+            "detected": 74,
+            "correct": 74
+          },
+          "en": {
+            "labelled": 83,
+            "found": 83,
+            "detected": 83,
+            "correct": 83
+          }
+        },
+        "IBAN": {
+          "de": {
+            "labelled": 50,
+            "found": 50,
+            "detected": 50,
+            "correct": 50
+          },
+          "en": {
+            "labelled": 50,
+            "found": 50,
+            "detected": 50,
+            "correct": 50
+          }
+        },
+        "CARD": {
+          "de": {
+            "labelled": 50,
+            "found": 50,
+            "detected": 50,
+            "correct": 50
+          },
+          "en": {
+            "labelled": 50,
+            "found": 50,
+            "detected": 50,
+            "correct": 50
+          }
+        },
+        "SVNR": {
+          "de": {
+            "labelled": 91,
+            "found": 91,
+            "detected": 91,
+            "correct": 91
+          },
+          "en": {
+            "labelled": 50,
+            "found": 50,
+            "detected": 50,
+            "correct": 50
+          }
+        },
+        "VAT_ID": {
+          "de": {
+            "labelled": 50,
+            "found": 50,
+            "detected": 50,
+            "correct": 50
+          },
+          "en": {
+            "labelled": 50,
+            "found": 50,
+            "detected": 50,
+            "correct": 50
+          }
+        },
+        "URL": {
+          "de": {
+            "labelled": 50,
+            "found": 50,
+            "detected": 50,
+            "correct": 50
+          },
+          "en": {
+            "labelled": 50,
+            "found": 50,
+            "detected": 50,
+            "correct": 50
+          }
+        },
+        "IP": {
+          "de": {
+            "labelled": 75,
+            "found": 75,
+            "detected": 75,
+            "correct": 75
+          },
+          "en": {
+            "labelled": 50,
+            "found": 50,
+            "detected": 50,
+            "correct": 50
+          }
+        },
+        "DATE_OF_BIRTH": {
+          "de": {
+            "labelled": 92,
+            "found": 92,
+            "detected": 92,
+            "correct": 92
+          },
+          "en": {
+            "labelled": 75,
+            "found": 75,
+            "detected": 75,
+            "correct": 75
+          }
+        },
+        "ADDRESS": {
+          "de": {
+            "labelled": 82,
+            "found": 82,
+            "detected": 82,
+            "correct": 82
+          },
+          "en": {
+            "labelled": 94,
+            "found": 94,
+            "detected": 94,
+            "correct": 94
+          }
+        },
+        "POSTCODE": {
+          "de": {
+            "labelled": 82,
+            "found": 82,
+            "detected": 82,
+            "correct": 82
+          },
+          "en": {
+            "labelled": 94,
+            "found": 94,
+            "detected": 94,
+            "correct": 94
+          }
+        },
+        "NAME": {
+          "de": {
+            "labelled": 189,
+            "found": 187,
+            "detected": 187,
+            "correct": 187
+          },
+          "en": {
+            "labelled": 172,
+            "found": 157,
+            "detected": 164,
+            "correct": 164
+          }
+        },
+        "PLACE": {
+          "de": {
+            "labelled": 82,
+            "found": 80,
+            "detected": 81,
+            "correct": 80
+          },
+          "en": {
+            "labelled": 94,
+            "found": 73,
+            "detected": 75,
+            "correct": 73
+          }
+        }
+      },
+      "any": {
+        "de": {
+          "labelled": 1049,
+          "found": 1046,
+          "detected": 1046,
+          "correct": 1046
+        },
+        "en": {
+          "labelled": 1000,
+          "found": 964,
+          "detected": 973,
+          "correct": 973
+        }
+      }
+    },
+    "hard-cases": {
+      "types": {
+        "EMAIL": {
+          "de": {
+            "labelled": 5,
+            "found": 5,
+            "detected": 5,
+            "correct": 5
+          },
+          "en": {
+            "labelled": 5,
+            "found": 4,
+            "detected": 4,
+            "correct": 4
+          }
+        },
+        "PHONE": {
+          "de": {
+            "labelled": 7,
+            "found": 7,
+            "detected": 7,
+            "correct": 7
+          },
+          "en": {
+            "labelled": 4,
+            "found": 4,
+            "detected": 4,
+            "correct": 4
+          }
+        },
+        "IBAN": {
+          "de": {
+            "labelled": 5,
+            "found": 5,
+            "detected": 5,
+            "correct": 5
+          },
+          "en": {
+            "labelled": 2,
+            "found": 2,
+            "detected": 2,
+            "correct": 2
+          }
+        },
+        "CARD": {
+          "de": {
+            "labelled": 3,
+            "found": 3,
+            "detected": 3,
+            "correct": 3
+          },
+          "en": {
+            "labelled": 3,
+            "found": 3,
+            "detected": 3,
+            "correct": 3
+          }
+        },
+        "SVNR": {
+          "de": {
+            "labelled": 6,
+            "found": 6,
+            "detected": 7,
+            "correct": 6
+          },
+          "en": {
+            "labelled": 0,
+            "found": 0,
+            "detected": 0,
+            "correct": 0
+          }
+        },
+        "VAT_ID": {
+          "de": {
+            "labelled": 5,
+            "found": 5,
+            "detected": 5,
+            "correct": 5
+          },
+          "en": {
+            "labelled": 2,
+            "found": 2,
+            "detected": 2,
+            "correct": 2
+          }
+        },
+        "URL": {
+          "de": {
+            "labelled": 2,
+            "found": 2,
+            "detected": 2,
+            "correct": 2
+          },
+          "en": {
+            "labelled": 3,
+            "found": 3,
+            "detected": 3,
+            "correct": 3
+          }
+        },
+        "IP": {
+          "de": {
+            "labelled": 0,
+            "found": 0,
+            "detected": 0,
+            "correct": 0
+          },
+          "en": {
+            "labelled": 3,
+            "found": 3,
+            "detected": 3,
+            "correct": 3
+          }
+        },
+        "DATE_OF_BIRTH": {
+          "de": {
+            "labelled": 4,
+            "found": 4,
+            "detected": 4,
+            "correct": 4
+          },
+          "en": {
+            "labelled": 2,
+            "found": 2,
+            "detected": 2,
+            "correct": 2
+          }
+        },
+        "ADDRESS": {
+          "de": {
+            "labelled": 5,
+            "found": 5,
+            "detected": 5,
+            "correct": 5
+          },
+          "en": {
+            "labelled": 2,
+            "found": 1,
+            "detected": 2,
+            "correct": 2
+          }
+        },
+        "POSTCODE": {
+          "de": {
+            "labelled": 4,
+            "found": 4,
+            "detected": 4,
+            "correct": 4
+          },
+          "en": {
+            "labelled": 2,
+            "found": 2,
+            "detected": 2,
+            "correct": 2
+          }
+        },
+        "NAME": {
+          "de": {
+            "labelled": 2,
+            "found": 1,
+            "detected": 1,
+            "correct": 1
+          },
+          "en": {
+            "labelled": 1,
+            "found": 1,
+            "detected": 1,
+            "correct": 1
+          }
+        },
+        "PLACE": {
+          "de": {
+            "labelled": 5,
+            "found": 5,
+            "detected": 5,
+            "correct": 5
+          },
+          "en": {
+            "labelled": 2,
+            "found": 2,
+            "detected": 2,
+            "correct": 2
+          }
+        }
+      },
+      "any": {
+        "de": {
+          "labelled": 53,
+          "found": 52,
+          "detected": 53,
+          "correct": 52
+        },
+        "en": {
+          "labelled": 31,
+          "found": 29,
+          "detected": 30,
+          "correct": 30
+        }
+      }
+    },
+    "names-test": {
+      "types": {
+        "NAME": {
+          "de": {
+            "labelled": 156,
+            "found": 153,
+            "detected": 154,
+            "correct": 154
+          },
+          "en": {
+            "labelled": 169,
+            "found": 162,
+            "detected": 164,
+            "correct": 164
+          }
+        },
+        "PLACE": {
+          "de": {
+            "labelled": 10,
+            "found": 10,
+            "detected": 10,
+            "correct": 10
+          },
+          "en": {
+            "labelled": 2,
+            "found": 2,
+            "detected": 3,
+            "correct": 2
+          }
+        }
+      },
+      "any": {
+        "de": {
+          "labelled": 166,
+          "found": 163,
+          "detected": 164,
+          "correct": 164
+        },
+        "en": {
+          "labelled": 171,
+          "found": 165,
+          "detected": 167,
+          "correct": 167
+        }
+      }
+    },
+    "long-texts": {
+      "types": {
+        "NAME": {
+          "de": {
+            "labelled": 12,
+            "found": 12,
+            "detected": 12,
+            "correct": 12
+          },
+          "en": {
+            "labelled": 12,
+            "found": 12,
+            "detected": 12,
+            "correct": 12
+          }
+        },
+        "PLACE": {
+          "de": {
+            "labelled": 3,
+            "found": 2,
+            "detected": 2,
+            "correct": 2
+          },
+          "en": {
+            "labelled": 3,
+            "found": 3,
+            "detected": 3,
+            "correct": 3
+          }
+        }
+      },
+      "any": {
+        "de": {
+          "labelled": 15,
+          "found": 14,
+          "detected": 14,
+          "correct": 14
+        },
+        "en": {
+          "labelled": 15,
+          "found": 15,
+          "detected": 15,
+          "correct": 15
+        }
+      }
+    }
+  },
+  "names": {
+    "groups": [
+      "german-speaking",
+      "english",
+      "bosnian-serbian-croatian",
+      "turkish",
+      "romanian",
+      "hungarian",
+      "polish",
+      "ukrainian",
+      "arabic",
+      "afghan",
+      "african",
+      "south-asian",
+      "east-asian"
+    ],
+    "removal": {
+      "german-speaking": {
+        "de": {
+          "labelled": 12,
+          "found": 12
+        },
+        "en": {
+          "labelled": 13,
+          "found": 13
+        }
+      },
+      "english": {
+        "de": {
+          "labelled": 12,
+          "found": 12
+        },
+        "en": {
+          "labelled": 13,
+          "found": 11
+        }
+      },
+      "bosnian-serbian-croatian": {
+        "de": {
+          "labelled": 12,
+          "found": 12
+        },
+        "en": {
+          "labelled": 13,
+          "found": 12
+        }
+      },
+      "turkish": {
+        "de": {
+          "labelled": 12,
+          "found": 12
+        },
+        "en": {
+          "labelled": 13,
+          "found": 13
+        }
+      },
+      "romanian": {
+        "de": {
+          "labelled": 12,
+          "found": 12
+        },
+        "en": {
+          "labelled": 13,
+          "found": 13
+        }
+      },
+      "hungarian": {
+        "de": {
+          "labelled": 12,
+          "found": 12
+        },
+        "en": {
+          "labelled": 13,
+          "found": 12
+        }
+      },
+      "polish": {
+        "de": {
+          "labelled": 12,
+          "found": 11
+        },
+        "en": {
+          "labelled": 13,
+          "found": 12
+        }
+      },
+      "ukrainian": {
+        "de": {
+          "labelled": 12,
+          "found": 12
+        },
+        "en": {
+          "labelled": 13,
+          "found": 13
+        }
+      },
+      "arabic": {
+        "de": {
+          "labelled": 12,
+          "found": 12
+        },
+        "en": {
+          "labelled": 13,
+          "found": 13
+        }
+      },
+      "afghan": {
+        "de": {
+          "labelled": 12,
+          "found": 12
+        },
+        "en": {
+          "labelled": 13,
+          "found": 13
+        }
+      },
+      "african": {
+        "de": {
+          "labelled": 12,
+          "found": 11
+        },
+        "en": {
+          "labelled": 13,
+          "found": 12
+        }
+      },
+      "south-asian": {
+        "de": {
+          "labelled": 12,
+          "found": 11
+        },
+        "en": {
+          "labelled": 13,
+          "found": 13
+        }
+      },
+      "east-asian": {
+        "de": {
+          "labelled": 12,
+          "found": 12
+        },
+        "en": {
+          "labelled": 13,
+          "found": 13
+        }
+      }
+    },
+    "typeCorrect": {
+      "german-speaking": {
+        "de": {
+          "labelled": 12,
+          "found": 12
+        },
+        "en": {
+          "labelled": 13,
+          "found": 13
+        }
+      },
+      "english": {
+        "de": {
+          "labelled": 12,
+          "found": 12
+        },
+        "en": {
+          "labelled": 13,
+          "found": 11
+        }
+      },
+      "bosnian-serbian-croatian": {
+        "de": {
+          "labelled": 12,
+          "found": 12
+        },
+        "en": {
+          "labelled": 13,
+          "found": 12
+        }
+      },
+      "turkish": {
+        "de": {
+          "labelled": 12,
+          "found": 12
+        },
+        "en": {
+          "labelled": 13,
+          "found": 13
+        }
+      },
+      "romanian": {
+        "de": {
+          "labelled": 12,
+          "found": 12
+        },
+        "en": {
+          "labelled": 13,
+          "found": 13
+        }
+      },
+      "hungarian": {
+        "de": {
+          "labelled": 12,
+          "found": 12
+        },
+        "en": {
+          "labelled": 13,
+          "found": 12
+        }
+      },
+      "polish": {
+        "de": {
+          "labelled": 12,
+          "found": 11
+        },
+        "en": {
+          "labelled": 13,
+          "found": 12
+        }
+      },
+      "ukrainian": {
+        "de": {
+          "labelled": 12,
+          "found": 12
+        },
+        "en": {
+          "labelled": 13,
+          "found": 13
+        }
+      },
+      "arabic": {
+        "de": {
+          "labelled": 12,
+          "found": 12
+        },
+        "en": {
+          "labelled": 13,
+          "found": 13
+        }
+      },
+      "afghan": {
+        "de": {
+          "labelled": 12,
+          "found": 12
+        },
+        "en": {
+          "labelled": 13,
+          "found": 13
+        }
+      },
+      "african": {
+        "de": {
+          "labelled": 12,
+          "found": 11
+        },
+        "en": {
+          "labelled": 13,
+          "found": 11
+        }
+      },
+      "south-asian": {
+        "de": {
+          "labelled": 12,
+          "found": 11
+        },
+        "en": {
+          "labelled": 13,
+          "found": 13
+        }
+      },
+      "east-asian": {
+        "de": {
+          "labelled": 12,
+          "found": 12
+        },
+        "en": {
+          "labelled": 13,
+          "found": 13
+        }
+      }
+    },
+    "withoutList": {
+      "german-speaking": {
+        "de": {
+          "labelled": 12,
+          "found": 11
+        },
+        "en": {
+          "labelled": 13,
+          "found": 12
+        }
+      },
+      "english": {
+        "de": {
+          "labelled": 12,
+          "found": 11
+        },
+        "en": {
+          "labelled": 13,
+          "found": 11
+        }
+      },
+      "bosnian-serbian-croatian": {
+        "de": {
+          "labelled": 12,
+          "found": 11
+        },
+        "en": {
+          "labelled": 13,
+          "found": 12
+        }
+      },
+      "turkish": {
+        "de": {
+          "labelled": 12,
+          "found": 11
+        },
+        "en": {
+          "labelled": 13,
+          "found": 12
+        }
+      },
+      "romanian": {
+        "de": {
+          "labelled": 12,
+          "found": 11
+        },
+        "en": {
+          "labelled": 13,
+          "found": 12
+        }
+      },
+      "hungarian": {
+        "de": {
+          "labelled": 12,
+          "found": 11
+        },
+        "en": {
+          "labelled": 13,
+          "found": 12
+        }
+      },
+      "polish": {
+        "de": {
+          "labelled": 12,
+          "found": 11
+        },
+        "en": {
+          "labelled": 13,
+          "found": 12
+        }
+      },
+      "ukrainian": {
+        "de": {
+          "labelled": 12,
+          "found": 11
+        },
+        "en": {
+          "labelled": 13,
+          "found": 11
+        }
+      },
+      "arabic": {
+        "de": {
+          "labelled": 12,
+          "found": 11
+        },
+        "en": {
+          "labelled": 13,
+          "found": 12
+        }
+      },
+      "afghan": {
+        "de": {
+          "labelled": 12,
+          "found": 11
+        },
+        "en": {
+          "labelled": 13,
+          "found": 12
+        }
+      },
+      "african": {
+        "de": {
+          "labelled": 12,
+          "found": 10
+        },
+        "en": {
+          "labelled": 13,
+          "found": 11
+        }
+      },
+      "south-asian": {
+        "de": {
+          "labelled": 12,
+          "found": 10
+        },
+        "en": {
+          "labelled": 13,
+          "found": 12
+        }
+      },
+      "east-asian": {
+        "de": {
+          "labelled": 12,
+          "found": 11
+        },
+        "en": {
+          "labelled": 13,
+          "found": 12
+        }
+      }
+    },
+    "onList": 271,
+    "total": 325
+  },
+  "positions": [
+    {
+      "de": {
+        "labelled": 4,
+        "found": 4
+      },
+      "en": {
+        "labelled": 4,
+        "found": 4
+      }
+    },
+    {
+      "de": {
+        "labelled": 4,
+        "found": 4
+      },
+      "en": {
+        "labelled": 4,
+        "found": 4
+      }
+    },
+    {
+      "de": {
+        "labelled": 4,
+        "found": 4
+      },
+      "en": {
+        "labelled": 4,
+        "found": 4
+      }
+    }
+  ],
+  "model": {
+    "source": "Xenova/distilbert-base-multilingual-cased-ner-hrl",
+    "original": "Davlan/distilbert-base-multilingual-cased-ner-hrl",
+    "license": "AFL-3.0",
+    "revision": "c2a4dbf593c57f47004c5bc2d3770d311aee9c43"
+  }
+}
