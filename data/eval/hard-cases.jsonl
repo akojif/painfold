@@ -51,7 +51,7 @@
 {"id":"hard-051","lang":"en","text":"Thanks to Grace from your support team.","spans":[{"start":10,"end":15,"type":"NAME","text":"Grace"}]}
 {"id":"hard-052","lang":"de","text":"Feature request: export für unseren Steuerberater as Excel, bitte.","spans":[]}
 {"id":"hard-053","lang":"en","text":"Works fine. No complaints.","spans":[]}
-{"id":"hard-054","lang":"de","text":"Bitte an <a href=\"mailto:lena.gruber@example.com\">Lena</a> weiterleiten.","spans":[{"start":25,"end":48,"type":"EMAIL","text":"lena.gruber@example.com"}]}
+{"id":"hard-054","lang":"de","text":"Bitte an <a href=\"mailto:lena.gruber@example.com\">Lena</a> weiterleiten.","spans":[{"start":25,"end":48,"type":"EMAIL","text":"lena.gruber@example.com"},{"start":50,"end":54,"type":"NAME","text":"Lena"}]}
 {"id":"hard-055","lang":"en","text":"Sent from my iPhone\n\n> On 3 Mar 2026, at 09:14, m.okonkwo@example.org wrote:\n> The export is broken.","spans":[{"start":48,"end":69,"type":"EMAIL","text":"m.okonkwo@example.org"}]}
 {"id":"hard-056","lang":"en","text":"EMAIL: MARK.OKONKWO@EXAMPLE.ORG (please update)","spans":[{"start":7,"end":31,"type":"EMAIL","text":"MARK.OKONKWO@EXAMPLE.ORG"}]}
 {"id":"hard-057","lang":"de","text":"Antwort bitte an anna.feldmoser@example.com.Danke!","spans":[{"start":17,"end":43,"type":"EMAIL","text":"anna.feldmoser@example.com"}]}

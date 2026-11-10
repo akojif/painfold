@@ -19,15 +19,36 @@ import type { Detection } from '../core/detect/types.ts'
 import { PII_TYPES, type PiiType } from '../core/pii-types.ts'
 
 export type Lang = 'de' | 'en'
-export type EvalItem = { id: string, lang: Lang, text: string, spans: Array<{ start: number, end: number, type: PiiType, text: string }> }
+// group and split exist only in the hand-written name set (see scripts/fake-data/names.ts).
+export type EvalItem = { id: string, lang: Lang, group?: string, split?: 'dev' | 'test', text: string, spans: Array<{ start: number, end: number, type: PiiType, text: string }> }
 export type Score = { labelled: number, found: number, detected: number, correct: number }
 export type SetScores = { byType: Map<PiiType, Record<Lang, Score>>, anyType: Record<Lang, Score>, anyDetectedType: Record<Lang, Score> }
 export type Mistake = { id: string, kind: 'missed' | 'wrong', type: PiiType, text: string }
 
-export const SETS = [
+// The name set's dev split may be used to tune the detectors; only its test split is reported.
+export const SETS: ReadonlyArray<{ name: string, path: string, split?: 'test' }> = [
   { name: 'Generated', path: 'data/eval/generated.jsonl' },
   { name: 'Hand-written hard cases', path: 'data/eval/hard-cases.jsonl' },
-] as const
+  { name: 'Hand-written names (test split)', path: 'data/eval/names.jsonl', split: 'test' },
+]
+export const NAMES_PATH = 'data/eval/names.jsonl'
+
+// Labels for the name-origin groups in the published table, in the order of scripts/fake-data/names.ts.
+export const GROUP_NAMES: Record<string, string> = {
+  'german-speaking': 'German-speaking',
+  'english': 'English',
+  'bosnian-serbian-croatian': 'Bosnian, Serbian, Croatian',
+  'turkish': 'Turkish',
+  'romanian': 'Romanian',
+  'hungarian': 'Hungarian',
+  'polish': 'Polish',
+  'ukrainian': 'Ukrainian',
+  'arabic': 'Arabic',
+  'afghan': 'Afghan',
+  'african': 'African',
+  'south-asian': 'South Asian',
+  'east-asian': 'East Asian',
+}
 export const LANGS: readonly Lang[] = ['de', 'en']
 // Detected from Stage 2; the Stage 2 target is recorded here so it is checked against these numbers.
 export const NOT_DETECTED_YET: readonly PiiType[] = ['NAME', 'PLACE']
@@ -103,8 +124,42 @@ export function toMarkdown(results: ReadonlyArray<{ name: string, scores: SetSco
   ].join('\n')).join('\n\n')
 }
 
-export function readItems(path: string): EvalItem[] {
-  return readFileSync(path, 'utf8').trim().split('\n').map(line => JSON.parse(line) as EvalItem)
+export function readItems(path: string, split?: 'dev' | 'test'): EvalItem[] {
+  const items = readFileSync(path, 'utf8').trim().split('\n').map(line => JSON.parse(line) as EvalItem)
+  return split ? items.filter(item => item.split === split) : items
+}
+
+export type GroupRecall = { group: string, scores: Record<Lang, Pick<Score, 'labelled' | 'found'>> }
+
+/** Name recall per name-origin group and language: the share of labelled names that NAME detections cover completely. */
+export function nameRecallByGroup(items: readonly EvalItem[], find: (text: string) => Detection[] = detect): GroupRecall[] {
+  const groups = new Map<string, Record<Lang, Pick<Score, 'labelled' | 'found'>>>()
+  for (const item of items) {
+    if (!item.group) continue
+    const scores = groups.get(item.group) ?? { de: { labelled: 0, found: 0 }, en: { labelled: 0, found: 0 } }
+    const names = find(item.text).filter(found => found.type === 'NAME')
+    for (const span of item.spans.filter(span => span.type === 'NAME')) {
+      scores[item.lang].labelled++
+      if (covers(names, span.start, span.end)) scores[item.lang].found++
+    }
+    groups.set(item.group, scores)
+  }
+  return [...groups].map(([group, scores]) => ({ group, scores }))
+}
+
+/** The per-group table: recall in each language and overall, marking groups below the target. */
+export function groupMarkdown(results: readonly GroupRecall[]): string {
+  const cell = (s: Pick<Score, 'labelled' | 'found'>) => `${ratio(s.found, s.labelled)} | ${s.labelled}`
+  return [
+    `**Name recall by name-origin group (test split).** Target: ${NAME_RECALL_TARGET.toFixed(2)} for every group. The group exists only in the evaluation data; Painfold never infers anyone's origin.`,
+    '',
+    '| Name-origin group | DE recall | DE names | EN recall | EN names | Recall | Names |',
+    '| --- | ---: | ---: | ---: | ---: | ---: | ---: |',
+    ...results.map(({ group, scores }) => {
+      const all = { labelled: scores.de.labelled + scores.en.labelled, found: scores.de.found + scores.en.found }
+      return `| ${GROUP_NAMES[group] ?? group} | ${cell(scores.de)} | ${cell(scores.en)} | ${cell(all)} |`
+    }),
+  ].join('\n')
 }
 
 export const ACCURACY_PATH = 'docs/accuracy.md'
@@ -121,7 +176,8 @@ export function withAccuracy(readme: string, tables: string): string {
 
 export function currentTables(): string {
   const typeNames = JSON.parse(readFileSync('i18n/locales/en.json', 'utf8')).typeMany as Record<PiiType, string>
-  return toMarkdown(SETS.map(set => ({ name: set.name, scores: evaluate(readItems(set.path)) })), typeNames)
+  const sets = toMarkdown(SETS.map(set => ({ name: set.name, scores: evaluate(readItems(set.path, set.split)) })), typeNames)
+  return `${sets}\n\n${groupMarkdown(nameRecallByGroup(readItems(NAMES_PATH, 'test')))}`
 }
 
 if (import.meta.main) {
@@ -130,7 +186,7 @@ if (import.meta.main) {
   if (process.argv.includes('--misses')) {
     for (const set of SETS) {
       const mistakes: Mistake[] = []
-      evaluate(readItems(set.path), detect, mistakes)
+      evaluate(readItems(set.path, set.split), detect, mistakes)
       console.log(`\n${set.name}: ${mistakes.length} mistakes`)
       for (const { id, kind, type, text } of mistakes.filter(mistake => !NOT_DETECTED_YET.includes(mistake.type))) console.log(`  ${id}  ${kind.padEnd(6)}  ${type.padEnd(13)}  ${text}`)
     }

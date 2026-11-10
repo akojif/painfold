@@ -78,7 +78,7 @@ export const HARD_CASES: Array<{ lang: Lang, source: string }> = [
 
   // Messy real-world forms: how people actually write, paste and forward data.
   // Emails: mailto links, quoted replies, capitals, a missing space after the full stop.
-  { lang: 'de', source: 'Bitte an <a href="mailto:[[EMAIL:lena.gruber@example.com]]">Lena</a> weiterleiten.' },
+  { lang: 'de', source: 'Bitte an <a href="mailto:[[EMAIL:lena.gruber@example.com]]">[[NAME:Lena]]</a> weiterleiten.' },
   { lang: 'en', source: 'Sent from my iPhone\n\n> On 3 Mar 2026, at 09:14, [[EMAIL:m.okonkwo@example.org]] wrote:\n> The export is broken.' },
   { lang: 'en', source: 'EMAIL: [[EMAIL:MARK.OKONKWO@EXAMPLE.ORG]] (please update)' },
   { lang: 'de', source: 'Antwort bitte an [[EMAIL:anna.feldmoser@example.com]].Danke!' },
