@@ -154,7 +154,7 @@ onBeforeUnmount(() => window.removeEventListener('beforeunload', onBeforeUnload)
                 target="_blank"
                 rel="noopener"
                 class="focus-ring rounded-sm text-fg underline-offset-4 hover:underline"
-              >{{ author.name }}</a>
+              >{{ author.name }}<span class="sr-only">{{ ` ${$t('nav.newTab')}` }}</span></a>
             </template>
           </i18n-t>
         </div>

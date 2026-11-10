@@ -1,10 +1,10 @@
 import { expect, test } from './fixtures'
 
-test('the footer credits the author in a new tab, without a heart or emoji', async ({ page }) => {
+test('the footer credits the author in a new tab, announced as one, without a heart or emoji', async ({ page }) => {
   await page.goto('/')
   const footer = page.locator('footer')
-  await expect(footer).toContainText('Built with love by Francis Akoji')
-  const link = footer.getByRole('link', { name: 'Francis Akoji' })
+  await expect(footer.getByText('Built by')).toHaveText('Built by Francis Akoji (opens in a new tab)')
+  const link = footer.getByRole('link', { name: 'Francis Akoji (opens in a new tab)' })
   await expect(link).toHaveAttribute('href', 'https://francisakoji.com')
   await expect(link).toHaveAttribute('target', '_blank')
   await expect(link).toHaveAttribute('rel', 'noopener')
@@ -54,4 +54,18 @@ test.describe('on a phone', () => {
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Roadmap')
     expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0)
   })
+})
+
+test('no link or button anywhere ends in an arrow', async ({ page }) => {
+  for (const path of ['/', '/roadmap', '/de', '/does-not-exist']) {
+    await page.goto(path)
+    const arrows = await page.locator('a, button').evaluateAll(elements => elements.filter(element => /[→↗➜]/.test(element.textContent ?? '') || element.querySelector('svg path[d*="h10m-3.5"], svg path[d*="L13 8"]')).length)
+    expect(arrows, path).toBe(0)
+  }
+})
+
+test('the German footer credit and the new-tab hint read in German', async ({ page }) => {
+  await page.goto('/de')
+  await expect(page.locator('footer').getByRole('link', { name: 'Francis Akoji (öffnet in neuem Tab)' })).toBeVisible()
+  await expect(page.locator('footer').getByText('Entwickelt von')).toBeVisible()
 })
