@@ -17,6 +17,11 @@
 // MORE_TEST adds 10 test-only sentences per group (5 German, 5 English, four of
 // them with two names), written before any tuning so they stay unseen: every
 // group then has 25 test names.
+//
+// LOOK_ALIKES are dev-only sentences where a greeting or sign-off is followed by
+// words that are not names ("Hallo Team", "Liebe Grüße", "Dear Customer
+// Support"), so tuning the cue rules is measured for precision too. They belong
+// to no group and come last, so the ids of every other case stay the same.
 import type { Lang } from './values.ts'
 
 export const NAME_GROUPS = [
@@ -425,9 +430,43 @@ const MORE_TEST: Record<NameGroup, { de: string[], en: string[] }> = {
   },
 }
 
-export const NAME_CASES: Array<{ lang: Lang, group: NameGroup, split: 'dev' | 'test', source: string }> = [
+const LOOK_ALIKES: { de: string[], en: string[] } = {
+  de: [
+    'Hallo Team, der Export bricht seit dem Update ab.',
+    'Hallo zusammen, wann kommt die neue Version?',
+    'Sehr geehrte Damen und Herren, bitte stornieren Sie meine Bestellung.',
+    'Liebe Grüße und danke für die schnelle Hilfe!',
+    'Liebes Support-Team, die Rechnung fehlt noch.',
+    'Hallo Kundenservice, ich komme nicht mehr in mein Konto.',
+    'Lieber Kunde, Ihre Anfrage ist bei uns eingegangen.',
+    'Danke Support, jetzt geht es wieder.',
+    'Hallo Herr Doktor, die App stürzt beim Start ab.',
+    'MfG, die Buchhaltung',
+    'Viele Grüße aus [[PLACE:Salzburg]]',
+    'Liebe Grüße, [[NAME:Petra Leitner]]',
+    'Hallo Frau [[NAME:Kovač]], danke für den Rückruf.',
+  ],
+  en: [
+    'Hi team, the export keeps failing since the update.',
+    'Hello everyone, is there an outage right now?',
+    'Hi all, quick question about the invoices.',
+    'Dear Customer Support, please cancel my subscription.',
+    'Dear Sir or Madam, I would like a refund.',
+    'Thanks Support, it works now.',
+    'Best regards, the Accounting Team',
+    'Kind regards and have a nice weekend!',
+    'Cheers mate, that fixed it.',
+    'Hi there, the app crashes on login.',
+    'Dear Customer, your ticket has been received.',
+    'Hello Admin, please reset my password.',
+    'Best regards, [[NAME:Martin Kowalczyk]]',
+  ],
+}
+
+export const NAME_CASES: Array<{ lang: Lang, group?: NameGroup, split: 'dev' | 'test', source: string }> = [
   ...NAME_GROUPS.flatMap(group =>
     SENTENCES[group].map((source, i) => ({ lang: i < 6 ? 'de' as const : 'en' as const, group, split: DEV.has(i) ? 'dev' as const : 'test' as const, source }))),
   ...NAME_GROUPS.flatMap(group => (['de', 'en'] as const).flatMap(lang =>
     MORE_TEST[group][lang].map(source => ({ lang, group, split: 'test' as const, source })))),
+  ...(['de', 'en'] as const).flatMap(lang => LOOK_ALIKES[lang].map(source => ({ lang, split: 'dev' as const, source }))),
 ]

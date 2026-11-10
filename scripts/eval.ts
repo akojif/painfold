@@ -148,10 +148,10 @@ export function nameRecallByGroup(items: readonly EvalItem[], find: (text: strin
 }
 
 /** The per-group table: recall in each language and overall, marking groups below the target. */
-export function groupMarkdown(results: readonly GroupRecall[]): string {
+export function groupMarkdown(results: readonly GroupRecall[], split: 'dev' | 'test' = 'test'): string {
   const cell = (s: Pick<Score, 'labelled' | 'found'>) => `${ratio(s.found, s.labelled)} | ${s.labelled}`
   return [
-    `**Name recall by name-origin group (test split).** Target: ${NAME_RECALL_TARGET.toFixed(2)} for every group. The group exists only in the evaluation data; Painfold never infers anyone's origin.`,
+    `**Name recall by name-origin group (${split} split).** Target: ${NAME_RECALL_TARGET.toFixed(2)} for every group. The group exists only in the evaluation data; Painfold never infers anyone's origin.`,
     '',
     '| Name-origin group | DE recall | DE names | EN recall | EN names | Recall | Names |',
     '| --- | ---: | ---: | ---: | ---: | ---: | ---: |',

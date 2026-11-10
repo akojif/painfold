@@ -284,3 +284,29 @@
 {"id":"name-284","lang":"en","group":"east-asian","split":"test","text":"Thanks, Aiko","spans":[{"start":8,"end":12,"type":"NAME","text":"Aiko"}]}
 {"id":"name-285","lang":"en","group":"east-asian","split":"test","text":"Yamamoto Haruka and Ouyang Ming approved the order.","spans":[{"start":0,"end":15,"type":"NAME","text":"Yamamoto Haruka"},{"start":20,"end":31,"type":"NAME","text":"Ouyang Ming"}]}
 {"id":"name-286","lang":"en","group":"east-asian","split":"test","text":"Please contact Đỗ Quang Huy about the invoice.","spans":[{"start":15,"end":27,"type":"NAME","text":"Đỗ Quang Huy"}]}
+{"id":"name-287","lang":"de","split":"dev","text":"Hallo Team, der Export bricht seit dem Update ab.","spans":[]}
+{"id":"name-288","lang":"de","split":"dev","text":"Hallo zusammen, wann kommt die neue Version?","spans":[]}
+{"id":"name-289","lang":"de","split":"dev","text":"Sehr geehrte Damen und Herren, bitte stornieren Sie meine Bestellung.","spans":[]}
+{"id":"name-290","lang":"de","split":"dev","text":"Liebe Grüße und danke für die schnelle Hilfe!","spans":[]}
+{"id":"name-291","lang":"de","split":"dev","text":"Liebes Support-Team, die Rechnung fehlt noch.","spans":[]}
+{"id":"name-292","lang":"de","split":"dev","text":"Hallo Kundenservice, ich komme nicht mehr in mein Konto.","spans":[]}
+{"id":"name-293","lang":"de","split":"dev","text":"Lieber Kunde, Ihre Anfrage ist bei uns eingegangen.","spans":[]}
+{"id":"name-294","lang":"de","split":"dev","text":"Danke Support, jetzt geht es wieder.","spans":[]}
+{"id":"name-295","lang":"de","split":"dev","text":"Hallo Herr Doktor, die App stürzt beim Start ab.","spans":[]}
+{"id":"name-296","lang":"de","split":"dev","text":"MfG, die Buchhaltung","spans":[]}
+{"id":"name-297","lang":"de","split":"dev","text":"Viele Grüße aus Salzburg","spans":[{"start":16,"end":24,"type":"PLACE","text":"Salzburg"}]}
+{"id":"name-298","lang":"de","split":"dev","text":"Liebe Grüße, Petra Leitner","spans":[{"start":13,"end":26,"type":"NAME","text":"Petra Leitner"}]}
+{"id":"name-299","lang":"de","split":"dev","text":"Hallo Frau Kovač, danke für den Rückruf.","spans":[{"start":11,"end":16,"type":"NAME","text":"Kovač"}]}
+{"id":"name-300","lang":"en","split":"dev","text":"Hi team, the export keeps failing since the update.","spans":[]}
+{"id":"name-301","lang":"en","split":"dev","text":"Hello everyone, is there an outage right now?","spans":[]}
+{"id":"name-302","lang":"en","split":"dev","text":"Hi all, quick question about the invoices.","spans":[]}
+{"id":"name-303","lang":"en","split":"dev","text":"Dear Customer Support, please cancel my subscription.","spans":[]}
+{"id":"name-304","lang":"en","split":"dev","text":"Dear Sir or Madam, I would like a refund.","spans":[]}
+{"id":"name-305","lang":"en","split":"dev","text":"Thanks Support, it works now.","spans":[]}
+{"id":"name-306","lang":"en","split":"dev","text":"Best regards, the Accounting Team","spans":[]}
+{"id":"name-307","lang":"en","split":"dev","text":"Kind regards and have a nice weekend!","spans":[]}
+{"id":"name-308","lang":"en","split":"dev","text":"Cheers mate, that fixed it.","spans":[]}
+{"id":"name-309","lang":"en","split":"dev","text":"Hi there, the app crashes on login.","spans":[]}
+{"id":"name-310","lang":"en","split":"dev","text":"Dear Customer, your ticket has been received.","spans":[]}
+{"id":"name-311","lang":"en","split":"dev","text":"Hello Admin, please reset my password.","spans":[]}
+{"id":"name-312","lang":"en","split":"dev","text":"Best regards, Martin Kowalczyk","spans":[{"start":14,"end":30,"type":"NAME","text":"Martin Kowalczyk"}]}
