@@ -416,6 +416,15 @@
           "Opportunities framed as “How might we…” questions"
         ]
       },
+      "sources": {
+        "name": "Transcripts and documents",
+        "summary": "Clean and analyze interview transcripts and documents, not only tables.",
+        "points": [
+          "Transcripts (TXT, VTT, SRT) first, then DOCX and PDF",
+          "Speakers replaced consistently, document metadata removed",
+          "Cleaned text as TXT or Markdown"
+        ]
+      },
       "launch": {
         "name": "Launch",
         "summary": "Try Painfold in 30 seconds, or run it on your own servers.",

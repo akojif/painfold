@@ -51,6 +51,7 @@ Done when:
 **Goal:** answer "what are customers trying to do, what hurts, and what do they wish for?" from the cleaned feedback.
 
 Scope:
+- First, behind the existing screens: every file becomes a list of feedback items (the text plus where it came from: file, row, column), so detection, review and export no longer depend on rows and columns. No new file formats yet; this prepares Stage 5 (#86).
 - Choose an AI: your own API key (sent directly from your browser to the provider) or a local model with Ollama.
 - Tag feedback as customer jobs, pains and gains, with sentiment and type (bug, feature request, praise, question).
 - A first report: ranked jobs, pains and gains with counts, share, intensity, and 2–3 real quotes each.
@@ -75,7 +76,21 @@ Scope:
 - Privacy report: what was removed, warnings, which AI saw the cleaned data.
 - Exports: PDF, Markdown, and a CSV of items tagged with their themes.
 
-## Stage 5: Launch (v1.0)
+## Stage 5: Transcripts and documents (v0.5)
+
+**Goal:** clean and analyze feedback that does not come as a table: interview transcripts first, then documents.
+
+Scope:
+- Interview transcripts as TXT, VTT and SRT. Speaker labels and timestamps are kept apart from the text, speakers are replaced consistently (`[NAME_1]`), and the cleaned transcript downloads as TXT or Markdown (#87).
+- Then DOCX and PDF documents. Their metadata (author, comments, tracked changes, headers and footers, image metadata) is removed, and the cleaned text downloads as TXT or Markdown (#88).
+- The review shows where each piece of text comes from: speaker and time, or page and paragraph.
+
+Done when:
+- Detection is measured on a labelled set of fake transcripts and documents, in German and English, and published.
+- The cleaning report lists the document metadata that was removed.
+- As for every stage: nothing is uploaded, and only cleaned text reaches an AI.
+
+## Stage 6: Launch (v1.0)
 
 **Goal:** anyone can try it in 30 seconds and teams can run it themselves.
 
@@ -86,7 +101,6 @@ Scope:
 
 ## Later (not planned yet)
 
-- User interview transcripts (TXT, DOCX).
 - Comparing two files or two periods side by side.
 - Export to Jira and Notion.
 - Custom patterns for company-specific identifiers (customer numbers, contract IDs).

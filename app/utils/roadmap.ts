@@ -4,7 +4,7 @@
 // Change a status here when work on a stage starts or it is released.
 // next: the stage after the current one, not started yet.
 export type StageStatus = 'available' | 'inProgress' | 'next' | 'planned'
-export type StageId = 'clean' | 'names' | 'jobs' | 'report' | 'launch'
+export type StageId = 'clean' | 'names' | 'jobs' | 'report' | 'sources' | 'launch'
 
 export interface RoadmapStage {
   id: StageId
@@ -17,6 +17,7 @@ export const ROADMAP_STAGES: readonly RoadmapStage[] = [
   { id: 'names', version: 'v0.2', status: 'inProgress' },
   { id: 'jobs', version: 'v0.3', status: 'next' },
   { id: 'report', version: 'v0.4', status: 'planned' },
+  { id: 'sources', version: 'v0.5', status: 'planned' },
   { id: 'launch', version: 'v1.0', status: 'planned' },
 ]
 
