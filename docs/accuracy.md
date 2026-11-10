@@ -130,6 +130,7 @@ Names and places, from the name test split and the generated set. Fixing these n
 - Names with particles that are not on the list yet, such as "ur": "Saif ur Rehman".
 - Multi-part names the model does not label fully, or labels as a place: "Tesfaye Bekele", "Sipho Ndlovu" (removed, but as a place).
 - The second part of some English double names ("Merriweather-Stone"), and English towns right before a postcode ("Bristol BS1 4DJ") are sometimes missed.
+- Small towns as places in long texts: "Mehmet Aydın aus Wels" removes the name but not "Wels". Places are not part of the 0.90 target; a missed town can still identify someone together with other details.
 
 In the review, names and places that were missed can be marked with M like anything else.
 
