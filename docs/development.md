@@ -102,6 +102,8 @@ SheetJS (XLSX import) is installed from the official SheetJS tarball, not the np
 
 `tosource` is excluded by exact version because its `package.json` has no license field; its LICENSE file is the permissive zlib license. A new version is checked again.
 
+`@img/sharp-libvips-*` (LGPL-3.0-or-later) is excluded by name: it is the native image library of `sharp`, which transformers.js depends on for image models. Painfold never loads `sharp`: the browser build does not include it, no build step or test uses it, and nothing from it is in the static site. LGPL allows using the unmodified library this way. Replacing `sharp` with an empty package through npm `overrides` was tried first, but npm 11 does not keep such a `file:` override in step with `package-lock.json`, which breaks `npm ci`.
+
 ## Dependency install scripts
 
 npm 11 does not run dependency install scripts unless they are allowed. The `allowScripts` field in `package.json` records the decision for each package that has one:
@@ -110,7 +112,7 @@ npm 11 does not run dependency install scripts unless they are allowed. The `all
 - `fsevents`: denied. It ships prebuilt; the script is a build-from-source fallback.
 - `onnxruntime-node`: denied. It comes with transformers.js for Node and ships its CPU binaries; the script only downloads optional GPU builds. The browser uses `onnxruntime-web`.
 - `protobufjs`: denied. Its postinstall only prints version notices.
+- `sharp`: denied. transformers.js depends on it for image models, which Painfold does not use; it ships prebuilt binaries, and the script is a build-from-source fallback.
 
-`sharp` is replaced with an empty local package (`scripts/stubs/sharp`, through `overrides` in `package.json`). transformers.js depends on it for image models, which Painfold does not use, and it would install libvips, an LGPL-3.0 native library, which the license allowlist rejects. With the stub nothing image-related is installed, and the allowlist stays strict.
 
 If a new dependency brings an install script, `npm install` warns about it. Review it with `npm install-scripts ls`, then allow or deny it explicitly.
