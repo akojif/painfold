@@ -37,7 +37,14 @@ jobs:
         run: |
           echo "## Detection accuracy" >> "$GITHUB_STEP_SUMMARY"
           npm run --silent eval >> "$GITHUB_STEP_SUMMARY"
+      - name: Cache the name model (downloaded and checked by scripts/fetch-model.ts)
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: node_modules/.cache/painfold-models
+          key: name-model-${{ hashFiles('deploy/model.ts') }}
       - run: npm run generate
+      - name: Name model tests
+        run: npm run test:model
 
   e2e:
     name: End-to-end tests
@@ -53,6 +60,11 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium
+      - name: Cache the name model (downloaded and checked by scripts/fetch-model.ts)
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: node_modules/.cache/painfold-models
+          key: name-model-${{ hashFiles('deploy/model.ts') }}
       - run: npm run generate
       - run: npm run test:e2e
       - name: Upload Playwright traces

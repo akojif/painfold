@@ -15,6 +15,8 @@ npm run test:e2e     # end-to-end tests against the static build (Playwright)
 npm run bench        # time a 5,000-row file from import to download
 npm run licenses     # fail on dependency licenses outside the allowlist
 npm run eval         # detection recall and precision; --write updates the numbers in docs/accuracy.md
+npm run models       # download and check the name model (also part of dev and generate)
+npm run test:model   # run the real name model through the post-processing (after npm run models)
 ```
 
 Run `npm run generate` before `npm run test:e2e`. The first time, install the test browser with `npx playwright install chromium`.
@@ -63,6 +65,18 @@ Every pull request runs three jobs: lint, typecheck, unit tests, the detection a
 - `npm run generate` builds the site, then `scripts/apply-csp.ts` adds the full policy to every page as a `<meta>` tag, with hashes of that build's inline scripts. It also fails the build if any page or stylesheet references another origin.
 - Static headers (framing, `nosniff`, referrer, permissions, and the full policy for app files and Web Workers) come from `headersFor()`. The local preview server sends them, so the end-to-end tests run under the real policy.
 - `vercel.json` is generated from the same file with `npm run headers:vercel`; a unit test fails if it is out of date.
+- Every response sends `Cross-Origin-Opener-Policy: same-origin` and `Cross-Origin-Embedder-Policy: require-corp`, so pages are cross-origin isolated: WebAssembly threads need it, and the name model runs about 4 times faster with them. Everything Painfold loads is same-origin, so nothing else is affected.
+- App code (`/_nuxt/`) and the ONNX Runtime files (`/ort/`) may compile WebAssembly (`'wasm-unsafe-eval'`), because the name model runs in the detection worker. Pages may not, and `'unsafe-eval'` is never allowed.
+
+## Name model
+
+Names and places are found by [Davlan/distilbert-base-multilingual-cased-ner-hrl](https://huggingface.co/Davlan/distilbert-base-multilingual-cased-ner-hrl) (AFL-3.0), in the int8 ONNX export by [Xenova](https://huggingface.co/Xenova/distilbert-base-multilingual-cased-ner-hrl). It was trained on news text, including CoNLL-2003 for German and English; the CoNLL source texts are themselves licensed, which is a common grey area for models trained on them.
+
+- `deploy/model.ts` pins the exact Hugging Face revision and the SHA-256 of every file. `scripts/fetch-model.ts` (part of `npm run dev` and `npm run generate`) downloads them into `node_modules/.cache/painfold-models/`, checks every hash and fails on a mismatch, then copies the model to `public/models/<id>/<revision>/` and the ONNX Runtime WebAssembly files to `public/ort/<version>/`. Both are ignored by git and served from this site with immutable caching; users' browsers never contact Hugging Face or a CDN.
+- The detection worker loads transformers.js only when names are first requested, with remote models switched off, and uses 4 threads when the page is cross-origin isolated.
+- transformers.js imports the WebGPU build of ONNX Runtime; `nuxt.config.ts` aliases it to the plain WebAssembly build, which halves the runtime download (14 MB instead of up to 28 MB). Painfold runs the model on the CPU.
+- To change the model: update the revision and hashes in `deploy/model.ts`, run `npm run models` and `npm run test:model`, and re-measure accuracy and speed.
+- CI caches the downloaded files between runs. `core/detect/names.ts` turns the model's word pieces into names and places and has unit tests; `tests/model/` runs the real model.
 
 ## Hosting
 
@@ -94,5 +108,9 @@ npm 11 does not run dependency install scripts unless they are allowed. The `all
 
 - `esbuild`: denied. Its postinstall only verifies the platform binary, which npm already installs as an optional dependency.
 - `fsevents`: denied. It ships prebuilt; the script is a build-from-source fallback.
+- `onnxruntime-node`: denied. It comes with transformers.js for Node and ships its CPU binaries; the script only downloads optional GPU builds. The browser uses `onnxruntime-web`.
+- `protobufjs`: denied. Its postinstall only prints version notices.
+
+`sharp` is replaced with an empty local package (`scripts/stubs/sharp`, through `overrides` in `package.json`). transformers.js depends on it for image models, which Painfold does not use, and it would install libvips, an LGPL-3.0 native library, which the license allowlist rejects. With the stub nothing image-related is installed, and the allowlist stays strict.
 
 If a new dependency brings an install script, `npm install` warns about it. Review it with `npm install-scripts ls`, then allow or deny it explicitly.

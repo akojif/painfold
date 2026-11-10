@@ -11,6 +11,8 @@
 // The local preview server and the generated vercel.json both use headersFor(),
 // so moving to another host only needs a new adapter, not app changes.
 
+import { ORT_PREFIX } from './model.ts'
+
 type Directives = Record<string, string[]>
 
 // Stage 1 makes no network requests beyond the app's own files.
@@ -38,16 +40,24 @@ export function documentPolicy(scriptHashes: string[]): string {
   return serialize({ ...directives, 'script-src': [...directives['script-src']!, ...hashes] })
 }
 
-/** The policy for app files, which covers Web Workers started from them. */
+/**
+ * The policy for app files, which covers Web Workers started from them. It also
+ * allows compiling WebAssembly ('wasm-unsafe-eval', not 'unsafe-eval'): the name
+ * model runs in ONNX Runtime's WebAssembly build inside the detection worker.
+ * Pages themselves never compile WebAssembly, so their policy does not allow it.
+ */
 export function assetPolicy(): string {
-  return serialize({ ...directives, 'frame-ancestors': ["'none'"] })
+  return serialize({ ...directives, 'script-src': [...directives['script-src']!, "'wasm-unsafe-eval'"], 'frame-ancestors': ["'none'"] })
 }
 
 const commonHeaders: Record<string, string> = {
   'Referrer-Policy': 'no-referrer',
   'X-Content-Type-Options': 'nosniff',
   'X-Frame-Options': 'DENY',
+  // Together these make every page cross-origin isolated, which WebAssembly threads
+  // need (SharedArrayBuffer): the name model runs about 4 times faster with them.
   'Cross-Origin-Opener-Policy': 'same-origin',
+  'Cross-Origin-Embedder-Policy': 'require-corp',
   'Cross-Origin-Resource-Policy': 'same-origin',
   'Strict-Transport-Security': 'max-age=63072000; includeSubDomains',
   'Permissions-Policy': [
@@ -58,12 +68,20 @@ const commonHeaders: Record<string, string> = {
 }
 
 export const ASSET_PREFIX = '/_nuxt/'
+export const RUNTIME_PREFIX = ORT_PREFIX
+export const MODEL_PREFIX = '/models/'
+
+// Code that runs in the browser, including ONNX Runtime's files, which start their own worker threads.
+const CODE_PREFIXES = [ASSET_PREFIX, RUNTIME_PREFIX]
+// Served under a versioned path that changes with every new file, so browsers may keep them for good.
+const IMMUTABLE_PREFIXES = [MODEL_PREFIX, RUNTIME_PREFIX]
 
 /** Response headers for a request path. */
 export function headersFor(path: string): Record<string, string> {
   return {
     ...commonHeaders,
-    'Content-Security-Policy': path.startsWith(ASSET_PREFIX) ? assetPolicy() : "frame-ancestors 'none'",
+    'Content-Security-Policy': CODE_PREFIXES.some(prefix => path.startsWith(prefix)) ? assetPolicy() : "frame-ancestors 'none'",
+    ...(IMMUTABLE_PREFIXES.some(prefix => path.startsWith(prefix)) ? { 'Cache-Control': 'public, max-age=31536000, immutable' } : {}),
   }
 }
 
@@ -73,7 +91,7 @@ function toVercelHeaders(headers: Record<string, string>) {
   return Object.entries(headers).map(([key, value]) => ({ key, value }))
 }
 
-/** vercel.json content; the two sources split paths exactly as headersFor() does. */
+/** vercel.json content; the sources split paths exactly as headersFor() does, one rule per path. */
 // Vercel builds the static site the same way as everywhere else: no framework
 // preset (which would run its own Nuxt build without the CSP step), our own
 // build command, and the generated folder as the output.
@@ -85,8 +103,10 @@ export function vercelConfig(): { $schema: string, framework: null, installComma
     buildCommand: 'NUXT_TELEMETRY_DISABLED=1 npm run generate',
     outputDirectory: '.output/public',
     headers: [
-      { source: '/((?!_nuxt/).*)', headers: toVercelHeaders(headersFor('/')) },
+      { source: '/((?!_nuxt/|ort/|models/).*)', headers: toVercelHeaders(headersFor('/')) },
       { source: '/_nuxt/(.*)', headers: toVercelHeaders(headersFor(`${ASSET_PREFIX}entry.js`)) },
+      { source: '/ort/(.*)', headers: toVercelHeaders(headersFor(`${RUNTIME_PREFIX}runtime.wasm`)) },
+      { source: '/models/(.*)', headers: toVercelHeaders(headersFor(`${MODEL_PREFIX}model.onnx`)) },
     ],
   }
 }

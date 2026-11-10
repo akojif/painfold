@@ -14,6 +14,9 @@ const root = resolve('.output/public')
 const contentTypes: Record<string, string> = {
   '.html': 'text/html; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8',
+  '.mjs': 'text/javascript; charset=utf-8',
+  '.wasm': 'application/wasm',
+  '.onnx': 'application/octet-stream',
   '.css': 'text/css; charset=utf-8',
   '.json': 'application/json; charset=utf-8',
   '.svg': 'image/svg+xml',
@@ -54,8 +57,11 @@ createServer(async (request, response) => {
   }
 
   const status = file.endsWith('404.html') && url.pathname !== '/404.html' ? 404 : 200
+  // Content-Length lets the app show how much of the name model has downloaded.
+  const { size } = await stat(file)
   response.writeHead(status, {
     ...headersFor(url.pathname),
+    'Content-Length': String(size),
     'Content-Type': contentTypes[extname(file)] ?? 'application/octet-stream',
   })
   createReadStream(file).pipe(response)

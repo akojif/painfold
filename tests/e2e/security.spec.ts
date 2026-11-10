@@ -62,3 +62,28 @@ for (const path of ['/', '/roadmap', '/404.html']) {
     expect(tags[1]).toMatch(/^<meta http-equiv="Content-Security-Policy"/)
   })
 }
+
+test('pages are cross-origin isolated, so the name model can use threads', async ({ page }) => {
+  await page.goto('/')
+  expect(await page.evaluate(() => crossOriginIsolated)).toBe(true)
+})
+
+test('the name model is served from this site, exactly the pinned file, cached for good', async ({ request }) => {
+  const { MODEL_PATH, NAME_MODEL } = await import('../../deploy/model')
+  const response = await request.get(`${MODEL_PATH}onnx/model_int8.onnx`)
+  expect(response.status()).toBe(200)
+  expect(response.headers()['cache-control']).toBe('public, max-age=31536000, immutable')
+  const { createHash } = await import('node:crypto')
+  expect(createHash('sha256').update(await response.body()).digest('hex')).toBe(NAME_MODEL.files['onnx/model_int8.onnx'])
+})
+
+test('the ONNX Runtime WebAssembly files are served from this site with a policy that allows WebAssembly', async ({ request }) => {
+  const { ORT_PREFIX } = await import('../../deploy/model')
+  const { ortVersion } = await import('../../deploy/ort-version')
+  const response = await request.get(`${ORT_PREFIX}${ortVersion()}/ort-wasm-simd-threaded.wasm`)
+  expect(response.status()).toBe(200)
+  expect(response.headers()['content-type']).toBe('application/wasm')
+  expect(response.headers()['content-security-policy']).toContain("'wasm-unsafe-eval'")
+  const page = await request.get('/')
+  expect(await page.text()).not.toContain('wasm-unsafe-eval')
+})

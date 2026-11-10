@@ -1,0 +1,7 @@
+{
+  "name": "sharp",
+  "version": "0.0.0-painfold-stub",
+  "description": "Empty stand-in for sharp. @huggingface/transformers depends on sharp for image models, which Painfold does not use; replacing it keeps its LGPL native library (libvips) out of node_modules. See docs/development.md.",
+  "license": "MIT",
+  "main": "index.js"
+}
