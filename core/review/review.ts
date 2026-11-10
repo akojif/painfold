@@ -155,6 +155,27 @@ export class Review {
     return added
   }
 
+  /**
+   * Adds findings that arrive after the review started: names and places from
+   * the name model, found in the background. Anything that overlaps an existing
+   * finding is left out, so rule findings and marked text come first. A
+   * decision already made for the same value applies to the new copies too.
+   * Arriving findings are not a step that undo takes back.
+   */
+  addDetected(cells: readonly CellDetections[]): Finding[] {
+    const added: Finding[] = []
+    for (const cell of cells) {
+      // Before any new finding of this cell is added: the name model's own findings never overlap each other.
+      const existing = this.findingsIn(cell.row, cell.column)
+      for (const found of cell.detections) {
+        if (existing.some(finding => found.start < finding.end && found.end > finding.start)) continue
+        added.push(this.add({ row: cell.row, column: cell.column, ...found }, 'detected'))
+      }
+    }
+    if (added.length > 0) this.sort()
+    return added
+  }
+
   /** Undoes the last decision, "remove all", or marked text. Returns false if there is nothing to undo. */
   undo(): boolean {
     const step = this.history.pop()
