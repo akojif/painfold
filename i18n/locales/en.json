@@ -312,11 +312,18 @@
   },
   "example": {
     "caption": "A support ticket, before and after cleaning",
-    "ticket": "Bitte rufen Sie mich unter {phone} zurück oder schreiben Sie an {email}.",
-    "phone": "+49 30 23125 417",
-    "email": "anna.huber{'@'}example.com",
+    "ticket": "Please call me back on {phone} or email me at {email}.",
     "found": "Found in the file",
-    "description": "Example: in a support ticket, a phone number and an email address are replaced by the placeholders [PHONE_1] and [EMAIL_1]."
+    "description": "Example: in a support ticket, a phone number and an email address are replaced by the placeholders [PHONE_1] and [EMAIL_1].",
+    "removed": "{type} removed:",
+    "languages": "Works with German and English feedback",
+    "values": {
+      "email": "olivia.hartley{'@'}example.com",
+      "phone": "+44 20 7946 0958",
+      "iban": "DE89 3704 0044 0532 0130 00",
+      "address": "27 Willow Lane",
+      "dateOfBirth": "12/03/1987"
+    }
   },
   "typeManyLower": {
     "EMAIL": "email addresses",

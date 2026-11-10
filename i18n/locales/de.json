@@ -313,10 +313,17 @@
   "example": {
     "caption": "Ein Support-Ticket, vor und nach der Bereinigung",
     "ticket": "Bitte rufen Sie mich unter {phone} zurück oder schreiben Sie an {email}.",
-    "phone": "+49 30 23125 417",
-    "email": "anna.huber{'@'}example.com",
     "found": "In der Datei gefunden",
-    "description": "Beispiel: In einem Support-Ticket werden eine Telefonnummer und eine E-Mail-Adresse durch die Platzhalter [PHONE_1] und [EMAIL_1] ersetzt."
+    "description": "Beispiel: In einem Support-Ticket werden eine Telefonnummer und eine E-Mail-Adresse durch die Platzhalter [PHONE_1] und [EMAIL_1] ersetzt.",
+    "removed": "{type} entfernt:",
+    "languages": "Funktioniert mit deutschem und englischem Feedback",
+    "values": {
+      "email": "anna.huber{'@'}example.com",
+      "phone": "+49 30 23125 417",
+      "iban": "AT61 1904 3002 3457 3201",
+      "address": "Lindengasse 5/2/7",
+      "dateOfBirth": "12.03.1987"
+    }
   },
   "typeManyLower": {
     "EMAIL": "E-Mail-Adressen",
