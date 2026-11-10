@@ -1,21 +1,42 @@
 <script setup lang="ts">
-defineProps<{ visible: boolean }>()
+// While a file is dragged over the page: the page dims and a sheet outline
+// rises to receive it. Transitions, not keyframes, so dragging in and out
+// quickly reverses smoothly; in 200 ms, out faster in 120 ms; only opacity
+// and transform. With reduced motion it appears and disappears at once.
+const props = defineProps<{ visible: boolean }>()
+
+const rendered = ref(false)
+const raised = ref(false)
+let leaving: ReturnType<typeof setTimeout> | undefined
+
+watch(() => props.visible, (visible) => {
+  clearTimeout(leaving)
+  if (visible) {
+    rendered.value = true
+    // One frame in the lowered state first, so the change is a transition.
+    requestAnimationFrame(() => requestAnimationFrame(() => (raised.value = props.visible)))
+  }
+  else {
+    raised.value = false
+    leaving = setTimeout(() => (rendered.value = false), 120)
+  }
+})
+onBeforeUnmount(() => clearTimeout(leaving))
 </script>
 
 <template>
   <div
-    v-if="visible"
-    class="pointer-events-none fixed inset-0 z-50 grid place-items-center bg-canvas/90 p-6"
+    v-if="rendered"
+    class="pointer-events-none fixed inset-0 z-50 grid place-items-center bg-canvas/85 p-6 transition-opacity ease-out motion-reduce:transition-none"
+    :class="raised ? 'opacity-100 duration-200' : 'opacity-0 duration-[120ms]'"
+    data-testid="drop-overlay"
     aria-hidden="true"
   >
-    <div class="animate-overlay-in flex flex-col items-center gap-3 rounded-md border-2 border-dashed border-accent bg-canvas px-10 py-12 text-center shadow-overlay">
-      <svg
-        viewBox="0 0 24 24"
-        class="size-7 fill-none stroke-accent stroke-[1.6]"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      ><path d="M12 15V3m0 12-4-4m4 4 4-4M4 15v4a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-4" /></svg>
-      <p class="text-lg font-medium">
+    <div
+      class="grid aspect-[3/4] w-56 place-items-center rounded-md border-2 border-dashed border-accent bg-canvas px-6 text-center shadow-overlay transition-[transform,opacity] ease-out motion-reduce:transition-none"
+      :class="raised ? 'translate-y-0 scale-100 opacity-100 duration-200' : 'translate-y-3 scale-[0.98] opacity-0 duration-[120ms]'"
+    >
+      <p class="text-md font-medium text-balance">
         {{ $t('start.dropOverlay') }}
       </p>
     </div>

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { ColumnCounts } from '~~/core/detect/table'
-import { ImportError, importFile, type ImportErrorCode } from '~~/core/import'
 
 definePageMeta({ step: 1 })
 
@@ -15,15 +14,11 @@ const detection = useDetection()
 // Set up here, before the review starts, so names are checked as soon as it does.
 useNameScan()
 
-const reading = ref<string>()
-const error = ref<ImportErrorCode>()
+const { reading, error, documentFormat, openSample, openSheet, openPicked } = useOpenFile()
 const detectionFailed = ref(false)
 const detecting = ref(false)
 const input = useTemplateRef<HTMLInputElement>('input')
 const summary = useTemplateRef<HTMLElement>('summary')
-
-// The file's bytes stay in memory so another sheet of a workbook can be read.
-let lastFile: { name: string, bytes: Uint8Array } | undefined
 
 const journey = [['clean', true], ['find', false], ['decide', false]] as const
 const columnCounts = shallowRef<readonly ColumnCounts[]>()
@@ -55,51 +50,29 @@ watch(table, async (current) => {
 
 const rowCount = computed(() => t('file.rows', { n: number(table.value?.rows.length ?? 0) }, table.value?.rows.length ?? 0))
 
-async function read(file: { name: string, bytes: Uint8Array }, options: { sheetName?: string, sample?: boolean } = {}) {
-  reading.value = file.name
-  error.value = undefined
-  try {
-    session.load(await importFile(file, { sheetName: options.sheetName }), options.sample)
-    lastFile = file
-    await nextTick()
-    summary.value?.focus()
-  }
-  catch (caught) {
-    error.value = caught instanceof ImportError ? caught.code : 'unreadable'
-  }
-  finally {
-    reading.value = undefined
-  }
-}
-
-async function onFile(file: File) {
-  await read({ name: file.name, bytes: new Uint8Array(await file.arrayBuffer()) })
-}
+// A newly opened file moves focus to the column step's heading, so keyboard and screen reader users start there.
+watch(table, async (now, before) => {
+  if (!now || now === before) return
+  await nextTick()
+  summary.value?.focus()
+})
 
 function onInputChange(event: Event) {
   const target = event.target as HTMLInputElement
   const file = target.files?.[0]
   target.value = ''
-  if (file) onFile(file)
+  if (file) void openPicked(file)
 }
 
-// Drop a file anywhere on the page while no file is open.
-const { dragging } = useFileDrop(onFile, () => !table.value)
+const onSample = openSample
 
-async function onSample() {
-  // Bundled with the app and loaded on demand: no request leaves this site.
-  const { default: text } = await import('~~/data/sample/support-tickets.csv?raw')
-  await read({ name: 'support-tickets.csv', bytes: new TextEncoder().encode(text) }, { sample: true })
-}
-
-async function onSheet(event: Event) {
-  if (lastFile) await read(lastFile, { sheetName: (event.target as HTMLSelectElement).value, sample: isSample.value })
+function onSheet(event: Event) {
+  void openSheet((event.target as HTMLSelectElement).value)
 }
 
 async function chooseAnother() {
   if (!(await mayDiscard())) return
   session.clear()
-  lastFile = undefined
   await nextTick()
   input.value?.click()
 }
@@ -143,7 +116,6 @@ async function findPersonalData() {
       data-testid="file-input"
       @change="onInputChange"
     >
-    <DropOverlay :visible="dragging" />
 
     <section
       v-if="!table"
@@ -184,18 +156,10 @@ async function findPersonalData() {
         >
           {{ $t('start.reading', { name: reading }) }}
         </p>
-        <div
-          v-if="error"
-          role="alert"
-          class="mt-5 flex gap-2.5 rounded-md border border-danger/30 bg-danger/5 px-3 py-2.5 text-sm text-danger"
-        >
-          <svg
-            aria-hidden="true"
-            viewBox="0 0 16 16"
-            class="mt-0.5 size-4 shrink-0 fill-current"
-          ><path d="M8 1 15 14H1Z M7.25 6v4h1.5V6Zm0 5v1.5h1.5V11Z" /></svg>
-          <p>{{ $t(`importErrors.${error}`) }}</p>
-        </div>
+        <ImportMessage
+          v-if="error || documentFormat"
+          class="mt-5"
+        />
 
         <p class="mt-6 flex items-center gap-2 text-sm text-fg-muted">
           <svg
@@ -295,6 +259,10 @@ async function findPersonalData() {
         </div>
       </div>
 
+      <ImportMessage
+        dismissible
+        class="mt-6"
+      />
       <ColumnTable
         class="mt-8"
         :counts="columnCounts"

@@ -237,7 +237,7 @@ test.describe('import errors', () => {
     ['old.xls', 'x', 'This is an old Excel file (.xls). Open it in Excel, save it as .xlsx or .csv, then choose it again.'],
     ['empty.csv', '', 'This file is empty. Choose a file with a header row and at least one row of feedback.'],
     ['header.csv', 'id,text\n', 'This file only has a header row. Add rows of feedback, or choose another file.'],
-    ['notes.pdf', '%PDF', 'Painfold reads CSV and XLSX files. Export your data in one of those formats and choose it again.'],
+    ['photo.png', '\x89PNG', 'That file type isn\'t supported. Painfold reads CSV, TSV and Excel (.xlsx) files.'],
   ] as const) {
     test(`${name} explains what to do next`, async ({ page }) => {
       await page.goto('/')

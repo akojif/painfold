@@ -23,8 +23,10 @@ const showSteps = computed(() => step.value !== undefined && (step.value > 1 || 
 // The empty start screen states the privacy notice in its own content; every other page states it here.
 const showNotice = computed(() => step.value !== 1 || Boolean(table.value))
 const facts = computed(() => [...(showNotice.value ? ['privacy.notice'] : []), 'footer.noCookies', 'footer.noAccount'])
-// Catch file drops everywhere, so a browser never opens a dropped file and leaves the app.
-useFileDrop()
+// A file can be dropped anywhere, on every step. Without this a browser would
+// open a dropped file itself and leave the app, losing everything in memory.
+const { openPicked } = useOpenFile()
+const { dragging } = useFileDrop(file => void openPicked(file))
 
 /** Back to the start screen with nothing open, after asking if work would be lost. */
 async function startOver() {
@@ -94,6 +96,12 @@ onBeforeUnmount(() => window.removeEventListener('beforeunload', onBeforeUnload)
         </button>
       </div>
       <main class="flex flex-1 flex-col py-8 sm:py-10">
+        <!-- After a drop on the review or download step, what happened to the file. The start and column steps show it in place. -->
+        <ImportMessage
+          v-if="step !== 1"
+          dismissible
+          class="mb-6"
+        />
         <slot />
       </main>
     </div>
@@ -155,6 +163,7 @@ onBeforeUnmount(() => window.removeEventListener('beforeunload', onBeforeUnload)
         </div>
       </div>
     </footer>
+    <DropOverlay :visible="dragging" />
     <ConfirmDialog />
   </div>
 </template>

@@ -66,7 +66,7 @@
     "file-too-large": "Diese Datei ist größer als 50 MB. Teilen Sie sie in kleinere Dateien auf und bereinigen Sie sie einzeln.",
     "no-rows": "Diese Datei enthält nur eine Kopfzeile. Fügen Sie Feedback-Zeilen hinzu oder wählen Sie eine andere Datei.",
     "too-many-rows": "Diese Datei hat mehr als 50.000 Zeilen. Teilen Sie sie in kleinere Dateien auf und bereinigen Sie sie einzeln.",
-    "unsupported-format": "Painfold liest CSV- und XLSX-Dateien. Exportieren Sie Ihre Daten in einem dieser Formate und wählen Sie die Datei erneut aus.",
+    "unsupported-format": "Dieser Dateityp wird nicht unterstützt. Painfold liest CSV-, TSV- und Excel-Dateien (.xlsx).",
     "legacy-excel": "Das ist eine alte Excel-Datei (.xls). Öffnen Sie sie in Excel, speichern Sie sie als .xlsx oder .csv und wählen Sie sie dann erneut aus.",
     "unreadable": "Diese Datei konnte nicht gelesen werden. Sie ist vielleicht beschädigt oder mit einem Passwort geschützt. Exportieren Sie sie bitte noch einmal."
   },
@@ -519,5 +519,10 @@
     "body": "Personenbezogene Daten werden mit der neuen Spaltenauswahl neu gesucht, und Ihre Prüfentscheidungen werden gelöscht.",
     "confirm": "Neu suchen",
     "cancel": "Weiterarbeiten"
+  },
+  "importNotes": {
+    "document": "Dokumente und Transkripte stehen auf der Roadmap. Derzeit liest Painfold CSV- und Excel-Dateien.",
+    "roadmap": "Zur Roadmap",
+    "dismiss": "Schließen"
   }
 }
