@@ -24,6 +24,7 @@ async function drop(page: Page, name: string, content: Buffer, on = 'main') {
 }
 
 const heading = (page: Page) => page.getByRole('heading', { level: 1 })
+const toast = (page: Page) => page.getByTestId('toast')
 const DOCUMENT_NOTE = 'Documents and transcripts are on the roadmap. For now, Painfold reads CSV and Excel files.'
 
 test.describe('on the start screen', () => {
@@ -48,10 +49,9 @@ test.describe('on the start screen', () => {
     test(`${name} gets a friendly note about documents, with a link to the roadmap`, async ({ page }) => {
       await page.goto('/')
       await drop(page, name, content)
-      const note = page.getByRole('status').filter({ hasText: DOCUMENT_NOTE })
-      await expect(note).toBeVisible()
-      await expect(page.getByRole('alert')).toHaveCount(0)
-      await note.getByRole('link', { name: 'See the roadmap' }).click()
+      await expect(toast(page)).toContainText(DOCUMENT_NOTE)
+      await expect(page.getByRole('status').filter({ has: toast(page) })).toHaveCount(1)
+      await toast(page).getByRole('link', { name: 'See the roadmap' }).click()
       await expect(page).toHaveURL(/\/roadmap$/)
     })
   }
@@ -65,13 +65,13 @@ test.describe('on the start screen', () => {
   test('anything else says it is not supported, and which files are', async ({ page }) => {
     await page.goto('/')
     await drop(page, 'photo.png', Buffer.from([0x89, 0x50, 0x4E, 0x47]))
-    await expect(page.getByRole('alert')).toHaveText('That file type isn\'t supported. Painfold reads CSV, TSV and Excel (.xlsx) files.')
+    await expect(toast(page)).toContainText('That file type isn\'t supported. Painfold reads CSV, TSV and Excel (.xlsx) files.')
   })
 
   test('choosing a document in the file picker gives the same note', async ({ page }) => {
     await page.goto('/')
     await page.getByTestId('file-input').setInputFiles({ name: 'interview.docx', mimeType: 'application/octet-stream', buffer: docx() })
-    await expect(page.getByRole('status').filter({ hasText: DOCUMENT_NOTE })).toBeVisible()
+    await expect(toast(page)).toContainText(DOCUMENT_NOTE)
   })
 })
 
@@ -101,11 +101,54 @@ test.describe('during a review', () => {
     await startReview(page)
     await drop(page, 'interview.docx', docx())
     await expect(page.getByRole('dialog', { name: 'Start over?' })).toBeHidden()
-    const note = page.getByRole('status').filter({ hasText: DOCUMENT_NOTE })
-    await expect(note).toBeVisible()
+    await expect(toast(page)).toContainText(DOCUMENT_NOTE)
     await expect(heading(page)).toHaveText(/findings in 200 rows$/)
-    await note.getByRole('button', { name: 'Dismiss' }).click()
-    await expect(note).toBeHidden()
+    await toast(page).getByRole('button', { name: 'Close' }).click()
+    await expect(toast(page)).toHaveCount(0)
+  })
+})
+
+test.describe('the toast', () => {
+  test('leaves after about 8 seconds, but not while hovered or focused', async ({ page }) => {
+    await page.clock.install()
+    await page.goto('/')
+    await drop(page, 'interview.docx', docx())
+    await expect(toast(page)).toBeVisible()
+    await toast(page).hover()
+    await page.clock.runFor(10_000)
+    await expect(toast(page)).toBeVisible()
+    await page.mouse.move(0, 0)
+    await page.clock.runFor(9_000)
+    await expect(toast(page)).toHaveCount(0)
+
+    await drop(page, 'interview.docx', docx())
+    await toast(page).getByRole('link', { name: 'See the roadmap' }).focus()
+    await page.clock.runFor(10_000)
+    await expect(toast(page)).toBeVisible()
+  })
+
+  test('nothing on the page moves, and it sits above the column step\'s action bar', async ({ page }) => {
+    await page.goto('/')
+    await page.getByRole('button', { name: 'Try the sample file' }).click()
+    const find = page.getByRole('button', { name: /^Find personal data in/ })
+    const before = await find.boundingBox()
+    await drop(page, 'interview.docx', docx())
+    await expect(toast(page)).toBeVisible()
+    expect(await find.boundingBox()).toEqual(before)
+    const bar = (await page.locator('[data-toast-avoid]').first().boundingBox())!
+    const shown = (await toast(page).boundingBox())!
+    expect(shown.y + shown.height).toBeLessThanOrEqual(bar.y + 1)
+  })
+
+  test.describe('on a phone', () => {
+    test.use({ viewport: { width: 390, height: 844 } })
+    test('spans the width, with a margin', async ({ page }) => {
+      await page.goto('/')
+      await drop(page, 'photo.png', Buffer.from([0x89, 0x50, 0x4E, 0x47]))
+      const shown = (await toast(page).boundingBox())!
+      expect(shown.x).toBe(16)
+      expect(shown.width).toBe(390 - 32)
+    })
   })
 })
 
@@ -136,4 +179,12 @@ test.describe('the drop state', () => {
       expect(await overlay.locator('div').first().evaluate(element => getComputedStyle(element).transitionProperty)).toBe('none')
     })
   })
+})
+
+test('the German note reads in German', async ({ page }) => {
+  await page.goto('/de')
+  await drop(page, 'interview.docx', docx())
+  await expect(toast(page)).toContainText('Dokumente und Transkripte stehen auf der Roadmap. Derzeit liest Painfold CSV- und Excel-Dateien.')
+  await expect(toast(page).getByRole('link', { name: 'Zur Roadmap' })).toHaveAttribute('href', '/de/roadmap')
+  await expect(toast(page).getByRole('button', { name: 'Schließen' })).toBeVisible()
 })

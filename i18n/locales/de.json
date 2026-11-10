@@ -522,7 +522,9 @@
   },
   "importNotes": {
     "document": "Dokumente und Transkripte stehen auf der Roadmap. Derzeit liest Painfold CSV- und Excel-Dateien.",
-    "roadmap": "Zur Roadmap",
-    "dismiss": "Schließen"
+    "roadmap": "Zur Roadmap"
+  },
+  "toast": {
+    "close": "Schließen"
   }
 }

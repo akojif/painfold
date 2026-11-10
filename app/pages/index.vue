@@ -14,7 +14,7 @@ const detection = useDetection()
 // Set up here, before the review starts, so names are checked as soon as it does.
 useNameScan()
 
-const { reading, error, documentFormat, openSample, openSheet, openPicked } = useOpenFile()
+const { reading, openSample, openSheet, openPicked } = useOpenFile()
 const detectionFailed = ref(false)
 const detecting = ref(false)
 const input = useTemplateRef<HTMLInputElement>('input')
@@ -156,10 +156,6 @@ async function findPersonalData() {
         >
           {{ $t('start.reading', { name: reading }) }}
         </p>
-        <ImportMessage
-          v-if="error || documentFormat"
-          class="mt-5"
-        />
 
         <p class="mt-6 flex items-center gap-2 text-sm text-fg-muted">
           <svg
@@ -259,10 +255,6 @@ async function findPersonalData() {
         </div>
       </div>
 
-      <ImportMessage
-        dismissible
-        class="mt-6"
-      />
       <ColumnTable
         class="mt-8"
         :counts="columnCounts"
@@ -270,7 +262,10 @@ async function findPersonalData() {
       <PreviewTable class="mt-8" />
       <NameModelDownload class="mt-10" />
 
-      <div class="sticky bottom-0 z-10 mt-8 -mb-8 border-t border-line bg-canvas py-4 sm:-mb-10">
+      <div
+        class="sticky bottom-0 z-10 mt-8 -mb-8 border-t border-line bg-canvas py-4 sm:-mb-10"
+        data-toast-avoid
+      >
         <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
           <p
             class="text-sm text-fg-muted tabular-nums"

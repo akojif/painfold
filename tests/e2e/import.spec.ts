@@ -242,7 +242,7 @@ test.describe('import errors', () => {
     test(`${name} explains what to do next`, async ({ page }) => {
       await page.goto('/')
       await upload(page, name, Buffer.from(content))
-      await expect(page.getByRole('alert')).toHaveText(message)
+      await expect(page.getByTestId('toast')).toContainText(message)
       await upload(page, 'support-tickets.csv', sampleCsv)
       await expectLoaded(page, 'support-tickets.csv', '200 rows')
     })

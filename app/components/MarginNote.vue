@@ -41,6 +41,7 @@ const copiesText = computed(() => {
   <aside
     class="max-lg:fixed max-lg:inset-x-0 max-lg:bottom-0 max-lg:z-10 max-lg:border-t max-lg:border-line max-lg:bg-canvas max-lg:px-4 max-lg:py-4 max-lg:shadow-overlay"
     :class="{ 'lg:sticky lg:top-20': docked }"
+    data-toast-avoid
     aria-labelledby="margin-note-title"
   >
     <form

@@ -96,12 +96,6 @@ onBeforeUnmount(() => window.removeEventListener('beforeunload', onBeforeUnload)
         </button>
       </div>
       <main class="flex flex-1 flex-col py-8 sm:py-10">
-        <!-- After a drop on the review or download step, what happened to the file. The start and column steps show it in place. -->
-        <ImportMessage
-          v-if="step !== 1"
-          dismissible
-          class="mb-6"
-        />
         <slot />
       </main>
     </div>
@@ -164,6 +158,7 @@ onBeforeUnmount(() => window.removeEventListener('beforeunload', onBeforeUnload)
       </div>
     </footer>
     <DropOverlay :visible="dragging" />
+    <ToastRegion />
     <ConfirmDialog />
   </div>
 </template>
