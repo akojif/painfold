@@ -59,6 +59,8 @@ Done when:
 - Every quote is verified to exist word for word in the cleaned feedback.
 - The user sees exactly what will be sent, and how many items, before analysis starts.
 
+Option for self-hosters (not required for the stage): **Painfold Engine**, a self-hosted service (Python, Docker) for companies that run Painfold themselves. It runs the AI analysis with a local model through Ollama and can optionally add server-side name detection (Presidio, spaCy). The online demo stays browser-only, so no data ever reaches a server we host. Tracked in #69.
+
 ## Stage 4: Report (v0.4)
 
 **Goal:** a report a team can act on in one meeting.
