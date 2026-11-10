@@ -19,7 +19,7 @@ import type { Detection } from '../core/detect/types.ts'
 import type { PiiType } from '../core/pii-types.ts'
 import { NAME_MODEL } from '../deploy/model.ts'
 import { detectNamesInBrowser } from './eval-browser.ts'
-import { evaluate, itemsOf, nameTables, toMarkdown, type Mistake } from './eval.ts'
+import { evaluate, itemsOf, nameTables, positionTable, toMarkdown, type Mistake } from './eval.ts'
 import { readStoredDetections, STORED_SETS, storedFormat, writeStoredDetections, type StoredSet } from './name-detections.ts'
 
 const { values } = parseArgs({ options: { set: { type: 'string', default: 'names-dev' }, misses: { type: 'boolean', default: false }, save: { type: 'boolean', default: false } } })
@@ -47,6 +47,7 @@ if (set.startsWith('names') && firstNames) {
   const withoutList = await detectNamesInBrowser(texts, { firstNames: false })
   console.log(`\n${nameTables(items, find, finder(withoutList.detections)).replaceAll('(test split)', `(${set})`)}`)
 }
+if (set === 'long-texts') console.log(`\n${positionTable(items, find)}`)
 if (values.misses) {
   const shown = mistakes.filter(mistake => mistake.type === 'NAME' || mistake.type === 'PLACE')
   const textOf = new Map(items.map(item => [item.id, item.text]))

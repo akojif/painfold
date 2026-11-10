@@ -33,6 +33,7 @@ export type Mistake = { id: string, kind: 'missed' | 'wrong', type: PiiType, tex
 export const SETS: ReadonlyArray<{ name: string, stored: StoredSet }> = [
   { name: 'Generated', stored: 'generated' },
   { name: 'Hand-written hard cases', stored: 'hard-cases' },
+  { name: 'Hand-written long texts', stored: 'long-texts' },
   { name: 'Hand-written names (test split)', stored: 'names-test' },
 ]
 export const NAMES_PATH = 'data/eval/names.jsonl'
@@ -193,6 +194,31 @@ export function nameTables(items: readonly EvalItem[], find: (text: string) => D
   ].join('\n')
 }
 
+/**
+ * Name recall in long texts by where the name is: in the first, middle or last
+ * third of the text. The model reads about 512 tokens at a time, so names
+ * further in are found only because long texts are checked in chunks.
+ */
+export function positionTable(items: readonly EvalItem[], find: (text: string) => Detection[]): string {
+  const thirds = ['Start', 'Middle', 'End'] as const
+  const counts = thirds.map(() => ({ de: { labelled: 0, found: 0 }, en: { labelled: 0, found: 0 } }))
+  for (const item of items) {
+    const found = find(item.text)
+    for (const span of item.spans.filter(span => span.type === 'NAME')) {
+      const third = counts[Math.min(2, Math.floor((span.start / item.text.length) * 3))]![item.lang]
+      third.labelled++
+      if (covers(found, span.start, span.end)) third.found++
+    }
+  }
+  return [
+    '**Names by where they are in a long text (removal recall).** Each text is far longer than the 512 tokens the name model reads at once.',
+    '',
+    '| Position | DE removal | DE names | EN removal | EN names |',
+    '| --- | ---: | ---: | ---: | ---: |',
+    ...thirds.map((third, i) => `| ${third} | ${ratio(counts[i]!.de.found, counts[i]!.de.labelled)} | ${counts[i]!.de.labelled} | ${ratio(counts[i]!.en.found, counts[i]!.en.labelled)} | ${counts[i]!.en.labelled} |`),
+  ].join('\n')
+}
+
 /** Finds detections for a set's texts: the rules, plus the name model's stored browser detections outside them, as in the review. */
 export function finderFor(set: StoredSet, items: readonly EvalItem[], stored: StoredDetections | undefined = readStoredDetections()): (text: string) => Detection[] {
   const names = stored?.sets[set]
@@ -226,7 +252,8 @@ export function currentTables(stored: StoredDetections | undefined = readStoredD
     return { name: set.name, scores: evaluate(items, finderFor(set.stored, items, stored)) }
   }), typeNames)
   const test = itemsOf('names-test')
-  return `${sets}\n\n${nameTables(test, finderFor('names-test', test, stored), finderFor('names-test-without-list', test, stored))}`
+  const long = itemsOf('long-texts')
+  return `${sets}\n\n${nameTables(test, finderFor('names-test', test, stored), finderFor('names-test-without-list', test, stored))}\n\n${positionTable(long, finderFor('long-texts', long, stored))}`
 }
 
 if (import.meta.main) {

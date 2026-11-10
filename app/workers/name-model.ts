@@ -14,13 +14,18 @@ import type { ModelToken } from '../../core/detect/names'
 import type { NameModel } from '../../core/detect/worker-protocol'
 import { MODEL_CACHE, NAME_MODEL, ORT_WASM } from '../../deploy/model'
 
-type TokenClassifier = (text: string, options: { ignore_labels: string[] }) => Promise<unknown>
+type TokenClassifier = ((text: string, options: { ignore_labels: string[] }) => Promise<unknown>) & { tokenizer: { encode: (text: string) => number[], model_max_length: number } }
 type ProgressInfo = { status: string, file?: string, loaded?: number }
+
+// Characters below which a text always fits the model's 512 tokens, without counting.
+const SURE_TO_FIT = 250
 
 // Threads need cross-origin isolation (deploy/headers.ts); without it, one thread.
 const THREADS = 4
 
 let classifier: Promise<TokenClassifier> | undefined
+// The loaded classifier, for the synchronous length check.
+let ready: TokenClassifier | undefined
 
 /** Reads a response to the end, reporting the bytes read so far. */
 async function readAll(response: Response, onProgress: (loaded: number) => void): Promise<Uint8Array<ArrayBuffer>> {
@@ -86,12 +91,19 @@ export function nameModel(ortPath: string): NameModel {
         }) as unknown as TokenClassifier
       })()
       try {
-        await classifier
+        ready = await classifier
       }
       catch (error) {
         classifier = undefined
         throw error
       }
+    },
+    // Counted with the model's own tokenizer, special tokens included, so the limit is exact for every script.
+    // Short texts are not counted: the tokenizer makes at most about one token per
+    // character, so SURE_TO_FIT characters (twice over, plus the special tokens) always fit.
+    fits(text) {
+      if (text.length <= SURE_TO_FIT) return true
+      return ready!.tokenizer.encode(text).length <= ready!.tokenizer.model_max_length
     },
     async label(text) {
       const classify = await classifier!

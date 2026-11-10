@@ -9,6 +9,7 @@ import { dirname } from 'node:path'
 import { parseArgs } from 'node:util'
 import { utils, write as writeWorkbook } from 'xlsx'
 import { HARD_CASES } from './fake-data/hard-cases.ts'
+import { LONG_TEXT_CASES } from './fake-data/long-texts.ts'
 import { NAME_CASES } from './fake-data/names.ts'
 import { mark, parseMarkup, type LabelledText } from './fake-data/markup.ts'
 import { seededRandom, type Random } from './fake-data/random.ts'
@@ -26,6 +27,7 @@ export const SAMPLE_XLSX_PATH = 'data/sample/support-tickets.xlsx'
 export const EVAL_GENERATED_PATH = 'data/eval/generated.jsonl'
 export const EVAL_HARD_CASES_PATH = 'data/eval/hard-cases.jsonl'
 export const EVAL_NAMES_PATH = 'data/eval/names.jsonl'
+export const EVAL_LONG_TEXTS_PATH = 'data/eval/long-texts.jsonl'
 
 function fillSlot(slot: string, random: Random, lang: Lang, who: Person): string {
   switch (slot) {
@@ -148,6 +150,10 @@ export function buildEvalNames(): string {
   })))
 }
 
+export function buildEvalLongTexts(): string {
+  return toJsonl(LONG_TEXT_CASES.map(({ lang, source }, i) => ({ id: `long-${String(i + 1).padStart(2, '0')}`, lang, ...parseMarkup(source) })))
+}
+
 async function write(path: string, content: string | Uint8Array) {
   await mkdir(dirname(path), { recursive: true })
   await writeFile(path, content)
@@ -166,6 +172,7 @@ async function main() {
   await write(EVAL_GENERATED_PATH, buildEvalGenerated(EVAL_SEED, EVAL_ITEMS))
   await write(EVAL_HARD_CASES_PATH, buildEvalHardCases())
   await write(EVAL_NAMES_PATH, buildEvalNames())
+  await write(EVAL_LONG_TEXTS_PATH, buildEvalLongTexts())
 }
 
 if (import.meta.main) await main()

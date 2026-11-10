@@ -51,6 +51,7 @@ describe('nameDetections', () => {
 
 describe('handleNameRequest', () => {
   const fakeModel = (labelled: string[]): NameModel => ({
+    fits: () => true,
     async load(onProgress) {
       onProgress(50)
       onProgress(100)
@@ -85,6 +86,7 @@ describe('handleNameRequest', () => {
   it('reports a failure without echoing the text', async () => {
     const sent: NameResponse[] = []
     const failing: NameModel = {
+      fits: () => true,
       load: async () => {
         throw new Error('Model files missing')
       },
@@ -92,5 +94,29 @@ describe('handleNameRequest', () => {
     }
     await handleNameRequest({ kind: 'names', id: 2, rows: [['Anna aus Wien']], columns: [0], ortPath: '/ort/x/' }, response => sent.push(response), failing)
     expect(sent).toEqual([{ kind: 'error', id: 2, message: 'Model files missing' }])
+  })
+})
+
+describe('long texts', () => {
+  // Like the real model, this one reads only its first 100 characters and ignores the rest.
+  const LIMIT = 100
+  const reading: NameModel = {
+    fits: text => text.length <= LIMIT,
+    async load() {},
+    async label(text) {
+      const read = text.slice(0, LIMIT)
+      return [...read.matchAll(/\b(?:Anna|Ben|Clara)\b/g)].map(match => ({ entity: 'B-PER', word: match[0] }))
+    },
+  }
+  const filler = 'Der Export dauert seit dem Update ewig und bricht manchmal ab. '
+
+  it('finds names early, in the middle and late in a text far longer than the model reads', async () => {
+    const text = `Anna schreibt: ${filler.repeat(4)}Ben hat das auch gesehen. ${filler.repeat(4)}Liebe Grüße, Clara`
+    const sent: NameResponse[] = []
+    await handleNameRequest({ kind: 'names', id: 1, rows: [[text]], columns: [0], ortPath: '/ort/x/' }, response => sent.push(response), reading)
+    const result = sent.at(-1)
+    expect(result?.kind).toBe('result')
+    const found = result?.kind === 'result' ? result.cells[0]!.detections.map(d => `${d.type}:${d.value}@${text.slice(d.start, d.end) === d.value}`) : []
+    expect(found).toEqual(['NAME:Anna@true', 'NAME:Ben@true', 'NAME:Clara@true'])
   })
 })
