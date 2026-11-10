@@ -93,8 +93,8 @@ const findingsByCell = computed(() => {
   return byCell
 })
 
-// Every row is shown by default in v0.1: names are not detected yet, and rows
-// without findings are where they hide.
+// Every row is shown by default: names can still be missed (and are not found
+// at all without the name model), and rows without findings are where they hide.
 const rowIndices = computed(() => {
   if (!table.value) return []
   if (!onlyWithFindings.value) return table.value.rows.map((_, index) => index)

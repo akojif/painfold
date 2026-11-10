@@ -22,7 +22,7 @@
   },
   "start": {
     "headline": "Find what hurts your customers. Without exposing who they are.",
-    "subline": "Start by cleaning your feedback file: emails, phone numbers, IBANs and more are removed right here in your browser.",
+    "subline": "Start by cleaning your feedback file: names, emails, phone numbers, IBANs and more are removed right here in your browser.",
     "choose": "Choose a CSV or Excel file",
     "sampleButton": "Try the sample file",
     "sampleNote": "200 made-up tickets, no real people",
@@ -320,12 +320,14 @@
   },
   "example": {
     "caption": "A support ticket, before and after cleaning",
-    "ticket": "Please call me back on {phone} or email me at {email}.",
+    "ticket": "Hi, this is {name} from {place}. Please call me back on {phone} or email me at {email}.",
     "found": "Found in the file",
-    "description": "Example: in a support ticket, a phone number and an email address are replaced by the placeholders [PHONE_1] and [EMAIL_1].",
+    "description": "Example: in a support ticket, a name, a place, a phone number and an email address are replaced by the placeholders [NAME_1], [PLACE_1], [PHONE_1] and [EMAIL_1].",
     "removed": "{type} removed:",
     "languages": "Works with German and English feedback",
     "values": {
+      "name": "Olivia Hartley",
+      "place": "Leeds",
       "email": "olivia.hartley{'@'}example.com",
       "phone": "+44 20 7946 0958",
       "iban": "DE89 3704 0044 0532 0130 00",

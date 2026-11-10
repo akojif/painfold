@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // A support ticket before and after cleaning: once, shortly after the page
-// loads, the phone number and email turn into their placeholders, and the
-// value list below shows the same change. With reduced motion it starts cleaned.
+// loads, the name, place, phone number and email turn into their placeholders,
+// and the value list below shows the same change. With reduced motion it starts cleaned.
 const cleaned = ref(false)
 let timer: ReturnType<typeof setTimeout> | undefined
 
@@ -15,12 +15,16 @@ onBeforeUnmount(() => clearTimeout(timer))
 // locale files, so the English page shows an English ticket and /de/ a German
 // one; all of them are reserved or documentation values (see data/README.md).
 const values = [
+  { type: 'NAME', key: 'name', token: '[NAME_1]' },
+  { type: 'PLACE', key: 'place', token: '[PLACE_1]' },
   { type: 'EMAIL', key: 'email', token: '[EMAIL_1]' },
   { type: 'PHONE', key: 'phone', token: '[PHONE_1]' },
   { type: 'IBAN', key: 'iban', token: '[IBAN_1]' },
   { type: 'ADDRESS', key: 'address', token: '[ADDRESS_1]' },
   { type: 'DATE_OF_BIRTH', key: 'dateOfBirth', token: '[DATE_OF_BIRTH_1]' },
 ] as const
+// The values that appear in the ticket itself, each a placeholder that reveals what it replaced.
+const inTicket = values.filter(item => (['name', 'place', 'phone', 'email'] as string[]).includes(item.key))
 </script>
 
 <template>
@@ -44,20 +48,20 @@ const values = [
           tag="p"
         >
           <template
-            v-for="slot in (['phone', 'email'] as const)"
-            :key="slot"
-            #[slot]
+            v-for="item in inTicket"
+            :key="item.key"
+            #[item.key]
           >
             <RevealToken
               v-if="cleaned"
-              :placeholder="slot === 'phone' ? '[PHONE_1]' : '[EMAIL_1]'"
-              :type="slot === 'phone' ? 'PHONE' : 'EMAIL'"
-              :original="$t(`example.values.${slot}`)"
+              :placeholder="item.token"
+              :type="item.type"
+              :original="$t(`example.values.${item.key}`)"
             />
             <span
               v-else
               class="rounded-sm bg-pending px-0.5 text-on-pending underline decoration-pending-line decoration-1 underline-offset-4"
-            >{{ $t(`example.values.${slot}`) }}</span>
+            >{{ $t(`example.values.${item.key}`) }}</span>
           </template>
         </i18n-t>
       </div>
