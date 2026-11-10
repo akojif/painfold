@@ -11,12 +11,13 @@
       "review": "Prüfen",
       "download": "Herunterladen"
     },
-    "startOver": "Neu beginnen"
+    "startOver": "Neu beginnen",
+    "newTab": "(öffnet in neuem Tab)"
   },
   "footer": {
     "source": "Open Source",
     "roadmap": "Roadmap",
-    "credit": "Mit Liebe gemacht von {name}",
+    "credit": "Entwickelt von {name}",
     "factsLabel": "Über Painfold",
     "noCookies": "Keine Cookies",
     "noAccount": "Kein Konto"
