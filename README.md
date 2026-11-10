@@ -37,7 +37,7 @@ Names and places follow in v0.2, finding customer jobs, pains and gains in v0.3.
 ## Privacy
 
 - Your file is never uploaded. It stays in your browser, and an end-to-end test checks that no request leaves it while you import, check and download.
-- No cookies, no analytics, no tracking. The only things Painfold stores are your theme choice (Light or Dark, under `painfold-theme`; choosing System removes it) and your language choice (`painfold-language`), both in `localStorage`.
+- No cookies, no analytics, no tracking. The only things Painfold stores are your theme choice (Light or Dark, under `painfold-theme`; choosing System removes it) and your language choice (`painfold-language`), both in `localStorage`, and, if you download it, the name model (152 MB, in Cache Storage under `painfold-name-model`), which you can remove in Painfold.
 - From v0.3, when analysis arrives: nothing is sent to an AI until you have reviewed what was removed, and the AI is your choice (your own API key or a local model).
 
 ## What you download

@@ -1,12 +1,18 @@
 <script setup lang="ts">
+import type { NetworkEntry } from '~/composables/useNetworkLog'
+
 const { t } = useI18n()
 const { number } = useFormat()
 const { entries, foreign, foreignBytes } = useNetworkLog()
 const dialog = useTemplateRef<HTMLDialogElement>('dialog')
 const label = computed(() => t('header.bytes', { n: number(foreignBytes.value) }, foreignBytes.value))
 
-function size(bytes: number) {
-  return bytes < 1024 ? t('network.bytes', { n: number(bytes) }) : t('network.kilobytes', { n: number(Math.round(bytes / 1024)) })
+function size(entry: NetworkEntry) {
+  if (entry.stored) return t('network.stored')
+  const { bytes } = entry
+  if (bytes < 1024) return t('network.bytes', { n: number(bytes) })
+  if (bytes < 1_000_000) return t('network.kilobytes', { n: number(Math.round(bytes / 1024)) })
+  return t('network.megabytes', { n: number(Math.round(bytes / 1_000_000)) })
 }
 </script>
 
@@ -100,8 +106,11 @@ function size(bytes: number) {
                 <td class="py-1.5 pr-3 whitespace-nowrap text-fg-muted">
                   {{ entry.own ? $t(`network.kind.${entry.kind}`) : $t('network.otherSite') }}
                 </td>
-                <td class="py-1.5 text-right whitespace-nowrap tabular-nums">
-                  {{ size(entry.bytes) }}
+                <td
+                  class="py-1.5 text-right whitespace-nowrap tabular-nums"
+                  :class="{ 'text-fg-muted': entry.stored }"
+                >
+                  {{ size(entry) }}
                 </td>
               </tr>
             </tbody>

@@ -283,6 +283,7 @@ async function findPersonalData() {
         :counts="columnCounts"
       />
       <PreviewTable class="mt-8" />
+      <NameModelDownload class="mt-10" />
 
       <div class="sticky bottom-0 z-10 mt-8 -mb-8 border-t border-line bg-canvas py-4 sm:-mb-10">
         <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">

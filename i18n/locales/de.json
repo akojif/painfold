@@ -281,13 +281,17 @@
       "style": "Stile",
       "font": "Schrift",
       "data": "App-Daten",
-      "other": "Sonstiges"
+      "other": "Sonstiges",
+      "model": "Namensmodell",
+      "runtime": "Modell-Laufzeit"
     },
     "otherSite": "Andere Website",
-    "allOwn": "Alle Anfragen gingen an diese Website ({host}): der eigene Code, die Schriften und die Texte der App.",
+    "allOwn": "Alle Anfragen gingen an diese Website ({host}): der eigene Code, die Schriften und die Texte der App und, falls geladen, das Namensmodell.",
     "bytes": "{n} B",
     "kilobytes": "{n} kB",
-    "close": "Schließen"
+    "close": "Schließen",
+    "stored": "Aus diesem Browser",
+    "megabytes": "{n} MB"
   },
   "report": {
     "title": "Painfold-Bereinigungsbericht",
@@ -423,5 +427,34 @@
     "label": "Sprache",
     "en": "Englisch",
     "de": "Deutsch"
+  },
+  "nameModel": {
+    "heading": "Namen und Orte",
+    "explain": "Für Namen und Orte braucht es ein Namensmodell: {size}, einmal von dieser Website geladen und in diesem Browser gespeichert. Ihre Datei wird nirgendwohin gesendet.",
+    "download": "Namensmodell herunterladen ({size})",
+    "downloadInline": "Namensmodell herunterladen ({size})",
+    "notChecked": "Namen werden nicht geprüft.",
+    "costly": "Das ist ein großer Download. Am besten über WLAN.",
+    "progress": "Namensmodell wird geladen: {loaded} von {total} MB",
+    "progressLabel": "Download des Namensmodells",
+    "background": "Sie können die Prüfung schon starten. Der Download läuft im Hintergrund weiter.",
+    "cancel": "Abbrechen",
+    "stored": "Namensmodell in diesem Browser gespeichert ({size}).",
+    "notStored": "Dieser Browser hatte keinen Platz, um das Namensmodell zu behalten. Es funktioniert für diesen Besuch und wird beim nächsten Mal neu geladen.",
+    "remove": "Entfernen",
+    "failed": "Der Download hat bei {loaded} von {total} MB aufgehört. Prüfen Sie die Verbindung und versuchen Sie es erneut.",
+    "withoutIt": "Alles andere wird auch ohne das Modell geprüft.",
+    "retry": "Erneut versuchen",
+    "offline": "Sie sind offline. Das Namensmodell kann geladen werden, sobald Sie wieder online sind; alles andere funktioniert schon jetzt.",
+    "offlineInline": "Namen werden nicht geprüft. Sie sind offline.",
+    "megabytes": "{n} MB",
+    "announce": {
+      "started": "Namensmodell wird geladen.",
+      "done": "Namensmodell geladen.",
+      "failed": "Der Download des Namensmodells hat aufgehört.",
+      "cancelled": "Download abgebrochen.",
+      "removed": "Namensmodell aus diesem Browser entfernt.",
+      "offline": "Sie sind offline."
+    }
   }
 }
