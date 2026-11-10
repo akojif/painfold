@@ -17,6 +17,7 @@ npm run licenses     # fail on dependency licenses outside the allowlist
 npm run eval         # detection recall and precision; --write updates the numbers in docs/accuracy.md
 npm run models       # download and check the name model (also part of dev and generate)
 npm run test:model   # run the real name model through the post-processing (after npm run models)
+npm run eval:names   # name and place accuracy in Chromium (after npm run generate); see below
 ```
 
 Run `npm run generate` before `npm run test:e2e`. The first time, install the test browser with `npx playwright install chromium`.
@@ -80,6 +81,10 @@ Names and places are found by [Davlan/distilbert-base-multilingual-cased-ner-hrl
 - A worker's requests are not in the page's Resource Timing, so the names worker passes its own on, and the "What leaves your browser" panel lists the model and runtime files too.
 - Until names are used in the review (#65), the download is hidden on the production site: `runtimeConfig.public.nameModel` is false when `VERCEL_ENV` is `production`. Previews, CI and local builds show it.
 - transformers.js imports the WebGPU build of ONNX Runtime; `nuxt.config.ts` aliases it to the plain WebAssembly build, which halves the runtime download (14 MB instead of up to 28 MB). Painfold runs the model on the CPU.
+- Name and place accuracy is measured only in the browser: `npm run eval:names` starts the built names worker in headless Chromium, cross-origin isolated with threads, and checks each text with the rules and the model together, as the app does. Native ONNX Runtime in Node gives different results on different processors, so it is never used for the numbers.
+  - The dev split (`--split dev`, the default) is for tuning: `--misses` lists every missed and wrong name or place. It includes look-alikes, greetings and sign-offs followed by words that are not names ("Hallo Team", "Liebe Grüße", "Dear Customer Support"), so precision is tuned too.
+  - The test split (`--split test`) is only reported, never tuned against.
+  - `--save` stores a split's detections in `data/eval/name-detections.json`. An end-to-end test reruns the worker on the same texts and fails if anything differs, so the stored detections, and the numbers computed from them, cannot go stale. It is a pass/fail check, not used for tuning.
 - To change the model: update the revision and hashes in `deploy/model.ts`, run `npm run models` and `npm run test:model`, and re-measure accuracy and speed.
 - CI caches the downloaded files between runs. `core/detect/names.ts` turns the model's word pieces into names and places and has unit tests; `tests/model/` runs the real model.
 
