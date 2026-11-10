@@ -13,17 +13,29 @@ export const NAME_MODEL = {
   original: 'Davlan/distilbert-base-multilingual-cased-ner-hrl',
   license: 'AFL-3.0',
   dtype: 'int8',
+  // Each file's SHA-256 and size. The size is shown to users before they agree
+  // to the download, so it is checked too (scripts/fetch-model.ts). These are
+  // exactly the files transformers.js loads; the repository has more.
   files: {
-    'config.json': '38847be4dc6699b1218a749ed69f888c2ccc7b4deba98e3c4a1cac8cb34d54c8',
-    'tokenizer.json': 'bf1b59b7b11c95f194f51708d918eea378e09d05f84c0e1656dc5180e8117088',
-    'tokenizer_config.json': '2d61ce6c7646881e0e7ef08e3b5dd655a19553ab85c41b1a3c27090a63ff6f49',
-    'special_tokens_map.json': 'b6d346be366a7d1d48332dbc9fdf3bf8960b5d879522b7799ddba59e76237ee3',
-    'onnx/model_int8.onnx': '92977e4b2335a2ee2fb95225e32fd0743a608091856b245c27d9001772023b06',
-  } as Record<string, string>,
+    'config.json': { sha256: '38847be4dc6699b1218a749ed69f888c2ccc7b4deba98e3c4a1cac8cb34d54c8', bytes: 927 },
+    'tokenizer.json': { sha256: 'bf1b59b7b11c95f194f51708d918eea378e09d05f84c0e1656dc5180e8117088', bytes: 2_919_362 },
+    'tokenizer_config.json': { sha256: '2d61ce6c7646881e0e7ef08e3b5dd655a19553ab85c41b1a3c27090a63ff6f49', bytes: 373 },
+    'onnx/model_int8.onnx': { sha256: '92977e4b2335a2ee2fb95225e32fd0743a608091856b245c27d9001772023b06', bytes: 135_115_720 },
+  } as Record<string, { sha256: string, bytes: number }>,
 } as const
 
 /** Where the model is served from: /models/<id>/<revision>/. */
 export const MODEL_PATH = `/models/${NAME_MODEL.id}/${NAME_MODEL.revision}/`
+
+/** The model files' total size in bytes. */
+export const MODEL_BYTES = Object.values(NAME_MODEL.files).reduce((sum, file) => sum + file.bytes, 0)
+
+/**
+ * The browser cache (Cache Storage) that keeps the downloaded model files and
+ * the runtime's WebAssembly file, and nothing else, so removing the model
+ * deletes exactly this cache.
+ */
+export const MODEL_CACHE = 'painfold-name-model'
 
 /**
  * The ONNX Runtime WebAssembly files, served from /ort/<version>/ instead of a CDN.
@@ -32,4 +44,8 @@ export const MODEL_PATH = `/models/${NAME_MODEL.id}/${NAME_MODEL.revision}/`
  * instead of up to 28 MB; Painfold runs the model on the CPU, with threads.
  */
 export const ORT_PREFIX = '/ort/'
-export const ORT_FILES = ['ort-wasm-simd-threaded.mjs', 'ort-wasm-simd-threaded.wasm'] as const
+/** The runtime itself (14 MB), kept with the model files in MODEL_CACHE. */
+export const ORT_WASM = 'ort-wasm-simd-threaded.wasm'
+/** The script that loads it (24 kB), which the browser imports by its address and keeps in its HTTP cache. */
+export const ORT_LOADER = 'ort-wasm-simd-threaded.mjs'
+export const ORT_FILES = [ORT_LOADER, ORT_WASM] as const
