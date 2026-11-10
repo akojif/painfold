@@ -51,7 +51,7 @@ The list of original values behind each placeholder is never exported; it is gon
 
 ## Accuracy and speed
 
-Detection is measured per data type and language, on generated messages, on hand-written hard cases and on hand-written names from 13 communities living in Austria, and checked in CI. On the name test split, 97 % of names are removed (0.98 in German, 0.96 in English), and at least 92 % in every name-origin group; the model is measured in the browser, as users run it. On the hard cases nothing that only looks like personal data is removed, apart from one known case, and the known misses are listed. A 5,000-row file is cleaned in about 1.5 seconds; with the name model in the browser, names in it are checked in about 71 seconds, in the background. Numbers, method and known gaps: [docs/accuracy.md](docs/accuracy.md).
+Detection is measured per data type and language, on generated messages, on hand-written hard cases and on hand-written names from 13 communities living in Austria, and checked in CI. On the name test split, 97 % of names are removed (0.98 in German, 0.96 in English), and at least 92 % in every name-origin group; the model is measured in the browser, as users run it. On the hard cases nothing that only looks like personal data is removed, apart from one known case, and the known misses are listed. A 5,000-row file is cleaned in about 1.5 seconds; with the name model in the browser, names in it are checked in 70 to 115 seconds, in the background. Numbers, method and known gaps: [docs/accuracy.md](docs/accuracy.md).
 
 Automatic detection can miss personal data, including names. Review the results before sharing the cleaned file.
 

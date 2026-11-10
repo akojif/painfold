@@ -1309,6 +1309,16 @@
       "hard-103": [],
       "hard-104": []
     },
+    "long-texts": {
+      "long-01": [{"type":"NAME","start":26,"end":42},{"type":"NAME","start":2939,"end":2951},{"type":"NAME","start":5893,"end":5908}],
+      "long-02": [{"type":"NAME","start":13,"end":28},{"type":"NAME","start":2928,"end":2944},{"type":"PLACE","start":2965,"end":2969},{"type":"NAME","start":5886,"end":5900}],
+      "long-03": [{"type":"NAME","start":21,"end":33},{"type":"NAME","start":2915,"end":2927},{"type":"NAME","start":5847,"end":5862}],
+      "long-04": [{"type":"NAME","start":18,"end":33},{"type":"NAME","start":2921,"end":2933},{"type":"PLACE","start":2937,"end":2941},{"type":"NAME","start":5853,"end":5866}],
+      "long-05": [{"type":"NAME","start":26,"end":43},{"type":"NAME","start":2648,"end":2659},{"type":"PLACE","start":2679,"end":2684},{"type":"NAME","start":5340,"end":5355}],
+      "long-06": [{"type":"NAME","start":13,"end":25},{"type":"NAME","start":2631,"end":2643},{"type":"PLACE","start":2647,"end":2657},{"type":"NAME","start":5281,"end":5296}],
+      "long-07": [{"type":"NAME","start":12,"end":26},{"type":"NAME","start":2640,"end":2655},{"type":"NAME","start":5292,"end":5306}],
+      "long-08": [{"type":"NAME","start":23,"end":39},{"type":"NAME","start":2643,"end":2650},{"type":"PLACE","start":2654,"end":2661},{"type":"NAME","start":5275,"end":5290}]
+    },
     "names-dev": {
       "name-001": [{"type":"NAME","start":5,"end":25},{"type":"PLACE","start":30,"end":38}],
       "name-005": [{"type":"NAME","start":4,"end":19}],

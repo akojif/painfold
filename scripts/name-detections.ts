@@ -13,6 +13,7 @@ export const DETECTIONS_PATH = 'data/eval/name-detections.json'
 export const STORED_SETS = {
   'generated': { path: 'data/eval/generated.jsonl', firstNames: true },
   'hard-cases': { path: 'data/eval/hard-cases.jsonl', firstNames: true },
+  'long-texts': { path: 'data/eval/long-texts.jsonl', firstNames: true },
   'names-dev': { path: 'data/eval/names.jsonl', split: 'dev', firstNames: true },
   'names-test': { path: 'data/eval/names.jsonl', split: 'test', firstNames: true },
   'names-test-without-list': { path: 'data/eval/names.jsonl', split: 'test', firstNames: false },

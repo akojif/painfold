@@ -7,14 +7,14 @@ import { seededRandom } from '../../scripts/fake-data/random'
 import { isValidIban, isValidLuhn, isValidSvnr, isValidVatId } from '../../scripts/fake-data/values'
 import {
   buildEvalGenerated, buildEvalHardCases, buildEvalNames, buildSample, buildSampleXlsx,
-  EVAL_GENERATED_PATH, EVAL_HARD_CASES_PATH, EVAL_NAMES_PATH, EVAL_ITEMS, EVAL_SEED, SAMPLE_PATH, SAMPLE_ROWS, SAMPLE_SEED, SAMPLE_XLSX_PATH,
+  EVAL_GENERATED_PATH, EVAL_HARD_CASES_PATH, EVAL_LONG_TEXTS_PATH, EVAL_NAMES_PATH, EVAL_ITEMS, EVAL_SEED, SAMPLE_PATH, SAMPLE_ROWS, SAMPLE_SEED, SAMPLE_XLSX_PATH,
 } from '../../scripts/generate-fake-data'
 
 const read = (path: string) => readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8')
 
 type Span = { start: number, end: number, type: string, text: string }
 type Item = { id: string, lang: string, text: string, spans: Span[] }
-const evalItems: Item[] = [EVAL_GENERATED_PATH, EVAL_HARD_CASES_PATH, EVAL_NAMES_PATH]
+const evalItems: Item[] = [EVAL_GENERATED_PATH, EVAL_HARD_CASES_PATH, EVAL_NAMES_PATH, EVAL_LONG_TEXTS_PATH]
   .flatMap(path => read(path).trim().split('\n').map(line => JSON.parse(line) as Item))
 const spansOf = (type: string) => evalItems.flatMap(item => item.spans.filter(span => span.type === type))
 
