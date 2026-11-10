@@ -2,18 +2,19 @@ import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import { PII_TYPES } from '../../core/pii-types'
 import { parseMarkup } from '../../scripts/fake-data/markup'
+import { NAME_GROUPS } from '../../scripts/fake-data/names'
 import { seededRandom } from '../../scripts/fake-data/random'
 import { isValidIban, isValidLuhn, isValidSvnr, isValidVatId } from '../../scripts/fake-data/values'
 import {
-  buildEvalGenerated, buildEvalHardCases, buildSample, buildSampleXlsx,
-  EVAL_GENERATED_PATH, EVAL_HARD_CASES_PATH, EVAL_ITEMS, EVAL_SEED, SAMPLE_PATH, SAMPLE_ROWS, SAMPLE_SEED, SAMPLE_XLSX_PATH,
+  buildEvalGenerated, buildEvalHardCases, buildEvalNames, buildSample, buildSampleXlsx,
+  EVAL_GENERATED_PATH, EVAL_HARD_CASES_PATH, EVAL_NAMES_PATH, EVAL_ITEMS, EVAL_SEED, SAMPLE_PATH, SAMPLE_ROWS, SAMPLE_SEED, SAMPLE_XLSX_PATH,
 } from '../../scripts/generate-fake-data'
 
 const read = (path: string) => readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8')
 
 type Span = { start: number, end: number, type: string, text: string }
 type Item = { id: string, lang: string, text: string, spans: Span[] }
-const evalItems: Item[] = [EVAL_GENERATED_PATH, EVAL_HARD_CASES_PATH]
+const evalItems: Item[] = [EVAL_GENERATED_PATH, EVAL_HARD_CASES_PATH, EVAL_NAMES_PATH]
   .flatMap(path => read(path).trim().split('\n').map(line => JSON.parse(line) as Item))
 const spansOf = (type: string) => evalItems.flatMap(item => item.spans.filter(span => span.type === type))
 
@@ -55,12 +56,13 @@ describe('committed fake data', () => {
     expect(read(SAMPLE_PATH)).toBe(buildSample(SAMPLE_SEED, SAMPLE_ROWS))
     expect(read(EVAL_GENERATED_PATH)).toBe(buildEvalGenerated(EVAL_SEED, EVAL_ITEMS))
     expect(read(EVAL_HARD_CASES_PATH)).toBe(buildEvalHardCases())
+    expect(read(EVAL_NAMES_PATH)).toBe(buildEvalNames())
     const committedXlsx = readFileSync(new URL(`../../${SAMPLE_XLSX_PATH}`, import.meta.url))
     expect(Buffer.compare(committedXlsx, Buffer.from(buildSampleXlsx(SAMPLE_SEED, SAMPLE_ROWS)))).toBe(0)
   })
 
   it('contains no email address outside the reserved example domains', () => {
-    for (const path of [SAMPLE_PATH, EVAL_GENERATED_PATH, EVAL_HARD_CASES_PATH]) {
+    for (const path of [SAMPLE_PATH, EVAL_GENERATED_PATH, EVAL_HARD_CASES_PATH, EVAL_NAMES_PATH]) {
       for (const [address] of read(path).matchAll(/[\w.+-]+@[\w-]+(?:\.[\w-]+)+/g)) {
         // \b, not $: a hard case leaves out the space after the full stop ("example.com.Danke").
         expect(address.toLowerCase(), path).toMatch(/@(?:mail\.)?example\.(?:com|org|net)\b/)
@@ -135,6 +137,33 @@ describe('evaluation set', () => {
       if (/^(?:0044|44|0)7700/.test(digits)) expect(digits, span.text).toMatch(/7700900\d{3}$/)
       if (/^(?:0044|44|0)20/.test(digits)) expect(digits, span.text).toMatch(/20?79460\d{3}$/)
     }
+  })
+})
+
+describe('hand-written name set', () => {
+  type NameItem = Item & { group: string, split: 'dev' | 'test' }
+  const items = read(EVAL_NAMES_PATH).trim().split('\n').map(line => JSON.parse(line) as NameItem)
+  const names = (filter: (item: NameItem) => boolean) => items.filter(filter).flatMap(item => item.spans.filter(span => span.type === 'NAME'))
+
+  it('covers every name-origin group in German and English sentences', () => {
+    expect(new Set(items.map(item => item.group))).toEqual(new Set(NAME_GROUPS))
+    for (const group of NAME_GROUPS) {
+      for (const lang of ['de', 'en']) expect(names(item => item.group === group && item.lang === lang).length, `${group} ${lang}`).toBeGreaterThanOrEqual(6)
+    }
+  })
+
+  it('has at least 25 test names and 3 dev names per group, so a single miss does not decide the target', () => {
+    for (const group of NAME_GROUPS) {
+      expect(names(item => item.group === group && item.split === 'test').length, group).toBeGreaterThanOrEqual(25)
+      expect(names(item => item.group === group && item.split === 'dev').length, group).toBeGreaterThanOrEqual(3)
+    }
+  })
+
+  it('includes diacritics, transliteration variants, multi-part and particle names', () => {
+    const all = names(() => true).map(span => span.text).join(' ')
+    for (const letter of ['ć', 'š', 'ž', 'ğ', 'ı', 'ș', 'ő', 'ł']) expect(all, letter).toContain(letter)
+    for (const variant of ['Mohammed', 'Muhammad', 'Mohamad', 'Mohammad']) expect(all, variant).toContain(variant)
+    for (const name of ['Abdul Rahman Darwish', 'Mohammed Al-Hassan', 'Sanne van der Berg']) expect(all, name).toContain(name)
   })
 })
 

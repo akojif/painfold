@@ -12,6 +12,7 @@ node scripts/generate-fake-data.ts --rows 5000 --out tmp/large.csv   # a larger 
 - `sample/support-tickets.csv` and `sample/support-tickets.xlsx`: the same 200 support tickets, reviews and survey comments for a fictional invoicing and time-tracking app, in German and English. Columns: `id`, `created_at`, `channel`, `rating`, `plan`, `country`, `customer_name`, `customer_email`, `message`. The customer columns are there to exercise the default "Drop" role for columns with personal headers.
 - `eval/generated.jsonl`: 1,200 labelled messages from the same templates. The generator rotates through the types of personal data so each type has at least 50 examples per language, and 1 in 12 items has none.
 - `eval/hard-cases.jsonl`: hand-written edge cases (`scripts/fake-data/hard-cases.ts`): obfuscated emails, invalid checksums, order numbers that look like phone numbers, version strings that look like IP addresses, ordinary dates, numbers that look like postcodes.
+- `eval/names.jsonl`: hand-written name cases (`scripts/fake-data/names.ts`): 286 German and English sentences with invented names typical of 13 communities living in Austria, each with a `group` and a `split` (`dev` for tuning, `test` for the published numbers). The group exists only to report recall per group; Painfold never infers anyone's origin.
 
 Each evaluation line is `{ id, lang, text, spans: [{ start, end, type, text }] }`. Text not covered by a span is not personal data. Types are listed in `core/pii-types.ts`; `NAME` and `PLACE` are labelled now and detected from Stage 2.
 
@@ -24,7 +25,7 @@ Each evaluation line is `{ id, lang, text, spans: [{ start, end, type, text }] }
 - **Austrian numbers** are random, in the mobile ranges (0)650 to (0)699. Checked in November 2026: RTR, the Austrian regulator, publishes no block of fictional or reserved numbers, and names no unassigned mobile prefix; the gaps in its list of assignable mobile prefixes ((0)654, (0)656, (0)658, (0)662) are the start of Salzburg-region landline area codes, so they are no safer ([RTR, mobile numbers](https://www.rtr.at/TKP/was_wir_tun/telekommunikation/nummerierung/nationaleRufnummern/mobileN.de.html)). The numbers are invented, not taken from anyone, but not guaranteed to be unassigned.
 - **IBANs, SV-Nummern and VAT IDs** are random with valid check digits, plus the documentation IBANs `DE89 3704 0044 0532 0130 00` and `AT61 1904 3002 3457 3201` and the textbook SV-Nummer `1237 010180`.
 - **Card numbers** are the published test numbers of Visa, Mastercard and American Express.
-- **Surnames** are invented. First names are common ones. Street names are generic; towns and postcodes are real places, which are not personal data on their own.
+- **Surnames** are invented in the generated data. In the hand-written name cases, names are combinations of common first names and surnames from each community, made up for testing and not meant to refer to anyone. First names are common ones. Street names are generic; towns and postcodes are real places, which are not personal data on their own.
 
 ## Limits
 

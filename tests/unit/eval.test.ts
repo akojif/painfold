@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import type { Detection } from '../../core/detect/types'
-import { covers, currentTables, evaluate, withAccuracy, type EvalItem, type Mistake } from '../../scripts/eval'
+import { covers, currentTables, evaluate, groupMarkdown, nameRecallByGroup, withAccuracy, type EvalItem, type Mistake } from '../../scripts/eval'
 
 describe('covers', () => {
   it('needs the ranges to reach from start to end without a gap', () => {
@@ -42,6 +42,27 @@ describe('evaluate', () => {
     const scores = evaluate([{ ...item, lang: 'en' }], () => [])
     expect(scores.byType.get('EMAIL')!.de.labelled).toBe(0)
     expect(scores.byType.get('EMAIL')!.en.labelled).toBe(1)
+  })
+})
+
+describe('nameRecallByGroup', () => {
+  const items: EvalItem[] = [
+    { id: 'a', lang: 'de', group: 'turkish', split: 'test', text: 'Danke, Ayşe Yılmaz!', spans: [{ start: 7, end: 18, type: 'NAME', text: 'Ayşe Yılmaz' }] },
+    { id: 'b', lang: 'en', group: 'turkish', split: 'test', text: 'Thanks Emre', spans: [{ start: 7, end: 11, type: 'NAME', text: 'Emre' }] },
+    { id: 'c', lang: 'en', group: 'polish', split: 'test', text: 'Ask Zofia Woźniak', spans: [{ start: 4, end: 17, type: 'NAME', text: 'Zofia Woźniak' }] },
+  ]
+
+  it('counts a name as found only when NAME detections cover all of it, per group and language', () => {
+    // Ayşe Yılmaz is covered, Emre is not detected, and only "Zofia" of Zofia Woźniak is covered.
+    const find = (text: string): Detection[] => text.startsWith('Danke')
+      ? [{ type: 'NAME', start: 7, end: 18, value: 'Ayşe Yılmaz' }]
+      : text.startsWith('Ask') ? [{ type: 'NAME', start: 4, end: 9, value: 'Zofia' }] : []
+    const results = nameRecallByGroup(items, find)
+    expect(results).toEqual([
+      { group: 'turkish', scores: { de: { labelled: 1, found: 1 }, en: { labelled: 1, found: 0 } } },
+      { group: 'polish', scores: { de: { labelled: 0, found: 0 }, en: { labelled: 1, found: 0 } } },
+    ])
+    expect(groupMarkdown(results)).toContain('| Turkish | 1.00 | 1 | 0.00 | 1 | 0.50 | 2 |')
   })
 })
 
