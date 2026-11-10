@@ -39,8 +39,14 @@ These are where precise wording matters most; a native speaker should review the
 - The "What leaves your browser" panel (`network.none`, `network.explain`, `network.allOwn`, `network.foreign`).
 - Column warnings and reasons (`columns.warning`, `columns.checkInstead`, `columns.masked`, `columns.reason.*`, `columns.help`).
 - What the download contains and what is kept (`download.mapStays`, `download.reportExplain`, `download.notReviewed`) and the cleaning report (`report.*`).
-- Terms chosen for this product: the column roles "Prüfen / Unverändert / Weglassen", "Treffer" for a finding, "UID-Nummer" for VAT ID, and "Aufgaben, Probleme und Wünsche" for jobs, pains and gains.
-- Addressing customers as "Kunden" in the headline and roadmap (instead of a gender-inclusive form such as "Kund:innen"): a deliberate choice for now, to review.
+- Terms chosen for this product: the column roles "Prüfen / Unverändert / Weglassen", "Treffer" for a finding, and "UID-Nummer" for VAT ID.
+
+Open questions for the reviewer:
+
+- "Aufgaben, Probleme und Wünsche" for jobs, pains and gains, or keeping the canvas terms "Jobs, Pains und Gains", which German-speaking product teams often use?
+- "Kunden", "Kund:innen" or "Kundschaft" in the headline, the roadmap and elsewhere?
+
+The review happens before the v0.2.0 release.
 
 
 
