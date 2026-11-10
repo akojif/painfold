@@ -130,6 +130,12 @@ onBeforeUnmount(() => window.removeEventListener('beforeunload', onBeforeUnload)
             >
               {{ $t('footer.roadmap') }}
             </NuxtLink>
+            <NuxtLink
+              :to="localePath('/accuracy')"
+              class="focus-ring rounded-sm hover:text-fg"
+            >
+              {{ $t('footer.accuracy') }}
+            </NuxtLink>
             <a
               href="https://github.com/akojif/painfold"
               class="focus-ring flex items-center gap-1.5 rounded-sm hover:text-fg"

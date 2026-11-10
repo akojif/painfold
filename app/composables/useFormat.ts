@@ -5,5 +5,7 @@ export function useFormat() {
   const tag = () => localeProperties.value.language ?? 'en'
   const number = (value: number) => new Intl.NumberFormat(tag()).format(value)
   const list = (items: string[]) => new Intl.ListFormat(tag(), { type: 'conjunction' }).format(items)
-  return { number, list }
+  /** A share between 0 and 1 as a whole percentage: 0.97 is "97%" in English, "97 %" in German. */
+  const percent = (share: number) => new Intl.NumberFormat(tag(), { style: 'percent', maximumFractionDigits: 0 }).format(share)
+  return { number, list, percent }
 }

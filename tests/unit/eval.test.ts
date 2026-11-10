@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import type { Detection } from '../../core/detect/types'
-import { covers, currentTables, evaluate, nameRecallByGroup, nameTables, withAccuracy, type EvalItem, type Mistake } from '../../scripts/eval'
+import { accuracyData, covers, currentTables, evaluate, nameRecallByGroup, nameTables, withAccuracy, type EvalItem, type Mistake } from '../../scripts/eval'
 
 describe('covers', () => {
   it('needs the ranges to reach from start to end without a gap', () => {
@@ -86,5 +86,10 @@ describe('published numbers', () => {
   it('docs/accuracy.md shows the numbers the detectors reach today (run `npm run eval -- --write` after changing a detector)', () => {
     const page = readFileSync(new URL('../../docs/accuracy.md', import.meta.url), 'utf8')
     expect(withAccuracy(page, currentTables())).toBe(page)
+  })
+
+  it('the Accuracy page\'s data is the same eval output (run `npm run eval -- --write`)', () => {
+    const data = JSON.parse(readFileSync(new URL('../../data/eval/accuracy.json', import.meta.url), 'utf8'))
+    expect(data).toEqual(JSON.parse(JSON.stringify(accuracyData())))
   })
 })

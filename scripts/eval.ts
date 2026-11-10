@@ -20,6 +20,7 @@ import { combined } from '../core/detect/merge.ts'
 import type { Detection } from '../core/detect/types.ts'
 import { PII_TYPES, type PiiType } from '../core/pii-types.ts'
 import { asDetections, readStoredDetections, STORED_SETS, type StoredDetections, type StoredSet } from './name-detections.ts'
+import { NAME_MODEL } from '../deploy/model.ts'
 
 export type Lang = 'de' | 'en'
 // group and split exist only in the hand-written name set (see scripts/fake-data/names.ts).
@@ -201,7 +202,19 @@ export function nameTables(items: readonly EvalItem[], find: (text: string) => D
  */
 export function positionTable(items: readonly EvalItem[], find: (text: string) => Detection[]): string {
   const thirds = ['Start', 'Middle', 'End'] as const
-  const counts = thirds.map(() => ({ de: { labelled: 0, found: 0 }, en: { labelled: 0, found: 0 } }))
+  const counts = positionCounts(items, find)
+  return [
+    '**Names by where they are in a long text (removal recall).** Each text is far longer than the 512 tokens the name model reads at once.',
+    '',
+    '| Position | DE removal | DE names | EN removal | EN names |',
+    '| --- | ---: | ---: | ---: | ---: |',
+    ...thirds.map((third, i) => `| ${third} | ${ratio(counts[i]!.de.found, counts[i]!.de.labelled)} | ${counts[i]!.de.labelled} | ${ratio(counts[i]!.en.found, counts[i]!.en.labelled)} | ${counts[i]!.en.labelled} |`),
+  ].join('\n')
+}
+
+/** Removed names in long texts, counted per third of the text (start, middle, end) and language. */
+export function positionCounts(items: readonly EvalItem[], find: (text: string) => Detection[]): Array<Record<Lang, Counts>> {
+  const counts = [0, 1, 2].map(() => ({ de: { labelled: 0, found: 0 }, en: { labelled: 0, found: 0 } }))
   for (const item of items) {
     const found = find(item.text)
     for (const span of item.spans.filter(span => span.type === 'NAME')) {
@@ -210,13 +223,7 @@ export function positionTable(items: readonly EvalItem[], find: (text: string) =
       if (covers(found, span.start, span.end)) third.found++
     }
   }
-  return [
-    '**Names by where they are in a long text (removal recall).** Each text is far longer than the 512 tokens the name model reads at once.',
-    '',
-    '| Position | DE removal | DE names | EN removal | EN names |',
-    '| --- | ---: | ---: | ---: | ---: |',
-    ...thirds.map((third, i) => `| ${third} | ${ratio(counts[i]!.de.found, counts[i]!.de.labelled)} | ${counts[i]!.de.labelled} | ${ratio(counts[i]!.en.found, counts[i]!.en.labelled)} | ${counts[i]!.en.labelled} |`),
-  ].join('\n')
+  return counts
 }
 
 /** Finds detections for a set's texts: the rules, plus the name model's stored browser detections outside them, as in the review. */
@@ -256,6 +263,51 @@ export function currentTables(stored: StoredDetections | undefined = readStoredD
   return `${sets}\n\n${nameTables(test, finderFor('names-test', test, stored), finderFor('names-test-without-list', test, stored))}\n\n${positionTable(long, finderFor('long-texts', long, stored))}`
 }
 
+/**
+ * The same numbers as the tables, as counts, for the in-app Accuracy page
+ * (app/pages/accuracy.vue), written to ACCURACY_DATA_PATH. Counts rather than
+ * ratios, so the page can show both languages together and format numbers
+ * for its language.
+ */
+export type AccuracyData = {
+  target: number
+  sets: Record<'generated' | 'hard-cases' | 'names-test' | 'long-texts', { types: Partial<Record<PiiType, Record<Lang, Score>>>, any: Record<Lang, Score> }>
+  names: { groups: string[], removal: Record<string, Record<Lang, Counts>>, typeCorrect: Record<string, Record<Lang, Counts>>, withoutList: Record<string, Record<Lang, Counts>>, onList: number, total: number }
+  positions: Array<Record<Lang, Counts>>
+  model: { source: string, original: string, license: string, revision: string }
+}
+
+export const ACCURACY_DATA_PATH = 'data/eval/accuracy.json'
+
+export function accuracyData(stored: StoredDetections | undefined = readStoredDetections()): AccuracyData {
+  const setCounts = (set: 'generated' | 'hard-cases' | 'names-test' | 'long-texts') => {
+    const items = itemsOf(set)
+    const scores = evaluate(items, finderFor(set, items, stored))
+    const types = Object.fromEntries([...scores.byType].filter(([, score]) => LANGS.some(lang => score[lang].labelled + score[lang].detected > 0)))
+    return { types, any: scores.anyType }
+  }
+  const test = itemsOf('names-test')
+  const find = finderFor('names-test', test, stored)
+  const byGroup = (results: GroupRecall[]) => Object.fromEntries(results.map(result => [result.group, result.scores]))
+  const removal = byGroup(nameRecallByGroup(test, find, { anyType: true }))
+  const names = test.flatMap(item => item.spans.filter(span => span.type === 'NAME'))
+  const long = itemsOf('long-texts')
+  return {
+    target: NAME_RECALL_TARGET,
+    sets: { 'generated': setCounts('generated'), 'hard-cases': setCounts('hard-cases'), 'names-test': setCounts('names-test'), 'long-texts': setCounts('long-texts') },
+    names: {
+      groups: Object.keys(removal),
+      removal,
+      typeCorrect: byGroup(nameRecallByGroup(test, find)),
+      withoutList: byGroup(nameRecallByGroup(test, finderFor('names-test-without-list', test, stored), { anyType: true })),
+      onList: names.filter(span => span.text.split(/[\s-]+/).some(word => isFirstName(word))).length,
+      total: names.length,
+    },
+    positions: positionCounts(long, finderFor('long-texts', long, stored)),
+    model: { source: NAME_MODEL.source, original: NAME_MODEL.original, license: NAME_MODEL.license, revision: NAME_MODEL.revision },
+  }
+}
+
 if (import.meta.main) {
   const tables = currentTables()
   console.log(tables)
@@ -268,5 +320,8 @@ if (import.meta.main) {
       for (const { id, kind, type, text } of mistakes) console.log(`  ${id}  ${kind.padEnd(6)}  ${type.padEnd(13)}  ${text}`)
     }
   }
-  if (process.argv.includes('--write')) writeFileSync(ACCURACY_PATH, withAccuracy(readFileSync(ACCURACY_PATH, 'utf8'), tables))
+  if (process.argv.includes('--write')) {
+    writeFileSync(ACCURACY_PATH, withAccuracy(readFileSync(ACCURACY_PATH, 'utf8'), tables))
+    writeFileSync(ACCURACY_DATA_PATH, `${JSON.stringify(accuracyData(), null, 2)}\n`)
+  }
 }
