@@ -20,7 +20,7 @@ test('the roadmap page is prerendered and lists every stage with the current one
   await expect(page).toHaveURL(/\/roadmap$/)
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Roadmap')
   const stages = page.getByRole('list', { name: 'Stages' }).locator(':scope > li')
-  await expect(stages.getByRole('heading', { level: 2 })).toHaveText(['v0.1 Clean', 'v0.2 Names', 'v0.3 Jobs, pains and gains', 'v0.4 Report', 'v1.0 Launch'])
+  await expect(stages.getByRole('heading', { level: 2 })).toHaveText(['v0.1 Clean', 'v0.2 Names', 'v0.3 Jobs, pains and gains', 'v0.4 Report', 'v0.5 Transcripts and documents', 'v1.0 Launch'])
   await expect(stages.first()).toContainText('Available')
   await expect(stages.nth(1)).toHaveAttribute('aria-current', 'step')
   await expect(stages.nth(1)).toContainText('Current stage')

@@ -416,6 +416,15 @@
           "Chancen als „Wie könnten wir …“-Fragen"
         ]
       },
+      "sources": {
+        "name": "Transkripte und Dokumente",
+        "summary": "Auch Interview-Transkripte und Dokumente bereinigen und auswerten, nicht nur Tabellen.",
+        "points": [
+          "Zuerst Transkripte (TXT, VTT, SRT), dann DOCX und PDF",
+          "Sprecher einheitlich ersetzt, Dokument-Metadaten entfernt",
+          "Bereinigter Text als TXT oder Markdown"
+        ]
+      },
       "launch": {
         "name": "Start",
         "summary": "Painfold in 30 Sekunden ausprobieren oder auf Ihren eigenen Servern betreiben.",
