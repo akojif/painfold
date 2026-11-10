@@ -37,12 +37,13 @@ Done when:
 **Goal:** catch the personal data rules can't: people's names and places, in German and English.
 
 Scope:
-- Name and place detection with a model that runs in the browser (downloaded once, then cached).
+- Name and place detection with a model that runs in the browser (downloaded once from Painfold's own site, kept in the browser, removable). Names are found in the background while rule findings are reviewed.
+- An interface in English and German, with German reviewed by a native speaker before release.
 - Warnings for indirect identifiers: job title plus small town, exact ages, rare roles.
 - An Accuracy page showing how well each data type is detected.
 
 Done when:
-- Name recall on the evaluation set is published and above a target set in Stage 1.
+- Name recall on the evaluation set is published and at least 0.90 for every name-origin group, counting a name as caught when it is removed, whatever type it is labelled. Measured in the browser, on a test split never used for tuning.
 - The model download is explained to the user before it starts, with its size.
 
 ## Stage 3: Jobs, pains and gains (v0.3)
@@ -80,7 +81,7 @@ Scope:
 
 Scope:
 - Demo mode with a fake sample dataset and pre-computed results, no API key needed.
-- Docker image for self-hosting with a local model.
+- Docker image for self-hosting with a local model. It contains only the static build, never `node_modules` (#75).
 - README with a short demo recording, documentation, and the accuracy numbers.
 
 ## Later (not planned yet)
