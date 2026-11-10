@@ -59,6 +59,7 @@
   --pf-light-accent: #0F766E;        /* the one accent: links, focus, progress, the current stage */
   --pf-light-on-accent: #FFFFFF;
   --pf-light-danger: #B91C1C;        /* errors and risks only */
+  --pf-light-on-danger: #FFFFFF;
   --pf-light-pending: #FEF3C7;       /* personal data waiting for review (soft amber) */
   --pf-light-pending-line: #B45309;  /* its underline, so colour is not the only cue */
   --pf-light-on-pending: #111827;
@@ -74,6 +75,7 @@
   --pf-dark-accent: #2DD4BF;
   --pf-dark-on-accent: #11161F;
   --pf-dark-danger: #F87171;
+  --pf-dark-on-danger: #11161F;
   --pf-dark-pending: #3B2F12;
   --pf-dark-pending-line: #F59E0B;
   --pf-dark-on-pending: #E6EAF0;
@@ -94,6 +96,7 @@
   --pf-accent: var(--pf-light-accent);
   --pf-on-accent: var(--pf-light-on-accent);
   --pf-danger: var(--pf-light-danger);
+  --pf-on-danger: var(--pf-light-on-danger);
   --pf-pending: var(--pf-light-pending);
   --pf-pending-line: var(--pf-light-pending-line);
   --pf-on-pending: var(--pf-light-on-pending);
@@ -114,6 +117,7 @@
     --pf-accent: var(--pf-dark-accent);
     --pf-on-accent: var(--pf-dark-on-accent);
     --pf-danger: var(--pf-dark-danger);
+    --pf-on-danger: var(--pf-dark-on-danger);
     --pf-pending: var(--pf-dark-pending);
     --pf-pending-line: var(--pf-dark-pending-line);
     --pf-on-pending: var(--pf-dark-on-pending);
@@ -134,6 +138,7 @@
   --pf-accent: var(--pf-dark-accent);
   --pf-on-accent: var(--pf-dark-on-accent);
   --pf-danger: var(--pf-dark-danger);
+  --pf-on-danger: var(--pf-dark-on-danger);
   --pf-pending: var(--pf-dark-pending);
   --pf-pending-line: var(--pf-dark-pending-line);
   --pf-on-pending: var(--pf-dark-on-pending);
@@ -164,6 +169,7 @@
   --color-accent: var(--pf-accent);
   --color-on-accent: var(--pf-on-accent);
   --color-danger: var(--pf-danger);
+  --color-on-danger: var(--pf-on-danger);
   --color-pending: var(--pf-pending);
   --color-pending-line: var(--pf-pending-line);
   --color-on-pending: var(--pf-on-pending);

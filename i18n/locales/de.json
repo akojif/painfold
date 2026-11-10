@@ -10,7 +10,8 @@
       "import": "Importieren",
       "review": "Prüfen",
       "download": "Herunterladen"
-    }
+    },
+    "startOver": "Neu beginnen"
   },
   "footer": {
     "source": "Open Source",
@@ -119,7 +120,9 @@
     "button": "Personenbezogene Daten in {rows} finden",
     "progress": "Zeile {done} von {total} wird geprüft",
     "progressLabel": "Fortschritt",
-    "failed": "Beim Prüfen der Datei ist etwas schiefgelaufen. Versuchen Sie es noch einmal oder laden Sie die Seite neu."
+    "failed": "Beim Prüfen der Datei ist etwas schiefgelaufen. Versuchen Sie es noch einmal oder laden Sie die Seite neu.",
+    "continue": "Weiter zur Prüfung",
+    "columnsChanged": "Ihre Spaltenauswahl hat sich geändert. Wenn Sie erneut suchen, werden Ihre Prüfentscheidungen zurückgesetzt."
   },
   "review": {
     "heading": "{findings} in {rows}",
@@ -244,7 +247,6 @@
     "unchecked": "Ohne Prüfung übernommen: {columns}.",
     "button": "{name} herunterladen",
     "back": "Zurück zur Prüfung",
-    "startOver": "Andere Datei bereinigen",
     "mapStays": "Die Liste der Originalwerte hinter den Platzhaltern bleibt in diesem Browser und ist weg, sobald Sie den Tab schließen.",
     "reportButton": "Bereinigungsbericht herunterladen (.txt)",
     "reportExplain": "Die bereinigte Datei enthält nur Ihre Daten. Der Bereinigungsbericht listet auf, was ersetzt wurde, mit Datum, Painfold-Version und den Grenzen der automatischen Erkennung.",
@@ -496,5 +498,17 @@
       "started": "Namen werden geprüft.",
       "done": "Namen geprüft: {names} und {places} hinzugefügt."
     }
+  },
+  "discard": {
+    "title": "Neu beginnen?",
+    "body": "Ihre Datei und Ihre Prüfentscheidungen werden gelöscht. Es wurde nichts hochgeladen, also bleibt auch nirgendwo anders etwas gespeichert.",
+    "confirm": "Neu beginnen",
+    "cancel": "Weiterarbeiten"
+  },
+  "resetReview": {
+    "title": "Prüfung zurücksetzen?",
+    "body": "Personenbezogene Daten werden mit der neuen Spaltenauswahl neu gesucht, und Ihre Prüfentscheidungen werden gelöscht.",
+    "confirm": "Neu suchen",
+    "cancel": "Weiterarbeiten"
   }
 }

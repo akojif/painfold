@@ -41,6 +41,7 @@ const namesNote = computed(() => {
 
 function download() {
   if (!table.value || !review.value) return
+  session.markDownloaded()
   saveTextFile(fileName.value, toCsv(cleanedTable(table.value, roles.value, review.value), { delimiter: table.value.delimiter ?? ',' }))
 }
 
@@ -71,11 +72,6 @@ function downloadReport() {
     limits: t('review.limits'),
   })
   saveTextFile(reportFileName(table.value.fileName), report, 'text/plain;charset=utf-8')
-}
-
-async function startOver() {
-  session.clear()
-  await navigateTo(localePath('/'))
 }
 </script>
 
@@ -189,13 +185,6 @@ async function startOver() {
           >
             {{ $t('download.back') }}
           </NuxtLink>
-          <button
-            type="button"
-            class="focus-ring rounded-sm text-accent underline-offset-4 hover:underline"
-            @click="startOver"
-          >
-            {{ $t('download.startOver') }}
-          </button>
         </div>
       </section>
 

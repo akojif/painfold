@@ -25,6 +25,7 @@ const pairs: Array<[foreground: string, background: string, minimum: number]> = 
   ['accent', 'canvas', TEXT],
   ['accent', 'surface', TEXT],
   ['on-accent', 'accent', TEXT],
+  ['on-danger', 'danger', TEXT],
   ['danger', 'canvas', TEXT],
   ['danger', 'surface', TEXT],
   ['on-pending', 'pending', TEXT],
