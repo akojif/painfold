@@ -4,10 +4,11 @@ How well Painfold finds personal data, and how fast it is. The tables are writte
 
 ## How it is measured
 
-Detection is measured on the evaluation set in [data/eval/](../data/README.md), with `npm run eval`. Two sets are reported separately:
+Detection is measured on the evaluation set in [data/eval/](../data/README.md), with `npm run eval`. Three sets are reported separately:
 
 - **Generated:** 1,200 messages built from the same templates as the sample file. The detectors could be tuned to these sentences, so treat these numbers as a check that nothing broke.
 - **Hand-written hard cases:** written separately to catch what templates don't: obfuscated and pasted values, numbers written with dashes, dots or non-breaking spaces, and look-alikes that must not be removed (order and invoice numbers, ISBNs, EANs, versions, ordinary dates).
+- **Hand-written names:** 156 German and English sentences with invented names typical of communities living in Austria, because names in Austrian feedback come from many backgrounds, not only German and English ones. They include real diacritics (ć, š, ž, ğ, ı, ș, ő, ł), variant transliterations (Mohammed, Muhammad, Mohamad, Mohammad), multi-part and particle names (Abdul Rahman, Al-Hassan, van der Berg), possessives and lowercase chat names. Name recall is also reported per name-origin group, with the same target for every group. The group exists only in the evaluation data; Painfold never infers anyone's origin. A dev split (3 sentences per group) may be used to tune the detectors; only the test split (9 sentences, 11 names per group) is reported.
 
 How it is counted:
 
@@ -15,7 +16,7 @@ How it is counted:
 - **Precision:** the share of detections that overlap a labelled value of their type.
 - **Removed by any type:** the share of labelled values that are fully removed by any detection. This is what matters for the cleaned file; an IBAN caught as something else is still removed. It is shown with and without names and places.
 
-The hard cases have only a few values per type and language, so one miss moves a number a lot: read them together with the list of known gaps below. Names and places are labelled but not detected until v0.2. The Stage 2 target is name recall of at least 0.90, in German and in English separately.
+The hard cases have only a few values per type and language, so one miss moves a number a lot: read them together with the list of known gaps below. Names and places are labelled but not detected until v0.2. The Stage 2 target is name recall of at least 0.90, in German and in English separately, and for every name-origin group. With 11 test names per group, one miss still meets the target and two do not.
 
 ## Results
 
@@ -55,10 +56,37 @@ The hard cases have only a few values per type and language, so one miss moves a
 | Dates of birth | 1.00 | 1.00 | 4 | 1.00 | 1.00 | 2 |
 | Street addresses | 1.00 | 1.00 | 5 | 0.50 | 1.00 | 2 |
 | Postcodes | 1.00 | 1.00 | 4 | 1.00 | 1.00 | 2 |
-| Names (from v0.2) | 0.00 | – | 1 | 0.00 | – | 1 |
+| Names (from v0.2) | 0.00 | – | 2 | 0.00 | – | 1 |
 | Places (from v0.2) | 0.00 | – | 5 | 0.00 | – | 2 |
-| **Removed by any type** | 0.88 | 0.98 | 52 | 0.84 | 1.00 | 31 |
+| **Removed by any type** | 0.87 | 0.98 | 53 | 0.84 | 1.00 | 31 |
 | **Removed by any type, without names and places** | 1.00 | 0.98 | 46 | 0.93 | 1.00 | 28 |
+
+**Hand-written names (test split)**
+
+| Data type | DE recall | DE precision | DE values | EN recall | EN precision | EN values |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Names (from v0.2) | 0.00 | – | 65 | 0.00 | – | 78 |
+| Places (from v0.2) | 0.00 | – | 9 | 0.00 | – | 2 |
+| **Removed by any type** | 0.00 | – | 74 | 0.00 | – | 80 |
+| **Removed by any type, without names and places** | – | – | 0 | – | – | 0 |
+
+**Name recall by name-origin group (test split).** Target: 0.90 for every group. The group exists only in the evaluation data; Painfold never infers anyone's origin.
+
+| Name-origin group | DE recall | DE names | EN recall | EN names | Recall | Names |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| German-speaking | 0.00 | 5 | 0.00 | 6 | 0.00 | 11 |
+| English | 0.00 | 5 | 0.00 | 6 | 0.00 | 11 |
+| Bosnian, Serbian, Croatian | 0.00 | 5 | 0.00 | 6 | 0.00 | 11 |
+| Turkish | 0.00 | 5 | 0.00 | 6 | 0.00 | 11 |
+| Romanian | 0.00 | 5 | 0.00 | 6 | 0.00 | 11 |
+| Hungarian | 0.00 | 5 | 0.00 | 6 | 0.00 | 11 |
+| Polish | 0.00 | 5 | 0.00 | 6 | 0.00 | 11 |
+| Ukrainian | 0.00 | 5 | 0.00 | 6 | 0.00 | 11 |
+| Arabic | 0.00 | 5 | 0.00 | 6 | 0.00 | 11 |
+| Afghan | 0.00 | 5 | 0.00 | 6 | 0.00 | 11 |
+| African | 0.00 | 5 | 0.00 | 6 | 0.00 | 11 |
+| South Asian | 0.00 | 5 | 0.00 | 6 | 0.00 | 11 |
+| East Asian | 0.00 | 5 | 0.00 | 6 | 0.00 | 11 |
 <!-- accuracy:end -->
 
 ## Known gaps
