@@ -175,7 +175,7 @@ describe('Review: names that arrive during review', () => {
   // As the name model reports them: "Anna" inside the email address, and Anna Huber in rows 2 and 3.
   const names = [
     { row: 0, column: 1, detections: [{ type: 'NAME' as const, start: 5, end: 9, value: 'anna' }] },
-    { row: 1, column: 1, detections: [{ type: 'NAME' as const, start: 32, end: 42, value: 'Anna Huber' }] },
+    { row: 1, column: 1, detections: [{ type: 'NAME' as const, start: 31, end: 41, value: 'Anna Huber' }] },
     { row: 2, column: 1, detections: [{ type: 'NAME' as const, start: 18, end: 28, value: 'Anna Huber' }] },
   ]
 
@@ -201,9 +201,9 @@ describe('Review: names that arrive during review', () => {
     expect(review.findings.filter(finding => finding.type === 'NAME')).toHaveLength(2)
   })
 
-  it('leaves out names that overlap marked text', () => {
+  it('keeps only the part of a name that marked text does not already cover', () => {
     const review = fresh()
     review.markMissed(2, 1, 18, 22, 'NAME')
-    expect(review.addDetected(names.slice(2))).toEqual([])
+    expect(review.addDetected(names.slice(2)).map(finding => finding.value)).toEqual(['Huber'])
   })
 })
