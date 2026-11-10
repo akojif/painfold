@@ -41,6 +41,7 @@ These are where precise wording matters most; a native speaker should review the
 - The limits notice (`review.limits`), also used in the cleaning report.
 - The "What leaves your browser" panel (`network.none`, `network.explain`, `network.allOwn`, `network.foreign`, `network.stored`).
 - The name model download: what is downloaded and kept, and the failure and offline messages (`nameModel.*`). "Namensmodell" is the chosen term.
+- Names in the review and the download: the check, Stop and its question, and what the cleaning report says (`nameScan.*`, `download.names.*`).
 - Column warnings and reasons (`columns.warning`, `columns.checkInstead`, `columns.masked`, `columns.reason.*`, `columns.help`).
 - What the download contains and what is kept (`download.mapStays`, `download.reportExplain`, `download.notReviewed`) and the cleaning report (`report.*`).
 - Terms chosen for this product: the column roles "Prüfen / Unverändert / Weglassen", "Treffer" for a finding, and "UID-Nummer" for VAT ID.
@@ -85,7 +86,7 @@ Names and places are found by [Davlan/distilbert-base-multilingual-cased-ner-hrl
 - Name and place accuracy is measured only in the browser: `npm run eval:names` starts the built names worker in headless Chromium, cross-origin isolated with threads, and checks each text with the rules and the model together, as the app does. Native ONNX Runtime in Node gives different results on different processors, so it is never used for the numbers.
   - The dev split (`--split dev`, the default) is for tuning: `--misses` lists every missed and wrong name or place. It includes look-alikes, greetings and sign-offs followed by words that are not names ("Hallo Team", "Liebe Grüße", "Dear Customer Support"), so precision is tuned too.
   - The test split (`--split test`) is only reported, never tuned against.
-  - `--save` stores a split's detections in `data/eval/name-detections.json`. An end-to-end test reruns the worker on the same texts and fails if anything differs, so the stored detections, and the numbers computed from them, cannot go stale. It is a pass/fail check, not used for tuning.
+  - `--set <set> --save` stores a set's detections in `data/eval/name-detections.json` (the sets are listed in `scripts/name-detections.ts`: the generated set, the hard cases, the name dev and test splits, and the test split without the first-name list). `npm run eval -- --write` computes the published tables from them. An end-to-end test reruns the worker on every stored set and fails if anything differs, so the stored detections, and the numbers computed from them, cannot go stale. It is a pass/fail check, not used for tuning.
 - To change the model: update the revision and hashes in `deploy/model.ts`, run `npm run models` and `npm run test:model`, and re-measure accuracy and speed.
 - CI caches the downloaded files between runs. `core/detect/names.ts` turns the model's word pieces into names and places and has unit tests; `tests/model/` runs the real model.
 

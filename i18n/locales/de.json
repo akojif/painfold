@@ -22,7 +22,7 @@
   },
   "start": {
     "headline": "Finden Sie, was Ihren Kunden wehtut. Ohne preiszugeben, wer sie sind.",
-    "subline": "Bereinigen Sie zuerst Ihre Feedback-Datei: E-Mail-Adressen, Telefonnummern, IBANs und mehr werden direkt hier in Ihrem Browser entfernt.",
+    "subline": "Bereinigen Sie zuerst Ihre Feedback-Datei: Namen, E-Mail-Adressen, Telefonnummern, IBANs und mehr werden direkt hier in Ihrem Browser entfernt.",
     "choose": "CSV- oder Excel-Datei auswählen",
     "sampleButton": "Beispieldatei ausprobieren",
     "sampleNote": "200 erfundene Tickets, keine echten Personen",
@@ -320,12 +320,14 @@
   },
   "example": {
     "caption": "Ein Support-Ticket, vor und nach der Bereinigung",
-    "ticket": "Bitte rufen Sie mich unter {phone} zurück oder schreiben Sie an {email}.",
+    "ticket": "Hallo, hier ist {name} aus {place}. Bitte rufen Sie mich unter {phone} zurück oder schreiben Sie an {email}.",
     "found": "In der Datei gefunden",
-    "description": "Beispiel: In einem Support-Ticket werden eine Telefonnummer und eine E-Mail-Adresse durch die Platzhalter [PHONE_1] und [EMAIL_1] ersetzt.",
+    "description": "Beispiel: In einem Support-Ticket werden ein Name, ein Ort, eine Telefonnummer und eine E-Mail-Adresse durch die Platzhalter [NAME_1], [PLACE_1], [PHONE_1] und [EMAIL_1] ersetzt.",
     "removed": "{type} entfernt:",
     "languages": "Funktioniert mit deutschem und englischem Feedback",
     "values": {
+      "name": "Anna Huber",
+      "place": "Graz",
       "email": "anna.huber{'@'}example.com",
       "phone": "+49 30 23125 417",
       "iban": "AT61 1904 3002 3457 3201",

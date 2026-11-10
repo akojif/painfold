@@ -1,5 +1,5 @@
 // Kinds of personal data Painfold labels and removes.
-// NAME and PLACE are labelled in the evaluation set now and detected from Stage 2.
+// NAME and PLACE are found by the name model (core/detect/names.ts, from Stage 2).
 export const PII_TYPES = [
   'EMAIL',
   'PHONE',

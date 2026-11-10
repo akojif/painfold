@@ -26,7 +26,7 @@ test.describe('start screen', () => {
   test('leads with the headline, one primary action, the sample file and the privacy line', async ({ page }) => {
     await page.goto('/')
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Find what hurts your customers. Without exposing who they are.')
-    await expect(page.getByText('Start by cleaning your feedback file: emails, phone numbers, IBANs and more are removed right here in your browser.')).toBeVisible()
+    await expect(page.getByText('Start by cleaning your feedback file: names, emails, phone numbers, IBANs and more are removed right here in your browser.')).toBeVisible()
     await expect(page.getByRole('button', { name: 'Choose a CSV or Excel file' })).toBeVisible()
     await expect(page.getByRole('button', { name: 'Try the sample file' })).toBeVisible()
     await expect(page.getByText('200 made-up tickets, no real people')).toBeVisible()
@@ -53,13 +53,12 @@ test.describe('start screen', () => {
     const example = page.getByRole('figure')
     await expect(example).toContainText('olivia.hartley@example.com')
     await expect(page.locator('figure[data-cleaned]')).toHaveCount(1, { timeout: 5000 })
-    await expect(example).toContainText('[EMAIL_1]')
-    await expect(example).toContainText('[PHONE_1]')
+    for (const placeholder of ['[NAME_1]', '[PLACE_1]', '[EMAIL_1]', '[PHONE_1]']) await expect(example.getByRole('button', { name: placeholder })).toBeVisible()
     // Every found value shows both sides of the change: the original and its placeholder.
     // The list is hidden from screen readers (the figure has a text description), so select its rows directly.
     const found = example.locator('li')
-    await expect(found).toHaveCount(5)
-    for (const [original, placeholder] of [['olivia.hartley@example.com', '[EMAIL_1]'], ['+44 20 7946 0958', '[PHONE_1]'], ['DE89 3704 0044 0532 0130 00', '[IBAN_1]'], ['27 Willow Lane', '[ADDRESS_1]'], ['12/03/1987', '[DATE_OF_BIRTH_1]']]) {
+    await expect(found).toHaveCount(7)
+    for (const [original, placeholder] of [['Olivia Hartley', '[NAME_1]'], ['Leeds', '[PLACE_1]'], ['olivia.hartley@example.com', '[EMAIL_1]'], ['+44 20 7946 0958', '[PHONE_1]'], ['DE89 3704 0044 0532 0130 00', '[IBAN_1]'], ['27 Willow Lane', '[ADDRESS_1]'], ['12/03/1987', '[DATE_OF_BIRTH_1]']]) {
       await expect(found.filter({ hasText: original })).toContainText(placeholder!)
     }
   })

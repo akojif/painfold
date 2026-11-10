@@ -6,10 +6,10 @@ const phone = (page: Page) => page.getByRole('figure').getByRole('button', { nam
 
 test('the example follows the interface language', async ({ page }) => {
   await page.goto('/')
-  await expect(page.getByRole('figure')).toContainText('Please call me back on')
+  await expect(page.getByRole('figure')).toContainText(/Hi, this is .+ from .+\. Please call me back on/)
   await expect(page.getByText('Works with German and English feedback')).toBeVisible()
   await page.goto('/de')
-  await expect(page.getByRole('figure')).toContainText('Bitte rufen Sie mich unter')
+  await expect(page.getByRole('figure')).toContainText(/Hallo, hier ist .+ aus .+\. Bitte rufen Sie mich unter/)
   await expect(page.getByText('Funktioniert mit deutschem und englischem Feedback')).toBeVisible()
 })
 

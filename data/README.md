@@ -13,9 +13,9 @@ node scripts/generate-fake-data.ts --rows 5000 --out tmp/large.csv   # a larger 
 - `eval/generated.jsonl`: 1,200 labelled messages from the same templates. The generator rotates through the types of personal data so each type has at least 50 examples per language, and 1 in 12 items has none.
 - `eval/hard-cases.jsonl`: hand-written edge cases (`scripts/fake-data/hard-cases.ts`): obfuscated emails, invalid checksums, order numbers that look like phone numbers, version strings that look like IP addresses, ordinary dates, numbers that look like postcodes.
 - `eval/names.jsonl`: hand-written name cases (`scripts/fake-data/names.ts`): 286 German and English sentences with invented names typical of 13 communities living in Austria, each with a `group` and a `split` (`dev` for tuning, `test` for the published numbers), and 26 dev-only look-alikes without a group: greetings and sign-offs followed by words that are not names ("Hallo Team", "Dear Customer Support"), to measure precision. The group exists only to report recall per group; Painfold never infers anyone's origin.
-- `eval/name-detections.json`: what the name model found in each split, measured in the browser (`npm run eval:names -- --save`); an end-to-end test checks it still matches.
+- `eval/name-detections.json`: what the name model found in each evaluation set, measured in the browser (`npm run eval:names -- --set <set> --save`); the published numbers are computed from it, and an end-to-end test checks it still matches.
 
-Each evaluation line is `{ id, lang, text, spans: [{ start, end, type, text }] }`. Text not covered by a span is not personal data. Types are listed in `core/pii-types.ts`; `NAME` and `PLACE` are labelled now and detected from Stage 2.
+Each evaluation line is `{ id, lang, text, spans: [{ start, end, type, text }] }`. Text not covered by a span is not personal data. Types are listed in `core/pii-types.ts`; `NAME` and `PLACE` are found by the name model (Stage 2).
 
 ## Where the values come from
 
