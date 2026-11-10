@@ -8,7 +8,9 @@ const { t } = useI18n()
 const localePath = useLocalePath()
 const { number } = useFormat()
 const session = useSession()
-const { table, isSample, roles, scanColumns } = session
+const { table, isSample, roles, scanColumns, review, columnsChanged } = session
+const mayDiscard = useDiscardGuard()
+const { confirm } = useConfirm()
 const detection = useDetection()
 // Set up here, before the review starts, so names are checked as soon as it does.
 useNameScan()
@@ -95,14 +97,27 @@ async function onSheet(event: Event) {
 }
 
 async function chooseAnother() {
+  if (!(await mayDiscard())) return
   session.clear()
   lastFile = undefined
   await nextTick()
   input.value?.click()
 }
 
+// Back from the review with the same columns: the review, and every decision in it, is still there.
+const backToReview = computed(() => Boolean(review.value) && !columnsChanged.value)
+
 async function findPersonalData() {
   if (!table.value) return
+  if (backToReview.value) {
+    await navigateTo(localePath('/review'))
+    return
+  }
+  // Changed columns mean a new review; ask first if decisions would be lost.
+  if (review.value && review.value.counts().reviewed > 0) {
+    const reset = await confirm({ title: t('resetReview.title'), body: t('resetReview.body'), confirm: t('resetReview.confirm'), cancel: t('resetReview.cancel') })
+    if (!reset) return
+  }
   detecting.value = true
   detectionFailed.value = false
   try {
@@ -301,9 +316,15 @@ async function findPersonalData() {
             :disabled="detecting"
             @click="findPersonalData"
           >
-            {{ $t('find.button', { rows: rowCount }) }}
+            {{ backToReview ? $t('find.continue') : $t('find.button', { rows: rowCount }) }}
           </button>
         </div>
+        <p
+          v-if="columnsChanged"
+          class="mt-3 text-sm text-fg-muted"
+        >
+          {{ $t('find.columnsChanged') }}
+        </p>
         <DetectionProgress
           v-if="detecting && detection.progress.value"
           class="mt-3"

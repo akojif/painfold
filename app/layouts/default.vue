@@ -13,7 +13,9 @@ const localePath = useLocalePath()
 const route = useRoute()
 // A name and a URL, the same in every language, so they are not in the locale files.
 const author = { name: 'Francis Akoji', url: 'https://francisakoji.com' }
-const { table } = useSession()
+const session = useSession()
+const { table, hasWork } = session
+const mayDiscard = useDiscardGuard()
 // Pages outside the cleaning flow (the roadmap) have no step.
 const step = computed(() => route.meta.step as number | undefined)
 // The empty start screen explains the product instead; steps appear once a file is open.
@@ -23,15 +25,42 @@ const showNotice = computed(() => step.value !== 1 || Boolean(table.value))
 const facts = computed(() => [...(showNotice.value ? ['privacy.notice'] : []), 'footer.noCookies', 'footer.noAccount'])
 // Catch file drops everywhere, so a browser never opens a dropped file and leaves the app.
 useFileDrop()
+
+/** Back to the start screen with nothing open, after asking if work would be lost. */
+async function startOver() {
+  if (!(await mayDiscard())) return
+  session.clear()
+  await navigateTo(localePath('/'))
+}
+
+// The logo leads to the start screen; with a file open, that means starting over.
+// A plain link, so this runs before any navigation; a new tab opens as usual.
+function onLogo(event: MouseEvent) {
+  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return
+  event.preventDefault()
+  if (table.value) void startOver()
+  else void navigateTo(localePath('/'))
+}
+
+// Closing or reloading the tab, or leaving the site with Back, while there is work to lose:
+// the browser asks with its own warning (it does not show a custom text).
+function onBeforeUnload(event: BeforeUnloadEvent) {
+  if (!hasWork.value) return
+  event.preventDefault()
+  event.returnValue = ''
+}
+onMounted(() => window.addEventListener('beforeunload', onBeforeUnload))
+onBeforeUnmount(() => window.removeEventListener('beforeunload', onBeforeUnload))
 </script>
 
 <template>
   <div class="flex min-h-dvh flex-col">
     <header class="sticky top-0 z-20 border-b border-line bg-canvas">
       <div class="mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 px-4 sm:gap-4 sm:px-6">
-        <NuxtLink
-          :to="localePath('/')"
+        <a
+          :href="localePath('/')"
           class="focus-ring flex items-center gap-2.5 rounded-sm text-md font-semibold tracking-tight"
+          @click="onLogo"
         >
           <span
             aria-hidden="true"
@@ -39,7 +68,7 @@ useFileDrop()
           />
           <!-- On the narrowest screens the mark alone leaves room for the switches; screen readers still hear the name. -->
           <span class="max-[399px]:sr-only">{{ $t('app.name') }}</span>
-        </NuxtLink>
+        </a>
         <div class="flex items-center gap-1.5 sm:gap-2">
           <LanguageToggle />
           <ThemeToggle />
@@ -49,11 +78,21 @@ useFileDrop()
     </header>
 
     <div class="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 sm:px-6">
-      <AppStepper
+      <!-- Once a file is open, Start over sits at the end of the steps on every step, in the same place. -->
+      <div
         v-if="showSteps"
-        class="pt-6"
-        :current="step!"
-      />
+        class="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 pt-6"
+      >
+        <AppStepper :current="step!" />
+        <button
+          v-if="table"
+          type="button"
+          class="press focus-ring rounded-sm text-sm text-fg-muted underline-offset-4 hover:text-fg hover:underline"
+          @click="startOver"
+        >
+          {{ $t('nav.startOver') }}
+        </button>
+      </div>
       <main class="flex flex-1 flex-col py-8 sm:py-10">
         <slot />
       </main>
@@ -116,5 +155,6 @@ useFileDrop()
         </div>
       </div>
     </footer>
+    <ConfirmDialog />
   </div>
 </template>

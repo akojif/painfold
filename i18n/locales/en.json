@@ -10,7 +10,8 @@
       "import": "Import",
       "review": "Review",
       "download": "Download"
-    }
+    },
+    "startOver": "Start over"
   },
   "footer": {
     "source": "Open source",
@@ -119,7 +120,9 @@
     "button": "Find personal data in {rows}",
     "progress": "Checking row {done} of {total}",
     "progressLabel": "Progress",
-    "failed": "Something went wrong while checking the file. Try again, or reload the page."
+    "failed": "Something went wrong while checking the file. Try again, or reload the page.",
+    "continue": "Continue to review",
+    "columnsChanged": "Your column choices changed. Finding personal data again resets your review decisions."
   },
   "review": {
     "heading": "{findings} in {rows}",
@@ -244,7 +247,6 @@
     "unchecked": "Copied without checking: {columns}.",
     "button": "Download {name}",
     "back": "Back to review",
-    "startOver": "Clean another file",
     "mapStays": "The list of original values behind each placeholder stays in this browser and is gone when you close the tab.",
     "reportButton": "Download cleaning report (.txt)",
     "reportExplain": "The cleaned file holds only your data. The cleaning report lists what was replaced, with the date, the Painfold version and the limits of automatic detection.",
@@ -496,5 +498,17 @@
       "started": "Checking for names.",
       "done": "Names checked: {names} and {places} added."
     }
+  },
+  "discard": {
+    "title": "Start over?",
+    "body": "Your file and your review decisions will be cleared. Nothing was uploaded, so nothing is kept anywhere else.",
+    "confirm": "Start over",
+    "cancel": "Keep working"
+  },
+  "resetReview": {
+    "title": "Reset your review?",
+    "body": "Personal data is found again with the new column choices, and your review decisions are cleared.",
+    "confirm": "Find again",
+    "cancel": "Keep working"
   }
 }

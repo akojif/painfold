@@ -152,12 +152,13 @@ test('the privacy panel lists every request, all to this site', async ({ page })
   await expect(dialog).toBeHidden()
 })
 
-test('"Clean another file" starts over with nothing kept', async ({ page }) => {
+test('Start over after downloading goes back to the start with nothing kept', async ({ page }) => {
   await page.goto('/')
   await page.getByRole('button', { name: 'Try the sample file' }).click()
   await page.getByRole('button', { name: /Find personal data/ }).click()
   await page.getByRole('link', { name: 'Continue to download' }).click()
-  await page.getByRole('button', { name: 'Clean another file' }).click()
+  await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: /^Download support-tickets_cleaned/ }).click()])
+  await page.getByRole('button', { name: 'Start over' }).click()
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Find what hurts your customers. Without exposing who they are.')
   await page.goto('/review')
   await expect(page).toHaveURL(/\/$/)
