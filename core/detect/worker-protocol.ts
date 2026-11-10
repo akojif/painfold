@@ -5,9 +5,11 @@
 // The rules run in detect.worker.ts. The name model runs in names.worker.ts on
 // its own, so a download can be cancelled by stopping that worker while the
 // rules keep working.
+import { chunkText, mergeOverlapping } from './chunks.ts'
 import { withNameRules } from './name-cues.ts'
 import { nameDetections, type ModelToken } from './names.ts'
 import { countByColumn, detectTable, type CellDetections, type ColumnCounts } from './table.ts'
+import type { Detection } from './types.ts'
 
 // detect: every finding in the given columns, for review.
 // survey: only how much personal data each column holds, so a column kept
@@ -57,13 +59,28 @@ export function handleDetectRequest(request: DetectRequest, send: (response: Det
   }
 }
 
-/** The name model as the worker sees it: load it once (reporting bytes downloaded so far), then label texts. */
+/**
+ * The name model as the worker sees it: load it once (reporting bytes
+ * downloaded so far), then label texts. fits says whether a text is short
+ * enough for the model to read whole; longer texts are labelled in chunks.
+ */
 export type NameModel = {
+  fits: (text: string) => boolean
   load: (onProgress: (loaded: number) => void) => Promise<void>
   label: (text: string) => Promise<ModelToken[]>
 }
 
 const PROGRESS_EVERY = 50
+
+/** The model's names and places in a text of any length: chunk by chunk, mapped back to the whole text. */
+async function modelDetections(text: string, model: NameModel): Promise<Detection[]> {
+  const found: Detection[] = []
+  for (const chunk of chunkText(text, model.fits)) {
+    const piece = text.slice(chunk.start, chunk.end)
+    for (const detection of nameDetections(piece, await model.label(piece))) found.push({ ...detection, start: detection.start + chunk.start, end: detection.end + chunk.start })
+  }
+  return mergeOverlapping(text, found)
+}
 
 /**
  * Loads the name model; for a names request, then finds names and places in
@@ -86,7 +103,7 @@ export async function handleNameRequest(request: NameRequest, send: (response: N
         if (!/\p{L}/u.test(text)) continue
         let detections = seen.get(text)
         if (!detections) {
-          detections = withNameRules(text, nameDetections(text, await model.label(text)), { firstNames })
+          detections = withNameRules(text, await modelDetections(text, model), { firstNames })
           seen.set(text, detections)
         }
         if (detections.length > 0) cells.push({ row, column, detections: detections.map(found => ({ ...found })) })
