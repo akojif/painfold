@@ -8,7 +8,7 @@ Detection is measured on the evaluation set in [data/eval/](../data/README.md), 
 
 - **Generated:** 1,200 messages built from the same templates as the sample file. The detectors could be tuned to these sentences, so treat these numbers as a check that nothing broke.
 - **Hand-written hard cases:** written separately to catch what templates don't: obfuscated and pasted values, numbers written with dashes, dots or non-breaking spaces, and look-alikes that must not be removed (order and invoice numbers, ISBNs, EANs, versions, ordinary dates).
-- **Hand-written names:** 156 German and English sentences with invented names typical of communities living in Austria, because names in Austrian feedback come from many backgrounds, not only German and English ones. They include real diacritics (ć, š, ž, ğ, ı, ș, ő, ł), variant transliterations (Mohammed, Muhammad, Mohamad, Mohammad), multi-part and particle names (Abdul Rahman, Al-Hassan, van der Berg), possessives and lowercase chat names. Name recall is also reported per name-origin group, with the same target for every group. The group exists only in the evaluation data; Painfold never infers anyone's origin. A dev split (3 sentences per group) may be used to tune the detectors; only the test split (9 sentences, 11 names per group) is reported.
+- **Hand-written names:** 286 German and English sentences with invented names typical of communities living in Austria, because names in Austrian feedback come from many backgrounds, not only German and English ones. They include real diacritics (ć, š, ž, ğ, ı, ș, ő, ł), variant transliterations (Mohammed, Muhammad, Mohamad, Mohammad), multi-part and particle names (Abdul Rahman, Al-Hassan, van der Berg), possessives and lowercase chat names. Name recall is also reported per name-origin group, with the same target for every group. The group exists only in the evaluation data; Painfold never infers anyone's origin. A dev split (3 sentences per group) may be used to tune the detectors; only the test split (19 sentences, 25 names per group, written before any tuning) is reported.
 
 How it is counted:
 
@@ -16,7 +16,7 @@ How it is counted:
 - **Precision:** the share of detections that overlap a labelled value of their type.
 - **Removed by any type:** the share of labelled values that are fully removed by any detection. This is what matters for the cleaned file; an IBAN caught as something else is still removed. It is shown with and without names and places.
 
-The hard cases have only a few values per type and language, so one miss moves a number a lot: read them together with the list of known gaps below. Names and places are labelled but not detected until v0.2. The Stage 2 target is name recall of at least 0.90, in German and in English separately, and for every name-origin group. With 11 test names per group, one miss still meets the target and two do not.
+The hard cases have only a few values per type and language, so one miss moves a number a lot: read them together with the list of known gaps below. Names and places are labelled but not detected until v0.2. The Stage 2 target is name recall of at least 0.90, in German and in English separately, and for every name-origin group. With 25 test names per group, two misses still meet the target (0.92) and three do not (0.88).
 
 ## Results
 
@@ -65,28 +65,28 @@ The hard cases have only a few values per type and language, so one miss moves a
 
 | Data type | DE recall | DE precision | DE values | EN recall | EN precision | EN values |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| Names (from v0.2) | 0.00 | – | 65 | 0.00 | – | 78 |
-| Places (from v0.2) | 0.00 | – | 9 | 0.00 | – | 2 |
-| **Removed by any type** | 0.00 | – | 74 | 0.00 | – | 80 |
+| Names (from v0.2) | 0.00 | – | 156 | 0.00 | – | 169 |
+| Places (from v0.2) | 0.00 | – | 10 | 0.00 | – | 2 |
+| **Removed by any type** | 0.00 | – | 166 | 0.00 | – | 171 |
 | **Removed by any type, without names and places** | – | – | 0 | – | – | 0 |
 
 **Name recall by name-origin group (test split).** Target: 0.90 for every group. The group exists only in the evaluation data; Painfold never infers anyone's origin.
 
 | Name-origin group | DE recall | DE names | EN recall | EN names | Recall | Names |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| German-speaking | 0.00 | 5 | 0.00 | 6 | 0.00 | 11 |
-| English | 0.00 | 5 | 0.00 | 6 | 0.00 | 11 |
-| Bosnian, Serbian, Croatian | 0.00 | 5 | 0.00 | 6 | 0.00 | 11 |
-| Turkish | 0.00 | 5 | 0.00 | 6 | 0.00 | 11 |
-| Romanian | 0.00 | 5 | 0.00 | 6 | 0.00 | 11 |
-| Hungarian | 0.00 | 5 | 0.00 | 6 | 0.00 | 11 |
-| Polish | 0.00 | 5 | 0.00 | 6 | 0.00 | 11 |
-| Ukrainian | 0.00 | 5 | 0.00 | 6 | 0.00 | 11 |
-| Arabic | 0.00 | 5 | 0.00 | 6 | 0.00 | 11 |
-| Afghan | 0.00 | 5 | 0.00 | 6 | 0.00 | 11 |
-| African | 0.00 | 5 | 0.00 | 6 | 0.00 | 11 |
-| South Asian | 0.00 | 5 | 0.00 | 6 | 0.00 | 11 |
-| East Asian | 0.00 | 5 | 0.00 | 6 | 0.00 | 11 |
+| German-speaking | 0.00 | 12 | 0.00 | 13 | 0.00 | 25 |
+| English | 0.00 | 12 | 0.00 | 13 | 0.00 | 25 |
+| Bosnian, Serbian, Croatian | 0.00 | 12 | 0.00 | 13 | 0.00 | 25 |
+| Turkish | 0.00 | 12 | 0.00 | 13 | 0.00 | 25 |
+| Romanian | 0.00 | 12 | 0.00 | 13 | 0.00 | 25 |
+| Hungarian | 0.00 | 12 | 0.00 | 13 | 0.00 | 25 |
+| Polish | 0.00 | 12 | 0.00 | 13 | 0.00 | 25 |
+| Ukrainian | 0.00 | 12 | 0.00 | 13 | 0.00 | 25 |
+| Arabic | 0.00 | 12 | 0.00 | 13 | 0.00 | 25 |
+| Afghan | 0.00 | 12 | 0.00 | 13 | 0.00 | 25 |
+| African | 0.00 | 12 | 0.00 | 13 | 0.00 | 25 |
+| South Asian | 0.00 | 12 | 0.00 | 13 | 0.00 | 25 |
+| East Asian | 0.00 | 12 | 0.00 | 13 | 0.00 | 25 |
 <!-- accuracy:end -->
 
 ## Known gaps

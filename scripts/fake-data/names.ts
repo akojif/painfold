@@ -10,9 +10,13 @@
 // infers anyone's origin.
 //
 // Each group has 12 sentences, 6 German and then 6 English. The second sentence
-// of each language holds two names, so every group has at least 10 test names.
-// Sentences 1, 5 and 11 of each group form the dev split, which may be used to
-// tune the detectors; the rest is the test split, which is only ever reported.
+// of each language holds two names. Sentences 1, 5 and 11 of each group form the
+// dev split, which may be used to tune the detectors; the rest is the test
+// split, which is only ever reported.
+//
+// MORE_TEST adds 10 test-only sentences per group (5 German, 5 English, four of
+// them with two names), written before any tuning so they stay unseen: every
+// group then has 25 test names.
 import type { Lang } from './values.ts'
 
 export const NAME_GROUPS = [
@@ -208,5 +212,222 @@ const SENTENCES: Record<NameGroup, string[]> = {
   ],
 }
 
-export const NAME_CASES: Array<{ lang: Lang, group: NameGroup, split: 'dev' | 'test', source: string }> = NAME_GROUPS.flatMap(group =>
-  SENTENCES[group].map((source, i) => ({ lang: i < 6 ? 'de' as const : 'en' as const, group, split: DEV.has(i) ? 'dev' as const : 'test' as const, source })))
+// Test-only: sign-offs and thanks with bare and full names, lowercase chat
+// names, titles, possessives, multi-part and particle names.
+const MORE_TEST: Record<NameGroup, { de: string[], en: string[] }> = {
+  'german-speaking': {
+    de: [
+      'Mit freundlichen Grüßen\n[[NAME:Elisabeth Haslinger]]',
+      'hallo, hier ist [[NAME:stefan]], und [[NAME:magdalena]] hat das gleiche problem',
+      'Danke, [[NAME:Wolfgang]]!',
+      'Herr DI [[NAME:Gerhard Pfeffer-Lindner]] und Frau [[NAME:Ingrid Zöhrer]] warten auf die Gutschrift.',
+      'Schöne Grüße aus [[PLACE:Feldkirch]], [[NAME:Barbara Ritzberger]]',
+    ],
+    en: [
+      'Kind regards,\n[[NAME:Christoph Aigner]]',
+      'thx [[NAME:martin]], and say hi to [[NAME:Petra Holzinger]]',
+      'Thanks, [[NAME:Michaela]]',
+      'Both [[NAME:Franz Xaver Mayrhofer]] and [[NAME:Gertraud Kainz]] need access.',
+      'This was reported by [[NAME:Clemens von Stauffenberg-Lenz]].',
+    ],
+  },
+  'english': {
+    de: [
+      'Mit freundlichen Grüßen\n[[NAME:Margaret Thornbury]]',
+      'hallo, hier ist [[NAME:liam]], und [[NAME:Sophie Pemberton]] kann das bestätigen',
+      'Danke, [[NAME:Hugo]]!',
+      'Herr [[NAME:Edward Lancaster-Hale]] und Frau [[NAME:Amelia Crowther]] möchten kündigen.',
+      'Grüße, [[NAME:Patrick Dunleavy]]',
+    ],
+    en: [
+      'Regards,\n[[NAME:Benjamin Ellery]]',
+      'cheers [[NAME:ollie]], and thanks to [[NAME:Fiona MacLeod]] too',
+      'Thanks, [[NAME:Imogen]]',
+      '[[NAME:Mary-Jane Fairweather]] and [[NAME:Dylan ap Rhys]] signed the form.',
+      'The account belongs to [[NAME:Rosalind de la Mare]].',
+    ],
+  },
+  'bosnian-serbian-croatian': {
+    de: [
+      'Mit freundlichen Grüßen\n[[NAME:Senada Halilović]]',
+      'hallo, hier ist [[NAME:damir]], und [[NAME:Vesna Stojanović]] hat das auch',
+      'Danke, [[NAME:Milica]]!',
+      'Herr [[NAME:Hasan Mehmedović-Kurtić]] und Frau [[NAME:Branka Radić]] warten auf Antwort.',
+      'LG [[NAME:Tomislav Perić]]',
+    ],
+    en: [
+      'Best regards,\n[[NAME:Edina Softić]]',
+      'thx [[NAME:dino]], and tell [[NAME:Stjepan Jukić]] it works now',
+      'Thanks, [[NAME:Azra]]',
+      '[[NAME:Zoran Ilić]] and [[NAME:Nermina Bajrić]] approved the budget.',
+      'Please send it to [[NAME:Kristijan Vuković]].',
+    ],
+  },
+  'turkish': {
+    de: [
+      'Mit freundlichen Grüßen\n[[NAME:Hülya Karataş]]',
+      'hallo, hier ist [[NAME:kerem]], und [[NAME:Selin Arslan]] hat das gleiche problem',
+      'Danke, [[NAME:Yusuf]]!',
+      'Herr [[NAME:Ali Rıza Güneş]] und Frau [[NAME:Fatma Erdoğan]] möchten eine Rechnungskopie.',
+      'Grüße, [[NAME:Tuğba Koç]]',
+    ],
+    en: [
+      'Kind regards,\n[[NAME:İsmail Özdemir]]',
+      'thx [[NAME:deniz]], and say thanks to [[NAME:Merve Yıldız]]',
+      'Thanks, [[NAME:Ebru]]',
+      '[[NAME:Mehmet Ali Aydoğan]] and [[NAME:Nesrin Kurt]] need new passwords.',
+      'Please contact [[NAME:Barış Çakır]] about the refund.',
+    ],
+  },
+  'romanian': {
+    de: [
+      'Mit freundlichen Grüßen\n[[NAME:Gabriela Pop]]',
+      'hallo, hier ist [[NAME:mihai]], und [[NAME:Roxana Moldovan]] sieht das auch',
+      'Danke, [[NAME:Ionuț]]!',
+      'Herr [[NAME:Constantin Vasilescu]] und Frau [[NAME:Ana-Maria Neagu]] warten auf die Gutschrift.',
+      'LG [[NAME:Daniela Știrbu]]',
+    ],
+    en: [
+      'Regards,\n[[NAME:Cătălin Dobre]]',
+      'thx [[NAME:radu]], and tell [[NAME:Simona Rădulescu]] too',
+      'Thanks, [[NAME:Irina]]',
+      '[[NAME:Petru Ciobanu]] and [[NAME:Loredana Mărgineanu]] approved it.',
+      'The invoice is for [[NAME:Teodor Pătrașcu]].',
+    ],
+  },
+  'hungarian': {
+    de: [
+      'Mit freundlichen Grüßen\n[[NAME:Judit Szabó]]',
+      'hallo, hier ist [[NAME:péter]], und [[NAME:Anikó Takács]] hat das gleiche problem',
+      'Danke, [[NAME:Ferenc]]!',
+      'Herr [[NAME:Zoltán Kovács-Bíró]] und Frau [[NAME:Krisztina Juhász]] warten auf eine Antwort.',
+      'Grüße, [[NAME:Ágnes Fehér]]',
+    ],
+    en: [
+      'Best wishes,\n[[NAME:Miklós Papp]]',
+      'thx [[NAME:gergő]], and thanks to [[NAME:Noémi Sipos]]',
+      'Thanks, [[NAME:Boglárka]]',
+      '[[NAME:István Oláh]] and [[NAME:Hajnalka Vörös]] need access.',
+      'Please reply to [[NAME:Szilvia Bognár]].',
+    ],
+  },
+  'polish': {
+    de: [
+      'Mit freundlichen Grüßen\n[[NAME:Dorota Kaczmarek]]',
+      'hallo, hier ist [[NAME:kuba]], und [[NAME:Magdalena Wróblewska]] hat das auch',
+      'Danke, [[NAME:Wojciech]]!',
+      'Herr [[NAME:Przemysław Jankowski]] und Frau [[NAME:Halina Grabowska-Sikora]] möchten kündigen.',
+      'LG [[NAME:Marta Kowalczyk]]',
+    ],
+    en: [
+      'Kind regards,\n[[NAME:Sławomir Pawlak]]',
+      'thx [[NAME:gosia]], and tell [[NAME:Rafał Michalski]] it works',
+      'Thanks, [[NAME:Kasia]]',
+      '[[NAME:Mirosław Sobczak]] and [[NAME:Beata Kozłowska]] signed the contract.',
+      'Please send it to [[NAME:Jarosław Wieczorek]].',
+    ],
+  },
+  'ukrainian': {
+    de: [
+      'Mit freundlichen Grüßen\n[[NAME:Halyna Petrenko]]',
+      'hallo, hier ist [[NAME:vasyl]], und [[NAME:Svitlana Kovalchuk]] hat das gleiche problem',
+      'Danke, [[NAME:Roman]]!',
+      'Herr [[NAME:Volodymyr Ivanenko]] und Frau [[NAME:Liudmyla Rudenko]] warten auf eine Antwort.',
+      'Grüße, [[NAME:Anastasiia Pavlenko]]',
+    ],
+    en: [
+      'Regards,\n[[NAME:Yevhen Marchenko]]',
+      'thx [[NAME:maksym]], and say hi to [[NAME:Viktoriia Zaitseva]]',
+      'Thanks, [[NAME:Oleh]]',
+      '[[NAME:Ihor Polishchuk]] and [[NAME:Tetiana Sydorenko]] need access.',
+      'The order is for [[NAME:Sergey Kuzmenko]].',
+    ],
+  },
+  'arabic': {
+    de: [
+      'Mit freundlichen Grüßen\n[[NAME:Abdullah Al-Masri]]',
+      'hallo, hier ist [[NAME:karim]], und [[NAME:Noor Al-Hussein]] hat das auch',
+      'Danke, [[NAME:Layla]]!',
+      'Herr [[NAME:Abd al-Aziz Haddad]] und Frau [[NAME:Reem Abu Khalil]] warten auf die Gutschrift.',
+      'Grüße, [[NAME:Tarek Bin Saleh]]',
+    ],
+    en: [
+      'Kind regards,\n[[NAME:Mahmoud El-Sayed]]',
+      'thx [[NAME:hamza]], and thanks to [[NAME:Dalia Kanaan]] too',
+      'Thanks, [[NAME:Sami]]',
+      '[[NAME:Abu Bakr Othman]] and [[NAME:Maryam Al-Khatib]] approved the order.',
+      'Please contact [[NAME:Walid Abdel Rahman]] about the invoice.',
+    ],
+  },
+  'afghan': {
+    de: [
+      'Mit freundlichen Grüßen\n[[NAME:Nasrin Azimi]]',
+      'hallo, hier ist [[NAME:ahmad]], und [[NAME:Hamid Safi]] hat das gleiche problem',
+      'Danke, [[NAME:Parwana]]!',
+      'Herr [[NAME:Gul Mohammad Zazai]] und Frau [[NAME:Mahbooba Rasuli]] möchten eine Rechnungskopie.',
+      'Grüße, [[NAME:Rahmatullah Mohammadi]]',
+    ],
+    en: [
+      'Regards,\n[[NAME:Najibullah Sarwari]]',
+      'thx [[NAME:yama]], and tell [[NAME:Laila Haidari]] it works now',
+      'Thanks, [[NAME:Sediqa]]',
+      '[[NAME:Mir Ahmad Nazari]] and [[NAME:Khatera Faizi]] need new passwords.',
+      'The account belongs to [[NAME:Abdul Qadir Mujaddidi]].',
+    ],
+  },
+  'african': {
+    de: [
+      'Mit freundlichen Grüßen\n[[NAME:Adaeze Nwosu]]',
+      'hallo, hier ist [[NAME:kofi]], und [[NAME:Halima Yusuf]] hat das auch',
+      'Danke, [[NAME:Makeda]]!',
+      'Herr [[NAME:Babajide Ogunleye]] und Frau [[NAME:Nomvula Dlamini]] warten auf eine Antwort.',
+      'Grüße, [[NAME:Yonas Haile]]',
+    ],
+    en: [
+      'Kind regards,\n[[NAME:Chidinma Eze]]',
+      'thx [[NAME:abdi]], and thanks to [[NAME:Awa Ndiaye]]',
+      'Thanks, [[NAME:Tendai]]',
+      '[[NAME:Ibrahim Abdullahi Musa]] and [[NAME:Akosua Boateng]] signed the form.',
+      'Please send it to [[NAME:Sipho Ndlovu]].',
+    ],
+  },
+  'south-asian': {
+    de: [
+      'Mit freundlichen Grüßen\n[[NAME:Lakshmi Raghavan]]',
+      'hallo, hier ist [[NAME:rohan]], und [[NAME:Shabana Akhtar]] hat das gleiche problem',
+      'Danke, [[NAME:Anjali]]!',
+      'Herr [[NAME:Gurpreet Singh Sandhu]] und Frau [[NAME:Meenakshi Pillai]] möchten kündigen.',
+      'Grüße, [[NAME:Saif ur Rehman]]',
+    ],
+    en: [
+      'Regards,\n[[NAME:Aravind Krishnamurthy]]',
+      'thx [[NAME:neha]], and say thanks to [[NAME:Bilal Hussain]]',
+      'Thanks, [[NAME:Sunil]]',
+      '[[NAME:Mohammed Rafiq Butt]] and [[NAME:Dilani Fernando]] need access.',
+      'The order is for [[NAME:Rukhsana Begum]].',
+    ],
+  },
+  'east-asian': {
+    de: [
+      'Mit freundlichen Grüßen\n[[NAME:Huang Xiu Ying]]',
+      'hallo, hier ist [[NAME:jun]], und [[NAME:Lê Văn Hùng]] hat das auch',
+      'Danke, [[NAME:Yuna]]!',
+      'Herr [[NAME:Watanabe Kenji]] und Frau [[NAME:Choi Min-jung]] warten auf die Gutschrift.',
+      'Grüße, [[NAME:Zhao Lei]]',
+    ],
+    en: [
+      'Kind regards,\n[[NAME:Nguyễn Thị Hồng]]',
+      'thx [[NAME:minh]], and tell [[NAME:Lee Seung-hoon]] it works now',
+      'Thanks, [[NAME:Aiko]]',
+      '[[NAME:Yamamoto Haruka]] and [[NAME:Ouyang Ming]] approved the order.',
+      'Please contact [[NAME:Đỗ Quang Huy]] about the invoice.',
+    ],
+  },
+}
+
+export const NAME_CASES: Array<{ lang: Lang, group: NameGroup, split: 'dev' | 'test', source: string }> = [
+  ...NAME_GROUPS.flatMap(group =>
+    SENTENCES[group].map((source, i) => ({ lang: i < 6 ? 'de' as const : 'en' as const, group, split: DEV.has(i) ? 'dev' as const : 'test' as const, source }))),
+  ...NAME_GROUPS.flatMap(group => (['de', 'en'] as const).flatMap(lang =>
+    MORE_TEST[group][lang].map(source => ({ lang, group, split: 'test' as const, source })))),
+]

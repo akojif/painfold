@@ -152,9 +152,9 @@ describe('hand-written name set', () => {
     }
   })
 
-  it('has at least 10 test names and 3 dev names per group, so one miss cannot decide the target alone', () => {
+  it('has at least 25 test names and 3 dev names per group, so a single miss does not decide the target', () => {
     for (const group of NAME_GROUPS) {
-      expect(names(item => item.group === group && item.split === 'test').length, group).toBeGreaterThanOrEqual(10)
+      expect(names(item => item.group === group && item.split === 'test').length, group).toBeGreaterThanOrEqual(25)
       expect(names(item => item.group === group && item.split === 'dev').length, group).toBeGreaterThanOrEqual(3)
     }
   })
