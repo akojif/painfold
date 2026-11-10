@@ -20,7 +20,8 @@
     "credit": "Entwickelt von {name}",
     "factsLabel": "Über Painfold",
     "noCookies": "Keine Cookies",
-    "noAccount": "Kein Konto"
+    "noAccount": "Kein Konto",
+    "accuracy": "Genauigkeit"
   },
   "start": {
     "headline": "Finden Sie, was Ihren Kunden wehtut. Ohne preiszugeben, wer sie sind.",
@@ -527,5 +528,105 @@
   },
   "toast": {
     "close": "Schließen"
+  },
+  "accuracy": {
+    "title": "Genauigkeit",
+    "heading": "Wie gut Painfold personenbezogene Daten findet",
+    "lead": "Von 100 Namen in Ihrem Feedback entfernt Painfold etwa {n}. Deshalb prüfen Sie jeden Treffer, bevor Sie die Datei weitergeben.",
+    "findingsLabel": "Kurz gesagt",
+    "findings": {
+      "names": "Namen: {removal} werden in deutschem und englischem Feedback entfernt, mindestens {min} in jeder der {groups} Herkunftsgruppen.",
+      "rules": "E-Mail-Adressen, Telefonnummern, IBANs und die übrigen personenbezogenen Daten: {removal} der Werte in handgeschriebenen schwierigen Fällen werden entfernt.",
+      "targetMet": "Ziel für Stufe 2, mindestens {target} der Namen in jeder Gruppe entfernt: erreicht.",
+      "targetMissed": "Ziel für Stufe 2, mindestens {target} der Namen in jeder Gruppe entfernt: noch nicht erreicht."
+    },
+    "language": "Sprache",
+    "languages": {
+      "both": "Beide Sprachen",
+      "de": "Deutsch",
+      "en": "Englisch"
+    },
+    "measured": {
+      "heading": "Wie gemessen wird",
+      "sets": "Painfold wird an erfundenem Feedback mit bekannten personenbezogenen Daten gemessen, auf Deutsch und Englisch: handgeschriebene schwierige Fälle, handgeschriebene Namen aus 13 in Österreich lebenden Gemeinschaften, lange Texte und generierte Nachrichten.",
+      "browser": "Das Namensmodell wird im Browser gemessen, so wie es bei Ihnen läuft. Seine Regeln wurden an eigenen Sätzen abgestimmt; die Testsätze wurden nur einmal geprüft, nach der Abstimmung. Sie stammen von derselben Person, die die Regeln abgestimmt hat; ein Testdatensatz von jemand anderem ist geplant.",
+      "terms": "Entfernt: Der Wert ist aus der bereinigten Datei verschwunden, egal, für welche Art von Daten er gehalten wurde. Als Name entfernt: entfernt und als Name erkannt."
+    },
+    "names": {
+      "heading": "Namen",
+      "removal": "Entfernt",
+      "typeCorrect": "Als Name entfernt",
+      "withoutList": "Ohne Vornamensliste entfernt",
+      "count": "{n} Testnamen",
+      "list": "{onList} von {total} Testnamen enthalten einen Vornamen aus der Liste von Painfold. Die Liste wird nur direkt nach einer Begrüßung, einem Dank, einer Grußformel oder einer Vorstellung verwendet („hi anna“, „LG Markus“)."
+    },
+    "groups": {
+      "heading": "Nach Herkunftsgruppe der Namen",
+      "note": "Die Gruppen gibt es nur in den Testdaten, damit Namen aus jeder Gemeinschaft gemessen werden. Painfold schließt nie auf die Herkunft einer Person.",
+      "target": "Ziel {target}",
+      "below": "unter dem Ziel",
+      "detail": "Als Name {typeCorrect}, ohne Liste {withoutList}",
+      "names": {
+        "german-speaking": "Deutschsprachig",
+        "english": "Englisch",
+        "bosnian-serbian-croatian": "Bosnisch, Serbisch, Kroatisch",
+        "turkish": "Türkisch",
+        "romanian": "Rumänisch",
+        "hungarian": "Ungarisch",
+        "polish": "Polnisch",
+        "ukrainian": "Ukrainisch",
+        "arabic": "Arabisch",
+        "afghan": "Afghanisch",
+        "african": "Afrikanisch",
+        "south-asian": "Südasiatisch",
+        "east-asian": "Ostasiatisch"
+      }
+    },
+    "long": {
+      "heading": "Namen in langen Texten",
+      "note": "Das Namensmodell liest etwa 300 Wörter auf einmal, deshalb werden längere Texte in überlappenden Teilen geprüft. Diese Texte sind vier- bis fünfmal so lang.",
+      "positions": [
+        "Am Anfang",
+        "In der Mitte",
+        "Am Ende"
+      ]
+    },
+    "rules": {
+      "heading": "Weitere personenbezogene Daten",
+      "note": "Handgeschriebene schwierige Fälle: ungewöhnlich geschriebene, eingefügte oder verschleierte Werte und Ähnliches, das nicht entfernt werden darf, etwa Bestellnummern.",
+      "type": "Art der Daten",
+      "found": "Gefunden",
+      "correct": "Richtig",
+      "values": "Werte",
+      "explain": "Gefunden: der Anteil der Werte, die als die richtige Art von Daten entfernt wurden. Richtig: der Anteil der Treffer, die wirklich diese Art von Daten waren.",
+      "generated": "Generierte Daten (eine Kontrolle, dass nichts kaputtgegangen ist)",
+      "generatedNote": "Nachrichten aus denselben Vorlagen wie die Beispieldatei. Die Erkennung konnte auf diese Sätze abgestimmt werden, die Werte sind also bewusst hoch: Sie zeigen, dass nichts kaputtgegangen ist."
+    },
+    "gaps": {
+      "heading": "Bekannte Lücken",
+      "items": [
+        "Spitznamen nach einer Begrüßung oder einem Dank, die nicht auf der Vornamensliste stehen, etwa „cheers ollie“.",
+        "Namen am Satzanfang, vor denen nichts steht: „Sanne van der Berg says…“.",
+        "Manche Namenszusätze und mehrteilige Namen: „Saif ur Rehman“, „Tesfaye Bekele“.",
+        "Kleine Orte: In „Mehmet Aydın aus Wels“ wird der Name entfernt, aber nicht „Wels“.",
+        "Ausgeschriebene E-Mail-Adressen, die Spamfilter austricksen sollen („name AT example DOT net“).",
+        "Englische Adressen, die mit einer Wohnungsnummer beginnen („Flat 2, 14 Market Street“).",
+        "Einige Dokumentnummern, die wie eine österreichische Sozialversicherungsnummer aussehen, werden entfernt, obwohl sie keine sind."
+      ],
+      "mark": "Was übersehen wurde, können Sie in der Prüfung mit M markieren."
+    },
+    "speed": {
+      "heading": "Geschwindigkeit",
+      "text": "Eine Datei mit 5.000 Zeilen wird in etwa 1,5 Sekunden auf E-Mail-Adressen, Telefonnummern und die übrigen regelbasierten Daten geprüft. Mit dem Namensmodell in Ihrem Browser dauern die Namen 70 bis 115 Sekunden und werden im Hintergrund geprüft, während Sie prüfen."
+    },
+    "model": {
+      "heading": "Das Namensmodell",
+      "text": "Namen und Orte findet {model} ({license}), ein mehrsprachiges Modell, das mit Nachrichtentexten trainiert wurde, darunter der Datensatz CoNLL-2003. Die CoNLL-Texte sind selbst lizenziert, was für damit trainierte Modelle eine Grauzone ist. Painfold stellt das Modell von der eigenen Website bereit und führt es in Ihrem Browser aus."
+    },
+    "method": {
+      "heading": "Methode und Daten",
+      "docs": "Alle Zahlen und die Methode",
+      "data": "Die Testdaten"
+    }
   }
 }

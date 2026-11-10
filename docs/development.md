@@ -41,6 +41,7 @@ These are where precise wording matters most; a native speaker should review the
 - The limits notice (`review.limits`), also used in the cleaning report.
 - The "What leaves your browser" panel (`network.none`, `network.explain`, `network.allOwn`, `network.foreign`, `network.stored`).
 - The name model download: what is downloaded and kept, and the failure and offline messages (`nameModel.*`). "Namensmodell" is the chosen term.
+- The Accuracy page (`accuracy.*`): the opening sentence ("Von 100 Namen in Ihrem Feedback entfernt Painfold etwa 97 …"), the findings, how it is measured, the name-origin groups ("Herkunftsgruppe"), the known gaps and the model's licence note.
 - Opening files: the note about documents and transcripts and the unsupported-file message (`importNotes.*`, `importErrors.unsupported-format`).
 - Names in the review and the download: the check, Stop and its question, and what the cleaning report says (`nameScan.*`, `download.names.*`).
 - Column warnings and reasons (`columns.warning`, `columns.checkInstead`, `columns.masked`, `columns.reason.*`, `columns.help`).
