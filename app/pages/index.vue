@@ -10,6 +10,8 @@ const { number } = useFormat()
 const session = useSession()
 const { table, isSample, roles, scanColumns } = session
 const detection = useDetection()
+// Set up here, before the review starts, so names are checked as soon as it does.
+useNameScan()
 
 const reading = ref<string>()
 const error = ref<ImportErrorCode>()

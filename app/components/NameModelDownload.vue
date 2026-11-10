@@ -12,12 +12,12 @@ const props = defineProps<{ compact?: boolean }>()
 
 const { t } = useI18n()
 const { number } = useFormat()
-const { enabled, total, costly, status, loaded, stored, download, cancel, remove } = useNameModel()
+const { total, costly, status, loaded, stored, download, cancel, remove } = useNameModel()
 
 const megabytes = (bytes: number) => number(Math.round(bytes / 1_000_000))
 const size = computed(() => t('nameModel.megabytes', { n: megabytes(total) }))
 const progress = computed(() => t('nameModel.progress', { loaded: megabytes(loaded.value), total: megabytes(total) }))
-const visible = computed(() => enabled && !(props.compact && (status.value === 'ready' || status.value === 'unknown')))
+const visible = computed(() => !(props.compact && (status.value === 'ready' || status.value === 'unknown')))
 
 const root = useTemplateRef<HTMLElement>('root')
 const announcement = ref('')

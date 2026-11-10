@@ -20,7 +20,8 @@ let checked = false
 // Rejects the requests still waiting when the worker is stopped.
 const pending = new Set<(error: Error) => void>()
 
-class Stopped extends Error {}
+/** What a waiting request rejects with when the model's worker is stopped. */
+export class NameModelStopped extends Error {}
 
 // A request as the page writes it; the id and the runtime path are added here.
 type Message = { kind: 'load' } | { kind: 'names', rows: string[][], columns: number[] }
@@ -30,7 +31,7 @@ const storage = () => (globalThis.caches as CacheStorage | undefined)
 function stopWorker() {
   worker?.terminate()
   worker = undefined
-  for (const reject of pending) reject(new Stopped('The name model was stopped'))
+  for (const reject of pending) reject(new NameModelStopped('The name model was stopped'))
   pending.clear()
 }
 
@@ -80,15 +81,11 @@ async function check() {
  * or removing it. Nothing is downloaded until download() is called.
  */
 export function useNameModel() {
-  const config = useRuntimeConfig().public
-  // Hidden on the production site until names are used in the review (#65).
-  const enabled = config.nameModel
-  const total = config.downloadBytes
+  const total = useRuntimeConfig().public.downloadBytes
   // Only where the browser reports it; most browsers do not.
   const costly = ref(false)
 
   onMounted(() => {
-    if (!enabled) return
     costly.value = isCostlyConnection((navigator as Navigator & { connection?: { saveData?: boolean, type?: string } }).connection)
     void check()
   })
@@ -107,7 +104,7 @@ export function useNameModel() {
       status.value = 'ready'
     }
     catch (error) {
-      if (error instanceof Stopped) return
+      if (error instanceof NameModelStopped) return
       status.value = navigator.onLine ? 'failed' : 'offline'
     }
   }
@@ -129,11 +126,17 @@ export function useNameModel() {
     loaded.value = 0
   }
 
-  /** Names and places in the given columns; the model must be ready. Used by the review from #65. */
+  /** Names and places in the given columns; the model must be ready. Rejects with a NameModelStopped error after stop(). */
   async function names(rows: string[][], columns: number[]): Promise<CellDetections[]> {
     const response = await request({ kind: 'names', rows, columns })
     return response.kind === 'result' ? response.cells : []
   }
 
-  return { enabled, total, costly: readonly(costly), status: readonly(status), loaded: readonly(loaded), stored: readonly(stored), download, cancel, remove, names }
+  /** Stops whatever the model is doing; a stored model stays stored. */
+  function stop() {
+    stopWorker()
+    if (status.value === 'downloading') status.value = 'absent'
+  }
+
+  return { total, stop, costly: readonly(costly), status: readonly(status), loaded: readonly(loaded), stored: readonly(stored), download, cancel, remove, names }
 }

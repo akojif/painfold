@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { cleanedFileName, cleanedTable, removedByType, reportFileName, toCsv } from '~~/core/export/csv'
 import { cleaningReport, reportTimestamp } from '~~/core/export/report'
+import { NAME_MODEL } from '~~/deploy/model'
 
 definePageMeta({
   step: 3,
@@ -25,6 +26,19 @@ const unchecked = computed(() => table.value?.columns.filter((_, index) => roles
 
 const { version } = useRuntimeConfig().public
 
+// Whether names and places were checked, for the summary and the cleaning report.
+// The download waits while they are still being checked (see the review).
+const nameScan = useNameScan()
+const checkingNames = nameScan.busy
+const namesChecked = computed(() => nameScan.status.value === 'done' || (nameScan.status.value === 'skipped' && nameScan.done.value > 0))
+const namesNote = computed(() => {
+  const { status, done, total } = nameScan
+  if (status.value === 'done') return t('download.names.checked')
+  if (status.value === 'skipped') return done.value > 0 ? t('download.names.partly', { done: number(done.value), total: number(total.value) }) : t('download.names.skipped')
+  if (status.value === 'failed') return t('download.names.failed')
+  return t('download.names.notChecked')
+})
+
 function download() {
   if (!table.value || !review.value) return
   saveTextFile(fileName.value, toCsv(cleanedTable(table.value, roles.value, review.value), { delimiter: table.value.delimiter ?? ',' }))
@@ -33,6 +47,7 @@ function download() {
 function downloadReport() {
   if (!table.value) return
   const notes = [
+    namesNote.value,
     ...(notReviewed.value > 0 ? [t('download.notReviewed', { n: number(notReviewed.value) }, notReviewed.value)] : []),
     ...(kept.value > 0 ? [t('download.kept', { n: number(kept.value) }, kept.value)] : []),
     ...(dropped.value.length > 0 ? [t('download.dropped', { columns: dropped.value.join(', ') })] : []),
@@ -46,6 +61,7 @@ function downloadReport() {
       [t('report.rows'), number(table.value.rows.length)],
       [t('report.date'), reportTimestamp(new Date())],
       [t('report.version'), String(version)],
+      ...(namesChecked.value ? [[t('report.nameModel'), `${NAME_MODEL.original} (${NAME_MODEL.license})`] as [string, string]] : []),
     ],
     removedHeading: t('report.removedHeading'),
     removed: removed.value.map(([type, count]) => [t(`typeMany.${type}`), number(count)]),
@@ -77,11 +93,26 @@ async function startOver() {
         :text="table.fileName"
       />
 
+      <template v-if="checkingNames">
+        <NameModelDownload
+          compact
+          class="mt-6"
+        />
+        <NameScanStatus class="mt-6" />
+        <p
+          id="download-waits"
+          class="mt-1 text-sm text-fg-muted"
+        >
+          {{ $t('nameScan.downloadWaits') }}
+        </p>
+      </template>
       <div class="mt-6 flex flex-wrap gap-2">
         <button
           type="button"
-          class="focus-ring press flex h-10 max-w-full min-w-0 items-center rounded-md bg-fg px-4 font-medium whitespace-pre text-canvas"
+          class="focus-ring press flex h-10 max-w-full min-w-0 items-center rounded-md bg-fg px-4 font-medium whitespace-pre text-canvas disabled:pointer-events-none disabled:opacity-50"
           :aria-label="$t('download.button', { name: fileName })"
+          :aria-describedby="checkingNames ? 'download-waits' : undefined"
+          :disabled="checkingNames"
           @click="download"
         >
           <i18n-t
@@ -95,7 +126,8 @@ async function startOver() {
         </button>
         <button
           type="button"
-          class="focus-ring press h-10 rounded-md border border-line px-4 hover:border-line-strong"
+          class="focus-ring press h-10 rounded-md border border-line px-4 hover:border-line-strong disabled:pointer-events-none disabled:opacity-50"
+          :disabled="checkingNames"
           @click="downloadReport"
         >
           {{ $t('download.reportButton') }}
@@ -133,10 +165,10 @@ async function startOver() {
         >
           {{ $t('download.nothingRemoved') }}
         </p>
-        <ul
-          v-if="notReviewed > 0 || kept > 0 || dropped.length > 0 || unchecked.length > 0"
-          class="mt-3 space-y-1 text-sm text-fg-muted"
-        >
+        <ul class="mt-3 space-y-1 text-sm text-fg-muted">
+          <li v-if="!checkingNames">
+            {{ namesNote }}
+          </li>
           <li v-if="notReviewed > 0">
             {{ $t('download.notReviewed', { n: number(notReviewed) }, notReviewed) }}
           </li>

@@ -21,6 +21,8 @@ const localePath = useLocalePath()
 const { number } = useFormat()
 const session = useSession()
 const { table, review, revision, feedbackColumn, scanColumns } = session
+// Names and places arrive in the background; the download waits for them.
+const { busy: checkingNames } = useNameScan()
 
 // By value: each distinct value once, decided for every copy. By row: the file as written.
 const view = ref<'value' | 'row'>('value')
@@ -334,9 +336,10 @@ onBeforeUnmount(() => {
         compact
         class="mt-3"
       />
+      <NameScanStatus class="mt-3" />
 
       <div
-        v-if="finished"
+        v-if="finished && !checkingNames"
         class="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-md border border-line bg-surface px-4 py-3"
         role="status"
       >
@@ -536,13 +539,30 @@ onBeforeUnmount(() => {
             >
               {{ $t('review.removeAll', { n: number(counts.left) }) }}
             </button>
+            <button
+              v-if="checkingNames"
+              type="button"
+              disabled
+              aria-describedby="download-waits"
+              class="h-9 rounded-md bg-fg px-3.5 font-medium text-canvas opacity-50"
+            >
+              {{ $t('review.continue') }}
+            </button>
             <NuxtLink
+              v-else
               :to="localePath('/download')"
               class="focus-ring press inline-flex h-9 items-center rounded-md bg-fg px-3.5 font-medium text-canvas"
             >
               {{ $t('review.continue') }}
             </NuxtLink>
           </div>
+          <p
+            v-if="checkingNames"
+            id="download-waits"
+            class="text-sm text-fg-muted"
+          >
+            {{ $t('nameScan.downloadWaits') }}
+          </p>
         </div>
       </div>
 

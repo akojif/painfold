@@ -252,6 +252,13 @@
       "title": "Your file is clean.",
       "body": "Next in Painfold: turn it into ranked customer pains (coming in v0.3).",
       "link": "See the roadmap"
+    },
+    "names": {
+      "checked": "Names and places were checked with the name model.",
+      "partly": "Names were checked in {done} of {total} rows; the check was skipped for the rest, so names there were not removed.",
+      "skipped": "Names were not checked: the check was skipped for this file.",
+      "failed": "Names were not checked: the name model could not run.",
+      "notChecked": "Names and places were not checked: the name model was not downloaded."
     }
   },
   "typeMany": {
@@ -302,7 +309,8 @@
     "rows": "Rows",
     "removedHeading": "Replaced with placeholders",
     "nothingRemoved": "Nothing was found or marked.",
-    "limitsHeading": "Limits"
+    "limitsHeading": "Limits",
+    "nameModel": "Name model"
   },
   "theme": {
     "label": "Theme",
@@ -462,6 +470,29 @@
       "cancelled": "Download cancelled.",
       "removed": "Name model removed from this browser.",
       "offline": "You're offline."
+    }
+  },
+  "nameScan": {
+    "running": "Checking for names: {done} of {total} rows",
+    "stop": "Stop",
+    "done": "Names and places checked.",
+    "names": "no names | 1 name | {n} names",
+    "places": "no places | 1 place | {n} places",
+    "skipped": "Names were checked in {done} of {total} rows, then skipped. Names in the other rows won't be removed from the download.",
+    "skippedNone": "Names were skipped for this file. They won't be removed from the download.",
+    "checkAnyway": "Check names after all",
+    "failed": "Checking for names stopped. The other findings are not affected.",
+    "retry": "Try again",
+    "downloadWaits": "The download is available when names are checked.",
+    "confirm": {
+      "title": "Skip names for this file?",
+      "body": "Names won't be removed from the download.",
+      "skip": "Skip names",
+      "keep": "Keep checking"
+    },
+    "announce": {
+      "started": "Checking for names.",
+      "done": "Names checked: {names} and {places} added."
     }
   }
 }

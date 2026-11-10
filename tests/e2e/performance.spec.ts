@@ -35,3 +35,27 @@ test('a 5,000-row file is cleaned within the time budget', async ({ page }) => {
   if (process.env.BENCH) process.stdout.write(`\n5,000 rows: ${JSON.stringify(timings)} ms\n`)
   expect(timings.total).toBeLessThan(BUDGET)
 })
+
+// Stage 2: names in 5,000 rows are checked in under 2.5 minutes on a recent
+// laptop, with the model already in the browser. Only with `npm run bench`:
+// shared CI runners are too slow and uneven for this number to mean anything.
+test('names in a 5,000-row file are checked within the time budget, model cached', async ({ page }) => {
+  test.skip(!process.env.BENCH, 'run with npm run bench')
+  test.setTimeout(300_000)
+  const csv = Buffer.from(buildSample(4711, ROWS))
+  await page.goto('/')
+  await page.getByTestId('file-input').setInputFiles({ name: 'large.csv', mimeType: 'text/csv', buffer: csv })
+  await page.getByRole('button', { name: /^Download name model/ }).click()
+  await expect(page.getByText(/^Name model stored in this browser/)).toBeVisible({ timeout: 120_000 })
+
+  const started = Date.now()
+  await page.getByRole('button', { name: `Find personal data in ${ROWS.toLocaleString('en')} rows` }).click()
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(/findings in 5,000 rows/, { timeout: 30_000 })
+  const rules = Date.now()
+  await expect(page.getByText('Names and places checked.', { exact: true })).toBeVisible({ timeout: 280_000 })
+  const finished = Date.now()
+
+  const timings = { rules: rules - started, names: finished - rules, total: finished - started }
+  process.stdout.write(`\n5,000 rows with names: ${JSON.stringify(timings)} ms, ${await page.getByText('Names and places checked.', { exact: true }).innerText()}\n`)
+  expect(timings.total).toBeLessThan(150_000)
+})
