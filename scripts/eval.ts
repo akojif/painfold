@@ -131,13 +131,18 @@ export function readItems(path: string, split?: 'dev' | 'test'): EvalItem[] {
 
 export type GroupRecall = { group: string, scores: Record<Lang, Pick<Score, 'labelled' | 'found'>> }
 
-/** Name recall per name-origin group and language: the share of labelled names that NAME detections cover completely. */
-export function nameRecallByGroup(items: readonly EvalItem[], find: (text: string) => Detection[] = detect): GroupRecall[] {
+/**
+ * Name recall per name-origin group and language: the share of labelled names
+ * that NAME detections cover completely (type-correct), or, with anyType, that
+ * detections of any type cover (removal recall: the name is removed even if it
+ * was labelled a place).
+ */
+export function nameRecallByGroup(items: readonly EvalItem[], find: (text: string) => Detection[] = detect, { anyType = false }: { anyType?: boolean } = {}): GroupRecall[] {
   const groups = new Map<string, Record<Lang, Pick<Score, 'labelled' | 'found'>>>()
   for (const item of items) {
     if (!item.group) continue
     const scores = groups.get(item.group) ?? { de: { labelled: 0, found: 0 }, en: { labelled: 0, found: 0 } }
-    const names = find(item.text).filter(found => found.type === 'NAME')
+    const names = find(item.text).filter(found => anyType || found.type === 'NAME')
     for (const span of item.spans.filter(span => span.type === 'NAME')) {
       scores[item.lang].labelled++
       if (covers(names, span.start, span.end)) scores[item.lang].found++

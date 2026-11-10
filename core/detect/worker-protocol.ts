@@ -5,6 +5,7 @@
 // The rules run in detect.worker.ts. The name model runs in names.worker.ts on
 // its own, so a download can be cancelled by stopping that worker while the
 // rules keep working.
+import { withNameRules } from './name-cues.ts'
 import { nameDetections, type ModelToken } from './names.ts'
 import { countByColumn, detectTable, type CellDetections, type ColumnCounts } from './table.ts'
 
@@ -22,9 +23,10 @@ export type DetectResponse
 // load: download the name model (or open it from the browser's cache).
 // names: names and places in the given columns, loading the model first if needed.
 // ortPath is where this build serves the ONNX Runtime WebAssembly files.
+// firstNames: false leaves out the first-name list, only to measure what it adds (scripts/eval-names.ts).
 export type NameRequest
   = | { kind: 'load', id: number, ortPath: string }
-    | { kind: 'names', id: number, rows: string[][], columns: number[], ortPath: string }
+    | { kind: 'names', id: number, rows: string[][], columns: number[], ortPath: string, firstNames?: boolean }
 
 // resources: the requests the worker made, for the "What leaves your browser"
 // panel, which cannot see a worker's requests on its own.
@@ -65,7 +67,7 @@ const PROGRESS_EVERY = 50
 
 /**
  * Loads the name model; for a names request, then finds names and places in
- * the given columns. Identical texts are labelled once, and cells without
+ * the given columns, with the model and the cue rules together (name-cues.ts). Identical texts are labelled once, and cells without
  * letters are skipped: they cannot hold a name.
  */
 export async function handleNameRequest(request: NameRequest, send: (response: NameResponse) => void, model: NameModel): Promise<void> {
@@ -77,13 +79,14 @@ export async function handleNameRequest(request: NameRequest, send: (response: N
     }
     const cells: CellDetections[] = []
     const seen = new Map<string, ReturnType<typeof nameDetections>>()
+    const firstNames = request.firstNames ?? true
     for (const [row, values] of request.rows.entries()) {
       for (const column of request.columns) {
         const text = values[column] ?? ''
         if (!/\p{L}/u.test(text)) continue
         let detections = seen.get(text)
         if (!detections) {
-          detections = nameDetections(text, await model.label(text))
+          detections = withNameRules(text, nameDetections(text, await model.label(text)), { firstNames })
           seen.set(text, detections)
         }
         if (detections.length > 0) cells.push({ row, column, detections: detections.map(found => ({ ...found })) })

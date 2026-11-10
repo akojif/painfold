@@ -36,9 +36,9 @@ async function waitForServer(): Promise<void> {
 export type BrowserRun = { detections: Detection[][], milliseconds: number, threads: boolean }
 
 /** Starts the built names worker in an open page of the app and finds names and places in each text, in order. */
-export async function namesInPage(page: Page, texts: readonly string[]): Promise<BrowserRun> {
+export async function namesInPage(page: Page, texts: readonly string[], { firstNames = true }: { firstNames?: boolean } = {}): Promise<BrowserRun> {
   const ortPath = `${ORT_PREFIX}${ortVersion()}/`
-  const run = await page.evaluate(async ({ worker, ortPath, texts }) => {
+  const run = await page.evaluate(async ({ worker, ortPath, texts, firstNames }) => {
     const started = performance.now()
     const names = new Worker(worker, { type: 'module' })
     const cells = await new Promise<unknown>((resolve, reject) => {
@@ -46,11 +46,11 @@ export async function namesInPage(page: Page, texts: readonly string[]): Promise
         if (data.kind === 'result') resolve(data.cells)
         if (data.kind === 'error') reject(new Error(data.message))
       })
-      names.postMessage({ kind: 'names', id: 1, rows: texts.map(text => [text]), columns: [0], ortPath })
+      names.postMessage({ kind: 'names', id: 1, rows: texts.map(text => [text]), columns: [0], ortPath, firstNames })
     })
     names.terminate()
     return { cells, milliseconds: performance.now() - started, threads: crossOriginIsolated }
-  }, { worker: workerPath(), ortPath, texts: [...texts] })
+  }, { worker: workerPath(), ortPath, texts: [...texts], firstNames })
 
   const detections: Detection[][] = texts.map(() => [])
   for (const cell of run.cells as CellDetections[]) detections[cell.row] = cell.detections
@@ -58,7 +58,7 @@ export async function namesInPage(page: Page, texts: readonly string[]): Promise
 }
 
 /** The same, with its own static server and browser, for scripts. */
-export async function detectNamesInBrowser(texts: readonly string[]): Promise<BrowserRun> {
+export async function detectNamesInBrowser(texts: readonly string[], options: { firstNames?: boolean } = {}): Promise<BrowserRun> {
   workerPath() // fails early, before a server is started, if there is no build
   const server = spawn(process.execPath, ['scripts/serve-static.ts', '--port', String(PORT)], { stdio: 'ignore' })
   const browser = await chromium.launch()
@@ -66,7 +66,7 @@ export async function detectNamesInBrowser(texts: readonly string[]): Promise<Br
     await waitForServer()
     const page = await browser.newPage()
     await page.goto(BASE)
-    return await namesInPage(page, texts)
+    return await namesInPage(page, texts, options)
   }
   finally {
     await browser.close()
