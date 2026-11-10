@@ -64,7 +64,7 @@ test.describe('review step', () => {
     await expect(progress(page)).toHaveText('2 reviewed, 1 left')
     await expect(currentValue(page)).toHaveAccessibleName(/192\.0\.2\.7/)
     await expect(currentValue(page)).toBeFocused()
-    await expect(page.locator('[aria-live="polite"]').last()).toHaveText('Email address removed, 1 left.')
+    await expect(page.locator('main [aria-live="polite"]').last()).toHaveText('Email address removed, 1 left.')
 
     await page.keyboard.press('z')
     await expect(values(page).getByRole('button', { name: 'Email address, not reviewed: anna@example.com' })).toBeVisible()
@@ -129,9 +129,10 @@ test.describe('review step', () => {
     await openReview(page)
     await page.keyboard.press('r')
     await page.keyboard.press('k')
-    await expect(page.getByRole('status')).toContainText('All findings are reviewed.')
-    await expect(page.getByRole('status')).toContainText('2 removed, 1 kept.')
-    await page.getByRole('status').getByRole('link', { name: 'Continue to download' }).click()
+    // The banner, not the toast region (which is also a status region).
+    const banner = page.locator('main').getByRole('status').filter({ hasText: 'All findings are reviewed.' })
+    await expect(banner).toContainText('2 removed, 1 kept.')
+    await banner.getByRole('link', { name: 'Continue to download' }).click()
     await expect(page).toHaveURL(/\/download$/)
   })
 
@@ -180,7 +181,7 @@ test.describe('review step', () => {
       await page.getByRole('button', { name: 'Mark as personal data' }).click()
       await expect(row(page, 1)).toContainText('[NAME_1]')
       await expect(row(page, 3)).toContainText('[NAME_1]')
-      await expect(page.locator('[aria-live="polite"]').last()).toHaveText('Name marked in 2 rows.')
+      await expect(page.locator('main [aria-live="polite"]').last()).toHaveText('Name marked in 2 rows.')
       await expect(page.getByRole('heading', { level: 1 })).toHaveText('5 findings in 4 rows')
     })
 
@@ -195,7 +196,7 @@ test.describe('review step', () => {
       await selectText(page, 1, 'Anna')
       await page.keyboard.press('m')
       await page.getByRole('button', { name: 'Mark as personal data' }).click()
-      await expect(page.locator('[aria-live="polite"]').last()).toHaveText('Name marked in 1 row. 2 possible forms to review.')
+      await expect(page.locator('main [aria-live="polite"]').last()).toHaveText('Name marked in 1 row. 2 possible forms to review.')
       await expect(row(page, 1)).toContainText('[NAME_1]')
       await expect(row(page, 2).getByRole('button', { name: 'Name, not reviewed: Anna' })).toBeVisible()
       await expect(row(page, 3).getByRole('button', { name: 'Name, not reviewed: Anna' })).toBeVisible()

@@ -42,9 +42,9 @@ export function toCsv(file: CleanedFile, options: { delimiter?: string } = {}): 
 
 const baseName = (fileName: string) => fileName.replace(/\.[^.]+$/, '') || 'feedback'
 
-/** The cleaned file's name: "tickets.xlsx" becomes "tickets_cleaned.csv". */
-export function cleanedFileName(fileName: string): string {
-  return `${baseName(fileName)}_cleaned.csv`
+/** The cleaned file's name: "tickets.xlsx" becomes "tickets_cleaned.csv" (later also .txt or .md, for transcripts and documents). */
+export function cleanedFileName(fileName: string, extension = 'csv'): string {
+  return `${baseName(fileName)}_cleaned.${extension}`
 }
 
 /** The cleaning report's name: "tickets.xlsx" becomes "tickets_cleaning-report.txt". */
