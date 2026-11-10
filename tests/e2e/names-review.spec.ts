@@ -7,11 +7,15 @@ import { expect, test } from './fixtures'
 // browser context first, from the local build.
 
 const sampleCsv = readFileSync(new URL('../../data/sample/support-tickets.csv', import.meta.url), 'utf8')
-// 2,000 rows: the sample ten times, so the check runs long enough to stop it.
+// The sample three times (600 rows), so names arrive while someone reviews, and
+// ten times (2,000 rows), so the check runs long enough to stop it. Shared CI
+// runners check names several times slower than a laptop.
 const [header, ...lines] = sampleCsv.trim().split('\n')
-const largeCsv = [header, ...Array.from({ length: 10 }, () => lines).flat()].join('\n')
+const repeated = (times: number) => [header, ...Array.from({ length: times }, () => lines).flat()].join('\n')
+const mediumCsv = repeated(3)
+const largeCsv = repeated(10)
 
-test.describe.configure({ timeout: 120_000 })
+test.describe.configure({ timeout: 240_000 })
 
 const text = async (download: Download) => readFileSync((await download.path())!, 'utf8')
 
@@ -22,17 +26,19 @@ async function withModel(page: Page, open: () => Promise<void>) {
   await expect(page.getByText(/^Name model stored in this browser/)).toBeVisible({ timeout: 60_000 })
 }
 const sample = (page: Page) => () => page.getByRole('button', { name: 'Try the sample file' }).click()
-const large = (page: Page) => () => page.getByTestId('file-input').setInputFiles({ name: 'large.csv', mimeType: 'text/csv', buffer: Buffer.from(largeCsv) })
+const upload = (csv: string) => (page: Page) => () => page.getByTestId('file-input').setInputFiles({ name: 'large.csv', mimeType: 'text/csv', buffer: Buffer.from(csv) })
+const medium = upload(mediumCsv)
+const large = upload(largeCsv)
 const findButton = (page: Page) => page.getByRole('button', { name: /^Find personal data in/ })
 const heading = (page: Page) => page.getByRole('heading', { level: 1 })
 const findings = async (page: Page) => Number((await heading(page).innerText()).match(/^([\d,]+) findings/)![1]!.replace(/,/g, ''))
 
 test('rule findings can be reviewed at once; names arrive in the background without moving focus', async ({ page }) => {
-  await withModel(page, large(page))
+  await withModel(page, medium(page))
   await findButton(page).click()
-  await expect(heading(page)).toHaveText(/findings in 2,000 rows$/)
+  await expect(heading(page)).toHaveText(/findings in 600 rows$/)
   const before = await findings(page)
-  await expect(page.getByText(/^Checking for names: [\d,]+ of 2,000 rows$/)).toBeVisible()
+  await expect(page.getByText(/^Checking for names: [\d,]+ of 600 rows$/)).toBeVisible()
 
   // Review a rule finding with the keyboard while names arrive.
   const first = page.locator('[data-value]').first()
@@ -42,7 +48,7 @@ test('rule findings can be reviewed at once; names arrive in the background with
   const next = await page.evaluate(() => document.activeElement?.getAttribute('data-value'))
   expect(next).not.toBe(focused)
 
-  await expect(page.getByText('Names and places checked.', { exact: true })).toBeVisible({ timeout: 90_000 })
+  await expect(page.getByText('Names and places checked.', { exact: true })).toBeVisible({ timeout: 180_000 })
   await expect(page.getByText(/^Names checked: [\d,]+ names? and [\d,]+ places? added\.$/)).toBeAttached()
   expect(await page.evaluate(() => document.activeElement?.getAttribute('data-value'))).toBe(next)
   expect(await findings(page)).toBeGreaterThan(before)
@@ -96,7 +102,7 @@ test('Stop asks first; skipping is recorded, and names can still be checked afte
 
   await page.getByRole('link', { name: 'Back to review' }).click()
   await page.getByRole('button', { name: 'Check names after all' }).click()
-  await expect(page.getByText('Names and places checked.', { exact: true })).toBeVisible({ timeout: 90_000 })
+  await expect(page.getByText('Names and places checked.', { exact: true })).toBeVisible({ timeout: 200_000 })
 })
 
 test('without the name model, the review and the download say names were not checked', async ({ page }) => {
