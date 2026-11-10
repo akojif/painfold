@@ -7,6 +7,7 @@ nvm use
 npm install
 npm run dev          # local development server
 npm run generate     # static build in .output/public
+npm run verify       # every check below that CI runs: lint, typecheck, unit, build, model, e2e; one summary, non-zero exit on any failure
 npm run serve        # serve the static build on http://localhost:4173
 npm run lint
 npm run typecheck
@@ -20,7 +21,7 @@ npm run test:model   # run the real name model through the post-processing (afte
 npm run eval:names   # name and place accuracy in Chromium (after npm run generate); see below
 ```
 
-Run `npm run generate` before `npm run test:e2e`. The first time, install the test browser with `npx playwright install chromium`.
+Run `npm run generate` before `npm run test:e2e`, or use `npm run verify -- e2e`, which always builds first. CI runs `npm run verify` too (split across its two test jobs), so a local `npm run verify` checks what CI checks; read its summary or exit code, not the last lines of a test run, which can hide failures listed above them. The first time, install the test browser with `npx playwright install chromium`.
 
 Every end-to-end test fails if the page contacts any origin other than the app itself.
 

@@ -24,7 +24,8 @@
     "headers:vercel": "node scripts/write-vercel-config.ts",
     "models": "node scripts/fetch-model.ts",
     "test:model": "vitest run --config vitest.model.config.ts",
-    "eval:names": "node scripts/eval-names.ts"
+    "eval:names": "node scripts/eval-names.ts",
+    "verify": "node scripts/verify.ts"
   },
   "dependencies": {
     "@huggingface/transformers": "^4.3.2",
