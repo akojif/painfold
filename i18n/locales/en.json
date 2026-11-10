@@ -11,12 +11,13 @@
       "review": "Review",
       "download": "Download"
     },
-    "startOver": "Start over"
+    "startOver": "Start over",
+    "newTab": "(opens in a new tab)"
   },
   "footer": {
     "source": "Open source",
     "roadmap": "Roadmap",
-    "credit": "Built with love by {name}",
+    "credit": "Built by {name}",
     "factsLabel": "About Painfold",
     "noCookies": "No cookies",
     "noAccount": "No account"

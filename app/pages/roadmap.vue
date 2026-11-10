@@ -95,10 +95,9 @@ const badge: Record<StageStatus, string> = {
 
     <a
       :href="ROADMAP_URL"
-      class="group focus-ring mt-10 inline-flex items-center gap-1 rounded-sm text-sm text-accent underline-offset-4 hover:underline"
+      class="focus-ring mt-10 inline-block rounded-sm text-sm text-accent underline-offset-4 hover:underline"
     >
       {{ $t('roadmap.full') }}
-      <LinkArrow external />
     </a>
   </div>
 </template>
