@@ -170,3 +170,40 @@ describe('Review: possible forms of marked text', () => {
     expect(review.findings).toEqual([])
   })
 })
+
+describe('Review: names that arrive during review', () => {
+  // As the name model reports them: "Anna" inside the email address, and Anna Huber in rows 2 and 3.
+  const names = [
+    { row: 0, column: 1, detections: [{ type: 'NAME' as const, start: 5, end: 9, value: 'anna' }] },
+    { row: 1, column: 1, detections: [{ type: 'NAME' as const, start: 31, end: 41, value: 'Anna Huber' }] },
+    { row: 2, column: 1, detections: [{ type: 'NAME' as const, start: 18, end: 28, value: 'Anna Huber' }] },
+  ]
+
+  it('adds them in reading order, leaving out what overlaps an existing finding', () => {
+    const review = fresh()
+    const added = review.addDetected(names)
+    expect(added.map(finding => finding.row)).toEqual([1, 2])
+    expect(review.findings.map(finding => [finding.row, finding.type])).toEqual([[0, 'EMAIL'], [0, 'IP'], [1, 'EMAIL'], [1, 'NAME'], [2, 'NAME'], [3, 'URL']])
+    expect(review.cleanedCell(2, 1)).toBe('Nothing here, but [NAME_1] wrote it.')
+  })
+
+  it('keeps decisions and undo history as they were, and applies a decision to the new copies', () => {
+    const review = fresh()
+    review.decide(review.findings[0]!.key, 'keep')
+    review.addDetected(names.slice(1, 2))
+    const name = review.findings.find(finding => finding.type === 'NAME')!
+    review.decide(name.key, 'keep')
+    review.addDetected(names.slice(2))
+    expect(review.copiesOf(name.key).map(copy => review.decisionFor(copy.key))).toEqual(['keep', 'keep'])
+    expect(review.undo()).toBe(true)
+    expect(review.undo()).toBe(true)
+    expect(review.undo()).toBe(false)
+    expect(review.findings.filter(finding => finding.type === 'NAME')).toHaveLength(2)
+  })
+
+  it('keeps only the part of a name that marked text does not already cover', () => {
+    const review = fresh()
+    review.markMissed(2, 1, 18, 22, 'NAME')
+    expect(review.addDetected(names.slice(2)).map(finding => finding.value)).toEqual(['Huber'])
+  })
+})

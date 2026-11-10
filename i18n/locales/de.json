@@ -22,7 +22,7 @@
   },
   "start": {
     "headline": "Finden Sie, was Ihren Kunden wehtut. Ohne preiszugeben, wer sie sind.",
-    "subline": "Bereinigen Sie zuerst Ihre Feedback-Datei: E-Mail-Adressen, Telefonnummern, IBANs und mehr werden direkt hier in Ihrem Browser entfernt.",
+    "subline": "Bereinigen Sie zuerst Ihre Feedback-Datei: Namen, E-Mail-Adressen, Telefonnummern, IBANs und mehr werden direkt hier in Ihrem Browser entfernt.",
     "choose": "CSV- oder Excel-Datei auswählen",
     "sampleButton": "Beispieldatei ausprobieren",
     "sampleNote": "200 erfundene Tickets, keine echten Personen",
@@ -252,6 +252,13 @@
       "title": "Ihre Datei ist bereinigt.",
       "body": "Als Nächstes in Painfold: daraus eine Rangliste der Kundenprobleme machen (kommt in v0.3).",
       "link": "Zur Roadmap"
+    },
+    "names": {
+      "checked": "Namen und Orte wurden mit dem Namensmodell geprüft.",
+      "partly": "Namen wurden in {done} von {total} Zeilen geprüft; für die übrigen wurde die Prüfung übersprungen, dort wurden Namen nicht entfernt.",
+      "skipped": "Namen wurden nicht geprüft: Die Prüfung wurde für diese Datei übersprungen.",
+      "failed": "Namen wurden nicht geprüft: Das Namensmodell konnte nicht laufen.",
+      "notChecked": "Namen und Orte wurden nicht geprüft: Das Namensmodell wurde nicht heruntergeladen."
     }
   },
   "typeMany": {
@@ -302,7 +309,8 @@
     "rows": "Zeilen",
     "removedHeading": "Durch Platzhalter ersetzt",
     "nothingRemoved": "Es wurde nichts gefunden oder markiert.",
-    "limitsHeading": "Grenzen"
+    "limitsHeading": "Grenzen",
+    "nameModel": "Namensmodell"
   },
   "theme": {
     "label": "Darstellung",
@@ -312,12 +320,14 @@
   },
   "example": {
     "caption": "Ein Support-Ticket, vor und nach der Bereinigung",
-    "ticket": "Bitte rufen Sie mich unter {phone} zurück oder schreiben Sie an {email}.",
+    "ticket": "Hallo, hier ist {name} aus {place}. Bitte rufen Sie mich unter {phone} zurück oder schreiben Sie an {email}.",
     "found": "In der Datei gefunden",
-    "description": "Beispiel: In einem Support-Ticket werden eine Telefonnummer und eine E-Mail-Adresse durch die Platzhalter [PHONE_1] und [EMAIL_1] ersetzt.",
+    "description": "Beispiel: In einem Support-Ticket werden ein Name, ein Ort, eine Telefonnummer und eine E-Mail-Adresse durch die Platzhalter [NAME_1], [PLACE_1], [PHONE_1] und [EMAIL_1] ersetzt.",
     "removed": "{type} entfernt:",
     "languages": "Funktioniert mit deutschem und englischem Feedback",
     "values": {
+      "name": "Anna Huber",
+      "place": "Graz",
       "email": "anna.huber{'@'}example.com",
       "phone": "+49 30 23125 417",
       "iban": "AT61 1904 3002 3457 3201",
@@ -462,6 +472,29 @@
       "cancelled": "Download abgebrochen.",
       "removed": "Namensmodell aus diesem Browser entfernt.",
       "offline": "Sie sind offline."
+    }
+  },
+  "nameScan": {
+    "running": "Namen werden geprüft: {done} von {total} Zeilen",
+    "stop": "Stoppen",
+    "done": "Namen und Orte geprüft.",
+    "names": "keine Namen | 1 Name | {n} Namen",
+    "places": "keine Orte | 1 Ort | {n} Orte",
+    "skipped": "Namen wurden in {done} von {total} Zeilen geprüft, dann übersprungen. Namen in den übrigen Zeilen werden im Download nicht entfernt.",
+    "skippedNone": "Namen wurden für diese Datei übersprungen. Sie werden im Download nicht entfernt.",
+    "checkAnyway": "Namen doch prüfen",
+    "failed": "Die Namensprüfung wurde abgebrochen. Die übrigen Treffer sind davon nicht betroffen.",
+    "retry": "Erneut versuchen",
+    "downloadWaits": "Der Download ist verfügbar, sobald die Namen geprüft sind.",
+    "confirm": {
+      "title": "Namen für diese Datei überspringen?",
+      "body": "Namen werden im Download nicht entfernt.",
+      "skip": "Namen überspringen",
+      "keep": "Weiter prüfen"
+    },
+    "announce": {
+      "started": "Namen werden geprüft.",
+      "done": "Namen geprüft: {names} und {places} hinzugefügt."
     }
   }
 }

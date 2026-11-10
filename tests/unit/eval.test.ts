@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import type { Detection } from '../../core/detect/types'
-import { covers, currentTables, evaluate, groupMarkdown, nameRecallByGroup, withAccuracy, type EvalItem, type Mistake } from '../../scripts/eval'
+import { covers, currentTables, evaluate, nameRecallByGroup, nameTables, withAccuracy, type EvalItem, type Mistake } from '../../scripts/eval'
 
 describe('covers', () => {
   it('needs the ranges to reach from start to end without a gap', () => {
@@ -34,7 +34,6 @@ describe('evaluate', () => {
     expect(scores.byType.get('IBAN')!.de).toEqual({ labelled: 1, found: 0, detected: 0, correct: 0 })
     expect(scores.byType.get('PHONE')!.de).toEqual({ labelled: 0, found: 0, detected: 1, correct: 0 })
     expect(scores.anyType.de).toEqual({ labelled: 3, found: 1, detected: 2, correct: 2 })
-    expect(scores.anyDetectedType.de).toEqual({ labelled: 2, found: 1, detected: 2, correct: 2 })
     expect(mistakes.map(mistake => `${mistake.kind} ${mistake.type}`)).toEqual(['missed EMAIL', 'missed IBAN', 'missed NAME', 'wrong PHONE'])
   })
 
@@ -62,7 +61,24 @@ describe('nameRecallByGroup', () => {
       { group: 'turkish', scores: { de: { labelled: 1, found: 1 }, en: { labelled: 1, found: 0 } } },
       { group: 'polish', scores: { de: { labelled: 0, found: 0 }, en: { labelled: 1, found: 0 } } },
     ])
-    expect(groupMarkdown(results)).toContain('| Turkish | 1.00 | 1 | 0.00 | 1 | 0.50 | 2 |')
+  })
+
+  it('counts a name labelled as a place as removed, but not as type-correct', () => {
+    const asPlace = (text: string): Detection[] => text.startsWith('Danke') ? [{ type: 'PLACE', start: 7, end: 18, value: 'Ayşe Yılmaz' }] : []
+    expect(nameRecallByGroup(items, asPlace)[0]!.scores.de).toEqual({ labelled: 1, found: 0 })
+    expect(nameRecallByGroup(items, asPlace, { anyType: true })[0]!.scores.de).toEqual({ labelled: 1, found: 1 })
+  })
+
+  it('reports removal, type-correct and without-the-list recall per language and group, and the list overlap', () => {
+    const all = (text: string): Detection[] => text.startsWith('Danke')
+      ? [{ type: 'PLACE', start: 7, end: 18, value: 'Ayşe Yılmaz' }]
+      : text.startsWith('Thanks') ? [{ type: 'NAME', start: 7, end: 11, value: 'Emre' }] : []
+    const withoutList = (text: string) => all(text).filter(found => found.value !== 'Emre')
+    const tables = nameTables(items, all, withoutList)
+    expect(tables).toContain('| DE | 1.00 | 0.00 | 1.00 | 1 |')
+    expect(tables).toContain('| EN | 0.50 (below target) | 0.50 | 0.00 | 2 |')
+    expect(tables).toContain('| Turkish | 1.00 | 0.00 | 1.00 | 1.00 | 1.00 | 0.00 | 1.00 | 0.50 | 0.50 | 2 |')
+    expect(tables).toContain('3 of 3 test names contain a first name from the list.')
   })
 })
 

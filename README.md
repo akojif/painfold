@@ -8,15 +8,16 @@ Painfold turns customer feedback into an evidence-backed customer profile: the j
 
 ![Painfold cleaning the sample file: the column step, finding personal data, reviewing values by value and by row, and the download step](docs/media/demo.gif)
 
-## What v0.1 does
+## What it does
 
 Removes personal data from a CSV or XLSX file in your browser, and lets you download the cleaned file.
 
 - Finds email addresses, phone numbers (Austrian, German and international), IBANs, card numbers, Austrian social security numbers (SV-Nummer), VAT IDs, links, IP addresses, dates of birth, street addresses and postcodes, in German and English.
+- Finds names and places with a name model that runs in your browser. It is downloaded once (152 MB, only when you ask), from this site, and kept in the browser until you remove it. Names are checked in the background while you review the other findings.
 - You choose per column what is checked, kept as is or dropped, then review every finding by value or by row, and mark anything that was missed.
 - The same value always gets the same placeholder, such as `[EMAIL_3]`.
 
-Names and places follow in v0.2, finding customer jobs, pains and gains in v0.3. See the [roadmap](ROADMAP.md) and the [changelog](CHANGELOG.md).
+Names and places are new in v0.2, which is in progress. Finding customer jobs, pains and gains follows in v0.3. See the [roadmap](ROADMAP.md) and the [changelog](CHANGELOG.md).
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/media/review-dark.png">
@@ -50,9 +51,9 @@ The list of original values behind each placeholder is never exported; it is gon
 
 ## Accuracy and speed
 
-Detection is measured per data type and language, on generated messages and on hand-written hard cases, and checked in CI. On the hard cases nothing that only looks like personal data is removed, apart from one known case, and the known misses are listed. A 5,000-row file is cleaned in about 1.5 seconds. Numbers, method and known gaps: [docs/accuracy.md](docs/accuracy.md).
+Detection is measured per data type and language, on generated messages, on hand-written hard cases and on hand-written names from 13 communities living in Austria, and checked in CI. On the name test split, 97 % of names are removed (0.98 in German, 0.96 in English), and at least 92 % in every name-origin group; the model is measured in the browser, as users run it. On the hard cases nothing that only looks like personal data is removed, apart from one known case, and the known misses are listed. A 5,000-row file is cleaned in about 1.5 seconds; with the name model in the browser, names in it are checked in about 71 seconds, in the background. Numbers, method and known gaps: [docs/accuracy.md](docs/accuracy.md).
 
-Automatic detection can miss personal data, names in particular until v0.2. Review the results before sharing the cleaned file.
+Automatic detection can miss personal data, including names. Review the results before sharing the cleaned file.
 
 ## Run it locally
 

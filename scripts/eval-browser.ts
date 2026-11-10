@@ -8,7 +8,7 @@
 // the same server and headers as the end-to-end tests; nothing leaves the
 // machine.
 import { spawn } from 'node:child_process'
-import { existsSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { readdirSync } from 'node:fs'
 import { chromium, type Page } from '@playwright/test'
 import type { Detection } from '../core/detect/types.ts'
 import type { CellDetections } from '../core/detect/table.ts'
@@ -72,24 +72,4 @@ export async function detectNamesInBrowser(texts: readonly string[], options: { 
     await browser.close()
     server.kill()
   }
-}
-
-// The detections each split produced, stored so an end-to-end test can check
-// that the published numbers still match what the code finds
-// (tests/e2e/name-eval.spec.ts). One line per text keeps the diffs readable.
-export const DETECTIONS_PATH = 'data/eval/name-detections.json'
-export type StoredDetections = { model: string, splits: Partial<Record<'dev' | 'test', Record<string, Array<Pick<Detection, 'type' | 'start' | 'end'>>>>> }
-
-export function readStoredDetections(): StoredDetections | undefined {
-  return existsSync(DETECTIONS_PATH) ? JSON.parse(readFileSync(DETECTIONS_PATH, 'utf8')) as StoredDetections : undefined
-}
-
-export function storedFormat(ids: readonly string[], detections: readonly Detection[][]): Record<string, Array<Pick<Detection, 'type' | 'start' | 'end'>>> {
-  return Object.fromEntries(ids.map((id, i) => [id, detections[i]!.map(({ type, start, end }) => ({ type, start, end }))]))
-}
-
-export function writeStoredDetections(stored: StoredDetections): void {
-  const split = (entries: Record<string, unknown>) => `{\n${Object.entries(entries).map(([id, list]) => `      ${JSON.stringify(id)}: ${JSON.stringify(list)}`).join(',\n')}\n    }`
-  const splits = Object.entries(stored.splits).map(([name, entries]) => `    ${JSON.stringify(name)}: ${split(entries!)}`).join(',\n')
-  writeFileSync(DETECTIONS_PATH, `{\n  "model": ${JSON.stringify(stored.model)},\n  "splits": {\n${splits}\n  }\n}\n`)
 }

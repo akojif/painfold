@@ -30,15 +30,12 @@ export default defineNuxtConfig({
   // The cleaning report names the Painfold version that produced it.
   // The name model and its runtime are served from this site, never from Hugging Face or a CDN.
   // downloadBytes is what a first download costs (model and runtime), shown before it starts.
-  // nameModel hides the download on the production site until names are used in the review
-  // (ROADMAP Stage 2, #65); previews, CI and local builds show it.
   runtimeConfig: {
     public: {
       version,
       modelPath: MODEL_PATH,
       ortPath: `${ORT_PREFIX}${ortVersion()}/`,
       downloadBytes: MODEL_BYTES + ortBytes(),
-      nameModel: process.env.VERCEL_ENV !== 'production',
     },
   },
 
