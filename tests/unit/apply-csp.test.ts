@@ -48,6 +48,17 @@ describe('externalReferences', () => {
   })
 })
 
+describe('externalReferences and links to other languages', () => {
+  it('ignores hreflang and canonical links, which browsers never fetch', () => {
+    const head = '<link rel="alternate" hreflang="de-AT" href="https://painfold.vercel.app/de"><link rel="canonical" href="https://painfold.vercel.app/">'
+    expect(externalReferences(head)).toEqual([])
+  })
+
+  it('still catches stylesheets and preloads from another origin', () => {
+    expect(externalReferences('<link rel="stylesheet" href="https://cdn.example.com/a.css"><link rel="preload" href="https://cdn.example.com/f.woff2">')).toHaveLength(2)
+  })
+})
+
 describe('styleAttributes', () => {
   it('finds style attributes, including the empty one Vue renders for an undefined binding', () => {
     expect(styleAttributes('<span class="a" style="">x</span><div style="width: 2px">')).toHaveLength(2)

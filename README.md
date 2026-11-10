@@ -2,7 +2,7 @@
 
 Find what hurts your customers, without exposing who they are.
 
-Painfold turns customer feedback into an evidence-backed customer profile: the jobs customers are trying to get done, their pains and their gains. Personal data is removed in your own browser before any AI sees it, including German-language and Austrian data.
+Painfold turns customer feedback into an evidence-backed customer profile: the jobs customers are trying to get done, their pains and their gains. Personal data is removed in your own browser before any AI sees it, including German-language and Austrian data. The interface is in English and German ([painfold.vercel.app/de](https://painfold.vercel.app/de)).
 
 **[Try it at painfold.vercel.app](https://painfold.vercel.app)**, with your own file or the built-in sample of 200 made-up support tickets.
 
@@ -37,7 +37,7 @@ Names and places follow in v0.2, finding customer jobs, pains and gains in v0.3.
 ## Privacy
 
 - Your file is never uploaded. It stays in your browser, and an end-to-end test checks that no request leaves it while you import, check and download.
-- No cookies, no analytics, no tracking. The only thing Painfold stores is your theme choice (Light or Dark), in `localStorage` under `painfold-theme`; choosing System removes it.
+- No cookies, no analytics, no tracking. The only things Painfold stores are your theme choice (Light or Dark, under `painfold-theme`; choosing System removes it) and your language choice (`painfold-language`), both in `localStorage`.
 - From v0.3, when analysis arrives: nothing is sent to an AI until you have reviewed what was removed, and the AI is your choice (your own API key or a local model).
 
 ## What you download

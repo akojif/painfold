@@ -5,11 +5,12 @@ import { cleaningReport, reportTimestamp } from '~~/core/export/report'
 definePageMeta({
   step: 3,
   middleware: () => {
-    if (import.meta.client && !useSession().review.value) return navigateTo('/')
+    if (import.meta.client && !useSession().review.value) return navigateTo(useLocalePath()('/'))
   },
 })
 
 const { t } = useI18n()
+const localePath = useLocalePath()
 const { number } = useFormat()
 const session = useSession()
 const { table, roles, review, revision } = session
@@ -58,7 +59,7 @@ function downloadReport() {
 
 async function startOver() {
   session.clear()
-  await navigateTo('/')
+  await navigateTo(localePath('/'))
 }
 </script>
 
@@ -151,7 +152,7 @@ async function startOver() {
         </ul>
         <div class="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm">
           <NuxtLink
-            to="/review"
+            :to="localePath('/review')"
             class="focus-ring rounded-sm text-accent underline-offset-4 hover:underline"
           >
             {{ $t('download.back') }}
@@ -186,7 +187,7 @@ async function startOver() {
           {{ $t('download.next.body') }}
         </p>
         <NuxtLink
-          to="/roadmap"
+          :to="localePath('/roadmap')"
           class="group focus-ring mt-2 inline-flex items-center gap-1 rounded-sm text-sm text-accent underline-offset-4 hover:underline"
         >
           {{ $t('download.next.link') }}

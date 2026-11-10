@@ -14,6 +14,14 @@ test('a missing address gets a 404 status and the not-found page', async ({ page
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Find what hurts your customers. Without exposing who they are.')
 })
 
+test('a missing German address shows the not-found page in German', async ({ page }) => {
+  const response = await page.goto('/de/gibt-es-nicht')
+  expect(response!.status()).toBe(404)
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Hier gibt es nichts zu bereinigen.')
+  await page.getByRole('link', { name: 'Zurück zum Start' }).click()
+  await expect(page).toHaveURL(/\/de$/)
+})
+
 test('the roadmap link leaves the not-found page', async ({ page }) => {
   await page.goto('/no-such-page')
   await page.getByRole('link', { name: 'See the roadmap' }).click()

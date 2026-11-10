@@ -36,11 +36,13 @@ export function inlineScriptHashes(html: string): string[] {
  * References that make the browser load something from another origin by
  * itself. Ordinary links (<a href>) are left out: nothing is requested until
  * someone follows one, and Referrer-Policy: no-referrer keeps the page private.
+ * So are <link rel="alternate"> and rel="canonical" (the same page in another
+ * language, for search engines), which browsers never fetch.
  */
 export function externalReferences(text: string): string[] {
   const external = '((?:https?:)?\\/\\/[^"\'\\s>)]+)'
   const tags = [...text.matchAll(/<([a-z][\w-]*)\b[^>]*>/gi)]
-    .filter(([, name]) => name!.toLowerCase() !== 'a')
+    .filter(([tag, name]) => name!.toLowerCase() !== 'a' && !(name!.toLowerCase() === 'link' && /\brel\s*=\s*["']?(?:alternate|canonical)\b/i.test(tag)))
     .map(([tag]) => tag)
   const inTags = tags.flatMap(tag =>
     [...tag.matchAll(new RegExp(`\\b(?:src|href|srcset|action|poster|data|formaction)\\s*=\\s*["']?\\s*${external}`, 'gi'))])

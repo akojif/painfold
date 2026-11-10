@@ -6,8 +6,8 @@ import { PII_TYPES } from '~~/core/pii-types'
 // Every column of the file with what happens to it. counts: how much personal
 // data each column holds, from the survey in the worker; undefined until known.
 const props = defineProps<{ counts?: readonly ColumnCounts[] }>()
-const { t, locale } = useI18n()
-const { number } = useFormat()
+const { t } = useI18n()
+const { number, list } = useFormat()
 const session = useSession()
 const { table, suggestions, roles, feedbackColumn } = session
 
@@ -63,7 +63,7 @@ function warning(index: number): string | undefined {
     return n > 0 ? [`${number(n)} ${t(n === 1 ? `typeOneLower.${type}` : `typeManyLower.${type}`)}`] : []
   })
   if (parts.length === 0) return undefined
-  return t('columns.warning', { found: new Intl.ListFormat(locale.value, { type: 'conjunction' }).format(parts) })
+  return t('columns.warning', { found: list(parts) })
 }
 
 async function checkInstead(index: number) {
