@@ -51,7 +51,7 @@ test.describe('start screen', () => {
   test('the example ticket ends with its values replaced by placeholders', async ({ page }) => {
     await page.goto('/')
     const example = page.getByRole('figure')
-    await expect(example).toContainText('anna.huber@example.com')
+    await expect(example).toContainText('olivia.hartley@example.com')
     await expect(page.locator('figure[data-cleaned]')).toHaveCount(1, { timeout: 5000 })
     await expect(example).toContainText('[EMAIL_1]')
     await expect(example).toContainText('[PHONE_1]')
@@ -59,7 +59,7 @@ test.describe('start screen', () => {
     // The list is hidden from screen readers (the figure has a text description), so select its rows directly.
     const found = example.locator('li')
     await expect(found).toHaveCount(5)
-    for (const [original, placeholder] of [['anna.huber@example.com', '[EMAIL_1]'], ['+49 30 23125 417', '[PHONE_1]'], ['AT61 1904 3002 3457 3201', '[IBAN_1]'], ['Lindengasse 5/2/7', '[ADDRESS_1]'], ['12.03.1987', '[DATE_OF_BIRTH_1]']]) {
+    for (const [original, placeholder] of [['olivia.hartley@example.com', '[EMAIL_1]'], ['+44 20 7946 0958', '[PHONE_1]'], ['DE89 3704 0044 0532 0130 00', '[IBAN_1]'], ['27 Willow Lane', '[ADDRESS_1]'], ['12/03/1987', '[DATE_OF_BIRTH_1]']]) {
       await expect(found.filter({ hasText: original })).toContainText(placeholder!)
     }
   })
