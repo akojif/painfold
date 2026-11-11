@@ -8,9 +8,9 @@
 //   the other security headers, and the full policy for files under /_nuxt/,
 //   because a Web Worker takes its policy from its own response headers.
 //
-// The local preview server, the generated vercel.json, Cloudflare's _headers
-// file and the Cloudflare Worker that serves the model all use headersFor(),
-// so moving to another host only needs a new adapter, not app changes.
+// The local preview server, Cloudflare's _headers file and the Cloudflare
+// Worker that serves the model all use headersFor(), so moving to another host
+// only needs a new adapter, not app changes.
 
 import { ORT_PREFIX } from './model.ts'
 
@@ -109,32 +109,4 @@ export function cloudflareHeaders(): string {
 /** The headers of `headers` that differ from (or are missing in) `base`. */
 function changedFrom(base: Record<string, string>, headers: Record<string, string>): Record<string, string> {
   return Object.fromEntries(Object.entries(headers).filter(([name, value]) => base[name] !== value))
-}
-
-type VercelHeaderRule = { source: string, headers: Array<{ key: string, value: string }> }
-
-function toVercelHeaders(headers: Record<string, string>) {
-  return Object.entries(headers).map(([key, value]) => ({ key, value }))
-}
-
-/** vercel.json content; the sources split paths exactly as headersFor() does, one rule per path. */
-// Vercel builds the static site the same way as everywhere else: no framework
-// preset (which would run its own Nuxt build without the CSP step), our own
-// build command, and the generated folder as the output.
-// Page addresses end in a slash (nuxt.config.ts), and Vercel redirects the form without it.
-export function vercelConfig(): { $schema: string, framework: null, installCommand: string, buildCommand: string, outputDirectory: string, trailingSlash: true, headers: VercelHeaderRule[] } {
-  return {
-    $schema: 'https://openapi.vercel.sh/vercel.json',
-    framework: null,
-    installCommand: 'npm ci',
-    buildCommand: 'NUXT_TELEMETRY_DISABLED=1 npm run generate',
-    outputDirectory: '.output/public',
-    trailingSlash: true,
-    headers: [
-      { source: '/((?!_nuxt/|ort/|models/).*)', headers: toVercelHeaders(headersFor('/')) },
-      { source: '/_nuxt/(.*)', headers: toVercelHeaders(headersFor(`${ASSET_PREFIX}entry.js`)) },
-      { source: '/ort/(.*)', headers: toVercelHeaders(headersFor(`${RUNTIME_PREFIX}runtime.wasm`)) },
-      { source: '/models/(.*)', headers: toVercelHeaders(headersFor(`${MODEL_PREFIX}model.onnx`)) },
-    ],
-  }
 }
