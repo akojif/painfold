@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
-import { assetPolicy, documentPolicy, headersFor, vercelConfig } from '../../deploy/headers'
+import { assetPolicy, cloudflareHeaders, documentPolicy, headersFor, vercelConfig } from '../../deploy/headers'
 
 function directive(policy: string, name: string): string[] {
   const entry = policy.split('; ').find(part => part.startsWith(`${name} `))
@@ -19,6 +19,13 @@ describe('documentPolicy', () => {
 
   it('only lets the page talk to its own origin', () => {
     expect(directive(policy, 'connect-src')).toEqual(["'self'"])
+  })
+
+  it('never names a host: every source is a keyword, a hash or data:, so the site only ever talks to itself', () => {
+    for (const policy of [documentPolicy(['aaa=']), assetPolicy()]) {
+      const sources = policy.split('; ').flatMap(part => part.split(' ').slice(1))
+      expect(sources.filter(source => !/^'[a-z-]+'$|^'sha256-[^']+'$|^data:$/.test(source)), policy).toEqual([])
+    }
   })
 
   it('allows inline scripts only by hash, sorted and without duplicates', () => {
@@ -85,5 +92,42 @@ describe('vercel.json', () => {
       const headers = Object.fromEntries(matching[0]!.rule.headers.map(header => [header.key, header.value]))
       expect(headers, path).toEqual(headersFor(path))
     }
+  })
+})
+
+// The paths every host config is checked on; /models/ only where a static rule serves it.
+const PATHS = ['/', '/index.html', '/de/roadmap', '/_payload.json', '/_nuxt/entry.js', '/_nuxt/fonts/a.woff2', '/ort/1.0.0/ort-wasm-simd-threaded.wasm']
+
+describe('Cloudflare _headers', () => {
+  // Applied as Cloudflare documents it: every matching rule applies in order,
+  // `! Name` removes a header, and a header set twice gets both values joined by ', '.
+  function apply(file: string, path: string): Record<string, string> {
+    const headers = new Map<string, string>()
+    let matches = false
+    for (const line of file.split('\n').filter(Boolean)) {
+      if (!line.startsWith(' ')) {
+        matches = new RegExp(`^${line.replaceAll('.', '\\.').replaceAll('*', '.*')}$`).test(path)
+        continue
+      }
+      if (!matches) continue
+      const entry = line.trim()
+      if (entry.startsWith('! ')) {
+        headers.delete(entry.slice(2))
+        continue
+      }
+      const [name, value] = [entry.slice(0, entry.indexOf(':')), entry.slice(entry.indexOf(':') + 1).trim()]
+      headers.set(name, headers.has(name) ? `${headers.get(name)}, ${value}` : value)
+    }
+    return Object.fromEntries(headers)
+  }
+
+  it('gives every static path exactly the headers of headersFor', () => {
+    for (const path of PATHS) expect(apply(cloudflareHeaders(), path), path).toEqual(headersFor(path))
+  })
+
+  it('stays inside Cloudflare\'s limits: 100 rules, 2,000 characters a line', () => {
+    const lines = cloudflareHeaders().split('\n')
+    expect(lines.filter(line => line && !line.startsWith(' ')).length).toBeLessThanOrEqual(100)
+    expect(Math.max(...lines.map(line => line.length))).toBeLessThan(2000)
   })
 })

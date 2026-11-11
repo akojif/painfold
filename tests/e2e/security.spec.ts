@@ -63,6 +63,19 @@ for (const path of ['/', '/roadmap', '/404.html']) {
   })
 }
 
+// A host may add headers that make browsers send reports elsewhere: Cloudflare's
+// Network Error Logging (NEL, Report-To) sends network errors to Cloudflare, outside
+// the CSP and the "What leaves your browser" panel. It is switched off for the zone;
+// workers.dev previews cannot switch it off, and only the team opens them.
+test('no response asks the browser to send reports anywhere', async ({ request, baseURL }) => {
+  test.skip(new URL(baseURL!).hostname.endsWith('.workers.dev'), 'workers.dev previews always send NEL; painfold.com does not')
+  const { MODEL_PATH } = await import('../../deploy/model')
+  for (const path of ['/', '/de/accuracy', '/no-such-page', `${MODEL_PATH}config.json`]) {
+    const headers = (await request.get(path)).headers()
+    expect(Object.keys(headers).filter(name => ['nel', 'report-to', 'reporting-endpoints'].includes(name)), path).toEqual([])
+  }
+})
+
 test('pages are cross-origin isolated, so the name model can use threads', async ({ page }) => {
   await page.goto('/')
   expect(await page.evaluate(() => crossOriginIsolated)).toBe(true)

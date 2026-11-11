@@ -63,7 +63,9 @@ All test data is fake and generated: see [data/README.md](../data/README.md) for
 
 ## Continuous integration
 
-Every pull request runs three jobs: lint, typecheck, unit tests, the detection accuracy (shown in the job summary) and the static build; end-to-end tests; and a dependency check (`npm audit --audit-level=high` and the license allowlist). All must pass before review.
+Every pull request runs four jobs: lint, typecheck, unit tests, the detection accuracy (shown in the job summary) and the static build; end-to-end tests; the name accuracy check (see Name model); and a dependency check (`npm audit --audit-level=high` and the license allowlist). All must pass before review.
+
+The two browser jobs run in Microsoft's Playwright image (`mcr.microsoft.com/playwright`), which already has Chromium and its system packages, so CI never installs anything from Ubuntu's package servers. The image's version must match `@playwright/test`: when Playwright is updated, change the image tag and its digest in `.github/workflows/ci.yml` too (a unit test fails until both match).
 
 ## Security headers
 
@@ -72,6 +74,8 @@ Every pull request runs three jobs: lint, typecheck, unit tests, the detection a
 - `npm run generate` builds the site, then `scripts/apply-csp.ts` adds the full policy to every page as a `<meta>` tag, with hashes of that build's inline scripts. It also fails the build if any page or stylesheet references another origin.
 - Static headers (framing, `nosniff`, referrer, permissions, and the full policy for app files and Web Workers) come from `headersFor()`. The local preview server sends them, so the end-to-end tests run under the real policy.
 - `vercel.json` is generated from the same file with `npm run headers:vercel`; a unit test fails if it is out of date.
+- For Cloudflare, the build writes a `_headers` file from the same file (`scripts/write-cloudflare-assets.ts`). Every matching rule applies there and a header set twice gets both values joined by a comma, so the rules for app files remove the page policy before setting their own; a unit test applies the file the way Cloudflare does and compares every path with `headersFor()`. The Worker that serves the model sets `headersFor()` itself.
+- No policy names a host: every source is a keyword, a hash or `data:`, and a unit test fails otherwise. On any address the site only talks to itself.
 - Every response sends `Cross-Origin-Opener-Policy: same-origin` and `Cross-Origin-Embedder-Policy: require-corp`, so pages are cross-origin isolated: WebAssembly threads need it, and the name model runs about 4 times faster with them. Everything Painfold loads is same-origin, so nothing else is affected.
 - App code (`/_nuxt/`) and the ONNX Runtime files (`/ort/`) may compile WebAssembly (`'wasm-unsafe-eval'`), because the name model runs in the detection worker. Pages may not, and `'unsafe-eval'` is never allowed.
 
@@ -98,12 +102,18 @@ Names and places are found by [Davlan/distilbert-base-multilingual-cased-ner-hrl
 
 ## Hosting
 
-The live site is a static build on Vercel. `vercel.json` (generated from `deploy/headers.ts`) sets the install and build commands, so Vercel runs the same `npm run generate` as CI, including the CSP check, and serves `.output/public` with the security headers. No Vercel framework preset, server functions or analytics are used.
+The site moves from Vercel to Cloudflare (Workers with static assets) for v0.2.0. `wrangler.jsonc` serves `.output/public` as static files, with the headers from the `_headers` file in the build. No analytics, logs or metrics are kept (`observability` is off, `send_metrics` is false).
 
-- `main` deploys to https://painfold.vercel.app; every pull request gets a preview deployment.
-- Unknown addresses get the 404 page with status 404. The build removes Nuxt's `200.html` single-page fallback (`scripts/remove-spa-fallback.ts`), which hosts would otherwise serve for every unknown path with status 200; every page is prerendered, so it is not needed.
-- Turn off the Vercel Toolbar for preview deployments (Project Settings, General): it injects a script from another origin, which the CSP blocks.
-- Any static host works the same way: serve `.output/public` with the headers from `headersFor()`.
+- The name model is the one exception. Its largest file (135 MB) is over Cloudflare's 25 MiB limit for a static file, so the build leaves `models/` out (`.assetsignore`), the files live in the R2 bucket `painfold-models`, and a small Worker (`deploy/worker.ts`) serves them at the same address, `/models/<id>/<revision>/`. Cloudflare runs it only for `/models/*` (`run_worker_first`). It serves only the pinned files in `deploy/model.ts`, with the same headers as every other host, and answers range and conditional requests. The bucket has no public address.
+- `npm run models:upload` uploads a new model revision to R2 (`--local` for wrangler's local copy). It takes each file from the build's cache, checked against its SHA-256 first, and the R2 key is the path the app requests, so a new revision never replaces an old one's files.
+- Cloudflare builds every push from GitHub (Workers Builds): `main` deploys to production (also at https://painfold.akfdev.workers.dev), other branches get a preview address on workers.dev, linked from the pull request.
+- Locally: `npx wrangler dev` serves the build with the Worker and local R2 (after `npm run models:upload -- --local`). `PAINFOLD_URL=<address> npx playwright test` runs the end-to-end tests against any address, such as a preview, without starting a local server.
+- Network Error Logging is off for the painfold.com zone (Network settings). Cloudflare adds `NEL` and `Report-To` headers by default, which make browsers send network errors to Cloudflare, outside the CSP and the "What leaves your browser" panel. An end-to-end test fails if any response carries them. workers.dev previews always send them; only the team opens previews, so the test is skipped there.
+- `PAINFOLD_URL` runs two tests at a time: every model test downloads 152 MB from the deployed site.
+- Cloudflare compresses some files, such as the ONNX Runtime WebAssembly file, and then sends no `Content-Length`. The app counts the bytes it receives, so download progress is unaffected.
+- Unknown addresses get the 404 page with status 404, and `/accuracy/` redirects to `/accuracy` (`html_handling: drop-trailing-slash`). The build removes Nuxt's `200.html` single-page fallback (`scripts/remove-spa-fallback.ts`), which hosts would otherwise serve for every unknown path with status 200; every page is prerendered, so it is not needed.
+- Until the move is complete, https://painfold.vercel.app keeps serving the same build from `vercel.json` (generated from `deploy/headers.ts`, only for `main`). Turn off the Vercel Toolbar for preview deployments (Project Settings, General): it injects a script from another origin, which the CSP blocks.
+- Any static host works the same way: serve `.output/public` with the headers from `headersFor()`, and the model from the same origin.
 
 ## Dependency updates
 
