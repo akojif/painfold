@@ -1,7 +1,11 @@
 // Every check, run the same way locally and in CI, with one clear result.
 //
-//   npm run verify                       lint, typecheck, unit, build, model, e2e
+//   npm run verify                       lint, typecheck, unit, build, model, e2e, names
 //   npm run verify -- lint unit          only these steps, in this order
+//
+// e2e runs every end-to-end test except the name accuracy check (tests tagged
+// @name-eval), which names runs: it reruns the name model on every stored
+// evaluation set and is the slowest part, so CI runs it as its own job.
 //
 // Each step's output streams as it runs and is saved to node_modules/.cache/painfold-verify/
 // (not test-results/, which Playwright empties when it starts).
@@ -13,6 +17,7 @@
 // code is 1 if anything failed. In CI the summary also goes to the job summary.
 import { spawn } from 'node:child_process'
 import { appendFileSync, createWriteStream, mkdirSync, readFileSync } from 'node:fs'
+import { availableParallelism } from 'node:os'
 import { stripVTControlCharacters } from 'node:util'
 
 type Step = { name: string, label: string, command: string[], needsBuild?: boolean }
@@ -23,17 +28,18 @@ const STEPS: Step[] = [
   { name: 'unit', label: 'Unit tests', command: ['npm', 'test'] },
   { name: 'build', label: 'Build', command: ['npm', 'run', 'generate'] },
   { name: 'model', label: 'Name model tests', command: ['npm', 'run', 'test:model'], needsBuild: true },
-  { name: 'e2e', label: 'End-to-end tests', command: ['npx', 'playwright', 'test'], needsBuild: true },
+  { name: 'e2e', label: 'End-to-end tests', command: ['npx', 'playwright', 'test', '--grep-invert', '@name-eval'], needsBuild: true },
+  { name: 'names', label: 'Name accuracy check', command: ['npx', 'playwright', 'test', '--grep', '@name-eval'], needsBuild: true },
 ]
 
 const LOGS = 'node_modules/.cache/painfold-verify'
 
-/** The steps asked for, in their fixed order; end-to-end tests bring the build with them. */
+/** The steps asked for, in their fixed order; browser tests bring the build with them. */
 export function plan(requested: readonly string[]): Step[] {
   const unknown = requested.filter(name => !STEPS.some(step => step.name === name))
   if (unknown.length > 0) throw new Error(`Unknown step: ${unknown.join(', ')}. Steps: ${STEPS.map(step => step.name).join(', ')}`)
   const names = new Set(requested.length > 0 ? requested : STEPS.map(step => step.name))
-  if (names.has('e2e')) names.add('build')
+  if (names.has('e2e') || names.has('names')) names.add('build')
   return STEPS.filter(step => names.has(step.name))
 }
 
@@ -74,6 +80,7 @@ const tail = (log: string, lines = 40) => stripVTControlCharacters(readFileSync(
 
 async function main() {
   mkdirSync(LOGS, { recursive: true })
+  console.log(`Verify on ${availableParallelism()} cores (${process.env.CI ? 'CI' : 'local'})`)
   const results: Result[] = []
   for (const step of plan(process.argv.slice(2))) {
     const buildFailed = results.some(result => result.step.name === 'build' && result.status !== 'passed')

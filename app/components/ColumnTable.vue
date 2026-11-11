@@ -74,9 +74,11 @@ async function checkInstead(index: number) {
 </script>
 
 <template>
+  <!-- data-surveyed: the counts of personal data per column have arrived (tests wait for it). -->
   <section
     v-if="table"
     :aria-label="$t('columns.listLabel')"
+    :data-surveyed="counts ? '' : undefined"
   >
     <p
       v-if="feedbackColumn === undefined"

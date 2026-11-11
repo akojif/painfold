@@ -1,34 +1,49 @@
 import { readFileSync } from 'node:fs'
-import type { Download, Page } from '@playwright/test'
-import { expect, test } from './fixtures'
+import type { BrowserContext, Download, Page } from '@playwright/test'
+import { expect, test as freshBrowser, waitForHydrationOnGoto } from './fixtures'
 
 // Names and places found in the background while the rule findings are
-// reviewed (ROADMAP Stage 2, #65). The model is downloaded in each test's fresh
-// browser context first, from the local build.
+// reviewed (ROADMAP Stage 2, #65). The tests that use the name model share one
+// browser per worker: the first downloads the model (152 MB, from the local
+// build), the rest find it stored, as on a later visit, and each still opens
+// its own page with a fresh app. The test without the model uses a fresh
+// browser.
+const test = freshBrowser.extend<object, { modelBrowser: BrowserContext }>({
+  modelBrowser: [async ({ browser }, use, workerInfo) => {
+    const context = await browser.newContext({ baseURL: workerInfo.project.use.baseURL })
+    await use(context)
+    await context.close()
+  }, { scope: 'worker' }],
+  page: async ({ modelBrowser }, use) => {
+    const page = await modelBrowser.newPage()
+    await use(waitForHydrationOnGoto(page))
+    await page.close()
+  },
+})
 
 const sampleCsv = readFileSync(new URL('../../data/sample/support-tickets.csv', import.meta.url), 'utf8')
-// The sample three times (600 rows), so names arrive while someone reviews, and
-// ten times (2,000 rows), so the check runs long enough to stop it. Shared CI
-// runners check names several times slower than a laptop.
+// The sample three times (600 rows): names arrive in batches of 100 while
+// someone reviews, and the check runs long enough to stop it.
 const [header, ...lines] = sampleCsv.trim().split('\n')
-const repeated = (times: number) => [header, ...Array.from({ length: times }, () => lines).flat()].join('\n')
-const mediumCsv = repeated(3)
-const largeCsv = repeated(10)
+const mediumCsv = [header, ...Array.from({ length: 3 }, () => lines).flat()].join('\n')
 
 test.describe.configure({ timeout: 240_000 })
 
 const text = async (download: Download) => readFileSync((await download.path())!, 'utf8')
 
-async function withModel(page: Page, open: () => Promise<void>) {
-  await page.goto('/')
+/** Opens a file with the name model ready: downloaded if this worker's browser does not have it yet. */
+async function withModel(page: Page, open: () => Promise<void>, path = '/') {
+  await page.goto(path)
   await open()
-  await page.getByRole('button', { name: /^Download name model/ }).click()
-  await expect(page.getByText(/^Name model stored in this browser/)).toBeVisible({ timeout: 60_000 })
+  const download = page.getByRole('button', { name: /^(Download name model|Namensmodell herunterladen)/ })
+  const stored = page.getByText(/^(Name model stored in this browser|Namensmodell in diesem Browser gespeichert)/)
+  await expect(download.or(stored)).toBeVisible()
+  if (await download.isVisible()) await download.click()
+  await expect(stored).toBeVisible({ timeout: 60_000 })
 }
 const sample = (page: Page) => () => page.getByRole('button', { name: 'Try the sample file' }).click()
 const upload = (csv: string) => (page: Page) => () => page.getByTestId('file-input').setInputFiles({ name: 'large.csv', mimeType: 'text/csv', buffer: Buffer.from(csv) })
 const medium = upload(mediumCsv)
-const large = upload(largeCsv)
 const findButton = (page: Page) => page.getByRole('button', { name: /^Find personal data in/ })
 const heading = (page: Page) => page.getByRole('heading', { level: 1 })
 const findings = async (page: Page) => Number((await heading(page).innerText()).match(/^([\d,]+) findings/)![1]!.replace(/,/g, ''))
@@ -79,7 +94,7 @@ test('the download waits while names are checked, and the cleaned file has them 
 })
 
 test('Stop asks first; skipping is recorded, and names can still be checked after all', async ({ page }) => {
-  await withModel(page, large(page))
+  await withModel(page, medium(page))
   await findButton(page).click()
   await expect(page.getByText(/^Checking for names:/)).toBeVisible()
 
@@ -92,20 +107,20 @@ test('Stop asks first; skipping is recorded, and names can still be checked afte
 
   await page.getByRole('button', { name: 'Stop' }).click()
   await dialog.getByRole('button', { name: 'Skip names' }).click()
-  await expect(page.getByText(/^Names were (checked in [\d,]+ of 2,000 rows, then skipped|skipped for this file)/)).toBeVisible()
+  await expect(page.getByText(/^Names were (checked in [\d,]+ of 600 rows, then skipped|skipped for this file)/)).toBeVisible()
   await expect(page.getByText('The download is available when names are checked.')).toBeHidden()
 
   await page.getByRole('link', { name: 'Continue to download' }).last().click()
-  await expect(page.getByText(/^Names were (checked in [\d,]+ of 2,000 rows; the check was skipped|not checked: the check was skipped)/)).toBeVisible()
+  await expect(page.getByText(/^Names were (checked in [\d,]+ of 600 rows; the check was skipped|not checked: the check was skipped)/)).toBeVisible()
   const [reportDownload] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: 'Download cleaning report (.txt)' }).click()])
-  expect(await text(reportDownload)).toMatch(/Names were (checked in [\d,]+ of 2,000 rows; the check was|not checked: the check was)/)
+  expect(await text(reportDownload)).toMatch(/Names were (checked in [\d,]+ of 600 rows; the check was|not checked: the check was)/)
 
   await page.getByRole('link', { name: 'Back to review' }).click()
   await page.getByRole('button', { name: 'Check names after all' }).click()
   await expect(page.getByText('Names and places checked.', { exact: true })).toBeVisible({ timeout: 200_000 })
 })
 
-test('without the name model, the review and the download say names were not checked', async ({ page }) => {
+freshBrowser('without the name model, the review and the download say names were not checked', async ({ page }) => {
   await page.goto('/')
   await sample(page)()
   await findButton(page).click()
@@ -116,10 +131,7 @@ test('without the name model, the review and the download say names were not che
 })
 
 test('the German review explains the check in German', async ({ page }) => {
-  await page.goto('/de')
-  await page.getByRole('button', { name: 'Beispieldatei ausprobieren' }).click()
-  await page.getByRole('button', { name: /^Namensmodell herunterladen/ }).click()
-  await expect(page.getByText(/^Namensmodell in diesem Browser gespeichert/)).toBeVisible({ timeout: 60_000 })
+  await withModel(page, () => page.getByRole('button', { name: 'Beispieldatei ausprobieren' }).click(), '/de')
   await page.getByRole('button', { name: /^Personenbezogene Daten in/ }).click()
   await expect(page.getByText('Namen und Orte geprüft.', { exact: true })).toBeVisible({ timeout: 60_000 })
 })

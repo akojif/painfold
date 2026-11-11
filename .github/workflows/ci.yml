@@ -4,6 +4,10 @@ on:
   pull_request:
   push:
     branches: [main]
+  # Nightly, so the name accuracy check also runs when nothing triggered it.
+  schedule:
+    - cron: '17 3 * * *'
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -63,13 +67,73 @@ jobs:
         with:
           path: node_modules/.cache/painfold-models
           key: name-model-${{ hashFiles('deploy/model.ts') }}
-      - name: Verify (build, end-to-end tests)
+      - name: Verify (build, end-to-end tests except the name accuracy check)
         run: npm run verify -- e2e
       - name: Upload Playwright traces
         if: failure()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: playwright-traces
+          path: test-results/
+          retention-days: 7
+
+  # The name model rerun on every stored evaluation set (tests tagged @name-eval).
+  # It always runs, so it can be a required check: on a pull request that touches
+  # nothing it depends on, it passes in seconds; otherwise, and on every push to
+  # main, nightly and when started by hand, it runs in full.
+  names:
+    name: Name accuracy check
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Decide whether the name check is needed
+        id: changes
+        env:
+          EVENT: ${{ github.event_name }}
+          BASE: ${{ github.event.pull_request.base.sha }}
+        run: |
+          if [ "$EVENT" != "pull_request" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+            echo "Not a pull request ($EVENT): running the full name check."
+            exit 0
+          fi
+          changed=$(git diff --name-only "$BASE"...HEAD)
+          relevant=$(echo "$changed" | grep -E '^(core/detect/|app/workers/|deploy/(model|ort-version)\.ts$|scripts/(eval|eval-names|eval-browser|name-detections|fetch-model)\.ts$|scripts/fake-data/|data/eval/|tests/e2e/name-eval\.spec\.ts$|package-lock\.json$|nuxt\.config\.ts$|playwright\.config\.ts$|\.github/workflows/)' || true)
+          if [ -n "$relevant" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+            echo "Files the name check depends on changed:"
+            echo "$relevant"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+            echo "Nothing the name check depends on changed: passing without running it." | tee -a "$GITHUB_STEP_SUMMARY"
+          fi
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        if: steps.changes.outputs.run == 'true'
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - if: steps.changes.outputs.run == 'true'
+        run: npm ci
+      - if: steps.changes.outputs.run == 'true'
+        run: npx playwright install --with-deps chromium
+      - name: Cache the name model (downloaded and checked by scripts/fetch-model.ts)
+        if: steps.changes.outputs.run == 'true'
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: node_modules/.cache/painfold-models
+          key: name-model-${{ hashFiles('deploy/model.ts') }}
+      - name: Verify (build, name accuracy check)
+        if: steps.changes.outputs.run == 'true'
+        run: npm run verify -- names
+      - name: Upload Playwright traces
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: playwright-traces-names
           path: test-results/
           retention-days: 7
 

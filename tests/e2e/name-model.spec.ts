@@ -96,7 +96,8 @@ test('Cancel stops the download and deletes what had arrived; the keyboard focus
   await expect(page.getByRole('progressbar', { name: 'Name model download' })).toBeVisible()
   await expect(page.getByText('You can start the review now. The download goes on in the background.')).toBeVisible()
   // The runtime and the tokenizer have arrived, so there is something to delete.
-  await expect.poll(() => cachedFiles(page)).not.toEqual([])
+  // Under a full parallel run they can take longer than the default 5 seconds.
+  await expect.poll(() => cachedFiles(page), { timeout: 20_000 }).not.toEqual([])
 
   await page.keyboard.press('Enter')
   await expect(downloadButton(page)).toBeFocused()
