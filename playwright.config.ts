@@ -14,7 +14,8 @@ export default defineConfig({
   // different workers. CI uses every core of its runner; locally Playwright's
   // default (half the cores) leaves room for other work.
   fullyParallel: true,
-  workers: process.env.CI ? '100%' : undefined,
+  // Against a deployed site, every model test downloads 152 MB over the internet; two at a time keeps them inside their time limits.
+  workers: deployed ? 2 : process.env.CI ? '100%' : undefined,
   reporter: process.env.CI ? 'github' : 'list',
   use: {
     baseURL: deployed ?? `http://localhost:${port}`,
