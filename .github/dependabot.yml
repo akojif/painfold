@@ -18,8 +18,13 @@ updates:
     schedule:
       interval: weekly
     groups:
+      # Playwright gets its own pull request: CI runs in the Playwright image of
+      # the same version, so the image in ci.yml is updated by hand with it.
+      playwright:
+        patterns: ["@playwright/test"]
       minor-and-patch:
         update-types: [minor, patch]
+        exclude-patterns: ["@playwright/test"]
     open-pull-requests-limit: 5
     ignore:
       # vue-tsc needs the JavaScript compiler API that TypeScript 7 removed.
