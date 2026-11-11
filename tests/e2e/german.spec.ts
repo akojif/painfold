@@ -97,6 +97,9 @@ test.describe('German at 320px', () => {
     await page.goto('/de')
     expect(await sideways(page), 'start').toBeLessThanOrEqual(0)
     await page.getByRole('button', { name: 'Beispieldatei ausprobieren' }).click()
+    // On a phone the flow runs after "Trotzdem weiter" (tests/e2e/mobile.spec.ts).
+    expect(await sideways(page), 'sheet').toBeLessThanOrEqual(0)
+    await page.getByRole('button', { name: 'Trotzdem weiter' }).click()
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Wählen Sie, was geprüft wird')
     expect(await sideways(page), 'columns').toBeLessThanOrEqual(0)
     await page.getByRole('button', { name: /Personenbezogene Daten in 200 Zeilen finden/ }).click()
