@@ -52,6 +52,13 @@ jobs:
     name: End-to-end tests
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    # Microsoft's Playwright image already has Chromium and every system package
+    # it needs, so no run depends on Ubuntu's package servers. Its version must
+    # match @playwright/test (a unit test checks); pinned by digest, like the actions.
+    container:
+      image: mcr.microsoft.com/playwright:v1.65.0-resolute@sha256:4d70b558dbaff71611b2f3e7a32aa2b4d42cfc892078ad368cb7ea229c2ffd1f
+      # Chromium needs more shared memory than a container gets by default.
+      options: --ipc=host
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -61,7 +68,6 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
-      - run: npx playwright install --with-deps chromium
       - name: Cache the name model (downloaded and checked by scripts/fetch-model.ts)
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
@@ -85,6 +91,13 @@ jobs:
     name: Name accuracy check
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    # Microsoft's Playwright image already has Chromium and every system package
+    # it needs, so no run depends on Ubuntu's package servers. Its version must
+    # match @playwright/test (a unit test checks); pinned by digest, like the actions.
+    container:
+      image: mcr.microsoft.com/playwright:v1.65.0-resolute@sha256:4d70b558dbaff71611b2f3e7a32aa2b4d42cfc892078ad368cb7ea229c2ffd1f
+      # Chromium needs more shared memory than a container gets by default.
+      options: --ipc=host
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -101,6 +114,8 @@ jobs:
             echo "Not a pull request ($EVENT): running the full name check."
             exit 0
           fi
+          # In the container the job runs as root, but the checkout belongs to the runner's user.
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
           changed=$(git diff --name-only "$BASE"...HEAD)
           relevant=$(echo "$changed" | grep -E '^(core/detect/|app/workers/|deploy/(model|ort-version)\.ts$|scripts/(eval|eval-names|eval-browser|name-detections|fetch-model)\.ts$|scripts/fake-data/|data/eval/|tests/e2e/name-eval\.spec\.ts$|package-lock\.json$|nuxt\.config\.ts$|playwright\.config\.ts$|\.github/workflows/)' || true)
           if [ -n "$relevant" ]; then
@@ -118,8 +133,6 @@ jobs:
           cache: npm
       - if: steps.changes.outputs.run == 'true'
         run: npm ci
-      - if: steps.changes.outputs.run == 'true'
-        run: npx playwright install --with-deps chromium
       - name: Cache the name model (downloaded and checked by scripts/fetch-model.ts)
         if: steps.changes.outputs.run == 'true'
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
