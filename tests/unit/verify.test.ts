@@ -3,12 +3,13 @@ import { counts, plan } from '../../scripts/verify'
 
 describe('verify', () => {
   it('runs every step by default, in a fixed order', () => {
-    expect(plan([]).map(step => step.name)).toEqual(['lint', 'typecheck', 'unit', 'build', 'model', 'e2e'])
+    expect(plan([]).map(step => step.name)).toEqual(['lint', 'typecheck', 'unit', 'build', 'model', 'e2e', 'names'])
   })
 
   it('runs only the steps asked for, and end-to-end tests always against a fresh build', () => {
     expect(plan(['unit', 'lint']).map(step => step.name)).toEqual(['lint', 'unit'])
     expect(plan(['e2e']).map(step => step.name)).toEqual(['build', 'e2e'])
+    expect(plan(['names']).map(step => step.name)).toEqual(['build', 'names'])
     expect(() => plan(['tests'])).toThrow('Unknown step: tests')
   })
 
