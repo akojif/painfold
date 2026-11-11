@@ -239,6 +239,8 @@ test.describe('review step', () => {
     test('nothing scrolls sideways in either view', async ({ page }) => {
       await page.goto('/')
       await page.getByRole('button', { name: 'Try the sample file' }).click()
+      // On a phone the flow runs after "Continue anyway" (tests/e2e/mobile.spec.ts).
+      await page.getByRole('button', { name: 'Continue anyway' }).click()
       await page.getByRole('button', { name: /Find personal data/ }).click()
       await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
       expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0)

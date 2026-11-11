@@ -262,7 +262,8 @@
       "partly": "Names were checked in {done} of {total} rows; the check was skipped for the rest, so names there were not removed.",
       "skipped": "Names were not checked: the check was skipped for this file.",
       "failed": "Names were not checked: the name model could not run.",
-      "notChecked": "Names and places were not checked: the name model was not downloaded."
+      "notChecked": "Names and places were not checked: the name model was not downloaded.",
+      "smallScreen": "Names were not checked: that happens on a larger screen."
     }
   },
   "typeMany": {
@@ -485,7 +486,8 @@
       "cancelled": "Download cancelled.",
       "removed": "Name model removed from this browser.",
       "offline": "You're offline."
-    }
+    },
+    "smallScreen": "Names are checked on a larger screen. Everything else works here."
   },
   "nameScan": {
     "running": "Checking for names: {done} of {total} rows",
@@ -628,5 +630,13 @@
       "docs": "All numbers and the method",
       "data": "The test data"
     }
+  },
+  "smallScreen": {
+    "title": "Painfold likes a bigger screen",
+    "body": "This phone shows it off nicely, but reviewing hundreds of rows is a job for a laptop. Your thumbs will thank you. Open it on your computer: your file stays just as private there.",
+    "copy": "Copy link",
+    "copied": "Link copied",
+    "copyManually": "Copy this address by hand:",
+    "continue": "Continue anyway"
   }
 }

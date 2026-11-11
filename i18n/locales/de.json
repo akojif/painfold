@@ -262,7 +262,8 @@
       "partly": "Namen wurden in {done} von {total} Zeilen geprüft; für die übrigen wurde die Prüfung übersprungen, dort wurden Namen nicht entfernt.",
       "skipped": "Namen wurden nicht geprüft: Die Prüfung wurde für diese Datei übersprungen.",
       "failed": "Namen wurden nicht geprüft: Das Namensmodell konnte nicht laufen.",
-      "notChecked": "Namen und Orte wurden nicht geprüft: Das Namensmodell wurde nicht heruntergeladen."
+      "notChecked": "Namen und Orte wurden nicht geprüft: Das Namensmodell wurde nicht heruntergeladen.",
+      "smallScreen": "Namen wurden nicht geprüft: Das geschieht auf einem größeren Bildschirm."
     }
   },
   "typeMany": {
@@ -485,7 +486,8 @@
       "cancelled": "Download abgebrochen.",
       "removed": "Namensmodell aus diesem Browser entfernt.",
       "offline": "Sie sind offline."
-    }
+    },
+    "smallScreen": "Namen werden auf einem größeren Bildschirm geprüft. Alles andere funktioniert hier."
   },
   "nameScan": {
     "running": "Namen werden geprüft: {done} von {total} Zeilen",
@@ -628,5 +630,13 @@
       "docs": "Alle Zahlen und die Methode",
       "data": "Die Testdaten"
     }
+  },
+  "smallScreen": {
+    "title": "Painfold mag größere Bildschirme",
+    "body": "Auf diesem Handy sieht es gut aus, aber Hunderte Zeilen prüft man besser am Laptop. Ihre Daumen werden es Ihnen danken. Öffnen Sie Painfold am Computer: Ihre Datei bleibt dort genauso privat.",
+    "copy": "Link kopieren",
+    "copied": "Link kopiert",
+    "copyManually": "Kopieren Sie diese Adresse von Hand:",
+    "continue": "Trotzdem weiter"
   }
 }
