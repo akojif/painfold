@@ -65,6 +65,8 @@ All test data is fake and generated: see [data/README.md](../data/README.md) for
 
 Every pull request runs four jobs: lint, typecheck, unit tests, the detection accuracy (shown in the job summary) and the static build; end-to-end tests; the name accuracy check (see Name model); and a dependency check (`npm audit --audit-level=high` and the license allowlist). All must pass before review.
 
+The two browser jobs run in Microsoft's Playwright image (`mcr.microsoft.com/playwright`), which already has Chromium and its system packages, so CI never installs anything from Ubuntu's package servers. The image's version must match `@playwright/test`: when Playwright is updated, change the image tag and its digest in `.github/workflows/ci.yml` too (a unit test fails until both match).
+
 ## Security headers
 
 `deploy/headers.ts` is the single source of truth for the Content-Security-Policy and the other security headers.
