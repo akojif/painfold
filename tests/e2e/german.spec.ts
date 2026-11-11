@@ -8,7 +8,7 @@ test('German pages are prerendered under /de/ with the right language', async ({
   const html = await (await request.get('/de/')).text()
   expect(html).toContain('lang="de-AT"')
   expect(html).toContain('Finden Sie, was Ihren Kunden wehtut.')
-  expect(html).toMatch(/<link[^>]*rel="alternate"[^>]*href="https:\/\/painfold\.vercel\.app"[^>]*hreflang="en"/)
+  expect(html).toMatch(/<link[^>]*rel="alternate"[^>]*href="https:\/\/painfold\.com\/?"[^>]*hreflang="en"/)
   expect(await (await request.get('/de/roadmap/')).text()).toContain('Der erste Schritt: Ihr Feedback vertraulich bereinigen.')
 })
 

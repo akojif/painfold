@@ -10,6 +10,9 @@
   "send_metrics": false,
   "workers_dev": true,
   "preview_urls": true,
+  // Production. www.painfold.com redirects here with a Cloudflare redirect rule
+  // (see docs/development.md, Hosting).
+  "routes": [{ "pattern": "painfold.com", "custom_domain": true }],
   // The Worker writes no logs, and none are kept.
   "observability": { "enabled": false },
   "assets": {

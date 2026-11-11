@@ -4,7 +4,7 @@ test('a missing address gets a 404 status and the not-found page', async ({ page
   const response = await page.goto('/no-such-page')
   expect(response!.status()).toBe(404)
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Nothing to clean here.')
-  await expect(page.getByText('The address /no-such-page was not found.')).toBeAttached()
+  await expect(page.getByText(/^The address \/no-such-page\/? was not found\.$/)).toBeAttached()
   // The address is shown waiting, then replaced by its placeholder, like personal data in the review.
   await expect(page.getByText('[PAGE_404]')).toBeVisible()
   await expect(page.locator('footer')).toContainText('Your file is never uploaded.')

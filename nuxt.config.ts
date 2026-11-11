@@ -82,7 +82,7 @@ export default defineNuxtConfig({
     strategy: 'prefix_except_default',
     defaultLocale: 'en',
     trailingSlash: true,
-    baseUrl: 'https://painfold.vercel.app',
+    baseUrl: 'https://painfold.com',
     locales: [
       { code: 'en', language: 'en', name: 'English', file: 'en.json' },
       { code: 'de', language: 'de-AT', name: 'Deutsch', file: 'de.json' },
