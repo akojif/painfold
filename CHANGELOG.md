@@ -12,7 +12,7 @@ Names and places are found too, with a model that runs in your browser, and the 
 - **The name model download** is explained before it starts, with its size (152 MB). It comes from Painfold's own site, hash-checked, shows progress with Cancel, is kept in the browser and can be removed; offline, failure and full-storage cases are handled, and the rules keep working without it.
 - **Names in the background:** rule findings can be reviewed at once while names arrive, without moving focus; the download waits until names are checked, and Stop asks first. The cleaning report says whether names were checked.
 - **German interface** under /de/, with a language switch that keeps your work.
-- **Accuracy page** in the app (/accuracy): how well every kind of personal data is found, names per language and per name-origin group, names in long texts, the known gaps, and the model's licence.
+- **Accuracy page** in the app (/accuracy/): how well every kind of personal data is found, names per language and per name-origin group, names in long texts, the known gaps, and the model's licence.
 - **Drop a file anywhere**, on any step. Documents and transcripts (DOCX, PDF, VTT, SRT and more) get a note that they are on the roadmap; other file types say which files work.
 - **Start over** from any step, with a question first when work would be lost, and the browser's own warning when closing the tab mid-review.
 - **On a phone**, the start screen explains Painfold and suggests a bigger screen; Copy link or Continue anyway.
@@ -20,6 +20,7 @@ Names and places are found too, with a model that runs in your browser, and the 
 
 ### Changed
 
+- **New address: [painfold.com](https://painfold.com).** The site is now hosted on Cloudflare, with the same security headers; painfold.vercel.app no longer works. Page addresses end in a slash (/roadmap/, /de/), and the address without it redirects there.
 - Back on the column step, the review and its decisions are kept; changing column choices asks before resetting them.
 - Messages about files that did not open are toasts, so nothing on the page moves.
 - Links no longer end in arrows; the footer says "Built by Francis Akoji".
