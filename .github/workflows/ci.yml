@@ -114,6 +114,8 @@ jobs:
             echo "Not a pull request ($EVENT): running the full name check."
             exit 0
           fi
+          # In the container the job runs as root, but the checkout belongs to the runner's user.
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
           changed=$(git diff --name-only "$BASE"...HEAD)
           relevant=$(echo "$changed" | grep -E '^(core/detect/|app/workers/|deploy/(model|ort-version)\.ts$|scripts/(eval|eval-names|eval-browser|name-detections|fetch-model)\.ts$|scripts/fake-data/|data/eval/|tests/e2e/name-eval\.spec\.ts$|package-lock\.json$|nuxt\.config\.ts$|playwright\.config\.ts$|\.github/workflows/)' || true)
           if [ -n "$relevant" ]; then
