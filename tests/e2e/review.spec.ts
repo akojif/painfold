@@ -15,7 +15,7 @@ async function openReview(page: Page, csv = CSV) {
   await page.goto('/')
   await page.getByTestId('file-input').setInputFiles({ name: 'tickets.csv', mimeType: 'text/csv', buffer: Buffer.from(csv) })
   await page.getByRole('button', { name: /Find personal data/ }).click()
-  await expect(page).toHaveURL(/\/review$/)
+  await expect(page).toHaveURL(/\/review\/$/)
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
 }
 
@@ -133,7 +133,7 @@ test.describe('review step', () => {
     const banner = page.locator('main').getByRole('status').filter({ hasText: 'All findings are reviewed.' })
     await expect(banner).toContainText('2 removed, 1 kept.')
     await banner.getByRole('link', { name: 'Continue to download' }).click()
-    await expect(page).toHaveURL(/\/download$/)
+    await expect(page).toHaveURL(/\/download\/$/)
   })
 
   test.describe('by row', () => {
@@ -221,7 +221,7 @@ test.describe('review step', () => {
     await expect(progress(page)).toHaveText('3 reviewed, 0 left')
     await expect(page.getByText(/not reviewed will be removed/)).toHaveCount(0)
     await page.getByRole('link', { name: 'Continue to download' }).last().click()
-    await expect(page).toHaveURL(/\/download$/)
+    await expect(page).toHaveURL(/\/download\/$/)
     await expect(page.getByRole('navigation', { name: 'Steps' }).locator('[aria-current="step"]')).toHaveText(/Download/)
   })
 

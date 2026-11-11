@@ -1,6 +1,5 @@
-import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
-import { assetPolicy, cloudflareHeaders, documentPolicy, headersFor, vercelConfig } from '../../deploy/headers'
+import { assetPolicy, cloudflareHeaders, documentPolicy, headersFor } from '../../deploy/headers'
 
 function directive(policy: string, name: string): string[] {
   const entry = policy.split('; ').find(part => part.startsWith(`${name} `))
@@ -75,23 +74,6 @@ describe('headersFor', () => {
     expect(headersFor('/_nuxt/worker.js')['Content-Security-Policy']).toBe(assetPolicy())
     expect(directive(assetPolicy(), 'connect-src')).toEqual(["'self'"])
     expect(directive(assetPolicy(), 'frame-ancestors')).toEqual(["'none'"])
-  })
-})
-
-describe('vercel.json', () => {
-  it('is up to date with deploy/headers.ts (run `npm run headers:vercel`)', () => {
-    const committed = JSON.parse(readFileSync(new URL('../../vercel.json', import.meta.url), 'utf8'))
-    expect(committed).toEqual(vercelConfig())
-  })
-
-  it('splits paths the same way as headersFor', () => {
-    const rules = vercelConfig().headers.map(rule => ({ pattern: new RegExp(`^${rule.source}$`), rule }))
-    for (const path of ['/', '/index.html', '/de/roadmap', '/_payload.json', '/_nuxt/entry.js', '/_nuxt/fonts/a.woff2', '/ort/1.0.0/ort-wasm-simd-threaded.wasm', '/models/m/r/onnx/model_int8.onnx']) {
-      const matching = rules.filter(({ pattern }) => pattern.test(path))
-      expect(matching, path).toHaveLength(1)
-      const headers = Object.fromEntries(matching[0]!.rule.headers.map(header => [header.key, header.value]))
-      expect(headers, path).toEqual(headersFor(path))
-    }
   })
 })
 

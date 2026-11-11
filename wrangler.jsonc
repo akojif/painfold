@@ -10,13 +10,16 @@
   "send_metrics": false,
   "workers_dev": true,
   "preview_urls": true,
+  // Production. www.painfold.com redirects here with a Cloudflare redirect rule
+  // (see docs/development.md, Hosting).
+  "routes": [{ "pattern": "painfold.com", "custom_domain": true }],
   // The Worker writes no logs, and none are kept.
   "observability": { "enabled": false },
   "assets": {
     "directory": ".output/public",
     "binding": "ASSETS",
-    // /accuracy serves accuracy/index.html, without a redirect to /accuracy/.
-    "html_handling": "drop-trailing-slash",
+    // Pages live at /accuracy/ (accuracy/index.html); /accuracy redirects there.
+    "html_handling": "auto-trailing-slash",
     // Unknown paths get 404.html with a real 404 status.
     "not_found_handling": "404-page",
     "run_worker_first": ["/models/*"]

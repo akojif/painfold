@@ -50,7 +50,7 @@ describe('externalReferences', () => {
 
 describe('externalReferences and links to other languages', () => {
   it('ignores hreflang and canonical links, which browsers never fetch', () => {
-    const head = '<link rel="alternate" hreflang="de-AT" href="https://painfold.vercel.app/de"><link rel="canonical" href="https://painfold.vercel.app/">'
+    const head = '<link rel="alternate" hreflang="de-AT" href="https://painfold.com/de/"><link rel="canonical" href="https://painfold.com/">'
     expect(externalReferences(head)).toEqual([])
   })
 

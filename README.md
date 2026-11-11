@@ -2,9 +2,9 @@
 
 Find what hurts your customers, without exposing who they are.
 
-Painfold turns customer feedback into an evidence-backed customer profile: the jobs customers are trying to get done, their pains and their gains. Personal data is removed in your own browser before any AI sees it, including German-language and Austrian data. The interface is in English and German ([painfold.vercel.app/de](https://painfold.vercel.app/de)).
+Painfold turns customer feedback into an evidence-backed customer profile: the jobs customers are trying to get done, their pains and their gains. Personal data is removed in your own browser before any AI sees it, including German-language and Austrian data. The interface is in English and German ([painfold.com/de/](https://painfold.com/de/)).
 
-**[Try it at painfold.vercel.app](https://painfold.vercel.app)**, with your own file or the built-in sample of 200 made-up support tickets.
+**[Try it at painfold.com](https://painfold.com)**, with your own file or the built-in sample of 200 made-up support tickets.
 
 ![Painfold cleaning the sample file: the column step, downloading the name model once, finding personal data and names, reviewing values by value and by row, and the download step](docs/media/demo.gif)
 
@@ -53,7 +53,7 @@ The list of original values behind each placeholder is never exported; it is gon
 
 ## Accuracy and speed
 
-Detection is measured per data type and language, on generated messages, on hand-written hard cases and on hand-written names from 13 communities living in Austria, and checked in CI. On the name test split, 97 % of names are removed (0.98 in German, 0.96 in English), and at least 92 % in every name-origin group; the model is measured in the browser, as users run it. On the hard cases nothing that only looks like personal data is removed, apart from one known case, and the known misses are listed. A 5,000-row file is cleaned in about 1.5 seconds; with the name model in the browser, names in it are checked in 70 to 115 seconds, in the background. Numbers, method and known gaps: [painfold.vercel.app/accuracy](https://painfold.vercel.app/accuracy) and, in full, [docs/accuracy.md](docs/accuracy.md).
+Detection is measured per data type and language, on generated messages, on hand-written hard cases and on hand-written names from 13 communities living in Austria, and checked in CI. On the name test split, 97 % of names are removed (0.98 in German, 0.96 in English), and at least 92 % in every name-origin group; the model is measured in the browser, as users run it. On the hard cases nothing that only looks like personal data is removed, apart from one known case, and the known misses are listed. A 5,000-row file is cleaned in about 1.5 seconds; with the name model in the browser, names in it are checked in 70 to 115 seconds, in the background. Numbers, method and known gaps: [painfold.com/accuracy/](https://painfold.com/accuracy/) and, in full, [docs/accuracy.md](docs/accuracy.md).
 
 Automatic detection can miss personal data, including names. Review the results before sharing the cleaned file.
 

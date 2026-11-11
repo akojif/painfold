@@ -164,7 +164,7 @@ test('nothing extra is shown where the browser does not report the connection', 
 })
 
 test('the German page explains the download in German', async ({ page }) => {
-  await openSample(page, '/de')
+  await openSample(page, '/de/')
   await expect(page.getByRole('heading', { name: 'Namen und Orte' })).toBeVisible()
   await expect(page.getByRole('button', { name: `Namensmodell herunterladen (${SIZE})` })).toBeVisible()
 })

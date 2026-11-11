@@ -1,8 +1,7 @@
 // Runs before `nuxt generate` (and can run on its own: `npm run models`).
 //
 // 1. Downloads the name model from the exact Hugging Face revision in
-//    deploy/model.ts into node_modules/.cache (kept between builds by CI and
-//    Vercel), and checks every file against its SHA-256. A mismatch fails the
+//    deploy/model.ts into node_modules/.cache (kept between builds by CI), and checks every file against its SHA-256. A mismatch fails the
 //    build, so a changed or tampered file never reaches users.
 // 2. Copies the model to public/models/<id>/<revision>/ and the ONNX Runtime
 //    WebAssembly files to public/ort/<version>/, so the app serves both from its

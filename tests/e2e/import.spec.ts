@@ -264,14 +264,14 @@ test.describe('finding personal data', () => {
     await upload(page, 'support-tickets.csv', sampleCsv)
     await page.getByRole('button', { name: 'Find personal data in 200 rows' }).click()
 
-    await expect(page).toHaveURL(/\/review$/)
+    await expect(page).toHaveURL(/\/review\/$/)
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(`${expected} findings in 200 rows`)
     await expect(page.getByRole('navigation', { name: 'Steps' }).locator('[aria-current="step"]')).toHaveText(/Review/)
     expect(workers.some(url => url.includes('/_nuxt/detect.worker'))).toBe(true)
   })
 
   test('the review step without a checked file goes back to the start', async ({ page }) => {
-    await page.goto('/review')
+    await page.goto('/review/')
     await expect(page).toHaveURL(/\/$/)
     await expect(page.getByRole('button', { name: 'Choose a CSV or Excel file' })).toBeVisible()
   })
