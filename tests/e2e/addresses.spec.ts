@@ -17,7 +17,7 @@ const addresses = (page: Page) => page.evaluate(() => [
 function pageAddresses(urls: string[], origin: string): string[] {
   return urls
     .map(url => new URL(url))
-    .filter(url => url.origin === origin || url.hostname === 'painfold.com' || url.hostname === 'painfold.vercel.app')
+    .filter(url => url.origin === origin || url.hostname === 'painfold.com')
     .filter(url => !/\.[a-z0-9]+$/i.test(url.pathname))
     .map(url => url.pathname)
 }

@@ -73,7 +73,6 @@ The two browser jobs run in Microsoft's Playwright image (`mcr.microsoft.com/pla
 
 - `npm run generate` builds the site, then `scripts/apply-csp.ts` adds the full policy to every page as a `<meta>` tag, with hashes of that build's inline scripts. It also fails the build if any page or stylesheet references another origin.
 - Static headers (framing, `nosniff`, referrer, permissions, and the full policy for app files and Web Workers) come from `headersFor()`. The local preview server sends them, so the end-to-end tests run under the real policy.
-- `vercel.json` is generated from the same file with `npm run headers:vercel`; a unit test fails if it is out of date.
 - For Cloudflare, the build writes a `_headers` file from the same file (`scripts/write-cloudflare-assets.ts`). Every matching rule applies there and a header set twice gets both values joined by a comma, so the rules for app files remove the page policy before setting their own; a unit test applies the file the way Cloudflare does and compares every path with `headersFor()`. The Worker that serves the model sets `headersFor()` itself.
 - No policy names a host: every source is a keyword, a hash or `data:`, and a unit test fails otherwise. On any address the site only talks to itself.
 - Every response sends `Cross-Origin-Opener-Policy: same-origin` and `Cross-Origin-Embedder-Policy: require-corp`, so pages are cross-origin isolated: WebAssembly threads need it, and the name model runs about 4 times faster with them. Everything Painfold loads is same-origin, so nothing else is affected.
@@ -84,7 +83,7 @@ The two browser jobs run in Microsoft's Playwright image (`mcr.microsoft.com/pla
 Every page address ends in a slash: `/roadmap/`, `/de/`, `/de/accuracy/`. That way search engines see one address per page.
 
 - `nuxt.config.ts` adds the slash to every link: `<NuxtLink>` (`experimental.defaults.nuxtLink.trailingSlash`), and `localePath`, `switchLocalePath`, the canonical and the hreflang links (`i18n.trailingSlash`). Always build page addresses with `localePath`, never as plain strings.
-- The hosts redirect the form without a slash, keeping the query: Cloudflare (`html_handling: auto-trailing-slash`), Vercel (`trailingSlash` in `vercel.json`) and the local test server.
+- The hosts redirect the form without a slash, keeping the query: Cloudflare (`html_handling: auto-trailing-slash`) and the local test server.
 - `tests/e2e/addresses.spec.ts` checks every page, including the review and download steps: each link, canonical and hreflang link ends in a slash, and each address without one redirects.
 
 ## Name model
@@ -110,7 +109,7 @@ Names and places are found by [Davlan/distilbert-base-multilingual-cased-ner-hrl
 
 ## Hosting
 
-The site moves from Vercel to Cloudflare (Workers with static assets) for v0.2.0. `wrangler.jsonc` serves `.output/public` as static files, with the headers from the `_headers` file in the build. No analytics, logs or metrics are kept (`observability` is off, `send_metrics` is false).
+The site runs on Cloudflare (Workers with static assets); until v0.2.0 it ran on Vercel. `wrangler.jsonc` serves `.output/public` as static files, with the headers from the `_headers` file in the build. No analytics, logs or metrics are kept (`observability` is off, `send_metrics` is false).
 
 - The name model is the one exception. Its largest file (135 MB) is over Cloudflare's 25 MiB limit for a static file, so the build leaves `models/` out (`.assetsignore`), the files live in the R2 bucket `painfold-models`, and a small Worker (`deploy/worker.ts`) serves them at the same address, `/models/<id>/<revision>/`. Cloudflare runs it only for `/models/*` (`run_worker_first`). It serves only the pinned files in `deploy/model.ts`, with the same headers as every other host, and answers range and conditional requests. The bucket has no public address.
 - `npm run models:upload` uploads a new model revision to R2 (`--local` for wrangler's local copy). It takes each file from the build's cache, checked against its SHA-256 first, and the R2 key is the path the app requests, so a new revision never replaces an old one's files.
@@ -124,7 +123,6 @@ The site moves from Vercel to Cloudflare (Workers with static assets) for v0.2.0
 - `PAINFOLD_URL` runs two tests at a time: every model test downloads 152 MB from the deployed site.
 - Cloudflare compresses some files, such as the ONNX Runtime WebAssembly file, and then sends no `Content-Length`. The app counts the bytes it receives, so download progress is unaffected.
 - Unknown addresses get the 404 page with status 404. Page addresses end in a slash, and `/accuracy` redirects to `/accuracy/` (`html_handling: auto-trailing-slash`; see Addresses). The build removes Nuxt's `200.html` single-page fallback (`scripts/remove-spa-fallback.ts`), which hosts would otherwise serve for every unknown path with status 200; every page is prerendered, so it is not needed.
-- Until the move is complete, https://painfold.vercel.app (the rollback) keeps serving the same build from `vercel.json` (generated from `deploy/headers.ts`, only for `main`). Turn off the Vercel Toolbar for preview deployments (Project Settings, General): it injects a script from another origin, which the CSP blocks.
 - Any static host works the same way: serve `.output/public` with the headers from `headersFor()`, and the model from the same origin.
 
 ## Dependency updates

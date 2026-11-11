@@ -4,7 +4,7 @@ Find what hurts your customers, without exposing who they are.
 
 Painfold turns customer feedback into an evidence-backed customer profile: the jobs customers are trying to get done, their pains and their gains. Personal data is removed in your own browser before any AI sees it, including German-language and Austrian data. The interface is in English and German ([painfold.com/de/](https://painfold.com/de/)).
 
-**[Try it at painfold.com](https://painfold.com/)**, with your own file or the built-in sample of 200 made-up support tickets.
+**[Try it at painfold.com](https://painfold.com)**, with your own file or the built-in sample of 200 made-up support tickets.
 
 ![Painfold cleaning the sample file: the column step, finding personal data, reviewing values by value and by row, and the download step](docs/media/demo.gif)
 
