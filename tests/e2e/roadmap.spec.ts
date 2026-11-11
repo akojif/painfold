@@ -12,12 +12,12 @@ test('the footer credits the author in a new tab, announced as one, without a he
 })
 
 test('the roadmap page is prerendered and lists every stage with the current one marked', async ({ page, request }) => {
-  const html = await (await request.get('/roadmap')).text()
+  const html = await (await request.get('/roadmap/')).text()
   expect(html).toContain('Cleaning your feedback privately is the first step.')
 
   await page.goto('/')
   await page.locator('footer').getByRole('link', { name: 'Roadmap' }).click()
-  await expect(page).toHaveURL(/\/roadmap$/)
+  await expect(page).toHaveURL(/\/roadmap\/$/)
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Roadmap')
   const stages = page.getByRole('list', { name: 'Stages' }).locator(':scope > li')
   await expect(stages.getByRole('heading', { level: 2 })).toHaveText(['v0.1 Clean', 'v0.2 Names', 'v0.3 Jobs, pains and gains', 'v0.4 Report', 'v0.5 Transcripts and documents', 'v1.0 Launch'])
@@ -41,7 +41,7 @@ test('the download step links to the roadmap page and back keeps the cleaned fil
   await page.getByRole('button', { name: /Find personal data/ }).click()
   await page.getByRole('link', { name: 'Continue to download' }).last().click()
   await page.getByRole('link', { name: 'See the roadmap' }).click()
-  await expect(page).toHaveURL(/\/roadmap$/)
+  await expect(page).toHaveURL(/\/roadmap\/$/)
   await page.goBack()
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Your cleaned file is ready.')
 })
@@ -50,14 +50,14 @@ test.describe('on a phone', () => {
   test.use({ viewport: { width: 390, height: 844 } })
 
   test('the roadmap and the footer do not scroll sideways', async ({ page }) => {
-    await page.goto('/roadmap')
+    await page.goto('/roadmap/')
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Roadmap')
     expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0)
   })
 })
 
 test('no link or button anywhere ends in an arrow', async ({ page }) => {
-  for (const path of ['/', '/roadmap', '/de', '/does-not-exist']) {
+  for (const path of ['/', '/roadmap/', '/de/', '/does-not-exist']) {
     await page.goto(path)
     const arrows = await page.locator('a, button').evaluateAll(elements => elements.filter(element => /[→↗➜]/.test(element.textContent ?? '') || element.querySelector('svg path[d*="h10m-3.5"], svg path[d*="L13 8"]')).length)
     expect(arrows, path).toBe(0)
@@ -65,7 +65,7 @@ test('no link or button anywhere ends in an arrow', async ({ page }) => {
 })
 
 test('the German footer credit and the new-tab hint read in German', async ({ page }) => {
-  await page.goto('/de')
+  await page.goto('/de/')
   await expect(page.locator('footer').getByRole('link', { name: 'Francis Akoji (öffnet in neuem Tab)' })).toBeVisible()
   await expect(page.locator('footer').getByText('Entwickelt von')).toBeVisible()
 })

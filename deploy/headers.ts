@@ -121,13 +121,15 @@ function toVercelHeaders(headers: Record<string, string>) {
 // Vercel builds the static site the same way as everywhere else: no framework
 // preset (which would run its own Nuxt build without the CSP step), our own
 // build command, and the generated folder as the output.
-export function vercelConfig(): { $schema: string, framework: null, installCommand: string, buildCommand: string, outputDirectory: string, headers: VercelHeaderRule[] } {
+// Page addresses end in a slash (nuxt.config.ts), and Vercel redirects the form without it.
+export function vercelConfig(): { $schema: string, framework: null, installCommand: string, buildCommand: string, outputDirectory: string, trailingSlash: true, headers: VercelHeaderRule[] } {
   return {
     $schema: 'https://openapi.vercel.sh/vercel.json',
     framework: null,
     installCommand: 'npm ci',
     buildCommand: 'NUXT_TELEMETRY_DISABLED=1 npm run generate',
     outputDirectory: '.output/public',
+    trailingSlash: true,
     headers: [
       { source: '/((?!_nuxt/|ort/|models/).*)', headers: toVercelHeaders(headersFor('/')) },
       { source: '/_nuxt/(.*)', headers: toVercelHeaders(headersFor(`${ASSET_PREFIX}entry.js`)) },

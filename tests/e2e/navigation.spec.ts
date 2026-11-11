@@ -146,7 +146,7 @@ test.describe('back to the column step', () => {
 })
 
 test('the German question reads in German', async ({ page }) => {
-  await sample(page, '/de')
+  await sample(page, '/de/')
   await dropChannel(page, 'Weglassen')
   await page.getByRole('button', { name: 'Neu beginnen' }).click()
   const asked = page.getByRole('dialog', { name: 'Neu beginnen?' })

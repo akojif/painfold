@@ -4,7 +4,7 @@
 import { createReadStream } from 'node:fs'
 import { stat } from 'node:fs/promises'
 import { createServer } from 'node:http'
-import { extname, join, normalize, resolve } from 'node:path'
+import { extname, join, normalize, resolve, sep } from 'node:path'
 import { parseArgs } from 'node:util'
 import { headersFor } from '../deploy/headers.ts'
 
@@ -49,6 +49,11 @@ async function resolveFile(urlPath: string): Promise<string | undefined> {
 
 createServer(async (request, response) => {
   const url = new URL(request.url ?? '/', 'http://localhost')
+  // Pages live at addresses ending in a slash; like the hosts, the form without it redirects there.
+  if (!url.pathname.endsWith('/') && (await resolveFile(url.pathname))?.endsWith(`${sep}index.html`)) {
+    response.writeHead(307, { ...headersFor(url.pathname), Location: `${url.pathname}/${url.search}` }).end()
+    return
+  }
   const file = await resolveFile(url.pathname) ?? await resolveFile('/404.html')
 
   if (!file) {

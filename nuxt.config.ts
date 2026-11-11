@@ -20,7 +20,7 @@ export default defineNuxtConfig({
         // Only the root decides the language: it opens /de/ before first paint if
         // German was chosen, or if nothing was chosen and the browser prefers German.
         // Every other address keeps its language, so a shared /de/ link stays German.
-        { innerHTML: "try{if(location.pathname==='/'){var l=localStorage.getItem('painfold-language');if(l==='de'||(!l&&/^de\\b/i.test(navigator.language)))location.replace('/de'+location.search+location.hash)}}catch(e){}" },
+        { innerHTML: "try{if(location.pathname==='/'){var l=localStorage.getItem('painfold-language');if(l==='de'||(!l&&/^de\\b/i.test(navigator.language)))location.replace('/de/'+location.search+location.hash)}}catch(e){}" },
       ],
     },
   },
@@ -39,11 +39,18 @@ export default defineNuxtConfig({
     },
   },
 
+  // Every page address ends in a slash (/roadmap/, /de/), one form only: links
+  // add it (NuxtLink here, localePath and the canonical and hreflang links in
+  // i18n below), and the host redirects the form without it (wrangler.jsonc).
+  experimental: {
+    defaults: { nuxtLink: { trailingSlash: 'append' } },
+  },
+
   compatibilityDate: '2026-11-01',
 
   nitro: {
     preset: 'static',
-    prerender: { routes: ['/roadmap', '/accuracy', '/de', '/de/roadmap', '/de/accuracy'] },
+    prerender: { routes: ['/roadmap/', '/accuracy/', '/de/', '/de/roadmap/', '/de/accuracy/'] },
   },
 
   vite: {
@@ -74,6 +81,7 @@ export default defineNuxtConfig({
   i18n: {
     strategy: 'prefix_except_default',
     defaultLocale: 'en',
+    trailingSlash: true,
     baseUrl: 'https://painfold.vercel.app',
     locales: [
       { code: 'en', language: 'en', name: 'English', file: 'en.json' },

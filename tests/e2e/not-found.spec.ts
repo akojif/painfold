@@ -19,7 +19,7 @@ test('a missing German address shows the not-found page in German', async ({ pag
   expect(response!.status()).toBe(404)
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Hier gibt es nichts zu bereinigen.')
   await page.getByRole('link', { name: 'Zurück zum Start' }).click()
-  await expect(page).toHaveURL(/\/de$/)
+  await expect(page).toHaveURL(/\/de\/$/)
 })
 
 test('the roadmap link leaves the not-found page', async ({ page }) => {

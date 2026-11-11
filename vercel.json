@@ -4,6 +4,7 @@
   "installCommand": "npm ci",
   "buildCommand": "NUXT_TELEMETRY_DISABLED=1 npm run generate",
   "outputDirectory": ".output/public",
+  "trailingSlash": true,
   "headers": [
     {
       "source": "/((?!_nuxt/|ort/|models/).*)",

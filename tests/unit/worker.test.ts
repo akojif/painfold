@@ -121,8 +121,8 @@ describe('wrangler.jsonc', () => {
     expect(config.r2_buckets).toEqual([{ binding: 'MODELS', bucket_name: 'painfold-models' }])
   })
 
-  it('serves pages at their own path and unknown paths with a real 404, as on every host', () => {
-    expect(config.assets.html_handling).toBe('drop-trailing-slash')
+  it('serves pages at addresses ending in a slash and unknown paths with a real 404, as on every host', () => {
+    expect(config.assets.html_handling).toBe('auto-trailing-slash')
     expect(config.assets.not_found_handling).toBe('404-page')
   })
 

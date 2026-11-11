@@ -79,6 +79,14 @@ The two browser jobs run in Microsoft's Playwright image (`mcr.microsoft.com/pla
 - Every response sends `Cross-Origin-Opener-Policy: same-origin` and `Cross-Origin-Embedder-Policy: require-corp`, so pages are cross-origin isolated: WebAssembly threads need it, and the name model runs about 4 times faster with them. Everything Painfold loads is same-origin, so nothing else is affected.
 - App code (`/_nuxt/`) and the ONNX Runtime files (`/ort/`) may compile WebAssembly (`'wasm-unsafe-eval'`), because the name model runs in the detection worker. Pages may not, and `'unsafe-eval'` is never allowed.
 
+## Addresses
+
+Every page address ends in a slash: `/roadmap/`, `/de/`, `/de/accuracy/`. That way search engines see one address per page.
+
+- `nuxt.config.ts` adds the slash to every link: `<NuxtLink>` (`experimental.defaults.nuxtLink.trailingSlash`), and `localePath`, `switchLocalePath`, the canonical and the hreflang links (`i18n.trailingSlash`). Always build page addresses with `localePath`, never as plain strings.
+- The hosts redirect the form without a slash, keeping the query: Cloudflare (`html_handling: auto-trailing-slash`), Vercel (`trailingSlash` in `vercel.json`) and the local test server.
+- `tests/e2e/addresses.spec.ts` checks every page, including the review and download steps: each link, canonical and hreflang link ends in a slash, and each address without one redirects.
+
 ## Name model
 
 Names and places are found by [Davlan/distilbert-base-multilingual-cased-ner-hrl](https://huggingface.co/Davlan/distilbert-base-multilingual-cased-ner-hrl) (AFL-3.0), in the int8 ONNX export by [Xenova](https://huggingface.co/Xenova/distilbert-base-multilingual-cased-ner-hrl). It was trained on news text, including CoNLL-2003 for German and English; the CoNLL source texts are themselves licensed, which is a common grey area for models trained on them.
@@ -111,7 +119,7 @@ The site moves from Vercel to Cloudflare (Workers with static assets) for v0.2.0
 - Network Error Logging is off for the painfold.com zone (Network settings). Cloudflare adds `NEL` and `Report-To` headers by default, which make browsers send network errors to Cloudflare, outside the CSP and the "What leaves your browser" panel. An end-to-end test fails if any response carries them. workers.dev previews always send them; only the team opens previews, so the test is skipped there.
 - `PAINFOLD_URL` runs two tests at a time: every model test downloads 152 MB from the deployed site.
 - Cloudflare compresses some files, such as the ONNX Runtime WebAssembly file, and then sends no `Content-Length`. The app counts the bytes it receives, so download progress is unaffected.
-- Unknown addresses get the 404 page with status 404, and `/accuracy/` redirects to `/accuracy` (`html_handling: drop-trailing-slash`). The build removes Nuxt's `200.html` single-page fallback (`scripts/remove-spa-fallback.ts`), which hosts would otherwise serve for every unknown path with status 200; every page is prerendered, so it is not needed.
+- Unknown addresses get the 404 page with status 404. Page addresses end in a slash, and `/accuracy` redirects to `/accuracy/` (`html_handling: auto-trailing-slash`; see Addresses). The build removes Nuxt's `200.html` single-page fallback (`scripts/remove-spa-fallback.ts`), which hosts would otherwise serve for every unknown path with status 200; every page is prerendered, so it is not needed.
 - Until the move is complete, https://painfold.vercel.app keeps serving the same build from `vercel.json` (generated from `deploy/headers.ts`, only for `main`). Turn off the Vercel Toolbar for preview deployments (Project Settings, General): it injects a script from another origin, which the CSP blocks.
 - Any static host works the same way: serve `.output/public` with the headers from `headersFor()`, and the model from the same origin.
 

@@ -28,7 +28,7 @@ async function open(page: Page, file: { name: string, text: string }) {
   await page.goto('/')
   await page.getByTestId('file-input').setInputFiles({ name: file.name, mimeType: 'text/csv', buffer: Buffer.from(file.text) })
   await page.getByRole('button', { name: /Find personal data/ }).click()
-  await expect(page).toHaveURL(/\/review$/)
+  await expect(page).toHaveURL(/\/review\/$/)
   await expect(page.getByRole('heading', { level: 1 })).toBeVisible()
 }
 
@@ -54,7 +54,7 @@ for (const width of [1280, 390, 320]) {
         expect(await sideways(page), 'review by row').toBeLessThanOrEqual(0)
         await shot('row')
         await page.getByRole('link', { name: 'Continue to download' }).last().click()
-        await expect(page).toHaveURL(/\/download$/)
+        await expect(page).toHaveURL(/\/download\/$/)
         expect(await sideways(page), 'download').toBeLessThanOrEqual(0)
         expect(await hiddenTruncation(page), 'download').toEqual([])
         await shot('download')

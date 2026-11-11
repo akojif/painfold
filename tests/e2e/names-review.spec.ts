@@ -131,7 +131,7 @@ freshBrowser('without the name model, the review and the download say names were
 })
 
 test('the German review explains the check in German', async ({ page }) => {
-  await withModel(page, () => page.getByRole('button', { name: 'Beispieldatei ausprobieren' }).click(), '/de')
+  await withModel(page, () => page.getByRole('button', { name: 'Beispieldatei ausprobieren' }).click(), '/de/')
   await page.getByRole('button', { name: /^Personenbezogene Daten in/ }).click()
   await expect(page.getByText('Namen und Orte geprüft.', { exact: true })).toBeVisible({ timeout: 60_000 })
 })
