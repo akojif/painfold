@@ -1,3 +1,4 @@
+import type { Page } from '@playwright/test'
 import { itemsOf } from '../../scripts/eval'
 import { namesInPage } from '../../scripts/eval-browser'
 import { readStoredDetections, STORED_SETS, storedFormat, type StoredSet } from '../../scripts/name-detections'
@@ -9,20 +10,35 @@ import { expect, test } from './fixtures'
 // numbers are computed from. This reruns the built worker on the same texts
 // and fails if it finds anything different, so the numbers cannot go stale.
 // Pass or fail only: it is not used to tune anything.
+//
+// Tagged @name-eval: `npm run verify` runs it as its own step (names), and CI
+// as its own job. The sets share one page, so the model loads once.
 const stored = readStoredDetections()
 
-test('the stored name detections are for the current model', () => {
-  expect(stored?.model).toBe(NAME_MODEL.revision)
-})
+test.describe('the name accuracy check', { tag: '@name-eval' }, () => {
+  test.describe.configure({ mode: 'serial' })
+  let page: Page
 
-for (const set of Object.keys(STORED_SETS) as StoredSet[]) {
-  test(`the name model still finds exactly the stored names and places (${set})`, async ({ page }) => {
-    test.skip(!stored?.sets[set], `no stored detections for ${set}`)
-    test.setTimeout(180_000)
-    const items = itemsOf(set)
+  test.beforeAll(async ({ browser }, testInfo) => {
+    page = await browser.newPage({ baseURL: testInfo.project.use.baseURL })
     await page.goto('/')
-    const run = await namesInPage(page, items.map(item => item.text), { firstNames: STORED_SETS[set].firstNames })
-    expect(run.threads).toBe(true)
-    expect(storedFormat(items.map(item => item.id), run.detections)).toEqual(stored!.sets[set])
   })
-}
+  test.afterAll(async () => {
+    await page.close()
+  })
+
+  test('the stored name detections are for the current model', () => {
+    expect(stored?.model).toBe(NAME_MODEL.revision)
+  })
+
+  for (const set of Object.keys(STORED_SETS) as StoredSet[]) {
+    test(`the name model still finds exactly the stored names and places (${set})`, async () => {
+      test.skip(!stored?.sets[set], `no stored detections for ${set}`)
+      test.setTimeout(180_000)
+      const items = itemsOf(set)
+      const run = await namesInPage(page, items.map(item => item.text), { firstNames: STORED_SETS[set].firstNames })
+      expect(run.threads).toBe(true)
+      expect(storedFormat(items.map(item => item.id), run.detections)).toEqual(stored!.sets[set])
+    })
+  }
+})

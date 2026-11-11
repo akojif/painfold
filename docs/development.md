@@ -7,7 +7,7 @@ nvm use
 npm install
 npm run dev          # local development server
 npm run generate     # static build in .output/public
-npm run verify       # every check below that CI runs: lint, typecheck, unit, build, model, e2e; one summary, non-zero exit on any failure
+npm run verify       # every check below that CI runs: lint, typecheck, unit, build, model, e2e, names; one summary, non-zero exit on any failure
 npm run serve        # serve the static build on http://localhost:4173
 npm run lint
 npm run typecheck
@@ -91,7 +91,7 @@ Names and places are found by [Davlan/distilbert-base-multilingual-cased-ner-hrl
 - Name and place accuracy is measured only in the browser: `npm run eval:names` starts the built names worker in headless Chromium, cross-origin isolated with threads, and checks each text with the rules and the model together, as the app does. Native ONNX Runtime in Node gives different results on different processors, so it is never used for the numbers.
   - The dev split (`--split dev`, the default) is for tuning: `--misses` lists every missed and wrong name or place. It includes look-alikes, greetings and sign-offs followed by words that are not names ("Hallo Team", "Liebe Grüße", "Dear Customer Support"), so precision is tuned too.
   - The test split (`--split test`) is only reported, never tuned against.
-  - `--set <set> --save` stores a set's detections in `data/eval/name-detections.json` (the sets are listed in `scripts/name-detections.ts`: the generated set, the hard cases, the name dev and test splits, and the test split without the first-name list). `npm run eval -- --write` computes the published tables from them. An end-to-end test reruns the worker on every stored set and fails if anything differs, so the stored detections, and the numbers computed from them, cannot go stale. It is a pass/fail check, not used for tuning.
+  - `--set <set> --save` stores a set's detections in `data/eval/name-detections.json` (the sets are listed in `scripts/name-detections.ts`: the generated set, the hard cases, the name dev and test splits, and the test split without the first-name list). `npm run eval -- --write` computes the published tables from them. An end-to-end test reruns the worker on every stored set and fails if anything differs, so the stored detections, and the numbers computed from them, cannot go stale. It is a pass/fail check, not used for tuning. It runs as its own step (`npm run verify -- names`, the end-to-end tests tagged `@name-eval`) and as its own required CI job, "Name accuracy check": on a pull request that changes nothing it depends on (detection, the workers, the model, the eval scripts and data, the lock file, the Nuxt and Playwright configs, the workflow) it passes in seconds; otherwise, and on every push to main, nightly and when started by hand, it runs in full. All sets share one page, so the model loads once.
 - To change the model: update the revision and hashes in `deploy/model.ts`, run `npm run models` and `npm run test:model`, and re-measure accuracy and speed.
 - CI caches the downloaded files between runs. `core/detect/names.ts` turns the model's word pieces into names and places and has unit tests; `tests/model/` runs the real model.
 

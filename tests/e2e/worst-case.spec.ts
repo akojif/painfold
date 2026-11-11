@@ -162,7 +162,8 @@ for (const width of [1280, 390, 320]) {
       test(`${state}: no sideways scroll, nothing cut off without a title`, async ({ page }) => {
         test.setTimeout(60_000)
         await openColumns(page, file)
-        await page.waitForTimeout(state === 'big' ? 3000 : 500)
+        // The survey of every column (warnings, masked samples) is done when the table says so.
+        await page.locator('[data-surveyed]').waitFor({ timeout: 30_000 })
         expect(await sideways(page), 'columns').toBeLessThanOrEqual(0)
         expect(await hiddenTruncation(page), 'columns').toEqual([])
         if (out) await page.screenshot({ path: `${out}/columns-${state}-${width}.png`, fullPage: true })

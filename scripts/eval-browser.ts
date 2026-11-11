@@ -35,20 +35,29 @@ async function waitForServer(): Promise<void> {
 
 export type BrowserRun = { detections: Detection[][], milliseconds: number, threads: boolean }
 
-/** Starts the built names worker in an open page of the app and finds names and places in each text, in order. */
+/**
+ * Finds names and places in each text with the built names worker, in an open
+ * page of the app. The worker (and with it the loaded model) is kept on the
+ * page and reused by later calls, so the model loads once per page.
+ */
 export async function namesInPage(page: Page, texts: readonly string[], { firstNames = true }: { firstNames?: boolean } = {}): Promise<BrowserRun> {
   const ortPath = `${ORT_PREFIX}${ortVersion()}/`
   const run = await page.evaluate(async ({ worker, ortPath, texts, firstNames }) => {
     const started = performance.now()
-    const names = new Worker(worker, { type: 'module' })
+    const scope = window as unknown as { painfoldNames?: Worker, painfoldNamesId?: number }
+    scope.painfoldNames ??= new Worker(worker, { type: 'module' })
+    const names = scope.painfoldNames
+    const id = (scope.painfoldNamesId = (scope.painfoldNamesId ?? 0) + 1)
     const cells = await new Promise<unknown>((resolve, reject) => {
-      names.addEventListener('message', ({ data }) => {
+      const onMessage = ({ data }: MessageEvent) => {
+        if (data.id !== id) return
+        if (data.kind === 'result' || data.kind === 'error') names.removeEventListener('message', onMessage)
         if (data.kind === 'result') resolve(data.cells)
         if (data.kind === 'error') reject(new Error(data.message))
-      })
-      names.postMessage({ kind: 'names', id: 1, rows: texts.map(text => [text]), columns: [0], ortPath, firstNames })
+      }
+      names.addEventListener('message', onMessage)
+      names.postMessage({ kind: 'names', id, rows: texts.map(text => [text]), columns: [0], ortPath, firstNames })
     })
-    names.terminate()
     return { cells, milliseconds: performance.now() - started, threads: crossOriginIsolated }
   }, { worker: workerPath(), ortPath, texts: [...texts], firstNames })
 
