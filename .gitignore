@@ -12,6 +12,8 @@ public/models/
 public/ort/
 node_modules/
 .nuxt/
+# Wrangler's local runtime state and builds (local R2 copy of the model)
+.wrangler/
 .output/
 .data/
 dist

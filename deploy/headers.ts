@@ -8,7 +8,8 @@
 //   the other security headers, and the full policy for files under /_nuxt/,
 //   because a Web Worker takes its policy from its own response headers.
 //
-// The local preview server and the generated vercel.json both use headersFor(),
+// The local preview server, the generated vercel.json, Cloudflare's _headers
+// file and the Cloudflare Worker that serves the model all use headersFor(),
 // so moving to another host only needs a new adapter, not app changes.
 
 import { ORT_PREFIX } from './model.ts'
@@ -83,6 +84,31 @@ export function headersFor(path: string): Record<string, string> {
     'Content-Security-Policy': CODE_PREFIXES.some(prefix => path.startsWith(prefix)) ? assetPolicy() : "frame-ancestors 'none'",
     ...(IMMUTABLE_PREFIXES.some(prefix => path.startsWith(prefix)) ? { 'Cache-Control': 'public, max-age=31536000, immutable' } : {}),
   }
+}
+
+/**
+ * Cloudflare's _headers file, written into the build by scripts/write-cloudflare-assets.ts.
+ * Every rule that matches a path applies, and a header set by two rules gets
+ * both values joined by a comma, so app files and the runtime first remove the
+ * page policy (`! Name`) and then set their own. The model is not covered: the
+ * Worker serves it from R2 (deploy/worker.ts) and sets headersFor() itself.
+ */
+export function cloudflareHeaders(): string {
+  const page = headersFor('/')
+  const rules: Array<[string, Record<string, string>]> = [
+    ['/*', page],
+    [`${ASSET_PREFIX}*`, changedFrom(page, headersFor(`${ASSET_PREFIX}entry.js`))],
+    [`${RUNTIME_PREFIX}*`, changedFrom(page, headersFor(`${RUNTIME_PREFIX}runtime.wasm`))],
+  ]
+  return rules.map(([path, headers]) => [
+    path,
+    ...Object.entries(headers).flatMap(([name, value]) => name in page && page[name] !== value ? [`  ! ${name}`, `  ${name}: ${value}`] : [`  ${name}: ${value}`]),
+  ].join('\n')).join('\n') + '\n'
+}
+
+/** The headers of `headers` that differ from (or are missing in) `base`. */
+function changedFrom(base: Record<string, string>, headers: Record<string, string>): Record<string, string> {
+  return Object.fromEntries(Object.entries(headers).filter(([name, value]) => base[name] !== value))
 }
 
 type VercelHeaderRule = { source: string, headers: Array<{ key: string, value: string }> }

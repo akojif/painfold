@@ -57,7 +57,7 @@ createServer(async (request, response) => {
   }
 
   const status = file.endsWith('404.html') && url.pathname !== '/404.html' ? 404 : 200
-  // Content-Length lets the app show how much of the name model has downloaded.
+  // Content-Length lets browsers show a download's progress.
   const { size } = await stat(file)
   response.writeHead(status, {
     ...headersFor(url.pathname),

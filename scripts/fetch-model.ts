@@ -28,7 +28,7 @@ async function readIfValid(path: string, expected: Expected): Promise<Uint8Array
   return bytes && matches(bytes, expected) ? bytes : undefined
 }
 
-async function cachedFile(file: string, expected: Expected): Promise<string> {
+export async function cachedFile(file: string, expected: Expected): Promise<string> {
   const path = join(CACHE, file)
   if (await readIfValid(path, expected)) return path
 
