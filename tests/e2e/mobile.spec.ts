@@ -95,7 +95,7 @@ test.describe('on a phone', () => {
   })
 
   test('the German sheet reads in German', async ({ page }) => {
-    await page.goto('/de')
+    await page.goto('/de/')
     await page.getByRole('button', { name: 'Beispieldatei ausprobieren' }).tap()
     const german = page.getByRole('dialog', { name: 'Painfold mag größere Bildschirme' })
     await expect(german).toContainText('Ihre Daumen werden es Ihnen danken.')

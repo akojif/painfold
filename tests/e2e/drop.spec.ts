@@ -52,7 +52,7 @@ test.describe('on the start screen', () => {
       await expect(toast(page)).toContainText(DOCUMENT_NOTE)
       await expect(page.getByRole('status').filter({ has: toast(page) })).toHaveCount(1)
       await toast(page).getByRole('link', { name: 'See the roadmap' }).click()
-      await expect(page).toHaveURL(/\/roadmap$/)
+      await expect(page).toHaveURL(/\/roadmap\/$/)
     })
   }
 
@@ -202,7 +202,7 @@ test.describe('the drop state', () => {
   const dragAway = (page: Page) => page.evaluate(() => document.body.dispatchEvent(new DragEvent('dragleave', { bubbles: true })))
 
   test('appears while a file is over the page, on every step, and goes when it leaves', async ({ page }) => {
-    await page.goto('/roadmap')
+    await page.goto('/roadmap/')
     await dragOver(page)
     await expect(page.getByText('Drop to open. Nothing is uploaded.')).toBeVisible()
     await dragAway(page)
@@ -223,9 +223,9 @@ test.describe('the drop state', () => {
 })
 
 test('the German note reads in German', async ({ page }) => {
-  await page.goto('/de')
+  await page.goto('/de/')
   await drop(page, 'interview.docx', docx())
   await expect(toast(page)).toContainText('Dokumente und Transkripte stehen auf der Roadmap. Derzeit liest Painfold CSV- und Excel-Dateien.')
-  await expect(toast(page).getByRole('link', { name: 'Zur Roadmap' })).toHaveAttribute('href', '/de/roadmap')
+  await expect(toast(page).getByRole('link', { name: 'Zur Roadmap' })).toHaveAttribute('href', '/de/roadmap/')
   await expect(toast(page).getByRole('button', { name: 'Schließen' })).toBeVisible()
 })

@@ -37,7 +37,7 @@ async function cleanFile(page: Page, file: { name: string, mimeType: string, buf
   await note.locator('label', { hasText: 'Keep as is' }).click()
   await expect(note.getByRole('radio', { name: 'Keep as is' })).toBeChecked()
   await page.getByRole('button', { name: /Find personal data/ }).click()
-  await expect(page).toHaveURL(/\/review$/)
+  await expect(page).toHaveURL(/\/review\/$/)
   await page.getByRole('tab', { name: 'By row' }).click()
 
   await page.keyboard.press('r') // the email: removed
@@ -160,6 +160,6 @@ test('Start over after downloading goes back to the start with nothing kept', as
   await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: /^Download support-tickets_cleaned/ }).click()])
   await page.getByRole('button', { name: 'Start over' }).click()
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Find what hurts your customers. Without exposing who they are.')
-  await page.goto('/review')
+  await page.goto('/review/')
   await expect(page).toHaveURL(/\/$/)
 })
