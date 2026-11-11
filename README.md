@@ -6,7 +6,7 @@ Painfold turns customer feedback into an evidence-backed customer profile: the j
 
 **[Try it at painfold.vercel.app](https://painfold.vercel.app)**, with your own file or the built-in sample of 200 made-up support tickets.
 
-![Painfold cleaning the sample file: the column step, finding personal data, reviewing values by value and by row, and the download step](docs/media/demo.gif)
+![Painfold cleaning the sample file: the column step, downloading the name model once, finding personal data and names, reviewing values by value and by row, and the download step](docs/media/demo.gif)
 
 ## What it does
 
@@ -18,11 +18,11 @@ Removes personal data from a CSV or XLSX file in your browser, and lets you down
 - Made for a laptop. On a phone the start screen explains Painfold and suggests a bigger screen; the full flow still works there, without the name model.
 - The same value always gets the same placeholder, such as `[EMAIL_3]`.
 
-Names and places are new in v0.2, which is in progress. Finding customer jobs, pains and gains follows in v0.3. See the [roadmap](ROADMAP.md) and the [changelog](CHANGELOG.md).
+Names and places are new in v0.2. Finding customer jobs, pains and gains follows in v0.3. See the [roadmap](ROADMAP.md) and the [changelog](CHANGELOG.md).
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/media/review-dark.png">
-  <img alt="The review step: values grouped by type on the left, the selected value with Remove and Keep on the right, and the rows it appears in" src="docs/media/review-light.png">
+  <img alt="The review step: values grouped by type on the left, a name selected with Remove and Keep on the right, and the row it appears in" src="docs/media/review-light.png">
 </picture>
 
 <details>
@@ -33,6 +33,7 @@ Names and places are new in v0.2, which is in progress. Finding customer jobs, p
 | Start | ![Start screen, light](docs/media/start-light.png) | ![Start screen, dark](docs/media/start-dark.png) |
 | Columns | ![Column step, light](docs/media/columns-light.png) | ![Column step, dark](docs/media/columns-dark.png) |
 | Review | ![Review step, light](docs/media/review-light.png) | ![Review step, dark](docs/media/review-dark.png) |
+| Accuracy | ![Accuracy page, light](docs/media/accuracy-light.png) | ![Accuracy page, dark](docs/media/accuracy-dark.png) |
 
 </details>
 
