@@ -26,6 +26,8 @@ let watching = false
 export function useNameScan() {
   const session = useSession()
   const model = useNameModel()
+  // Names are not checked on a small screen (useSmallScreen): the model is never offered there.
+  const { narrow } = useSmallScreen()
 
   async function run() {
     const review = session.review.value
@@ -60,7 +62,7 @@ export function useNameScan() {
     status.value = 'waiting'
     done.value = 0
     found.value = { names: 0, places: 0 }
-    if (model.status.value === 'ready') void run()
+    if (model.status.value === 'ready' && !narrow.value) void run()
   }
 
   /** Skips names for this file: stops the check (or the model's download) and keeps what was found so far. */
@@ -89,7 +91,7 @@ export function useNameScan() {
         else reset()
       })
       watch(model.status, (now) => {
-        if (now === 'ready' && status.value === 'waiting') void run()
+        if (now === 'ready' && status.value === 'waiting' && !narrow.value) void run()
       })
     })
     // A review that already started before anything asked about names.

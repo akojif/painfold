@@ -64,7 +64,23 @@ function onInputChange(event: Event) {
   if (file) void openPicked(file)
 }
 
-const onSample = openSample
+// On a small screen the two actions first suggest a laptop; Continue anyway
+// runs the one that was tapped (SmallScreenSheet.vue).
+const { suggestBiggerScreen, continued } = useSmallScreen()
+const smallScreenSheet = useTemplateRef<{ open: () => void }>('smallScreenSheet')
+let pending: (() => void) | undefined
+function act(action: () => void) {
+  if (!suggestBiggerScreen()) return action()
+  pending = action
+  smallScreenSheet.value?.open()
+}
+function onContinueAnyway() {
+  continued.value = true
+  pending?.()
+  pending = undefined
+}
+const onChoose = () => act(() => input.value?.click())
+const onSample = () => act(() => void openSample())
 
 function onSheet(event: Event) {
   void openSheet((event.target as HTMLSelectElement).value)
@@ -117,11 +133,12 @@ async function findPersonalData() {
       @change="onInputChange"
     >
 
+    <!-- One grid: on small screens headline, actions, example, then the rest; from lg two columns, the example on the right. -->
     <section
       v-if="!table"
-      class="grid flex-1 items-center gap-x-16 gap-y-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,27rem)]"
+      class="grid flex-1 content-center gap-y-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,27rem)] lg:grid-rows-[auto_auto] lg:gap-x-16 lg:gap-y-0"
     >
-      <div class="max-w-xl">
+      <div class="max-w-xl lg:col-start-1 lg:row-start-1 lg:self-end">
         <h1 class="text-2xl font-semibold text-balance sm:text-3xl">
           {{ $t('start.headline') }}
         </h1>
@@ -133,7 +150,7 @@ async function findPersonalData() {
           <button
             type="button"
             class="press focus-ring h-10 rounded-md bg-fg px-4 font-medium text-canvas hover:opacity-90"
-            @click="input?.click()"
+            @click="onChoose"
           >
             {{ $t('start.choose') }}
           </button>
@@ -156,8 +173,12 @@ async function findPersonalData() {
         >
           {{ $t('start.reading', { name: reading }) }}
         </p>
+      </div>
 
-        <p class="mt-6 flex items-center gap-2 text-sm text-fg-muted">
+      <ExamplePanel class="lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-center" />
+
+      <div class="max-w-xl lg:col-start-1 lg:row-start-2 lg:self-start">
+        <p class="flex items-center gap-2 text-sm text-fg-muted lg:mt-6">
           <svg
             aria-hidden="true"
             viewBox="0 0 24 24"
@@ -174,9 +195,10 @@ async function findPersonalData() {
           {{ $t('start.privacy') }}
         </p>
 
+        <!-- Not on phones: stacked, the three stages read as a stray list; the roadmap link in the footer covers it. -->
         <ol
           :aria-label="$t('start.journeyLabel')"
-          class="mt-10 grid gap-4 border-t border-line pt-6 sm:grid-cols-3"
+          class="mt-10 grid gap-4 border-t border-line pt-6 max-md:hidden sm:grid-cols-3"
         >
           <li
             v-for="[key, now] in journey"
@@ -195,7 +217,10 @@ async function findPersonalData() {
         </ol>
       </div>
 
-      <ExamplePanel />
+      <SmallScreenSheet
+        ref="smallScreenSheet"
+        @continue="onContinueAnyway"
+      />
     </section>
 
     <div

@@ -13,11 +13,13 @@ const props = defineProps<{ compact?: boolean }>()
 const { t } = useI18n()
 const { number } = useFormat()
 const { total, costly, status, loaded, stored, download, cancel, remove } = useNameModel()
+// On a small screen the 152 MB model is never offered; a short note says where names are checked.
+const { narrow } = useSmallScreen()
 
 const megabytes = (bytes: number) => number(Math.round(bytes / 1_000_000))
 const size = computed(() => t('nameModel.megabytes', { n: megabytes(total) }))
 const progress = computed(() => t('nameModel.progress', { loaded: megabytes(loaded.value), total: megabytes(total) }))
-const visible = computed(() => !(props.compact && (status.value === 'ready' || status.value === 'unknown')))
+const visible = computed(() => narrow.value || !(props.compact && (status.value === 'ready' || status.value === 'unknown')))
 
 const root = useTemplateRef<HTMLElement>('root')
 const announcement = ref('')
@@ -51,7 +53,7 @@ watch(status, (current, previous) => {
         {{ $t('nameModel.heading') }}
       </h2>
       <p
-        v-if="status !== 'ready'"
+        v-if="status !== 'ready' && !narrow"
         class="mt-1 max-w-measure text-sm text-fg-muted"
       >
         {{ $t('nameModel.explain', { size }) }}
@@ -62,8 +64,14 @@ watch(status, (current, previous) => {
       class="text-sm"
       :class="{ 'mt-4': !compact }"
     >
+      <p
+        v-if="narrow"
+        class="text-fg-muted"
+      >
+        {{ $t('nameModel.smallScreen') }}
+      </p>
       <div
-        v-if="status === 'absent' || status === 'unknown'"
+        v-else-if="status === 'absent' || status === 'unknown'"
         class="flex flex-wrap items-center gap-x-4 gap-y-2"
       >
         <span

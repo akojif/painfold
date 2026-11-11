@@ -15,6 +15,7 @@ Removes personal data from a CSV or XLSX file in your browser, and lets you down
 - Finds email addresses, phone numbers (Austrian, German and international), IBANs, card numbers, Austrian social security numbers (SV-Nummer), VAT IDs, links, IP addresses, dates of birth, street addresses and postcodes, in German and English.
 - Finds names and places with a name model that runs in your browser. It is downloaded once (152 MB, only when you ask), from this site, and kept in the browser until you remove it. Names are checked in the background while you review the other findings.
 - You choose per column what is checked, kept as is or dropped, then review every finding by value or by row, and mark anything that was missed.
+- Made for a laptop. On a phone the start screen explains Painfold and suggests a bigger screen; the full flow still works there, without the name model.
 - The same value always gets the same placeholder, such as `[EMAIL_3]`.
 
 Names and places are new in v0.2, which is in progress. Finding customer jobs, pains and gains follows in v0.3. See the [roadmap](ROADMAP.md) and the [changelog](CHANGELOG.md).
