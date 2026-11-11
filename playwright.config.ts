@@ -1,6 +1,9 @@
 import { defineConfig, devices } from '@playwright/test'
 
 const port = 4173
+// PAINFOLD_URL runs the tests against a deployed site instead, such as a
+// Cloudflare preview (see docs/development.md); no local server is started.
+const deployed = process.env.PAINFOLD_URL || undefined
 
 // End-to-end tests run against the generated static site, as it will be served.
 export default defineConfig({
@@ -14,15 +17,17 @@ export default defineConfig({
   workers: process.env.CI ? '100%' : undefined,
   reporter: process.env.CI ? 'github' : 'list',
   use: {
-    baseURL: `http://localhost:${port}`,
+    baseURL: deployed ?? `http://localhost:${port}`,
     trace: 'retain-on-failure',
   },
   projects: [
     { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
   ],
-  webServer: {
-    command: `node scripts/serve-static.ts --port ${port}`,
-    url: `http://localhost:${port}`,
-    reuseExistingServer: !process.env.CI,
-  },
+  webServer: deployed
+    ? undefined
+    : {
+        command: `node scripts/serve-static.ts --port ${port}`,
+        url: `http://localhost:${port}`,
+        reuseExistingServer: !process.env.CI,
+      },
 })

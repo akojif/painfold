@@ -50,14 +50,20 @@ test('explains the download and its size, and requests nothing before the user a
 })
 
 test('downloads exactly the size it states, keeps it, and lists it in the network panel', async ({ page }) => {
-  const sizes = new Map<string, number>()
+  // A host may compress a file and leave out its Content-Length (Cloudflare does
+  // for the runtime); then the unpacked body is counted. The 135 MB model file
+  // always has one: the browser's inspector does not keep a body that large.
+  const bodies = new Map<string, Promise<number>>()
   page.on('response', (response) => {
-    if (/\/(?:models|ort)\//.test(response.url()) && response.status() === 200) sizes.set(response.url(), Number(response.headers()['content-length']))
+    if (!/\/(?:models|ort)\//.test(response.url()) || response.status() !== 200) return
+    const length = response.headers()['content-length']
+    bodies.set(response.url(), length ? Promise.resolve(Number(length)) : response.body().then(body => body.length))
   })
   await openSample(page)
   await downloadButton(page).click()
   await expect(storedLine(page)).toBeVisible({ timeout: 30_000 })
 
+  const sizes = new Map(await Promise.all([...bodies].map(async ([url, bytes]) => [url, await bytes] as const)))
   expect([...sizes.values()].reduce((sum, bytes) => sum + bytes, 0)).toBe(TOTAL)
   expect((await cachedFiles(page)).sort()).toEqual([...sizes.keys()].map(url => new URL(url).pathname).filter(path => !path.endsWith('.mjs')).sort())
 
