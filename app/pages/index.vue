@@ -195,9 +195,10 @@ async function findPersonalData() {
           {{ $t('start.privacy') }}
         </p>
 
+        <!-- Not on phones: stacked, the three stages read as a stray list; the roadmap link in the footer covers it. -->
         <ol
           :aria-label="$t('start.journeyLabel')"
-          class="mt-10 grid gap-4 border-t border-line pt-6 sm:grid-cols-3"
+          class="mt-10 grid gap-4 border-t border-line pt-6 max-md:hidden sm:grid-cols-3"
         >
           <li
             v-for="[key, now] in journey"

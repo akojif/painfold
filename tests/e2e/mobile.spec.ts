@@ -15,16 +15,15 @@ for (const width of [390, 320]) {
   test.describe(`on a phone, ${width} px wide`, () => {
     test.use({ viewport: { width, height: 800 }, hasTouch: true, isMobile: true })
 
-    test('the start screen reads in order: headline, actions, example, journey, then the trust row with the roadmap and accuracy pages', async ({ page }) => {
+    test('the start screen reads in order: headline, actions, example, then the trust row with the roadmap and accuracy pages; no journey list', async ({ page }) => {
       await page.goto('/')
       const y = async (locator: ReturnType<Page['locator']>) => (await locator.boundingBox())!.y
       const actions = await y(choose(page))
       const example = await y(page.getByRole('figure'))
-      const journey = await y(page.getByRole('list', { name: 'What Painfold does' }))
       expect(actions).toBeLessThan(example)
-      expect(example).toBeLessThan(journey)
+      await expect(page.getByRole('list', { name: 'What Painfold does' })).toBeHidden()
       const footer = page.locator('footer')
-      expect(journey).toBeLessThan(await y(footer))
+      expect(example).toBeLessThan(await y(footer))
       await expect(footer.getByRole('listitem').filter({ hasText: 'No cookies' })).toBeVisible()
       await expect(footer.getByRole('link', { name: 'Roadmap' })).toBeVisible()
       await expect(footer.getByRole('link', { name: 'Accuracy' })).toBeVisible()
