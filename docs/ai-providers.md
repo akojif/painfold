@@ -16,12 +16,12 @@ Result on 13 November 2026:
 
 | Provider | Endpoint | From https://painfold.com |
 |---|---|---|
-| Anthropic | `https://api.anthropic.com/v1/messages` | Works with the header `anthropic-dangerous-direct-browser-access: true` (the page reads the 401); blocked without it. An organisation can switch browser calls off for its keys; the app must explain that error. |
+| Anthropic | `https://api.anthropic.com/v1/messages` | Works with the header `anthropic-dangerous-direct-browser-access: true` (a 401 with a fake key, a 200 with a real key); blocked without it. An organisation can switch browser calls off for its keys; the app must explain that error. |
 | OpenAI | `https://api.openai.com/v1/chat/completions` | Works (`access-control-allow-origin: *`) |
 | Mistral | `https://api.mistral.ai/v1/chat/completions` | Works (`access-control-allow-origin: *`) |
 | Mistral, EU | `https://api.eu.mistral.ai/v1/chat/completions` | Works (`access-control-allow-origin: *`) |
 
-Still to confirm with a real key (a successful answer, not only an error): all four. Run the script with the keys set; nothing is printed or stored.
+With a real key, Anthropic returned a successful answer (status 200) on 13 November 2026, run by Francis. OpenAI and Mistral are checked with a real key when they ship: run the script with the key set; nothing is printed or stored.
 
 ### Ollama (local)
 

@@ -97,7 +97,10 @@ const engines: Array<[string, BrowserType, string[]]> = [
   ['Firefox', firefox, []],
   ['WebKit (Safari)', webkit, []],
 ]
-for (const [engineName, engine, permissions] of engines) {
+// A browser cannot tell "Ollama is not running" from "blocked", so ask Ollama directly first.
+const ollamaRunning = await fetch('http://127.0.0.1:11434/api/version').then(response => response.ok, () => false)
+if (!ollamaRunning) console.log('Ollama is not running, so its checks are skipped. Start it with: OLLAMA_ORIGINS=https://painfold.com ollama serve\n')
+for (const [engineName, engine, permissions] of ollamaRunning ? engines : []) {
   const engineBrowser = await engine.launch()
   const engineContext = await engineBrowser.newContext()
   if (permissions.length > 0) await engineContext.grantPermissions(permissions, { origin: ORIGIN })
