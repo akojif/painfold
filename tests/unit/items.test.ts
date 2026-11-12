@@ -3,6 +3,7 @@ import type { ColumnRole } from '../../core/columns/roles'
 import { cleanedTable } from '../../core/export/csv'
 import { detectItems } from '../../core/detect/items'
 import { cellId, itemsFromTable, rebuildTable, rowId, sheetIndexOf, textItems } from '../../core/items/table'
+import { placeOf } from '../../core/items/types'
 import { Review } from '../../core/review/review'
 
 // All values are invented.
@@ -86,6 +87,22 @@ describe('itemsFromTable', () => {
     // A sheet named after a customer never reaches an id or a location.
     const named = itemsFromTable({ ...table, sheetIndex: 1, sheetName: 'Kunde Huber' } as Parameters<typeof itemsFromTable>[0], roles)
     expect(JSON.stringify(named)).not.toContain('Huber')
+  })
+})
+
+describe('labels, display and places', () => {
+  it('labels each item with its column and tells the review how to show it', () => {
+    // message is the feedback column; note holds short values, so it only shows with a finding.
+    const { items } = itemsFromTable(table, roles, { feedbackColumn: 3 })
+    expect(items.slice(0, 2).map(item => [item.label, item.display])).toEqual([['message', 'main'], ['note', 'short']])
+    const free = itemsFromTable({ columns: ['a', 'b'], rows: [['x', 'Eine längere Rückmeldung mit mehr als zwanzig Zeichen']] }, ['scan', 'scan'], { feedbackColumn: 0 })
+    expect(free.items.map(item => item.display)).toEqual(['main', 'text'])
+  })
+
+  it('gives every unit a place counted from 1, as people read it', () => {
+    const { units } = itemsFromTable(table, roles)
+    expect(units.map(unit => placeOf(unit.source))).toEqual([{ kind: 'row', number: 1 }, { kind: 'row', number: 2 }, { kind: 'row', number: 3 }])
+    expect(placeOf({ kind: 'turn', index: 4, speaker: 'A' })).toEqual({ kind: 'turn', number: 5 })
   })
 })
 

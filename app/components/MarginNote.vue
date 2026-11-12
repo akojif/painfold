@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { PII_TYPES, type PiiType } from '~~/core/pii-types'
 import type { Finding, Warning } from '~~/core/review/review'
-import type { CellSelection } from '~/utils/selection'
+import type { ItemSelection } from '~/utils/selection'
 
 // docked: stays in view beside the rows while they scroll (desktop). On small
 // screens it is always a bar fixed to the bottom.
-const props = defineProps<{ finding?: Finding, warning?: Warning, marking?: CellSelection & { text: string }, problem?: string, docked?: boolean }>()
+const props = defineProps<{ finding?: Finding, warning?: Warning, marking?: ItemSelection & { text: string }, problem?: string, docked?: boolean }>()
 const emit = defineEmits<{ remove: [event: MouseEvent], keep: [], undo: [], startMark: [], confirmMark: [type: PiiType], cancelMark: [] }>()
-const { review, revision, rowOf } = useSession()
+const { review, revision, placeOfUnit } = useSession()
 const { t } = useI18n()
 
 // Names are the most likely miss in Stage 1, so they come first and are preselected.
@@ -111,7 +111,7 @@ const copiesText = computed(() => {
           id="margin-note-title"
           class="text-sm text-fg-muted"
         >
-          {{ $t('warning.title', { row: rowOf(warning.unit) + 1 }) }}
+          {{ $t('warning.title', { n: placeOfUnit(warning.unit).number }) }}
         </p>
         <p class="mt-1 font-mono text-md wrap-anywhere max-lg:line-clamp-2">
           {{ warning.value }}
@@ -152,7 +152,7 @@ const copiesText = computed(() => {
           id="margin-note-title"
           class="text-sm text-fg-muted"
         >
-          {{ $t('review.note.title', { type: $t(`typeOne.${finding.type}`), row: rowOf(finding.unit) + 1 }) }}
+          {{ $t('review.note.title', { type: $t(`typeOne.${finding.type}`), n: placeOfUnit(finding.unit).number }) }}
         </p>
         <p class="mt-1 font-mono text-md wrap-anywhere max-lg:line-clamp-2">
           {{ finding.value }}

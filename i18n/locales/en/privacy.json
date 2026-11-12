@@ -105,7 +105,7 @@
   },
   "warning": {
     "heading": "Could identify someone",
-    "title": "Could identify someone, row {row}",
+    "title": "Could identify someone, row {n}",
     "kind": {
       "age": "Exact age",
       "only": "“The only …”",
@@ -135,7 +135,7 @@
       "dismiss": "kept"
     },
     "markLabel": "Could identify someone: {kind}, {state}: {text}",
-    "valueLabel": "Could identify someone: {kind}, row {row}, {state}: {text}",
+    "valueLabel": "Could identify someone: {kind}, row {n}, {state}: {text}",
     "toCheck": "1 warning to check | {n} warnings to check",
     "removeAllLabel": "Remove the warning that is not checked yet | Remove all {n} warnings that are not checked yet",
     "announce": {

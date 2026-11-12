@@ -1,6 +1,6 @@
 {
   "review": {
-    "heading": "{findings} in {rows}",
+    "heading": "{findings} in {units}",
     "findings": "No findings | 1 finding | {n} findings",
     "progress": "{reviewed} reviewed, {left} left",
     "progressLabel": "Reviewed",
@@ -15,7 +15,7 @@
     },
     "markLabel": "{type}, {state}: {text}",
     "note": {
-      "title": "{type}, row {row}",
+      "title": "{type}, row {n}",
       "copies": "Appears in 1 row. Removing it replaces it with {placeholder}. | Appears in {n} rows. Removing it replaces every copy with {placeholder}.",
       "removed": "Removed in every copy.",
       "kept": "Kept in every copy.",

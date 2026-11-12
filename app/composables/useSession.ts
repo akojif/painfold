@@ -1,8 +1,8 @@
 import type { ColumnRole, RoleSuggestion } from '~~/core/columns/roles'
 import { guessFeedbackColumn, suggestRoles } from '~~/core/columns/roles'
 import type { ItemDetections } from '~~/core/detect/items'
-import { cellId, itemsFromTable, sheetIndexOf } from '~~/core/items/table'
-import type { ItemSet } from '~~/core/items/types'
+import { itemsFromTable, sheetIndexOf } from '~~/core/items/table'
+import { placeOf, type Item, type ItemSet, type Place } from '~~/core/items/types'
 import type { ImportedTable } from '~~/core/import'
 import { Review } from '~~/core/review/review'
 
@@ -55,21 +55,22 @@ export function useSession() {
   /** The checked cells as feedback items, with the rows as units: what detection runs on. */
   function itemsToCheck(): ItemSet | undefined {
     if (!table.value) return undefined
-    return itemsFromTable({ ...table.value, sheetIndex: sheetIndexOf(table.value) }, roles.value)
+    return itemsFromTable({ ...table.value, sheetIndex: sheetIndexOf(table.value) }, roles.value, { feedbackColumn: feedbackColumn.value })
   }
 
-  // Where an item or unit is in the table, for the review screen until it
-  // shows units instead of rows (#86, PR 4).
-  const places = computed(() => {
-    const cells = new Map<string, { row: number, column: number }>()
-    const rows = new Map<string, number>()
-    for (const item of items.value?.items ?? []) if (item.source.kind === 'cell') cells.set(item.id, { row: item.source.row, column: item.source.column })
-    for (const unit of items.value?.units ?? []) if (unit.source.kind === 'row') rows.set(unit.id, unit.source.row)
-    return { cells, rows }
+  // Each unit's place ("Row 17"), and each unit's items, for the review screen.
+  const unitIndex = computed(() => {
+    const places = new Map<string, Place>()
+    const byUnit = new Map<string, Item[]>()
+    for (const unit of items.value?.units ?? []) {
+      places.set(unit.id, placeOf(unit.source))
+      byUnit.set(unit.id, [])
+    }
+    for (const item of items.value?.items ?? []) byUnit.get(item.unit)?.push(item)
+    return { places, byUnit }
   })
-  const cellOf = (item: string) => places.value.cells.get(item) ?? { row: -1, column: -1 }
-  const rowOf = (unit: string) => places.value.rows.get(unit) ?? -1
-  const itemAt = (row: number, column: number) => cellId(row, column, table.value ? sheetIndexOf(table.value) : 0)
+  const placeOfUnit = (unit: string): Place => unitIndex.value.places.get(unit) ?? { kind: 'row', number: 0 }
+  const itemsOfUnit = (unit: string): readonly Item[] => unitIndex.value.byUnit.get(unit) ?? []
 
   function startReview(set: ItemSet, results: ItemDetections[]) {
     if (!table.value) return
@@ -118,5 +119,5 @@ export function useSession() {
     reviewedChoices.value = ''
   }
 
-  return { table, isSample, suggestions, roles, feedbackColumn, review, items, cellOf, rowOf, itemAt, revision, scanColumns, columnsChanged, hasWork, load, setFeedbackColumn, itemsToCheck, startReview, change, markDownloaded, clear }
+  return { table, isSample, suggestions, roles, feedbackColumn, review, items, placeOfUnit, itemsOfUnit, revision, scanColumns, columnsChanged, hasWork, load, setFeedbackColumn, itemsToCheck, startReview, change, markDownloaded, clear }
 }
