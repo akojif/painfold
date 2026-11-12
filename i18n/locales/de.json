@@ -638,5 +638,47 @@
     "copied": "Link kopiert",
     "copyManually": "Kopieren Sie diese Adresse von Hand:",
     "continue": "Trotzdem weiter"
+  },
+  "warning": {
+    "heading": "Könnte jemanden erkennbar machen",
+    "title": "Könnte jemanden erkennbar machen, Zeile {row}",
+    "kind": {
+      "age": "Genaues Alter",
+      "only": "„Die einzige …“",
+      "role-place": "Beruf mit Ort",
+      "unique-role": "Rolle, die eine Person innehat"
+    },
+    "short": {
+      "age": "Alter",
+      "only": "die einzige",
+      "role-place": "Beruf und Ort",
+      "unique-role": "Rolle"
+    },
+    "why": {
+      "age": "Ein genaues Alter kann zusammen mit anderen Angaben auf eine Person hinweisen.",
+      "only": "Das beschreibt eine Person.",
+      "role-place": "Zusammen mit {place} kann dieser Beruf auf eine Person hinweisen.",
+      "unique-role": "Diese Rolle hat eine Person inne.",
+      "unique-role-place": "Diese Rolle hat in {place} eine Person inne."
+    },
+    "placeRemoved": "{place} wird entfernt, damit ist das jetzt weniger eindeutig.",
+    "open": "Bleibt in der Datei, außer Sie entfernen es. Beim Entfernen wird es durch {placeholder} ersetzt.",
+    "removed": "Entfernt. In der bereinigten Datei steht hier {placeholder}.",
+    "kept": "So belassen, wie es geschrieben ist.",
+    "state": {
+      "pending": "nicht geprüft",
+      "remove": "entfernt",
+      "dismiss": "behalten"
+    },
+    "markLabel": "Könnte jemanden erkennbar machen: {kind}, {state}: {text}",
+    "valueLabel": "Könnte jemanden erkennbar machen: {kind}, Zeile {row}, {state}: {text}",
+    "toCheck": "1 Hinweis zu prüfen | {n} Hinweise zu prüfen",
+    "removeAllLabel": "Den noch nicht geprüften Hinweis entfernen | Alle {n} noch nicht geprüften Hinweise entfernen",
+    "announce": {
+      "remove": "Entfernt. Noch {left} Hinweise zu prüfen.",
+      "dismiss": "Behalten. Noch {left} Hinweise zu prüfen.",
+      "removeAll": "Alle offenen Hinweise sind entfernt."
+    },
+    "summary": "Könnte jemanden erkennbar machen: {removed} entfernt, {kept} behalten."
   }
 }

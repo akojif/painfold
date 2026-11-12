@@ -48,6 +48,7 @@ These are where precise wording matters most; a native speaker should review the
 - Names in the review and the download: the check, Stop and its question, and what the cleaning report says (`nameScan.*`, `download.names.*`).
 - Column warnings and reasons (`columns.warning`, `columns.checkInstead`, `columns.masked`, `columns.reason.*`, `columns.help`).
 - What the download contains and what is kept (`download.mapStays`, `download.reportExplain`, `download.notReviewed`) and the cleaning report (`report.*`).
+- The warnings for text that could identify someone (`warning.*`): "Könnte jemanden erkennbar machen" as the heading, "Hinweis" for a warning, and the reasons, especially "Beruf mit Ort" and "Rolle, die eine Person innehat".
 - Terms chosen for this product: the column roles "Prüfen / Unverändert / Weglassen", "Treffer" for a finding, and "UID-Nummer" for VAT ID.
 
 Open questions for the reviewer:
@@ -98,6 +99,8 @@ Text that is not personal data on its own but can point to one person, such as "
   - German feminine and gender-inclusive forms ("Lehrer:in", "LehrerIn") and compounds ("Volksschuldirektorin") count.
 
 In the review (`core/review/review.ts`), warnings sit next to the findings and never overlap them: a finding over the same text wins. A warning nobody decided on is **kept**; Remove replaces it with `[AGE_n]` or `[ROLE_n]`, and Dismiss keeps it as decided. Both can be undone. Decisions follow a warning's position, so they survive when the name model's places arrive and the cell's warnings are found again. `placeRemoved()` says whether a role's place will be removed, so the interface can say the role is less identifying.
+
+In the interface, warnings are listed after the personal data under "Could identify someone" (By value) and marked in the text (By row). They use the same keys as findings: R removes, K keeps. A warning not checked yet has a dashed underline in the risk colour (`danger`, which passes 4.5:1 on the page and surface backgrounds in both themes, above the 3:1 a line needs). The dashes, not the colour, set it apart from personal data waiting for review (a yellow fill) and from kept text (a dotted underline), and each mark's label says "Could identify someone" and the kind for screen readers. Warnings never hold up the review: Continue doesn't wait for them, and an untouched warning stays in the file. The download summary and the cleaning report count them.
 
 Places come from the name model. Without it, ages, "the only …" and unique roles linked to an organisation or the writer are still found.
 

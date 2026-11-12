@@ -638,5 +638,47 @@
     "copied": "Link copied",
     "copyManually": "Copy this address by hand:",
     "continue": "Continue anyway"
+  },
+  "warning": {
+    "heading": "Could identify someone",
+    "title": "Could identify someone, row {row}",
+    "kind": {
+      "age": "Exact age",
+      "only": "“The only …”",
+      "role-place": "Job title with a place",
+      "unique-role": "Role held by one person"
+    },
+    "short": {
+      "age": "age",
+      "only": "the only",
+      "role-place": "job and place",
+      "unique-role": "role"
+    },
+    "why": {
+      "age": "An exact age can point to one person, together with other details.",
+      "only": "It describes one person.",
+      "role-place": "Together with {place}, this job title can point to one person.",
+      "unique-role": "One person holds this role.",
+      "unique-role-place": "One person holds this role in {place}."
+    },
+    "placeRemoved": "{place} will be removed, so this is less identifying now.",
+    "open": "It stays in the file unless you remove it. Removing it replaces it with {placeholder}.",
+    "removed": "Removed. The cleaned file has {placeholder} here.",
+    "kept": "Kept as written.",
+    "state": {
+      "pending": "not checked",
+      "remove": "removed",
+      "dismiss": "kept"
+    },
+    "markLabel": "Could identify someone: {kind}, {state}: {text}",
+    "valueLabel": "Could identify someone: {kind}, row {row}, {state}: {text}",
+    "toCheck": "1 warning to check | {n} warnings to check",
+    "removeAllLabel": "Remove the warning that is not checked yet | Remove all {n} warnings that are not checked yet",
+    "announce": {
+      "remove": "Removed. {left} warnings left to check.",
+      "dismiss": "Kept. {left} warnings left to check.",
+      "removeAll": "All warnings left are removed."
+    },
+    "summary": "Could identify someone: {removed} removed, {kept} kept."
   }
 }

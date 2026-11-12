@@ -1,33 +1,49 @@
 <script setup lang="ts">
-import type { Finding } from '~~/core/review/review'
+import type { Finding, Warning } from '~~/core/review/review'
 
 const props = defineProps<{
   row: number
-  cells: { column: number, label?: string, text: string, findings: Finding[] }[]
+  cells: { column: number, label?: string, text: string, findings: Finding[], warnings: Warning[] }[]
   selectedId?: number
+  selectedWarningKey?: string
   motions: ReadonlyMap<string, RemovalMotion>
 }>()
-const emit = defineEmits<{ select: [id: number, event: MouseEvent | KeyboardEvent] }>()
+const emit = defineEmits<{ select: [id: number, event: MouseEvent | KeyboardEvent], selectWarning: [key: string, event: MouseEvent | KeyboardEvent] }>()
 const { review, revision } = useSession()
 
-type Piece = { kind: 'text', start: number, text: string } | { kind: 'finding', finding: Finding }
+type Piece = { kind: 'text', start: number, text: string } | { kind: 'finding', finding: Finding } | { kind: 'warning', warning: Warning }
 
-function pieces(text: string, findings: Finding[]): Piece[] {
+/** The cell's text cut at its findings and warnings, which never overlap. */
+function pieces(text: string, findings: Finding[], warnings: Warning[]): Piece[] {
+  const marks: Piece[] = [
+    ...findings.map(finding => ({ kind: 'finding' as const, finding })),
+    ...warnings.map(warning => ({ kind: 'warning' as const, warning })),
+  ].sort((a, b) => spanOf(a).start - spanOf(b).start)
   const result: Piece[] = []
   let last = 0
-  for (const finding of findings) {
-    if (finding.start > last) result.push({ kind: 'text', start: last, text: text.slice(last, finding.start) })
-    result.push({ kind: 'finding', finding })
-    last = finding.end
+  for (const mark of marks) {
+    const { start, end } = spanOf(mark)
+    if (start > last) result.push({ kind: 'text', start: last, text: text.slice(last, start) })
+    result.push(mark)
+    last = end
   }
   if (last < text.length) result.push({ kind: 'text', start: last, text: text.slice(last) })
   return result
 }
 
-const isCurrent = computed(() => props.cells.some(cell => cell.findings.some(finding => finding.id === props.selectedId)))
-const hasFindings = computed(() => props.cells.some(cell => cell.findings.length > 0))
+function spanOf(piece: Piece): { start: number, end: number } {
+  if (piece.kind === 'finding') return piece.finding
+  if (piece.kind === 'warning') return piece.warning
+  return { start: piece.start, end: piece.start + piece.text.length }
+}
+
+const pieceKey = (piece: Piece) => piece.kind === 'text' ? `t${piece.start}` : piece.kind === 'finding' ? `f${piece.finding.id}` : `w${piece.warning.key}`
+
+const isCurrent = computed(() => props.cells.some(cell => cell.findings.some(finding => finding.id === props.selectedId) || cell.warnings.some(warning => warning.key === props.selectedWarningKey)))
+const hasFindings = computed(() => props.cells.some(cell => cell.findings.length > 0 || cell.warnings.length > 0))
 // Read the revision so decisions re-render this row.
 const decisionFor = (finding: Finding) => (revision.value, review.value?.decisionFor(finding.key))
+const warningDecisionFor = (warning: Warning) => (revision.value, review.value?.warningDecisionFor(warning.key))
 </script>
 
 <template>
@@ -49,8 +65,8 @@ const decisionFor = (finding: Finding) => (revision.value, review.value?.decisio
         </p>
         <p class="break-words whitespace-pre-wrap">
           <template
-            v-for="piece in pieces(cell.text, cell.findings)"
-            :key="piece.kind === 'text' ? `t${piece.start}` : `f${piece.finding.id}`"
+            v-for="piece in pieces(cell.text, cell.findings, cell.warnings)"
+            :key="pieceKey(piece)"
           >
             <span
               v-if="piece.kind === 'text'"
@@ -58,6 +74,15 @@ const decisionFor = (finding: Finding) => (revision.value, review.value?.decisio
               :data-column="cell.column"
               :data-offset="piece.start"
             >{{ piece.text }}</span>
+            <WarningMark
+              v-else-if="piece.kind === 'warning'"
+              :warning="piece.warning"
+              :decision="warningDecisionFor(piece.warning)"
+              :placeholder="review!.placeholderForWarning(piece.warning)"
+              :selected="piece.warning.key === selectedWarningKey"
+              :motion="motions.get(piece.warning.key)"
+              @select="emit('selectWarning', piece.warning.key, $event)"
+            />
             <FindingMark
               v-else
               :finding="piece.finding"
