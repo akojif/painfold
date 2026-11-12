@@ -50,6 +50,17 @@ test('the language switch shows German or English alone', async ({ page }) => {
   await expect(names).toContainText(`${german} test names`)
 })
 
+test('the target is marked only across both languages, where it applies', async ({ page }) => {
+  await page.goto('/accuracy/')
+  const english = page.locator('#groups').locator('xpath=ancestor::section').locator('li').filter({ hasText: /^English/ })
+  await page.locator('label').filter({ hasText: /^\s*English\s*$/ }).click()
+  // English names in English sentences: 11 of 13, shown, but not judged against the target.
+  const { found, labelled } = data.names.removal.english!.en
+  await expect(english).toContainText(percent(found / labelled))
+  await expect(page.getByText('below target')).toHaveCount(0)
+  await expect(page.getByText('The target applies to each group across both languages.')).toBeVisible()
+})
+
 test('the generated set is collapsed, after the hard cases', async ({ page }) => {
   await page.goto('/accuracy/')
   const details = page.locator('details')

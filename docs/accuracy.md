@@ -125,6 +125,7 @@ From the hand-written cases:
 
 Names and places, from the name test split and the generated set. Fixing these needs new dev cases first, then a new test set written by someone else ([#82](https://github.com/akojif/painfold/issues/82)):
 
+- English names in English sentences are the weakest area: 11 of the 13 English-origin test names in English sentences are removed (0.85; 0.92 for the group across both languages, which is what the target is measured on). With 12 or 13 names per group and language, one miss moves a per-language number by about 8 points, so these slices are too small to judge one language on its own. The larger, independent test set in #82 has at least 25 names per group and language for this.
 - Lowercase nicknames after a greeting or thank-you that are not on the first-name list: "cheers ollie", "thx dino", "thx gergő", "hier ist kuba", "thx gosia".
 - Names at the start of a sentence, without a greeting or other cue: "Sanne van der Berg says…", "Oluwaseun Adebayo says…".
 - Names with particles that are not on the list yet, such as "ur": "Saif ur Rehman".

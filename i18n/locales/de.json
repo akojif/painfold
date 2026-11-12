@@ -565,6 +565,7 @@
     "groups": {
       "heading": "Nach Herkunftsgruppe der Namen",
       "note": "Die Gruppen gibt es nur in den Testdaten, damit Namen aus jeder Gemeinschaft gemessen werden. Painfold schließt nie auf die Herkunft einer Person.",
+      "perLanguage": "Pro Sprache hat jede Gruppe nur 12 oder 13 Testnamen, ein verpasster Name verschiebt den Wert also um etwa 8 Punkte. Das Ziel gilt für jede Gruppe über beide Sprachen.",
       "target": "Ziel {target}",
       "below": "unter dem Ziel",
       "detail": "Als Name {typeCorrect}, ohne Liste {withoutList}",
@@ -607,6 +608,7 @@
     "gaps": {
       "heading": "Bekannte Lücken",
       "items": [
+        "Englische Namen in englischen Sätzen sind die schwächste Stelle: 11 von 13 werden entfernt. Das sind zu wenige Namen, um eine Sprache allein zu beurteilen; eine größere Testmenge ist geplant (#82).",
         "Spitznamen nach einer Begrüßung oder einem Dank, die nicht auf der Vornamensliste stehen, etwa „cheers ollie“.",
         "Namen am Satzanfang, vor denen nichts steht: „Sanne van der Berg says…“.",
         "Manche Namenszusätze und mehrteilige Namen: „Saif ur Rehman“, „Tesfaye Bekele“.",
