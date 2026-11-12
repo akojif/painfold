@@ -97,9 +97,11 @@ Text that is not personal data on its own but can point to one person, such as "
   - A unique role (a mayor, a bishop, a school principal, a CEO) warns with any place, with an organisation ("Direktorin der Volksschule …") or when the writer holds it ("I am the mayor").
   - German feminine and gender-inclusive forms ("Lehrer:in", "LehrerIn") and compounds ("Volksschuldirektorin") count.
 
+In the review (`core/review/review.ts`), warnings sit next to the findings and never overlap them: a finding over the same text wins. A warning nobody decided on is **kept**; Remove replaces it with `[AGE_n]` or `[ROLE_n]`, and Dismiss keeps it as decided. Both can be undone. Decisions follow a warning's position, so they survive when the name model's places arrive and the cell's warnings are found again. `placeRemoved()` says whether a role's place will be removed, so the interface can say the role is less identifying.
+
 Places come from the name model. Without it, ages, "the only …" and unique roles linked to an organisation or the writer are still found.
 
-Large cities (`large-cities.ts`) are those with 100,000 or more residents. The list has the six in Austria, from Statistik Austria, and the 79 in Germany, from the statistical state offices, with English names such as Vienna and Munich. The source and the date it was checked are in the file; re-check when new figures are published. A place that isn't on the list warns, so a missing city adds a warning but never hides one.
+Large cities (`large-cities.ts`) are those with 100,000 or more residents. The list has the six in Austria, from Statistik Austria, and the 79 in Germany, from Destatis, with English names such as Vienna and Munich. The source and the date it was checked are in the file; re-check when new figures are published. A place that isn't on the list warns, so a missing city adds a warning but never hides one.
 
 ## Name model
 

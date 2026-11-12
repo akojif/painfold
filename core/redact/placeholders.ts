@@ -1,12 +1,16 @@
 import type { Detection } from '../detect/types.ts'
+import type { IndirectType } from '../detect/indirect/types.ts'
 import type { PiiType } from '../pii-types.ts'
+
+/** What a placeholder can stand for: personal data, or an indirect identifier the reviewer removed ([AGE_1], [ROLE_1]). */
+export type PlaceholderType = PiiType | IndirectType
 
 /**
  * Values that differ only in ways that do not change who they point to share
  * a placeholder: case in emails and IP addresses, scheme and host case in URLs,
  * spaces, dashes and case in IBANs, card numbers, SV-Nummern and VAT IDs.
  */
-export function normalizeValue(type: PiiType, value: string): string {
+export function normalizeValue(type: PlaceholderType, value: string): string {
   switch (type) {
     case 'EMAIL':
     case 'IP':
@@ -27,15 +31,15 @@ export function normalizeValue(type: PiiType, value: string): string {
 }
 
 // Placeholder labels read as plain words where the internal type name does not.
-const LABELS: Partial<Record<PiiType, string>> = { URL: 'LINK', VAT_ID: 'VAT' }
+const LABELS: Partial<Record<PlaceholderType, string>> = { URL: 'LINK', VAT_ID: 'VAT' }
 
 /** The word inside a placeholder, e.g. EMAIL in [EMAIL_3] or LINK for a URL. */
-export function placeholderLabel(type: PiiType): string {
+export function placeholderLabel(type: PlaceholderType): string {
   return LABELS[type] ?? type
 }
 
 /** Identifies a value for decisions and placeholders: the same key means the same value. */
-export function valueKey(type: PiiType, value: string): string {
+export function valueKey(type: PlaceholderType, value: string): string {
   return `${type}\u0000${normalizeValue(type, value)}`
 }
 
@@ -46,9 +50,9 @@ export function valueKey(type: PiiType, value: string): string {
  */
 export class PlaceholderMap {
   private readonly byKey = new Map<string, string>()
-  private readonly counts = new Map<PiiType, number>()
+  private readonly counts = new Map<PlaceholderType, number>()
 
-  placeholderFor(type: PiiType, value: string): string {
+  placeholderFor(type: PlaceholderType, value: string): string {
     const key = valueKey(type, value)
     let placeholder = this.byKey.get(key)
     if (!placeholder) {

@@ -1,3 +1,5 @@
+import { findIndirect } from '../detect/indirect/index.ts'
+import type { IndirectReason, IndirectType } from '../detect/indirect/index.ts'
 import { outside } from '../detect/merge.ts'
 import type { CellDetections } from '../detect/table.ts'
 import type { PiiType } from '../pii-types.ts'
@@ -19,6 +21,27 @@ export type Finding = {
 }
 
 export type Decision = 'remove' | 'keep'
+
+/**
+ * An indirect identifier (core/detect/indirect/): text that can point to one
+ * person together with what else is known. Unlike a finding, a warning nobody
+ * decided on is kept; only Remove replaces it with a placeholder.
+ */
+export type Warning = {
+  /** Where it is ("row:column:start:end"): decisions follow the position, so a warning found again keeps its decision. */
+  key: string
+  row: number
+  column: number
+  start: number
+  end: number
+  type: IndirectType
+  reason: IndirectReason
+  value: string
+  /** For a role with a place: the place it is linked to. */
+  place?: { start: number, end: number, value: string }
+}
+
+export type WarningDecision = 'remove' | 'dismiss'
 
 export class OverlapError extends Error {
   constructor() {
@@ -59,6 +82,9 @@ export class Review {
   private nextId = 1
   /** Findings by cell, rebuilt when findings change, so cleaning a large file stays fast. */
   private cellIndex?: Map<string, Finding[]>
+  /** Warnings by cell ("row:column"), in order. */
+  private readonly warningsByCell = new Map<string, Warning[]>()
+  private readonly warningDecisions = new Map<string, WarningDecision>()
 
   constructor(rows: readonly (readonly string[])[], columns: readonly number[], cells: readonly CellDetections[]) {
     this.rows = rows
@@ -67,6 +93,9 @@ export class Review {
       for (const found of cell.detections) this.add({ row: cell.row, column: cell.column, ...found }, 'detected')
     }
     this.sort()
+    for (const row of this.rows.keys()) {
+      for (const column of columns) this.refreshWarnings(row, column)
+    }
   }
 
   get findings(): readonly Finding[] {
@@ -148,9 +177,11 @@ export class Review {
     const previous = this.decisions.get(key)
     this.decisions.set(key, 'remove')
     const ids = new Set(added.map(finding => finding.id))
+    this.refreshWarningsIn(added)
     this.history.push(() => {
       this.list = this.list.filter(finding => !ids.has(finding.id))
       this.cellIndex = undefined
+      this.refreshWarningsIn(added)
       this.restore(key, previous)
     })
     return added
@@ -175,7 +206,58 @@ export class Review {
       }
     }
     if (added.length > 0) this.sort()
+    // New places can link a job title to a place, and new findings can cover a warning.
+    this.refreshWarningsIn(cells)
     return added
+  }
+
+  /** Every warning, in reading order. */
+  get warnings(): readonly Warning[] {
+    return [...this.warningsByCell.values()].flat().sort((a, b) => a.row - b.row || a.column - b.column || a.start - b.start)
+  }
+
+  warningDecisionFor(key: string): WarningDecision | undefined {
+    return this.warningDecisions.get(key)
+  }
+
+  /** Removes a warning's text or dismisses the warning, as a step that can be undone. */
+  decideWarning(key: string, decision: WarningDecision): void {
+    const previous = this.warningDecisions.get(key)
+    if (previous === decision) return
+    this.warningDecisions.set(key, decision)
+    this.history.push(() => this.restoreWarning(key, previous))
+  }
+
+  /** Decides every open warning the same way, as one step that can be undone. Returns how many were decided. */
+  decideAllWarnings(decision: WarningDecision): number {
+    const open = this.warnings.filter(warning => !this.warningDecisions.has(warning.key)).map(warning => warning.key)
+    if (open.length === 0) return 0
+    for (const key of open) this.warningDecisions.set(key, decision)
+    this.history.push(() => open.forEach(key => this.warningDecisions.delete(key)))
+    return open.length
+  }
+
+  warningCounts(): { total: number, removed: number, dismissed: number, open: number } {
+    const all = this.warnings
+    const removed = all.filter(warning => this.warningDecisions.get(warning.key) === 'remove').length
+    const dismissed = all.filter(warning => this.warningDecisions.get(warning.key) === 'dismiss').length
+    return { total: all.length, removed, dismissed, open: all.length - removed - dismissed }
+  }
+
+  /**
+   * Whether the place a role warning is linked to will be removed: a place
+   * finding over it that nobody kept. The interface then says the role is
+   * less identifying. False for warnings without a place.
+   */
+  placeRemoved(warning: Warning): boolean {
+    const place = warning.place
+    if (!place) return false
+    return this.findingsIn(warning.row, warning.column)
+      .some(finding => finding.type === 'PLACE' && finding.start < place.end && finding.end > place.start && this.decisions.get(finding.key) !== 'keep')
+  }
+
+  placeholderForWarning(warning: Pick<Warning, 'type' | 'value'>): string {
+    return this.placeholders.placeholderFor(warning.type, warning.value)
   }
 
   /** Undoes the last decision, "remove all", or marked text. Returns false if there is nothing to undo. */
@@ -192,12 +274,20 @@ export class Review {
   /** The cell's text as it will be exported: removed and undecided findings become placeholders. */
   cleanedCell(row: number, column: number): string {
     const text = this.rows[row]?.[column] ?? ''
+    // Warnings never overlap findings, so both can be replaced in one pass.
+    const replaced = [
+      ...this.findingsIn(row, column)
+        .filter(finding => this.decisions.get(finding.key) !== 'keep')
+        .map(finding => ({ start: finding.start, end: finding.end, placeholder: this.placeholderFor(finding) })),
+      ...(this.warningsByCell.get(`${row}:${column}`) ?? [])
+        .filter(warning => this.warningDecisions.get(warning.key) === 'remove')
+        .map(warning => ({ start: warning.start, end: warning.end, placeholder: this.placeholderForWarning(warning) })),
+    ].sort((a, b) => a.start - b.start)
     let result = ''
     let last = 0
-    for (const finding of this.findingsIn(row, column)) {
-      if (this.decisions.get(finding.key) === 'keep') continue
-      result += text.slice(last, finding.start) + this.placeholderFor(finding)
-      last = finding.end
+    for (const { start, end, placeholder } of replaced) {
+      result += text.slice(last, start) + placeholder
+      last = end
     }
     return result + text.slice(last)
   }
@@ -215,6 +305,38 @@ export class Review {
 
   private overlaps(row: number, column: number, start: number, end: number): boolean {
     return this.list.some(finding => finding.row === row && finding.column === column && start < finding.end && end > finding.start)
+  }
+
+  /** Finds a cell's warnings again from its text and its findings: places link roles, and findings cover warnings. */
+  private refreshWarnings(row: number, column: number) {
+    const text = this.rows[row]?.[column] ?? ''
+    const cell = `${row}:${column}`
+    if (!text) {
+      this.warningsByCell.delete(cell)
+      return
+    }
+    const findings = this.findingsIn(row, column)
+    const places = findings.filter(finding => finding.type === 'PLACE')
+    const warnings: Warning[] = findIndirect(text, places)
+      .filter(found => findings.every(finding => found.end <= finding.start || found.start >= finding.end))
+      .map(found => ({ ...found, row, column, key: `${row}:${column}:${found.start}:${found.end}` }))
+    for (const warning of warnings) this.placeholderForWarning(warning)
+    if (warnings.length > 0) this.warningsByCell.set(cell, warnings)
+    else this.warningsByCell.delete(cell)
+  }
+
+  private refreshWarningsIn(cells: ReadonlyArray<{ row: number, column: number }>) {
+    const seen = new Set<string>()
+    for (const { row, column } of cells) {
+      if (seen.has(`${row}:${column}`)) continue
+      seen.add(`${row}:${column}`)
+      this.refreshWarnings(row, column)
+    }
+  }
+
+  private restoreWarning(key: string, previous: WarningDecision | undefined) {
+    if (previous) this.warningDecisions.set(key, previous)
+    else this.warningDecisions.delete(key)
   }
 
   private restore(key: string, previous: Decision | undefined) {
