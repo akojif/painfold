@@ -99,7 +99,7 @@ Text that is not personal data on its own but can point to one person, such as "
 
 Places come from the name model. Without it, ages, "the only …" and unique roles linked to an organisation or the writer are still found.
 
-Large cities (`large-cities.ts`) are those with 100,000 or more residents. The list has the six in Austria, from Statistik Austria, and the 79 in Germany, from the statistical state offices, with English names such as Vienna and Munich. The source and the date it was checked are in the file; re-check when new figures are published. A place that isn't on the list warns, so a missing city adds a warning but never hides one.
+Large cities (`large-cities.ts`) are those with 100,000 or more residents. The list has the six in Austria, from Statistik Austria, and the 79 in Germany, from Destatis, with English names such as Vienna and Munich. The source and the date it was checked are in the file; re-check when new figures are published. A place that isn't on the list warns, so a missing city adds a warning but never hides one.
 
 ## Name model
 

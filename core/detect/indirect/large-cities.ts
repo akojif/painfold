@@ -13,10 +13,11 @@
 //   municipalities are above 100,000: Wien 2,005,760, Graz 302,749, Linz
 //   211,944, Salzburg 157,399, Innsbruck 132,188, Klagenfurt 104,866. Checked
 //   on 2026-11-12.
-// - Germany: official population figures of the statistical state offices for
-//   31 December 2025 (projected from the 2022 census), as listed in "Liste der
-//   Großstädte in Deutschland" (de.wikipedia.org), 79 cities. Checked on
-//   2026-11-12.
+// - Germany: Statistisches Bundesamt (Destatis), Gemeindeverzeichnis-
+//   Informationssystem, "Gemeinden in Deutschland nach Fläche, Bevölkerung und
+//   Postleitzahl am 31.12.2025", population based on the 2022 census. 79
+//   municipalities are above 100,000, from Berlin (3,700,577) to
+//   Kaiserslautern (100,247). Checked on 2026-11-12.
 // Re-check both when a new year's figures are published; a city near the
 // threshold (Klagenfurt, Kaiserslautern) can cross it.
 
