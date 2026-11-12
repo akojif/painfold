@@ -2,15 +2,15 @@ import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import { suggestRoles, type ColumnRole } from '../../core/columns/roles'
 import { detectItems } from '../../core/detect/items'
-import { detectTable } from '../../core/detect/table'
-import { cleanedTable, toCsv } from '../../core/export/csv'
+import { detect } from '../../core/detect/index'
+import type { Detection } from '../../core/detect/types'
 import { readCsv } from '../../core/import/csv'
-import { itemsFromTable, textItems, toCellDetections } from '../../core/items/table'
-import { Review } from '../../core/review/review'
+import { itemsFromTable, textItems } from '../../core/items/table'
 
-// Detection on feedback items must find exactly what detection on rows and
-// columns found, so the review, the cleaned file and the report cannot change
-// (#86). Checked on the bundled sample file and on invented worst cases.
+// Detection on feedback items must find exactly what detection on every
+// checked cell finds (#86). The reference below is the plain loop over rows
+// and columns that the app used before items. Checked on the bundled sample
+// file and on invented worst cases.
 const sample = readCsv('support-tickets.csv', new Uint8Array(readFileSync(new URL('../../data/sample/support-tickets.csv', import.meta.url))))
 
 const worst = {
@@ -24,12 +24,22 @@ const worst = {
   ],
 }
 
-function bothWays(table: { columns: string[], rows: string[][] }, roles: ColumnRole[]) {
+/** The reference: every checked cell, row by row, as the app did before items. */
+function byCell(table: { rows: string[][] }, roles: readonly ColumnRole[]): Array<{ row: number, column: number, detections: Detection[] }> {
   const scan = roles.flatMap((role, column) => (role === 'scan' ? [column] : []))
-  const byCell = detectTable(table.rows, scan)
+  return table.rows.flatMap((cells, row) => scan.flatMap((column) => {
+    const detections = detect(cells[column] ?? '')
+    return detections.length > 0 ? [{ row, column, detections }] : []
+  }))
+}
+
+function byItem(table: { columns: string[], rows: string[][] }, roles: readonly ColumnRole[]) {
   const { items } = itemsFromTable(table, roles)
-  const byItem = toCellDetections(items, detectItems(textItems(items)))
-  return { byCell, byItem }
+  const cell = new Map(items.map(item => [item.id, item.source]))
+  return detectItems(textItems(items)).map(({ id, detections }) => {
+    const source = cell.get(id) as { row: number, column: number }
+    return { row: source.row, column: source.column, detections }
+  })
 }
 
 describe('detection on items', () => {
@@ -38,17 +48,10 @@ describe('detection on items', () => {
     ['the sample file, with every column checked', sample, sample.columns.map((): ColumnRole => 'scan')],
     ['worst cases, with two checked columns and a dropped one', worst, ['keep', 'scan', 'scan', 'drop'] as ColumnRole[]],
   ] as const) {
-    it(`finds the same as detection on rows and columns: ${name}`, () => {
-      const { byCell, byItem } = bothWays(table, [...roles])
-      expect(byCell.length).toBeGreaterThan(0)
-      expect(byItem).toEqual(byCell)
-    })
-
-    it(`cleans the file to the same bytes: ${name}`, () => {
-      const scan = roles.flatMap((role, column) => (role === 'scan' ? [column] : []))
-      const { byCell, byItem } = bothWays(table, [...roles])
-      const clean = (cells: typeof byCell) => toCsv(cleanedTable(table, roles, new Review(table.rows, scan, cells)))
-      expect(clean(byItem)).toBe(clean(byCell))
+    it(`finds the same as detection on every checked cell: ${name}`, () => {
+      const reference = byCell(table, roles)
+      expect(reference.length).toBeGreaterThan(0)
+      expect(byItem(table, roles)).toEqual(reference)
     })
   }
 })

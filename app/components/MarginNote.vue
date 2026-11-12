@@ -7,7 +7,7 @@ import type { CellSelection } from '~/utils/selection'
 // screens it is always a bar fixed to the bottom.
 const props = defineProps<{ finding?: Finding, warning?: Warning, marking?: CellSelection & { text: string }, problem?: string, docked?: boolean }>()
 const emit = defineEmits<{ remove: [event: MouseEvent], keep: [], undo: [], startMark: [], confirmMark: [type: PiiType], cancelMark: [] }>()
-const { review, revision } = useSession()
+const { review, revision, rowOf } = useSession()
 const { t } = useI18n()
 
 // Names are the most likely miss in Stage 1, so they come first and are preselected.
@@ -25,7 +25,7 @@ const decision = computed(() => (revision.value, props.finding ? review.value?.d
 const copyRows = computed(() => {
   const current = (revision.value, review.value)
   if (!props.finding || !current) return 0
-  return new Set(current.copiesOf(props.finding.key).map(copy => copy.row)).size
+  return new Set(current.copiesOf(props.finding.key).map(copy => copy.unit)).size
 })
 const hasFindings = computed(() => (revision.value, (review.value?.findings.length ?? 0) + (review.value?.warnings.length ?? 0) > 0))
 
@@ -111,7 +111,7 @@ const copiesText = computed(() => {
           id="margin-note-title"
           class="text-sm text-fg-muted"
         >
-          {{ $t('warning.title', { row: warning.row + 1 }) }}
+          {{ $t('warning.title', { row: rowOf(warning.unit) + 1 }) }}
         </p>
         <p class="mt-1 font-mono text-md wrap-anywhere max-lg:line-clamp-2">
           {{ warning.value }}
@@ -152,7 +152,7 @@ const copiesText = computed(() => {
           id="margin-note-title"
           class="text-sm text-fg-muted"
         >
-          {{ $t('review.note.title', { type: $t(`typeOne.${finding.type}`), row: finding.row + 1 }) }}
+          {{ $t('review.note.title', { type: $t(`typeOne.${finding.type}`), row: rowOf(finding.unit) + 1 }) }}
         </p>
         <p class="mt-1 font-mono text-md wrap-anywhere max-lg:line-clamp-2">
           {{ finding.value }}

@@ -1,4 +1,4 @@
-import { textItems, toCellDetections } from '~~/core/items/table'
+import { textItems } from '~~/core/items/table'
 import { NameModelStopped } from './useNameModel'
 
 // Finding names and places in the background while the rule findings are
@@ -47,7 +47,7 @@ export function useNameScan() {
         const batch = set.units.slice(start, start + BATCH).flatMap(unit => byUnit.get(unit.id) ?? [])
         const results = await model.names(textItems(batch))
         if (scan !== current || session.review.value !== review) return
-        session.change(current => current.addDetected(toCellDetections(batch, results)))
+        session.change(current => current.addDetected(results))
         done.value = Math.min(start + BATCH, set.units.length)
       }
       // Counted from the review, so a check that is run again after skipping counts every name once.

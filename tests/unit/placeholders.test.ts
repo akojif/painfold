@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest'
 import { detect } from '../../core/detect'
-import { detectTable } from '../../core/detect/table'
 import { detectItems } from '../../core/detect/items'
 import { handleDetectRequest, type DetectResponse } from '../../core/detect/worker-protocol'
 import { countsByColumn, itemsForColumns, textItems } from '../../core/items/table'
@@ -53,24 +52,6 @@ describe('redact', () => {
       { type: 'URL' as const, start: 3, end: 8, value: 'aaaaa' },
     ]
     expect(() => redact('aaaaaaaa', overlapping, new PlaceholderMap())).toThrow()
-  })
-})
-
-describe('detectTable', () => {
-  const rows = [
-    ['1', 'a@example.com', 'kept@example.com'],
-    ['2', 'nothing here', ''],
-    ['3', 'IP 192.0.2.1', ''],
-  ]
-
-  it('scans only the chosen columns and returns only cells with detections', () => {
-    expect(detectTable(rows, [1]).map(({ row, column }) => [row, column])).toEqual([[0, 1], [2, 1]])
-  })
-
-  it('reports progress per batch and at the end', () => {
-    const progress: number[] = []
-    detectTable(rows, [1], { batchSize: 2, onProgress: done => progress.push(done) })
-    expect(progress).toEqual([2, 3])
   })
 })
 

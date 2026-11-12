@@ -1,14 +1,21 @@
 import { findIndirect } from '../detect/indirect/index.ts'
 import type { IndirectReason, IndirectType } from '../detect/indirect/index.ts'
+import type { ItemDetections } from '../detect/items.ts'
 import { outside } from '../detect/merge.ts'
-import type { CellDetections } from '../detect/table.ts'
 import type { PiiType } from '../pii-types.ts'
 import { PlaceholderMap, valueKey } from '../redact/placeholders.ts'
 
+/**
+ * A feedback item as the review sees it (core/items/): its text, its id and
+ * the unit it belongs to. The review never needs to know where it came from.
+ */
+export type ReviewItem = { id: string, text: string, unit: string }
+
 export type Finding = {
   id: number
-  row: number
-  column: number
+  /** The item it is in, and that item's unit. */
+  item: string
+  unit: string
   start: number
   end: number
   type: PiiType
@@ -28,10 +35,10 @@ export type Decision = 'remove' | 'keep'
  * decided on is kept; only Remove replaces it with a placeholder.
  */
 export type Warning = {
-  /** Where it is ("row:column:start:end"): decisions follow the position, so a warning found again keeps its decision. */
+  /** Where it is ("<item>:start:end"): decisions follow the position, so a warning found again keeps its decision. */
   key: string
-  row: number
-  column: number
+  item: string
+  unit: string
   start: number
   end: number
   type: IndirectType
@@ -73,29 +80,43 @@ function formEndings(value: string): string {
  * numbers are fixed when a value is first seen and never change during review.
  */
 export class Review {
-  readonly rows: readonly (readonly string[])[]
-  readonly columns: readonly number[]
+  /** The items in reading order. */
+  readonly items: readonly ReviewItem[]
+  private readonly itemsById = new Map<string, ReviewItem & { order: number }>()
   private list: Finding[] = []
   private readonly decisions = new Map<string, Decision>()
   private readonly history: Array<() => void> = []
   private readonly placeholders = new PlaceholderMap()
   private nextId = 1
-  /** Findings by cell, rebuilt when findings change, so cleaning a large file stays fast. */
-  private cellIndex?: Map<string, Finding[]>
-  /** Warnings by cell ("row:column"), in order. */
-  private readonly warningsByCell = new Map<string, Warning[]>()
+  /**
+   * Findings by item, each in text order, kept up to date as findings are
+   * added and undone: the overlap check and cleaning look at one item's
+   * findings, never at all of them, so a long text with many findings and a
+   * large file both stay fast.
+   */
+  private readonly byItem = new Map<string, Finding[]>()
+  /** Warnings by item, in order. */
+  private readonly warningsByItem = new Map<string, Warning[]>()
   private readonly warningDecisions = new Map<string, WarningDecision>()
 
-  constructor(rows: readonly (readonly string[])[], columns: readonly number[], cells: readonly CellDetections[]) {
-    this.rows = rows
-    this.columns = columns
-    for (const cell of cells) {
-      for (const found of cell.detections) this.add({ row: cell.row, column: cell.column, ...found }, 'detected')
+  constructor(items: readonly ReviewItem[], results: readonly ItemDetections[]) {
+    this.items = items
+    for (const [order, item] of items.entries()) this.itemsById.set(item.id, { ...item, order })
+    for (const { id, detections } of results) {
+      for (const found of detections) this.add({ item: id, ...found }, 'detected')
     }
     this.sort()
-    for (const row of this.rows.keys()) {
-      for (const column of columns) this.refreshWarnings(row, column)
-    }
+    for (const item of items) this.refreshWarnings(item.id)
+  }
+
+  /** An item's text, as it was read. */
+  textOf(item: string): string {
+    return this.itemsById.get(item)?.text ?? ''
+  }
+
+  /** An item's position in reading order, for sorting findings and warnings of different items. */
+  orderOf(item: string): number {
+    return this.itemsById.get(item)?.order ?? -1
   }
 
   get findings(): readonly Finding[] {
@@ -138,37 +159,33 @@ export class Review {
 
   /**
    * Marks text the detectors missed as personal data. Every other copy of the
-   * same text in the checked columns is marked too, and removed. Possible
+   * same text in any item is marked too, and removed. Possible
    * forms of it ("Annas", "Anna's") are flagged for review, not decided, and
    * share its placeholder. Throws OverlapError if the selection overlaps an
    * existing finding.
    */
-  markMissed(row: number, column: number, start: number, end: number, type: PiiType): Finding[] {
-    const text = this.rows[row]?.[column] ?? ''
-    const value = text.slice(start, end)
+  markMissed(item: string, start: number, end: number, type: PiiType): Finding[] {
+    const value = this.textOf(item).slice(start, end)
     if (!value.trim() || value !== value.trim()) throw new RangeError('Mark a value without surrounding spaces')
-    if (this.overlaps(row, column, start, end)) throw new OverlapError()
+    if (this.overlaps(item, start, end)) throw new OverlapError()
 
     const escaped = escapeRegExp(value)
     // "Anna's" is a possible form, not a copy, even though ' is not a letter.
     const copy = new RegExp(`${NOT_A_WORD_BEFORE}${escaped}(?!${formEndings(value)}${NOT_A_WORD_AFTER})${NOT_A_WORD_AFTER}`, 'giu')
     const form = new RegExp(`${NOT_A_WORD_BEFORE}(${escaped})${formEndings(value)}${NOT_A_WORD_AFTER}`, 'giu')
-    const added: Finding[] = [this.add({ row, column, start, end, type, value }, 'marked')]
-    for (const [otherRow, cells] of this.rows.entries()) {
-      for (const otherColumn of this.columns) {
-        const cell = cells[otherColumn] ?? ''
-        for (const match of cell.matchAll(copy)) {
-          const otherStart = match.index
-          if (otherRow === row && otherColumn === column && otherStart === start) continue
-          if (this.overlaps(otherRow, otherColumn, otherStart, otherStart + match[0].length)) continue
-          added.push(this.add({ row: otherRow, column: otherColumn, start: otherStart, end: otherStart + match[0].length, type, value: match[0] }, 'marked'))
-        }
-        for (const match of cell.matchAll(form)) {
-          const formStart = match.index
-          const formEnd = formStart + match[1]!.length
-          if (this.overlaps(otherRow, otherColumn, formStart, formEnd)) continue
-          added.push(this.add({ row: otherRow, column: otherColumn, start: formStart, end: formEnd, type, value: match[1]! }, 'form', value))
-        }
+    const added: Finding[] = [this.add({ item, start, end, type, value }, 'marked')]
+    for (const other of this.items) {
+      for (const match of other.text.matchAll(copy)) {
+        const otherStart = match.index
+        if (other.id === item && otherStart === start) continue
+        if (this.overlaps(other.id, otherStart, otherStart + match[0].length)) continue
+        added.push(this.add({ item: other.id, start: otherStart, end: otherStart + match[0].length, type, value: match[0] }, 'marked'))
+      }
+      for (const match of other.text.matchAll(form)) {
+        const formStart = match.index
+        const formEnd = formStart + match[1]!.length
+        if (this.overlaps(other.id, formStart, formEnd)) continue
+        added.push(this.add({ item: other.id, start: formStart, end: formEnd, type, value: match[1]! }, 'form', value))
       }
     }
     this.sort()
@@ -180,7 +197,7 @@ export class Review {
     this.refreshWarningsIn(added)
     this.history.push(() => {
       this.list = this.list.filter(finding => !ids.has(finding.id))
-      this.cellIndex = undefined
+      for (const finding of added) this.byItem.set(finding.item, this.findingsIn(finding.item).filter(other => !ids.has(other.id)))
       this.refreshWarningsIn(added)
       this.restore(key, previous)
     })
@@ -195,25 +212,25 @@ export class Review {
    * decision already made for the same value applies to the new copies too.
    * Arriving findings are not a step that undo takes back.
    */
-  addDetected(cells: readonly CellDetections[]): Finding[] {
+  addDetected(results: readonly ItemDetections[]): Finding[] {
     const added: Finding[] = []
-    for (const cell of cells) {
-      // Before any new finding of this cell is added: the name model's own findings never overlap each other.
-      const existing = this.findingsIn(cell.row, cell.column)
-      const text = this.rows[cell.row]?.[cell.column] ?? ''
-      for (const found of cell.detections) {
-        for (const part of outside(text, found, existing)) added.push(this.add({ row: cell.row, column: cell.column, ...part }, 'detected'))
+    for (const { id, detections } of results) {
+      // Before any new finding of this item is added: the name model's own findings never overlap each other.
+      const existing = [...this.findingsIn(id)]
+      const text = this.textOf(id)
+      for (const found of detections) {
+        for (const part of outside(text, found, existing)) added.push(this.add({ item: id, ...part }, 'detected'))
       }
     }
     if (added.length > 0) this.sort()
     // New places can link a job title to a place, and new findings can cover a warning.
-    this.refreshWarningsIn(cells)
+    this.refreshWarningsIn(results.map(({ id }) => ({ item: id })))
     return added
   }
 
   /** Every warning, in reading order. */
   get warnings(): readonly Warning[] {
-    return [...this.warningsByCell.values()].flat().sort((a, b) => a.row - b.row || a.column - b.column || a.start - b.start)
+    return [...this.warningsByItem.values()].flat().sort((a, b) => this.orderOf(a.item) - this.orderOf(b.item) || a.start - b.start)
   }
 
   warningDecisionFor(key: string): WarningDecision | undefined {
@@ -252,7 +269,7 @@ export class Review {
   placeRemoved(warning: Warning): boolean {
     const place = warning.place
     if (!place) return false
-    return this.findingsIn(warning.row, warning.column)
+    return this.findingsIn(warning.item)
       .some(finding => finding.type === 'PLACE' && finding.start < place.end && finding.end > place.start && this.decisions.get(finding.key) !== 'keep')
   }
 
@@ -271,15 +288,15 @@ export class Review {
     return this.history.length > 0
   }
 
-  /** The cell's text as it will be exported: removed and undecided findings become placeholders. */
-  cleanedCell(row: number, column: number): string {
-    const text = this.rows[row]?.[column] ?? ''
+  /** The item's text as it will be exported: removed and undecided findings, and removed warnings, become placeholders. */
+  cleanedItem(item: string): string {
+    const text = this.textOf(item)
     // Warnings never overlap findings, so both can be replaced in one pass.
     const replaced = [
-      ...this.findingsIn(row, column)
+      ...this.findingsIn(item)
         .filter(finding => this.decisions.get(finding.key) !== 'keep')
         .map(finding => ({ start: finding.start, end: finding.end, placeholder: this.placeholderFor(finding) })),
-      ...(this.warningsByCell.get(`${row}:${column}`) ?? [])
+      ...(this.warningsByItem.get(item) ?? [])
         .filter(warning => this.warningDecisions.get(warning.key) === 'remove')
         .map(warning => ({ start: warning.start, end: warning.end, placeholder: this.placeholderForWarning(warning) })),
     ].sort((a, b) => a.start - b.start)
@@ -292,46 +309,60 @@ export class Review {
     return result + text.slice(last)
   }
 
-  private add(found: Omit<Finding, 'id' | 'key' | 'source' | 'formOf'>, source: Finding['source'], formOf?: string): Finding {
+  private add(found: Omit<Finding, 'id' | 'key' | 'source' | 'formOf' | 'unit'>, source: Finding['source'], formOf?: string): Finding {
     // A form gets its own key, so it is reviewed separately from the marked text.
     const key = formOf
       ? `${valueKey(found.type, formOf)}\u0000form\u0000${found.value.toLowerCase()}`
       : valueKey(found.type, found.value)
-    const finding: Finding = { ...found, id: this.nextId++, key, source, ...(formOf ? { formOf } : {}) }
+    const unit = this.itemsById.get(found.item)?.unit ?? ''
+    const finding: Finding = { ...found, unit, id: this.nextId++, key, source, ...(formOf ? { formOf } : {}) }
     this.placeholders.placeholderFor(finding.type, formOf ?? finding.value)
     this.list.push(finding)
+    const inItem = this.byItem.get(finding.item)
+    if (inItem) inItem.splice(this.firstEndingAfter(inItem, finding.start), 0, finding)
+    else this.byItem.set(finding.item, [finding])
     return finding
   }
 
-  private overlaps(row: number, column: number, start: number, end: number): boolean {
-    return this.list.some(finding => finding.row === row && finding.column === column && start < finding.end && end > finding.start)
+  /** The first finding, in a list sorted by start, that ends after a position: findings never overlap, so ends are sorted too. */
+  private firstEndingAfter(findings: readonly Finding[], position: number): number {
+    let low = 0
+    let high = findings.length
+    while (low < high) {
+      const middle = (low + high) >> 1
+      if (findings[middle]!.end <= position) low = middle + 1
+      else high = middle
+    }
+    return low
   }
 
-  /** Finds a cell's warnings again from its text and its findings: places link roles, and findings cover warnings. */
-  private refreshWarnings(row: number, column: number) {
-    const text = this.rows[row]?.[column] ?? ''
-    const cell = `${row}:${column}`
+  /** Whether a span overlaps a finding in the item: one binary search, however many findings the item has. */
+  private overlaps(item: string, start: number, end: number): boolean {
+    const findings = this.findingsIn(item)
+    const next = findings[this.firstEndingAfter(findings, start)]
+    return next !== undefined && next.start < end
+  }
+
+  /** Finds an item's warnings again from its text and its findings: places link roles, and findings cover warnings. */
+  private refreshWarnings(item: string) {
+    const text = this.textOf(item)
     if (!text) {
-      this.warningsByCell.delete(cell)
+      this.warningsByItem.delete(item)
       return
     }
-    const findings = this.findingsIn(row, column)
+    const findings = this.findingsIn(item)
     const places = findings.filter(finding => finding.type === 'PLACE')
+    const unit = this.itemsById.get(item)?.unit ?? ''
     const warnings: Warning[] = findIndirect(text, places)
       .filter(found => findings.every(finding => found.end <= finding.start || found.start >= finding.end))
-      .map(found => ({ ...found, row, column, key: `${row}:${column}:${found.start}:${found.end}` }))
+      .map(found => ({ ...found, item, unit, key: `${item}:${found.start}:${found.end}` }))
     for (const warning of warnings) this.placeholderForWarning(warning)
-    if (warnings.length > 0) this.warningsByCell.set(cell, warnings)
-    else this.warningsByCell.delete(cell)
+    if (warnings.length > 0) this.warningsByItem.set(item, warnings)
+    else this.warningsByItem.delete(item)
   }
 
-  private refreshWarningsIn(cells: ReadonlyArray<{ row: number, column: number }>) {
-    const seen = new Set<string>()
-    for (const { row, column } of cells) {
-      if (seen.has(`${row}:${column}`)) continue
-      seen.add(`${row}:${column}`)
-      this.refreshWarnings(row, column)
-    }
+  private refreshWarningsIn(found: ReadonlyArray<{ item: string }>) {
+    for (const item of new Set(found.map(({ item }) => item))) this.refreshWarnings(item)
   }
 
   private restoreWarning(key: string, previous: WarningDecision | undefined) {
@@ -344,21 +375,12 @@ export class Review {
     else this.decisions.delete(key)
   }
 
-  private findingsIn(row: number, column: number): readonly Finding[] {
-    if (!this.cellIndex) {
-      this.cellIndex = new Map()
-      for (const finding of this.list) {
-        const key = `${finding.row}:${finding.column}`
-        const cell = this.cellIndex.get(key)
-        if (cell) cell.push(finding)
-        else this.cellIndex.set(key, [finding])
-      }
-    }
-    return this.cellIndex.get(`${row}:${column}`) ?? []
+  /** One item's findings, in text order. */
+  findingsIn(item: string): readonly Finding[] {
+    return this.byItem.get(item) ?? []
   }
 
   private sort() {
-    this.cellIndex = undefined
-    this.list.sort((a, b) => a.row - b.row || a.column - b.column || a.start - b.start)
+    this.list.sort((a, b) => this.orderOf(a.item) - this.orderOf(b.item) || a.start - b.start)
   }
 }

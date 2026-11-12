@@ -20,7 +20,7 @@ const { t } = useI18n()
 const localePath = useLocalePath()
 const { number } = useFormat()
 const session = useSession()
-const { table, review, revision, feedbackColumn, scanColumns } = session
+const { table, review, revision, feedbackColumn, scanColumns, rowOf, itemAt } = session
 // Names and places arrive in the background; the download waits for them.
 const { busy: checkingNames } = useNameScan()
 
@@ -51,11 +51,11 @@ const finished = computed(() => counts.value.total > 0 && counts.value.left === 
 
 // One entry per distinct value, grouped by type, in order of first appearance within a type.
 const values = computed<ValueEntry[]>(() => {
-  const byKey = new Map<string, { finding: Finding, rows: Set<number> }>()
+  const byKey = new Map<string, { finding: Finding, rows: Set<string> }>()
   for (const finding of all.value) {
     const entry = byKey.get(finding.key)
-    if (entry) entry.rows.add(finding.row)
-    else byKey.set(finding.key, { finding, rows: new Set([finding.row]) })
+    if (entry) entry.rows.add(finding.unit)
+    else byKey.set(finding.key, { finding, rows: new Set([finding.unit]) })
   }
   return [...byKey.values()]
     .map(({ finding, rows }) => ({ key: finding.key, type: finding.type, finding, rows: rows.size }))
@@ -92,8 +92,9 @@ const navigable = computed<Item[]>(() => {
   const warningItems = warnings.value.map(warning => ({ kind: 'warning' as const, warning }))
   if (view.value === 'value') return [...values.value.map(entry => ({ kind: 'finding' as const, finding: entry.finding })), ...warningItems]
   const where = (item: Item) => (item.kind === 'finding' ? item.finding : item.warning)
+  const order = (item: Item) => review.value?.orderOf(where(item).item) ?? 0
   return [...all.value.map(finding => ({ kind: 'finding' as const, finding })), ...warningItems]
-    .sort((a, b) => where(a).row - where(b).row || where(a).column - where(b).column || where(a).start - where(b).start)
+    .sort((a, b) => order(a) - order(b) || where(a).start - where(b).start)
 })
 const current = computed<Item | undefined>(() => {
   if (selectedWarning.value) return { kind: 'warning', warning: selectedWarning.value }
@@ -110,8 +111,7 @@ const isPending = (item: Item) => item.kind === 'finding' ? !review.value?.decis
 const warningsByCell = computed(() => {
   const byCell = new Map<string, Warning[]>()
   for (const warning of warnings.value) {
-    const key = `${warning.row}:${warning.column}`
-    byCell.set(key, [...(byCell.get(key) ?? []), warning])
+    byCell.set(warning.item, [...(byCell.get(warning.item) ?? []), warning])
   }
   return byCell
 })
@@ -119,8 +119,7 @@ const warningsByCell = computed(() => {
 const findingsByCell = computed(() => {
   const byCell = new Map<string, Finding[]>()
   for (const finding of all.value) {
-    const key = `${finding.row}:${finding.column}`
-    byCell.set(key, [...(byCell.get(key) ?? []), finding])
+    byCell.set(finding.item, [...(byCell.get(finding.item) ?? []), finding])
   }
   return byCell
 })
@@ -130,16 +129,16 @@ const findingsByCell = computed(() => {
 const rowIndices = computed(() => {
   if (!table.value) return []
   if (!onlyWithFindings.value) return table.value.rows.map((_, index) => index)
-  return [...new Set([...all.value.map(finding => finding.row), ...warnings.value.map(warning => warning.row)])].sort((a, b) => a - b)
+  return [...new Set([...all.value.map(finding => rowOf(finding.unit)), ...warnings.value.map(warning => rowOf(warning.unit))])].sort((a, b) => a - b)
 })
 const shownRows = computed(() => rowIndices.value.slice(0, visibleCount.value))
 
 // The rows the selected value appears in, for the By value view.
 const valueRows = computed(() => {
-  if (selectedWarning.value) return [selectedWarning.value.row]
+  if (selectedWarning.value) return [rowOf(selectedWarning.value.unit)]
   const finding = selected.value
   if (!finding || !review.value) return []
-  return [...new Set((revision.value, review.value.copiesOf(finding.key)).map(copy => copy.row))]
+  return [...new Set((revision.value, review.value.copiesOf(finding.key)).map(copy => rowOf(copy.unit)))]
 })
 
 // Checked columns that hold free text, where missed names can hide; short
@@ -155,8 +154,8 @@ function cellsFor(row: number) {
   const ordered = [...scanColumns.value].sort((a, b) => Number(b === feedbackColumn.value) - Number(a === feedbackColumn.value))
   const cells = ordered.flatMap((column) => {
     const text = table.value!.rows[row]![column] ?? ''
-    const findings = findingsByCell.value.get(`${row}:${column}`) ?? []
-    const cellWarnings = warningsByCell.value.get(`${row}:${column}`) ?? []
+    const findings = findingsByCell.value.get(itemAt(row, column)) ?? []
+    const cellWarnings = warningsByCell.value.get(itemAt(row, column)) ?? []
     const show = column === feedbackColumn.value || freeTextColumns.value.has(column) || findings.length > 0 || cellWarnings.length > 0
     return show ? [{ column, text, findings, warnings: cellWarnings }] : []
   })
@@ -183,7 +182,7 @@ async function select(id: number | undefined, focus = true) {
     target = `[data-value="${ofType[index]?.finding.id}"]`
   }
   else {
-    const index = rowIndices.value.indexOf(finding.row)
+    const index = rowIndices.value.indexOf(rowOf(finding.unit))
     if (index >= visibleCount.value) visibleCount.value = index + BATCH
   }
   if (!focus) return
@@ -200,7 +199,7 @@ async function selectWarning(key: string | undefined, focus = true) {
   const warning = selectedWarning.value
   if (!warning) return
   if (view.value === 'row') {
-    const index = rowIndices.value.indexOf(warning.row)
+    const index = rowIndices.value.indexOf(rowOf(warning.unit))
     if (index >= visibleCount.value) visibleCount.value = index + BATCH
   }
   if (!focus) return
@@ -288,10 +287,10 @@ function confirmMark(type: PiiType) {
   const mark = marking.value
   if (!mark) return
   try {
-    const added = session.change(current => current.markMissed(mark.row, mark.column, mark.start, mark.end, type)) ?? []
+    const added = session.change(current => current.markMissed(itemAt(mark.row, mark.column), mark.start, mark.end, type)) ?? []
     const marked = added.filter(finding => finding.source === 'marked')
     const forms = added.length - marked.length
-    const rows = new Set(marked.map(finding => finding.row)).size
+    const rows = new Set(marked.map(finding => finding.unit)).size
     announcement.value = [
       t('review.mark.done', { type: t(`typeOne.${type}`), n: rows }, rows),
       ...(forms > 0 ? [t('review.mark.forms', { n: forms }, forms)] : []),

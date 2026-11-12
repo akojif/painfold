@@ -1,7 +1,8 @@
 import { readFileSync } from 'node:fs'
 import { utils, write } from 'xlsx'
 import { guessFeedbackColumn, suggestRoles } from '../../core/columns/roles'
-import { detectTable } from '../../core/detect/table'
+import { detectItems } from '../../core/detect/items'
+import { itemsFromTable, textItems } from '../../core/items/table'
 import { importFile } from '../../core/import'
 import { GERMAN_EXCEL_TEXT, windows1252 } from '../fixtures/german-excel'
 import { expect, test } from './fixtures'
@@ -254,8 +255,7 @@ test.describe('finding personal data', () => {
     const table = await importFile({ name: 'support-tickets.csv', bytes: sampleCsv })
     const roles = suggestRoles(table).map(suggestion => suggestion.role)
     roles[guessFeedbackColumn(table)!] = 'scan'
-    const scan = roles.flatMap((role, index) => (role === 'scan' ? [index] : []))
-    const expected = detectTable(table.rows, scan).reduce((sum, cell) => sum + cell.detections.length, 0)
+    const expected = detectItems(textItems(itemsFromTable(table, roles).items)).reduce((sum, item) => sum + item.detections.length, 0)
     expect(expected).toBeGreaterThan(0)
 
     const workers: string[] = []
