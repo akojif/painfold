@@ -1,0 +1,36 @@
+{
+  "columns": {
+    "heading": "Wählen Sie, was geprüft wird",
+    "listLabel": "Spalten",
+    "headers": {
+      "column": "Spalte",
+      "samples": "Beispielwerte",
+      "choice": "Was passiert"
+    },
+    "roleLabel": "Was mit {column} passiert",
+    "roles": {
+      "scan": "Prüfen",
+      "keep": "Unverändert",
+      "drop": "Weglassen"
+    },
+    "useAsFeedback": "{column} als Feedback-Spalte verwenden",
+    "isFeedback": "Feedback-Spalte, wird immer geprüft",
+    "empty": "Leere Spalte",
+    "summary": "Bereinigte Datei: {columns}, {checked} geprüft, {kept} unverändert, {dropped} weggelassen",
+    "columnCount": "1 Spalte | {n} Spalten",
+    "noFeedback": "Keine Spalte sieht nach Feedback aus. Markieren Sie die richtige mit dem Kreis am Anfang ihrer Zeile."
+  },
+  "preview": {
+    "heading": "Erste {n} Zeilen anzeigen",
+    "note": "Nur die Spalten, die in der bereinigten Datei bleiben.",
+    "label": "Vorschau der ersten Zeilen"
+  },
+  "find": {
+    "button": "Personenbezogene Daten in {rows} finden",
+    "progress": "Zeile {done} von {total} wird geprüft",
+    "progressLabel": "Fortschritt",
+    "failed": "Beim Prüfen der Datei ist etwas schiefgelaufen. Versuchen Sie es noch einmal oder laden Sie die Seite neu.",
+    "continue": "Weiter zur Prüfung",
+    "columnsChanged": "Ihre Spaltenauswahl hat sich geändert. Wenn Sie erneut suchen, werden Ihre Prüfentscheidungen zurückgesetzt."
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "download": {
+    "heading": "Ihre bereinigte Datei ist fertig.",
+    "removed": "Durch Platzhalter ersetzt",
+    "nothingRemoved": "Es wurde nichts gefunden oder markiert, der Text ist unverändert.",
+    "kept": "1 Treffer wurde behalten. | {n} Treffer wurden behalten.",
+    "dropped": "Weggelassen: {columns}.",
+    "unchecked": "Ohne Prüfung übernommen: {columns}.",
+    "button": "{name} herunterladen",
+    "back": "Zurück zur Prüfung",
+    "reportButton": "Bereinigungsbericht herunterladen (.txt)",
+    "next": {
+      "title": "Ihre Datei ist bereinigt.",
+      "body": "Als Nächstes in Painfold: daraus eine Rangliste der Kundenprobleme machen (kommt in v0.3).",
+      "link": "Zur Roadmap"
+    }
+  }
+}

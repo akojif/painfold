@@ -14,6 +14,7 @@
 import { readFileSync } from 'node:fs'
 import { findIndirect, type IndirectReason } from '../core/detect/indirect/index.ts'
 import type { Detection } from '../core/detect/types.ts'
+import { readMessages, type Messages } from '../i18n/messages.ts'
 import type { Lang, Score } from './eval.ts'
 
 export const INDIRECT_PATH = 'data/eval/indirect.jsonl'
@@ -83,7 +84,7 @@ if (import.meta.main) {
   const split = process.argv.includes('--test') ? 'test' : 'dev'
   const mistakes: IndirectMistake[] = []
   const scores = evaluateIndirect(readIndirect(split), mistakes)
-  const names = JSON.parse(readFileSync('i18n/locales/en.json', 'utf8')).warning.kind as Record<IndirectReason, string>
+  const names = (readMessages('en').warning as Messages).kind as Record<IndirectReason, string>
   console.log(`Split: ${split}\n`)
   console.log(indirectTable(scores, names))
   console.log(`\n${mistakes.length} mistakes`)

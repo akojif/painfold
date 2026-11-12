@@ -22,6 +22,8 @@ import type { Detection } from '../core/detect/types.ts'
 import { PII_TYPES, type PiiType } from '../core/pii-types.ts'
 import { asDetections, readStoredDetections, STORED_SETS, type StoredDetections, type StoredSet } from './name-detections.ts'
 import { NAME_MODEL } from '../deploy/model.ts'
+import { readMessages, type Messages } from '../i18n/messages.ts'
+import type { IndirectReason } from '../core/detect/indirect/index.ts'
 
 export type Lang = 'de' | 'en'
 // group and split exist only in the hand-written name set (see scripts/fake-data/names.ts).
@@ -254,14 +256,14 @@ export function withAccuracy(readme: string, tables: string): string {
 }
 
 export function currentTables(stored: StoredDetections | undefined = readStoredDetections()): string {
-  const typeNames = JSON.parse(readFileSync('i18n/locales/en.json', 'utf8')).typeMany as Record<PiiType, string>
+  const typeNames = readMessages('en').typeMany as Record<PiiType, string>
   const sets = toMarkdown(SETS.map((set) => {
     const items = itemsOf(set.stored)
     return { name: set.name, scores: evaluate(items, finderFor(set.stored, items, stored)) }
   }), typeNames)
   const test = itemsOf('names-test')
   const long = itemsOf('long-texts')
-  const kindNames = JSON.parse(readFileSync('i18n/locales/en.json', 'utf8')).warning.kind
+  const kindNames = (readMessages('en').warning as Messages).kind as Record<IndirectReason, string>
   return `${sets}\n\n${nameTables(test, finderFor('names-test', test, stored), finderFor('names-test-without-list', test, stored))}\n\n${positionTable(long, finderFor('long-texts', long, stored))}\n\n${indirectTable(evaluateIndirect(readIndirect('test')), kindNames)}`
 }
 

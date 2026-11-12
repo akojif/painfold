@@ -1,0 +1,153 @@
+{
+  "app": {
+    "name": "Painfold",
+    "tagline": "Find what hurts your customers, without exposing who they are."
+  },
+  "nav": {
+    "label": "Steps",
+    "done": "done",
+    "steps": {
+      "import": "Import",
+      "review": "Review",
+      "download": "Download"
+    },
+    "startOver": "Start over",
+    "newTab": "(opens in a new tab)"
+  },
+  "footer": {
+    "source": "Open source",
+    "roadmap": "Roadmap",
+    "credit": "Built by {name}",
+    "factsLabel": "About Painfold",
+    "noCookies": "No cookies",
+    "noAccount": "No account",
+    "accuracy": "Accuracy"
+  },
+  "types": {
+    "EMAIL": "email addresses",
+    "PHONE": "phone numbers",
+    "IBAN": "IBANs",
+    "CARD": "card numbers",
+    "SVNR": "Austrian social security numbers",
+    "VAT_ID": "VAT IDs",
+    "URL": "links",
+    "IP": "IP addresses",
+    "DATE_OF_BIRTH": "dates of birth",
+    "ADDRESS": "street addresses",
+    "POSTCODE": "postcodes",
+    "NAME": "names",
+    "PLACE": "places"
+  },
+  "file": {
+    "rows": "no rows | 1 row | {n} rows",
+    "chooseAnother": "Choose another file",
+    "sheet": "Sheet",
+    "sample": "Sample file with fake data.",
+    "ragged": "1 row had a different number of cells than the header and was filled in. | {n} rows had a different number of cells than the header and were filled in."
+  },
+  "header": {
+    "outbound": "What leaves your browser",
+    "bytes": "0 bytes | 1 byte | {n} bytes"
+  },
+  "typeOne": {
+    "EMAIL": "Email address",
+    "PHONE": "Phone number",
+    "IBAN": "IBAN",
+    "CARD": "Card number",
+    "SVNR": "Social security number",
+    "VAT_ID": "VAT ID",
+    "URL": "Link",
+    "IP": "IP address",
+    "DATE_OF_BIRTH": "Date of birth",
+    "ADDRESS": "Street address",
+    "POSTCODE": "Postcode",
+    "NAME": "Name",
+    "PLACE": "Place"
+  },
+  "typeShort": {
+    "EMAIL": "Email",
+    "PHONE": "Phone",
+    "IBAN": "IBAN",
+    "CARD": "Card",
+    "SVNR": "SV number",
+    "VAT_ID": "VAT ID",
+    "URL": "Link",
+    "IP": "IP",
+    "DATE_OF_BIRTH": "Birth date",
+    "ADDRESS": "Address",
+    "POSTCODE": "Postcode",
+    "NAME": "Name",
+    "PLACE": "Place"
+  },
+  "typeMany": {
+    "EMAIL": "Email addresses",
+    "PHONE": "Phone numbers",
+    "IBAN": "IBANs",
+    "CARD": "Card numbers",
+    "SVNR": "Social security numbers",
+    "VAT_ID": "VAT IDs",
+    "URL": "Links",
+    "IP": "IP addresses",
+    "DATE_OF_BIRTH": "Dates of birth",
+    "ADDRESS": "Street addresses",
+    "POSTCODE": "Postcodes",
+    "NAME": "Names",
+    "PLACE": "Places"
+  },
+  "theme": {
+    "label": "Theme",
+    "system": "Use the system setting",
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "typeManyLower": {
+    "EMAIL": "email addresses",
+    "PHONE": "phone numbers",
+    "IBAN": "IBANs",
+    "CARD": "card numbers",
+    "SVNR": "SV-Nummern",
+    "VAT_ID": "VAT IDs",
+    "URL": "links",
+    "IP": "IP addresses",
+    "DATE_OF_BIRTH": "dates of birth",
+    "ADDRESS": "addresses",
+    "POSTCODE": "postcodes",
+    "NAME": "names",
+    "PLACE": "places"
+  },
+  "typeOneLower": {
+    "EMAIL": "email address",
+    "PHONE": "phone number",
+    "IBAN": "IBAN",
+    "CARD": "card number",
+    "SVNR": "SV-Nummer",
+    "VAT_ID": "VAT ID",
+    "URL": "link",
+    "IP": "IP address",
+    "DATE_OF_BIRTH": "date of birth",
+    "ADDRESS": "address",
+    "POSTCODE": "postcode",
+    "NAME": "name",
+    "PLACE": "place"
+  },
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "de": "German"
+  },
+  "discard": {
+    "title": "Start over?",
+    "body": "Your file and your review decisions will be cleared. Nothing was uploaded, so nothing is kept anywhere else.",
+    "confirm": "Start over",
+    "cancel": "Keep working"
+  },
+  "resetReview": {
+    "title": "Reset your review?",
+    "body": "Personal data is found again with the new column choices, and your review decisions are cleared.",
+    "confirm": "Find again",
+    "cancel": "Keep working"
+  },
+  "toast": {
+    "close": "Close"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "download": {
+    "heading": "Your cleaned file is ready.",
+    "removed": "Replaced with placeholders",
+    "nothingRemoved": "Nothing was found or marked, so the text is unchanged.",
+    "kept": "1 finding was kept. | {n} findings were kept.",
+    "dropped": "Left out: {columns}.",
+    "unchecked": "Copied without checking: {columns}.",
+    "button": "Download {name}",
+    "back": "Back to review",
+    "reportButton": "Download cleaning report (.txt)",
+    "next": {
+      "title": "Your file is clean.",
+      "body": "Next in Painfold: turn it into ranked customer pains (coming in v0.3).",
+      "link": "See the roadmap"
+    }
+  }
+}

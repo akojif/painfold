@@ -1,0 +1,36 @@
+{
+  "columns": {
+    "heading": "Choose what to check",
+    "listLabel": "Columns",
+    "headers": {
+      "column": "Column",
+      "samples": "Sample values",
+      "choice": "What happens"
+    },
+    "roleLabel": "What happens to {column}",
+    "roles": {
+      "scan": "Check",
+      "keep": "Keep as is",
+      "drop": "Drop"
+    },
+    "useAsFeedback": "Use {column} as the feedback column",
+    "isFeedback": "Feedback column, always checked",
+    "empty": "Empty column",
+    "summary": "Cleaned file: {columns}, {checked} checked, {kept} kept as is, {dropped} dropped",
+    "columnCount": "1 column | {n} columns",
+    "noFeedback": "No column looks like feedback. Mark the one that holds it with the circle at the start of its row."
+  },
+  "preview": {
+    "heading": "Show first {n} rows",
+    "note": "Only the columns that stay in the cleaned file.",
+    "label": "Preview of the first rows"
+  },
+  "find": {
+    "button": "Find personal data in {rows}",
+    "progress": "Checking row {done} of {total}",
+    "progressLabel": "Progress",
+    "failed": "Something went wrong while checking the file. Try again, or reload the page.",
+    "continue": "Continue to review",
+    "columnsChanged": "Your column choices changed. Finding personal data again resets your review decisions."
+  }
+}
