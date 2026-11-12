@@ -2,7 +2,7 @@
 
 All notable changes to Painfold. Versions follow the stages in [ROADMAP.md](ROADMAP.md).
 
-## 0.2.0: Names (unreleased)
+## 0.2.0: Names (2026-11-12)
 
 Names and places are found too, with a model that runs in your browser, and the interface is in English and German. Nothing is uploaded.
 
@@ -35,6 +35,7 @@ Names and places are found too, with a model that runs in your browser, and the 
 - Lowercase nicknames that are not on the first-name list, names at the very start of a sentence without a greeting, some multi-part names and particles ("Saif ur Rehman"), and small towns can be missed; see the known gaps.
 - Names are not checked on small screens, where the model is not offered.
 - Warnings for indirect identifiers (job title plus small town, exact ages, rare roles) follow in v0.2.1.
+- The German interface has not been reviewed by a native speaker yet; that review follows in v0.2.1.
 
 ## 0.1.0: Clean (2026-11-09)
 

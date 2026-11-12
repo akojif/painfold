@@ -38,11 +38,11 @@ Done when:
 
 Scope:
 - Name and place detection with a model that runs in the browser (downloaded once from Painfold's own site, kept in the browser, removable). Names are found in the background while rule findings are reviewed.
-- An interface in English and German, with German reviewed by a native speaker before release.
+- An interface in English and German.
 - An Accuracy page showing how well each data type is detected.
 - On a phone, the start screen explains Painfold and invites you to continue on a larger screen; the full flow still works there for anyone who wants it (#60).
 
-Follows in v0.2.1: warnings for indirect identifiers, such as a job title together with a small town, exact ages and rare roles (#66).
+Follows in v0.2.1: warnings for indirect identifiers, such as a job title together with a small town, exact ages and rare roles (#66), and a native-speaker review of the German interface (#110).
 
 Done when:
 - Name recall on the evaluation set is published and at least 0.90 for every name-origin group, counting a name as caught when it is removed, whatever type it is labelled. Measured in the browser, on a test split never used for tuning.
