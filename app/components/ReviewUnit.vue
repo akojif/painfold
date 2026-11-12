@@ -1,9 +1,13 @@
 <script setup lang="ts">
+import type { Place } from '~~/core/items/types'
 import type { Finding, Warning } from '~~/core/review/review'
 
+// One unit of the file (a table row today) with its items: the feedback text
+// first, then other items that hold text or a finding, each with its label
+// when there is more than one.
 const props = defineProps<{
-  row: number
-  cells: { column: number, label?: string, text: string, findings: Finding[], warnings: Warning[] }[]
+  place: Place
+  items: { id: string, label?: string, text: string, findings: Finding[], warnings: Warning[] }[]
   selectedId?: number
   selectedWarningKey?: string
   motions: ReadonlyMap<string, RemovalMotion>
@@ -13,7 +17,7 @@ const { review, revision } = useSession()
 
 type Piece = { kind: 'text', start: number, text: string } | { kind: 'finding', finding: Finding } | { kind: 'warning', warning: Warning }
 
-/** The cell's text cut at its findings and warnings, which never overlap. */
+/** The item's text cut at its findings and warnings, which never overlap. */
 function pieces(text: string, findings: Finding[], warnings: Warning[]): Piece[] {
   const marks: Piece[] = [
     ...findings.map(finding => ({ kind: 'finding' as const, finding })),
@@ -39,9 +43,9 @@ function spanOf(piece: Piece): { start: number, end: number } {
 
 const pieceKey = (piece: Piece) => piece.kind === 'text' ? `t${piece.start}` : piece.kind === 'finding' ? `f${piece.finding.id}` : `w${piece.warning.key}`
 
-const isCurrent = computed(() => props.cells.some(cell => cell.findings.some(finding => finding.id === props.selectedId) || cell.warnings.some(warning => warning.key === props.selectedWarningKey)))
-const hasFindings = computed(() => props.cells.some(cell => cell.findings.length > 0 || cell.warnings.length > 0))
-// Read the revision so decisions re-render this row.
+const isCurrent = computed(() => props.items.some(item => item.findings.some(finding => finding.id === props.selectedId) || item.warnings.some(warning => warning.key === props.selectedWarningKey)))
+const hasFindings = computed(() => props.items.some(item => item.findings.length > 0 || item.warnings.length > 0))
+// Read the revision so decisions re-render this unit.
 const decisionFor = (finding: Finding) => (revision.value, review.value?.decisionFor(finding.key))
 const warningDecisionFor = (warning: Warning) => (revision.value, review.value?.warningDecisionFor(warning.key))
 </script>
@@ -51,27 +55,26 @@ const warningDecisionFor = (warning: Warning) => (revision.value, review.value?.
     <span
       class="pt-px font-mono text-xs tabular-nums"
       :class="isCurrent ? 'text-fg' : 'text-fg-muted'"
-    >{{ $t('review.row', { n: row + 1 }) }}</span>
+    >{{ $t('review.row', { n: place.number }) }}</span>
     <div class="max-w-measure space-y-2">
       <div
-        v-for="cell in cells"
-        :key="cell.column"
+        v-for="item in items"
+        :key="item.id"
       >
         <p
-          v-if="cell.label"
+          v-if="item.label"
           class="text-xs text-fg-muted"
         >
-          {{ cell.label }}
+          {{ item.label }}
         </p>
         <p class="break-words whitespace-pre-wrap">
           <template
-            v-for="piece in pieces(cell.text, cell.findings, cell.warnings)"
+            v-for="piece in pieces(item.text, item.findings, item.warnings)"
             :key="pieceKey(piece)"
           >
             <span
               v-if="piece.kind === 'text'"
-              :data-row="row"
-              :data-column="cell.column"
+              :data-item="item.id"
               :data-offset="piece.start"
             >{{ piece.text }}</span>
             <WarningMark

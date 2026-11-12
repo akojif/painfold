@@ -105,7 +105,7 @@
   },
   "warning": {
     "heading": "Könnte jemanden erkennbar machen",
-    "title": "Könnte jemanden erkennbar machen, Zeile {row}",
+    "title": "Könnte jemanden erkennbar machen, Zeile {n}",
     "kind": {
       "age": "Genaues Alter",
       "only": "„Die einzige …“",
@@ -135,7 +135,7 @@
       "dismiss": "behalten"
     },
     "markLabel": "Könnte jemanden erkennbar machen: {kind}, {state}: {text}",
-    "valueLabel": "Könnte jemanden erkennbar machen: {kind}, Zeile {row}, {state}: {text}",
+    "valueLabel": "Könnte jemanden erkennbar machen: {kind}, Zeile {n}, {state}: {text}",
     "toCheck": "1 Hinweis zu prüfen | {n} Hinweise zu prüfen",
     "removeAllLabel": "Den noch nicht geprüften Hinweis entfernen | Alle {n} noch nicht geprüften Hinweise entfernen",
     "announce": {

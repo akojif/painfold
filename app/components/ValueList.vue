@@ -7,7 +7,7 @@ const props = defineProps<{ groups: ValueGroup[], warnings: readonly Warning[], 
 const emit = defineEmits<{ select: [id: number], removeType: [type: PiiType], showMore: [type: PiiType], selectWarning: [key: string], removeWarnings: [] }>()
 const { t } = useI18n()
 const { number } = useFormat()
-const { review, revision, rowOf } = useSession()
+const { review, revision, placeOfUnit } = useSession()
 
 // Read the revision so decisions re-render the list.
 const decisionFor = (key: string) => (revision.value, review.value?.decisionFor(key))
@@ -15,7 +15,7 @@ const warningDecisionFor = (key: string) => (revision.value, review.value?.warni
 const openWarnings = computed(() => (revision.value, props.warnings.filter(warning => !review.value?.warningDecisionFor(warning.key)).length))
 const warningLabel = (warning: Warning) => t('warning.valueLabel', {
   kind: t(`warning.kind.${warning.reason}`),
-  row: rowOf(warning.unit) + 1,
+  n: placeOfUnit(warning.unit).number,
   state: t(`warning.state.${warningDecisionFor(warning.key) ?? 'pending'}`),
   text: warningDecisionFor(warning.key) === 'remove' ? review.value!.placeholderForWarning(warning) : warning.value,
 })
@@ -89,7 +89,7 @@ const label = (entry: ValueEntry) => t('review.valueLabel', {
             </span>
             <span class="flex shrink-0 items-center gap-2 text-xs text-fg-muted">
               <span v-if="decisionFor(entry.key) === 'keep'">{{ $t('review.keptTag') }}</span>
-              <span class="font-mono tabular-nums">{{ number(entry.rows) }}</span>
+              <span class="font-mono tabular-nums">{{ number(entry.units) }}</span>
             </span>
           </button>
         </li>

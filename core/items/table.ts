@@ -29,10 +29,26 @@ export function sheetIndexOf(table: { sheetNames?: readonly string[], sheetName?
 export const cellId = (row: number, column: number, sheet = 0) => `cell:${sheet}:${row}:${column}`
 export const rowId = (row: number, sheet = 0) => `row:${sheet}:${row}`
 
-/** The checked cells as items and the rows as units with their kept values as attributes. */
-export function itemsFromTable(table: TableInput, roles: readonly ColumnRole[]): ItemSet {
+// A checked column whose filled cells average at least this many characters
+// is free text, where missed names can hide, so the review always shows it.
+const FREE_TEXT_AVERAGE = 20
+
+function displayOf(table: TableInput, column: number, feedbackColumn: number | undefined): Item['display'] {
+  if (column === feedbackColumn) return 'main'
+  const filled = table.rows.map(row => row[column]?.trim() ?? '').filter(Boolean)
+  const average = filled.reduce((sum, text) => sum + text.length, 0) / Math.max(1, filled.length)
+  return filled.length > 0 && average >= FREE_TEXT_AVERAGE ? 'text' : 'short'
+}
+
+/**
+ * The checked cells as items and the rows as units with their kept values as
+ * attributes. Each item is labelled with its column's name; the feedback
+ * column, if given, is the main item of its row.
+ */
+export function itemsFromTable(table: TableInput, roles: readonly ColumnRole[], options: { feedbackColumn?: number } = {}): ItemSet {
   const sheet = table.sheetIndex ?? 0
   const checked = table.columns.flatMap((_, column) => (roles[column] === 'scan' ? [column] : []))
+  const display = new Map(checked.map(column => [column, displayOf(table, column, options.feedbackColumn)]))
   const kept = table.columns.flatMap((_, column) => (roles[column] === 'keep' ? [column] : []))
   const items: Item[] = []
   const units: Unit[] = []
@@ -45,7 +61,7 @@ export function itemsFromTable(table: TableInput, roles: readonly ColumnRole[]):
     }
     units.push({ id: unit, source: { kind: 'row', sheet, row }, attributes })
     for (const column of checked) {
-      items.push({ id: cellId(row, column, sheet), text: cells[column] ?? '', source: { kind: 'cell', sheet, row, column }, unit })
+      items.push({ id: cellId(row, column, sheet), text: cells[column] ?? '', source: { kind: 'cell', sheet, row, column }, unit, label: table.columns[column]!, display: display.get(column)! })
     }
   }
   return { items, units }

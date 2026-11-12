@@ -1,6 +1,6 @@
 {
   "review": {
-    "heading": "{findings} in {rows}",
+    "heading": "{findings} in {units}",
     "findings": "Keine Treffer | 1 Treffer | {n} Treffer",
     "progress": "{reviewed} geprüft, {left} offen",
     "progressLabel": "Geprüft",
@@ -15,7 +15,7 @@
     },
     "markLabel": "{type}, {state}: {text}",
     "note": {
-      "title": "{type}, Zeile {row}",
+      "title": "{type}, Zeile {n}",
       "copies": "Kommt in 1 Zeile vor. Beim Entfernen wird der Wert durch {placeholder} ersetzt. | Kommt in {n} Zeilen vor. Beim Entfernen wird jedes Vorkommen durch {placeholder} ersetzt.",
       "removed": "In jedem Vorkommen entfernt.",
       "kept": "In jedem Vorkommen behalten.",

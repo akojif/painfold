@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { PII_TYPES, type PiiType } from '~~/core/pii-types'
 import { OverlapError, type Decision, type Finding, type Warning } from '~~/core/review/review'
-import type { CellSelection } from '~/utils/selection'
+import type { ItemSelection } from '~/utils/selection'
 import type { ValueEntry, ValueGroup } from '~/utils/value-list'
 
 definePageMeta({
@@ -20,7 +20,7 @@ const { t } = useI18n()
 const localePath = useLocalePath()
 const { number } = useFormat()
 const session = useSession()
-const { table, review, revision, feedbackColumn, scanColumns, rowOf, itemAt } = session
+const { table, review, items, revision, placeOfUnit, itemsOfUnit } = session
 // Names and places arrive in the background; the download waits for them.
 const { busy: checkingNames } = useNameScan()
 
@@ -31,7 +31,7 @@ const selectedId = ref<number>()
 // A warning is selected by its key; selecting one clears the selected finding and the other way round.
 const selectedWarningKey = ref<string>()
 const motions = shallowRef<ReadonlyMap<string, RemovalMotion>>(new Map())
-const marking = ref<CellSelection & { text: string }>()
+const marking = ref<ItemSelection & { text: string }>()
 const problem = ref<string>()
 const announcement = ref('')
 const visibleCount = ref(BATCH)
@@ -51,14 +51,14 @@ const finished = computed(() => counts.value.total > 0 && counts.value.left === 
 
 // One entry per distinct value, grouped by type, in order of first appearance within a type.
 const values = computed<ValueEntry[]>(() => {
-  const byKey = new Map<string, { finding: Finding, rows: Set<string> }>()
+  const byKey = new Map<string, { finding: Finding, units: Set<string> }>()
   for (const finding of all.value) {
     const entry = byKey.get(finding.key)
-    if (entry) entry.rows.add(finding.unit)
-    else byKey.set(finding.key, { finding, rows: new Set([finding.unit]) })
+    if (entry) entry.units.add(finding.unit)
+    else byKey.set(finding.key, { finding, units: new Set([finding.unit]) })
   }
   return [...byKey.values()]
-    .map(({ finding, rows }) => ({ key: finding.key, type: finding.type, finding, rows: rows.size }))
+    .map(({ finding, units }) => ({ key: finding.key, type: finding.type, finding, units: units.size }))
     .sort((a, b) => PII_TYPES.indexOf(a.type) - PII_TYPES.indexOf(b.type))
 })
 const valuesByType = computed(() => {
@@ -108,7 +108,7 @@ const position = (item?: Item) => navigable.value.findIndex((other) => {
 })
 const isPending = (item: Item) => item.kind === 'finding' ? !review.value?.decisionFor(item.finding.key) : !review.value?.warningDecisionFor(item.warning.key)
 
-const warningsByCell = computed(() => {
+const warningsByItem = computed(() => {
   const byCell = new Map<string, Warning[]>()
   for (const warning of warnings.value) {
     byCell.set(warning.item, [...(byCell.get(warning.item) ?? []), warning])
@@ -116,7 +116,7 @@ const warningsByCell = computed(() => {
   return byCell
 })
 
-const findingsByCell = computed(() => {
+const findingsByItem = computed(() => {
   const byCell = new Map<string, Finding[]>()
   for (const finding of all.value) {
     byCell.set(finding.item, [...(byCell.get(finding.item) ?? []), finding])
@@ -124,47 +124,47 @@ const findingsByCell = computed(() => {
   return byCell
 })
 
-// Every row is shown by default: names can still be missed (and are not found
-// at all without the name model), and rows without findings are where they hide.
-const rowIndices = computed(() => {
-  if (!table.value) return []
-  if (!onlyWithFindings.value) return table.value.rows.map((_, index) => index)
-  return [...new Set([...all.value.map(finding => rowOf(finding.unit)), ...warnings.value.map(warning => rowOf(warning.unit))])].sort((a, b) => a - b)
+// Every unit (row) is shown by default: names can still be missed (and are
+// not found at all without the name model), and units without findings are
+// where they hide.
+const unitIds = computed(() => {
+  const everyUnit = items.value?.units.map(unit => unit.id) ?? []
+  if (!onlyWithFindings.value) return everyUnit
+  const marked = new Set([...all.value.map(finding => finding.unit), ...warnings.value.map(warning => warning.unit)])
+  return everyUnit.filter(unit => marked.has(unit))
 })
-const shownRows = computed(() => rowIndices.value.slice(0, visibleCount.value))
+const shownUnits = computed(() => unitIds.value.slice(0, visibleCount.value))
 
-// The rows the selected value appears in, for the By value view.
-const valueRows = computed(() => {
-  if (selectedWarning.value) return [rowOf(selectedWarning.value.unit)]
+// The units the selected value appears in, for the By value view.
+const valueUnits = computed(() => {
+  if (selectedWarning.value) return [selectedWarning.value.unit]
   const finding = selected.value
   if (!finding || !review.value) return []
-  return [...new Set((revision.value, review.value.copiesOf(finding.key)).map(copy => rowOf(copy.unit)))]
+  return [...new Set((revision.value, review.value.copiesOf(finding.key)).map(copy => copy.unit))]
 })
 
-// Checked columns that hold free text, where missed names can hide; short
-// columns such as channel or plan only show where they have a finding.
-const FREE_TEXT_AVERAGE = 20
-const freeTextColumns = computed(() => new Set(scanColumns.value.filter((column) => {
-  const filled = table.value?.rows.map(row => row[column]?.trim() ?? '').filter(Boolean) ?? []
-  return filled.length > 0 && filled.reduce((sum, text) => sum + text.length, 0) / filled.length >= FREE_TEXT_AVERAGE
-})))
-
-/** The checked cells of a row worth showing: the feedback column, other free-text columns, and any cell with a finding. */
-function cellsFor(row: number) {
-  const ordered = [...scanColumns.value].sort((a, b) => Number(b === feedbackColumn.value) - Number(a === feedbackColumn.value))
-  const cells = ordered.flatMap((column) => {
-    const text = table.value!.rows[row]![column] ?? ''
-    const findings = findingsByCell.value.get(itemAt(row, column)) ?? []
-    const cellWarnings = warningsByCell.value.get(itemAt(row, column)) ?? []
-    const show = column === feedbackColumn.value || freeTextColumns.value.has(column) || findings.length > 0 || cellWarnings.length > 0
-    return show ? [{ column, text, findings, warnings: cellWarnings }] : []
-  })
-  return cells.map(cell => ({ ...cell, label: cells.length > 1 || cell.column !== feedbackColumn.value ? table.value!.columns[cell.column] : undefined }))
+/**
+ * The items of a unit worth showing: the feedback text first, other free
+ * text, and any item with a finding or warning. Labels show when there is
+ * more than one, or when the one shown is not the feedback text.
+ */
+function itemsFor(unit: string) {
+  const shown = [...itemsOfUnit(unit)]
+    .sort((a, b) => Number(b.display === 'main') - Number(a.display === 'main'))
+    .map(item => ({ item, findings: findingsByItem.value.get(item.id) ?? [], warnings: warningsByItem.value.get(item.id) ?? [] }))
+    .filter(({ item, findings, warnings }) => item.display !== 'short' || findings.length > 0 || warnings.length > 0)
+  return shown.map(({ item, findings, warnings }) => ({
+    id: item.id,
+    text: item.text,
+    findings,
+    warnings,
+    label: shown.length > 1 || item.display !== 'main' ? item.label : undefined,
+  }))
 }
 
 const heading = computed(() => t('review.heading', {
   findings: t('review.findings', { n: number(counts.value.total) }, counts.value.total),
-  rows: t('file.rows', { n: number(table.value?.rows.length ?? 0) }, table.value?.rows.length ?? 0),
+  units: t('file.rows', { n: number(items.value?.units.length ?? 0) }, items.value?.units.length ?? 0),
 }))
 const progress = computed(() => (counts.value.total === 0 ? 1 : counts.value.reviewed / counts.value.total))
 
@@ -182,7 +182,7 @@ async function select(id: number | undefined, focus = true) {
     target = `[data-value="${ofType[index]?.finding.id}"]`
   }
   else {
-    const index = rowIndices.value.indexOf(rowOf(finding.unit))
+    const index = unitIds.value.indexOf(finding.unit)
     if (index >= visibleCount.value) visibleCount.value = index + BATCH
   }
   if (!focus) return
@@ -199,7 +199,7 @@ async function selectWarning(key: string | undefined, focus = true) {
   const warning = selectedWarning.value
   if (!warning) return
   if (view.value === 'row') {
-    const index = rowIndices.value.indexOf(rowOf(warning.unit))
+    const index = unitIds.value.indexOf(warning.unit)
     if (index >= visibleCount.value) visibleCount.value = index + BATCH
   }
   if (!focus) return
@@ -274,25 +274,25 @@ function removeLeft(type?: PiiType) {
 }
 
 function startMark() {
-  const range = selectedCellRange(window.getSelection(), (row, column) => table.value?.rows[row]?.[column] ?? '')
+  const range = selectedItemRange(window.getSelection(), item => review.value?.textOf(item) ?? '')
   if (typeof range === 'string') {
     problem.value = t(`review.mark.${range}`)
     return
   }
   problem.value = undefined
-  marking.value = { ...range, text: table.value!.rows[range.row]![range.column]!.slice(range.start, range.end) }
+  marking.value = { ...range, text: review.value!.textOf(range.item).slice(range.start, range.end) }
 }
 
 function confirmMark(type: PiiType) {
   const mark = marking.value
   if (!mark) return
   try {
-    const added = session.change(current => current.markMissed(itemAt(mark.row, mark.column), mark.start, mark.end, type)) ?? []
+    const added = session.change(current => current.markMissed(mark.item, mark.start, mark.end, type)) ?? []
     const marked = added.filter(finding => finding.source === 'marked')
     const forms = added.length - marked.length
-    const rows = new Set(marked.map(finding => finding.unit)).size
+    const units = new Set(marked.map(finding => finding.unit)).size
     announcement.value = [
-      t('review.mark.done', { type: t(`typeOne.${type}`), n: rows }, rows),
+      t('review.mark.done', { type: t(`typeOne.${type}`), n: units }, units),
       ...(forms > 0 ? [t('review.mark.forms', { n: forms }, forms)] : []),
     ].join(' ')
     window.getSelection()?.removeAllRanges()
@@ -535,14 +535,14 @@ onBeforeUnmount(() => {
             @cancel-mark="marking = undefined"
           />
           <ol
-            v-if="valueRows.length > 0"
+            v-if="valueUnits.length > 0"
             class="mt-6 border-t border-line"
           >
-            <ReviewRow
-              v-for="row in valueRows.slice(0, SNIPPETS)"
-              :key="row"
-              :row="row"
-              :cells="cellsFor(row)"
+            <ReviewUnit
+              v-for="unit in valueUnits.slice(0, SNIPPETS)"
+              :key="unit"
+              :place="placeOfUnit(unit)"
+              :items="itemsFor(unit)"
               :selected-id="selectedId"
               :selected-warning-key="selectedWarningKey"
               :motions="motions"
@@ -551,10 +551,10 @@ onBeforeUnmount(() => {
             />
           </ol>
           <p
-            v-if="valueRows.length > SNIPPETS"
+            v-if="valueUnits.length > SNIPPETS"
             class="mt-2 text-sm text-fg-muted"
           >
-            {{ $t('review.moreRows', { n: number(valueRows.length - SNIPPETS) }, valueRows.length - SNIPPETS) }}
+            {{ $t('review.moreRows', { n: number(valueUnits.length - SNIPPETS) }, valueUnits.length - SNIPPETS) }}
           </p>
         </div>
       </div>
@@ -567,12 +567,12 @@ onBeforeUnmount(() => {
         class="mt-2 grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_18rem]"
       >
         <div>
-          <ol v-if="shownRows.length > 0">
-            <ReviewRow
-              v-for="row in shownRows"
-              :key="row"
-              :row="row"
-              :cells="cellsFor(row)"
+          <ol v-if="shownUnits.length > 0">
+            <ReviewUnit
+              v-for="unit in shownUnits"
+              :key="unit"
+              :place="placeOfUnit(unit)"
+              :items="itemsFor(unit)"
               :selected-id="selectedId"
               :selected-warning-key="selectedWarningKey"
               :motions="motions"
@@ -587,7 +587,7 @@ onBeforeUnmount(() => {
             {{ $t('review.noRows') }}
           </p>
           <div
-            v-if="shownRows.length < rowIndices.length"
+            v-if="shownUnits.length < unitIds.length"
             ref="sentinel"
             class="h-px"
           />

@@ -25,6 +25,14 @@ export type Item = {
   source: Source
   /** The unit it belongs to. */
   unit: string
+  /** What it is within its unit, for the interface: a column name today, a speaker later. */
+  label?: string
+  /**
+   * How the review shows it: main is the feedback itself (shown first),
+   * text is other free text (always shown, where missed names can hide),
+   * short is a short value such as a channel or plan (shown only with a finding).
+   */
+  display: 'main' | 'text' | 'short'
 }
 
 /**
@@ -37,6 +45,21 @@ export type Unit = {
   id: string
   source: Source
   attributes: Record<string, string>
+}
+
+/** Where a unit is, for the interface ("Row 17"); numbers count from 1. */
+export type Place = { kind: 'row', number: number } | { kind: 'turn', number: number } | { kind: 'paragraph', number: number, page?: number }
+
+export function placeOf(source: Source): Place {
+  switch (source.kind) {
+    case 'cell':
+    case 'row':
+      return { kind: 'row', number: source.row + 1 }
+    case 'turn':
+      return { kind: 'turn', number: source.index + 1 }
+    case 'paragraph':
+      return { kind: 'paragraph', number: source.index + 1, ...(source.page === undefined ? {} : { page: source.page }) }
+  }
 }
 
 /** A file read as items, in reading order, and the units that group them. */
