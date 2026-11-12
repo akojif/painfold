@@ -22,6 +22,7 @@
     "postinstall": "nuxt prepare",
     "licenses": "license-checker-rseidelsohn --excludePrivatePackages --excludePackages \"tosource@2.0.0-alpha.3\" --excludePackagesStartingWith \"@img/sharp-libvips-\" --onlyAllow \"MIT;Apache-2.0;ISC;BSD-2-Clause;BSD-3-Clause;0BSD;BlueOak-1.0.0;CC0-1.0;Python-2.0;MPL-2.0;CC-BY-4.0;CC-BY-3.0\" --summary",
     "models": "node scripts/fetch-model.ts",
+    "check:providers": "node scripts/check-providers.ts",
     "models:upload": "node scripts/upload-model.ts",
     "test:model": "vitest run --config vitest.model.config.ts",
     "eval:names": "node scripts/eval-names.ts",
