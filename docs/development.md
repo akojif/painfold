@@ -157,6 +157,7 @@ The site runs on Cloudflare (Workers with static assets); until v0.2.0 it ran on
 - `PAINFOLD_URL` runs two tests at a time: every model test downloads 152 MB from the deployed site.
 - Cloudflare compresses some files, such as the ONNX Runtime WebAssembly file, and then sends no `Content-Length`. The app counts the bytes it receives, so download progress is unaffected.
 - Unknown addresses get the 404 page with status 404. Page addresses end in a slash, and `/accuracy` redirects to `/accuracy/` (`html_handling: auto-trailing-slash`; see Addresses). The build removes Nuxt's `200.html` single-page fallback (`scripts/remove-spa-fallback.ts`), which hosts would otherwise serve for every unknown path with status 200; every page is prerendered, so it is not needed.
+- Rollback: Cloudflare keeps every deployed version. To go back, open painfold in the dashboard (Workers & Pages, Deployments) and roll back to an earlier version, or run `npx wrangler rollback <version-id>` (`npx wrangler deployments list` shows them). Static files, headers and the Worker go back together; model files in R2 are never replaced (each revision has its own path), so an older version still finds its model. If a redirect rule is the problem, switch it off under Rules, Redirect Rules; that takes effect at once.
 - Any static host works the same way: serve `.output/public` with the headers from `headersFor()`, and the model from the same origin.
 
 ## Dependency updates
