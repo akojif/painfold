@@ -11,6 +11,8 @@ Detection is measured on the evaluation set in [data/eval/](../data/README.md), 
 - **Hand-written long texts:** 8 German and English support messages of 5,000 to 6,000 characters (about 1,200 to 1,400 model tokens), each with a name near the start, one in the middle and one in the last sentence. The name model reads at most 512 tokens at a time, so long texts are checked in overlapping chunks; this set shows that names are found wherever they are. It was written after the name rules were tuned and is only reported.
 - **Hand-written names:** 286 German and English sentences with invented names typical of communities living in Austria, because names in Austrian feedback come from many backgrounds, not only German and English ones. They include real diacritics (ć, š, ž, ğ, ı, ș, ő, ł), variant transliterations (Mohammed, Muhammad, Mohamad, Mohammad), multi-part and particle names (Abdul Rahman, Al-Hassan, van der Berg), possessives and lowercase chat names. Name recall is also reported per name-origin group, with the same target for every group. The group exists only in the evaluation data; Painfold never infers anyone's origin. A dev split (3 sentences per group, plus 26 look-alikes such as "Hallo Team" or "Liebe Grüße") was used to tune the name rules; only the test split (19 sentences, 25 names per group, written before any tuning) is reported. The test sentences were written by the same author as the tuning, but the test split was run only once, after tuning, and never used to tune. The generated set and the hard cases were measured with the name model once, after tuning, and were not used to tune it either.
 
+- **Hand-written indirect identifiers:** 80 short German and English messages ([data/eval/indirect.jsonl](../data/eval/indirect.jsonl)) for the warnings about text that could identify someone: exact ages, "the only …", job titles with a place and unique roles, plus traps that must not warn (durations, versions, order numbers, the age of things, "the only problem", a role mentioned in passing, a job title in a large city). The places in each text are given, as the name model would find them, so the numbers measure the warning rules, not the model. A dev split (40 messages) was used to tune the rules; the test split (40 messages, 23 warnings, written before any tuning) was run once, after tuning, and is what is reported. These are warnings, never removed on their own, so a miss means a reviewer is not pointed at the text, and a wrong warning costs one key press.
+
 How it is counted:
 
 - **Recall:** the share of labelled values that detections of the same type cover completely. A value that is only partly removed counts as missed.
@@ -18,6 +20,8 @@ How it is counted:
 - **Removed by any type:** the share of labelled values that are fully removed by any detection. This is what matters for the cleaned file; an IBAN caught as something else is still removed.
 - **For names, three columns:** removal recall (the name is removed, whatever type it got: a name labelled as a place is still protected), type-correct recall (removed and labelled as a name), and removal recall without the first-name list. The first-name list is used only right after a greeting, title, thank-you, sign-off or introduction ("hi anna", "LG Markus"), so the last column shows how much the names depend on it.
 - Where a name or place overlaps a rule finding, the rule finding wins and only the rest of the name or place is kept, as in the review: a street name inside an address counts as the address, not as a place.
+
+For the warnings, a labelled warning counts as found when a warning of the same kind of placeholder (age or role) covers part of it, and a warning counts as correct when it covers part of a labelled one.
 
 The hard cases have only a few values per type and language, so one miss moves a number a lot: read them together with the list of known gaps below. The Stage 2 target is name removal recall of at least 0.90 in German and in English, and for every name-origin group. With 25 test names per group, two misses still meet the target (0.92) and three do not (0.88). The target is met with the first-name list; without it, four groups would be below it.
 
@@ -113,6 +117,15 @@ The hard cases have only a few values per type and language, so one miss moves a
 | Start | 1.00 | 4 | 1.00 | 4 |
 | Middle | 1.00 | 4 | 1.00 | 4 |
 | End | 1.00 | 4 | 1.00 | 4 |
+
+**Could identify someone (indirect identifiers, test split)**
+
+| Kind | DE recall | DE precision | DE warnings | EN recall | EN precision | EN warnings |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Exact age | 1.00 | 1.00 | 5 | 1.00 | 1.00 | 4 |
+| “The only …” | 1.00 | 1.00 | 2 | 1.00 | 1.00 | 2 |
+| Job title with a place | 1.00 | 1.00 | 2 | 1.00 | 1.00 | 2 |
+| Role held by one person | 1.00 | 1.00 | 3 | 1.00 | 1.00 | 3 |
 <!-- accuracy:end -->
 
 ## Known gaps
@@ -122,6 +135,13 @@ From the hand-written cases:
 - Document numbers written like an SV-Nummer with a dash, whose second part looks like a date and happens to pass the check digit (`Vorgang 2024-010106`), are removed as SV-Nummern. Most are left alone: a dash form needs a date-like second part, and order, invoice and customer words before the number rule it out.
 - Email addresses spelled out to fool spam filters (`name AT example DOT net`).
 - English addresses that start with a flat number (`Flat 2, 14 Market Street`).
+
+Warnings for indirect identifiers. The test split scores 1.00, but it is small (23 warnings) and was written by the same author as the rules, so real feedback will score lower. Known not to warn:
+
+- Ages written as words ("zweiundvierzig", "forty-two"), ages after a comma ("meine Frau, 42, …"), and ages after a person other than with "ist" or "is" ("my mum turned 80").
+- Roles and job titles that are not on the lists in `core/detect/indirect/roles.ts`, and German compounds of words shorter than six letters.
+- Job titles with a place, when the name model is not used: the places come from it.
+- Places outside Austria and Germany are not on the large-city list, so a common job title next to London or Zürich warns although it would not need to.
 
 Names and places, from the name test split and the generated set. Fixing these needs new dev cases first, then a new test set written by someone else ([#82](https://github.com/akojif/painfold/issues/82)):
 

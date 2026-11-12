@@ -14,6 +14,7 @@
 // - "Removed by any type" counts a labelled value as removed when detections
 //   of any type cover it, which is what matters for the cleaned file.
 import { readFileSync, writeFileSync } from 'node:fs'
+import { evaluateIndirect, indirectTable, readIndirect } from './eval-indirect.ts'
 import { isFirstName } from '../core/detect/first-names.ts'
 import { detect } from '../core/detect/index.ts'
 import { combined } from '../core/detect/merge.ts'
@@ -260,7 +261,8 @@ export function currentTables(stored: StoredDetections | undefined = readStoredD
   }), typeNames)
   const test = itemsOf('names-test')
   const long = itemsOf('long-texts')
-  return `${sets}\n\n${nameTables(test, finderFor('names-test', test, stored), finderFor('names-test-without-list', test, stored))}\n\n${positionTable(long, finderFor('long-texts', long, stored))}`
+  const kindNames = JSON.parse(readFileSync('i18n/locales/en.json', 'utf8')).warning.kind
+  return `${sets}\n\n${nameTables(test, finderFor('names-test', test, stored), finderFor('names-test-without-list', test, stored))}\n\n${positionTable(long, finderFor('long-texts', long, stored))}\n\n${indirectTable(evaluateIndirect(readIndirect('test')), kindNames)}`
 }
 
 /**
@@ -274,6 +276,8 @@ export type AccuracyData = {
   sets: Record<'generated' | 'hard-cases' | 'names-test' | 'long-texts', { types: Partial<Record<PiiType, Record<Lang, Score>>>, any: Record<Lang, Score> }>
   names: { groups: string[], removal: Record<string, Record<Lang, Counts>>, typeCorrect: Record<string, Record<Lang, Counts>>, withoutList: Record<string, Record<Lang, Counts>>, onList: number, total: number }
   positions: Array<Record<Lang, Counts>>
+  /** Warnings for indirect identifiers, per kind, on the test split of data/eval/indirect.jsonl. */
+  indirect: Record<string, Record<Lang, Score>>
   model: { source: string, original: string, license: string, revision: string }
 }
 
@@ -304,6 +308,7 @@ export function accuracyData(stored: StoredDetections | undefined = readStoredDe
       total: names.length,
     },
     positions: positionCounts(long, finderFor('long-texts', long, stored)),
+    indirect: evaluateIndirect(readIndirect('test')),
     model: { source: NAME_MODEL.source, original: NAME_MODEL.original, license: NAME_MODEL.license, revision: NAME_MODEL.revision },
   }
 }

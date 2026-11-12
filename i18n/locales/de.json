@@ -629,6 +629,10 @@
       "heading": "Methode und Daten",
       "docs": "Alle Zahlen und die Methode",
       "data": "Die Testdaten"
+    },
+    "warnings": {
+      "heading": "Könnte jemanden erkennbar machen",
+      "text": "Painfold weist auf Text hin, der zusammen mit anderen Angaben auf eine Person zeigen kann: genaue Altersangaben, „die einzige …“, Berufe mit kleinem Ort und Rollen, die eine Person innehat. Hinweise werden nie von selbst entfernt. Gemessen an {n} selbst geschriebenen Hinweisen, mit vorgegebenen Orten; die Menge ist klein und von derselben Person geschrieben wie die Regeln, echtes Feedback schneidet daher wohl schlechter ab."
     }
   },
   "smallScreen": {
