@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import type { ColumnRole } from '../../core/columns/roles'
-import { detectTable } from '../../core/detect/table'
 import { cleanedTable } from '../../core/export/csv'
-import { cellId, itemsFromTable, rebuildTable, rowId, sheetIndexOf } from '../../core/items/table'
+import { detectItems } from '../../core/detect/items'
+import { cellId, itemsFromTable, rebuildTable, rowId, sheetIndexOf, textItems } from '../../core/items/table'
 import { Review } from '../../core/review/review'
 
 // All values are invented.
@@ -104,13 +104,10 @@ describe('rebuildTable', () => {
     })
   })
 
-  it('builds the same cleaned table as the review does today', () => {
-    const scan = [3, 5]
-    const review = new Review(table.rows, scan, detectTable(table.rows, scan))
-    const fromItems = rebuildTable(table, roles, (item) => {
-      const source = item.source as { row: number, column: number }
-      return review.cleanedCell(source.row, source.column)
-    })
+  it('builds the cleaned table from the review\'s cleaned items', () => {
+    const { items } = itemsFromTable(table, roles)
+    const review = new Review(items, detectItems(textItems(items)))
+    const fromItems = rebuildTable(table, roles, item => review.cleanedItem(item.id))
     expect(fromItems).toEqual(cleanedTable(table, roles, review))
     expect(fromItems.rows[0]).toEqual(['1', '2026-10-01', 'Bitte an [EMAIL_1] schreiben.', 'email', 'Ruf [PHONE_1]'])
   })

@@ -13,8 +13,7 @@
 //   header. Never the sheet's name, which can hold personal data, since ids
 //   may later appear in quotes, links and exports.
 import type { ColumnRole } from '../columns/roles.ts'
-import type { ItemCounts, ItemDetections, TextItem } from '../detect/items.ts'
-import type { CellDetections } from '../detect/table.ts'
+import type { ItemCounts, TextItem } from '../detect/items.ts'
 import type { PiiType } from '../pii-types.ts'
 import type { Item, ItemSet, Unit } from './types.ts'
 
@@ -92,16 +91,4 @@ export function countsByColumn(items: readonly Item[], counts: readonly ItemCoun
     byColumn.set(column, total)
   }
   return [...byColumn].map(([column, counts]) => ({ column, counts })).sort((a, b) => a.column - b.column)
-}
-
-/**
- * The workers' results as findings per cell, for the review, which still
- * works on rows and columns until it moves to items (#86, PR 3).
- */
-export function toCellDetections(items: readonly Item[], results: readonly ItemDetections[]): CellDetections[] {
-  const byId = new Map(items.map(item => [item.id, item]))
-  return results.flatMap(({ id, detections }) => {
-    const source = byId.get(id)?.source
-    return source?.kind === 'cell' ? [{ row: source.row, column: source.column, detections }] : []
-  })
 }
