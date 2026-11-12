@@ -101,6 +101,10 @@ Every file becomes a list of **items**, each a piece of text and where it came f
 - **Review screen:** it shows units with their place ("Row 17", from `placeOf()`), and each unit's items with their labels (the column names). Each item says how to show it (`display`): the feedback text first (`main`), other free text always (`text`, where missed names can hide), and short values such as a channel only with a finding (`short`). Selecting text for "Mark as missed" reads the item id from the page (`data-item`).
 - **The boundary:** only the import side (the column step, `core/import`, `core/columns`), the table adapter and the CSV export know about rows and columns. `tests/unit/items-boundary.test.ts` reads the code after that boundary (detection, review, redaction, the report and the review screen) and fails if it names a row or a column.
 
+## AI providers
+
+Which AI providers Painfold can call straight from the browser, their terms (training, retention, location), and the CSP design for Stage 3 are recorded in [docs/ai-providers.md](ai-providers.md). `npm run check:providers` repeats the browser check: one request with the word "Hello" and a fake key per provider, from a page at the production origin.
+
 ## Indirect identifiers
 
 Text that is not personal data on its own but can point to one person, such as "the only female CFO in Wels" or "a 42-year-old tax adviser in Wels" (#66). Painfold warns about it and never removes it on its own. `core/detect/indirect/` finds three kinds, in German and English:
