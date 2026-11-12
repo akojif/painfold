@@ -88,6 +88,15 @@ Every page address ends in a slash: `/roadmap/`, `/de/`, `/de/accuracy/`. That w
 - The hosts redirect the form without a slash, keeping the query: Cloudflare (`html_handling: auto-trailing-slash`) and the local test server.
 - `tests/e2e/addresses.spec.ts` checks every page, including the review and download steps: each link, canonical and hreflang link ends in a slash, and each address without one redirects.
 
+## Feedback items
+
+Every file becomes a list of **items**, each a piece of text and where it came from (`core/items/`, #86). Detection, review and export move to items one pull request at a time, so later sources such as interview transcripts only need a new adapter. Only tables are read today.
+
+- **Items:** the table adapter (`core/items/table.ts`) makes every checked cell an item, empty ones included.
+- **Units:** every row is a unit that groups its items. A unit's `attributes` hold the non-empty values of the columns kept as they are (Keep as is), such as date, channel, plan or country, for segments and trends later. Dropped columns never appear there, and checked columns are always items, never attributes.
+- **Ids:** they come from the location, not from a counter, so they're the same for a given file whatever is checked, and a quote can be linked back to its source: `cell:<sheet>:<row>:<column>` for an item and `row:<sheet>:<row>` for a unit, all counted from 0. The sheet is its position in the workbook (0 for CSV), never its name, because sheet names are chosen by people and can hold personal data, and ids may later appear in quotes, links and exports. Row and column count in the data, after the header.
+- **Rebuilding the table:** `rebuildTable()` puts cleaned item texts back through their cell locations, with dropped columns left out and kept columns unchanged.
+
 ## Indirect identifiers
 
 Text that is not personal data on its own but can point to one person, such as "the only female CFO in Wels" or "a 42-year-old tax adviser in Wels" (#66). Painfold warns about it and never removes it on its own. `core/detect/indirect/` finds three kinds, in German and English:
