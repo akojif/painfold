@@ -12,7 +12,13 @@
 // MISTRAL_API_KEY), that provider is also asked for a real, short answer, to
 // confirm a successful response is readable too. Keys are never printed or
 // stored. No feedback text is ever sent: only the fixed word "Hello".
-import { chromium } from '@playwright/test'
+//
+// Ollama (local) is checked in Chromium, Firefox and WebKit, against a running
+// Ollama started with OLLAMA_ORIGINS=https://painfold.com and the model in
+// OLLAMA_MODEL (default llama3.2:3b). In Chromium the check grants the local
+// network permission, as a person does when Chrome asks; without it, Chrome
+// blocks the call.
+import { chromium, firefox, webkit, type BrowserType } from '@playwright/test'
 
 const ORIGIN = 'https://painfold.com'
 const FAKE_KEY = 'painfold-cors-check-not-a-key'
@@ -44,12 +50,6 @@ const checks = (keys: Record<string, string | undefined>): Check[] => {
     { ...openAiStyle('OpenAI', 'https://api.openai.com/v1/chat/completions', 'gpt-4.1-nano', keys.openai ?? FAKE_KEY), realKey: keys.openai },
     { ...openAiStyle('Mistral', 'https://api.mistral.ai/v1/chat/completions', 'ministral-8b-latest', keys.mistral ?? FAKE_KEY), realKey: keys.mistral },
     { ...openAiStyle('Mistral, EU endpoint', 'https://api.eu.mistral.ai/v1/chat/completions', 'ministral-8b-latest', keys.mistral ?? FAKE_KEY), realKey: keys.mistral },
-    {
-      provider: 'Ollama (local)',
-      url: 'http://localhost:11434/api/chat',
-      headers: { 'content-type': 'application/json' },
-      body: { model: 'llama3.2', stream: false, messages: [{ role: 'user', content: TEXT }] },
-    },
   ]
 }
 
@@ -89,9 +89,38 @@ for (const check of checks({ anthropic: process.env.ANTHROPIC_API_KEY, openai: p
 }
 await browser.close()
 
+// Ollama, in each browser engine. A real answer from the local model counts as browser access.
+const OLLAMA_MODEL = process.env.OLLAMA_MODEL ?? 'llama3.2:3b'
+const engines: Array<[string, BrowserType, string[]]> = [
+  ['Chromium (Chrome, Edge), local network allowed', chromium, ['local-network-access']],
+  ['Chromium (Chrome, Edge), not allowed yet', chromium, []],
+  ['Firefox', firefox, []],
+  ['WebKit (Safari)', webkit, []],
+]
+for (const [engineName, engine, permissions] of engines) {
+  const engineBrowser = await engine.launch()
+  const engineContext = await engineBrowser.newContext()
+  if (permissions.length > 0) await engineContext.grantPermissions(permissions, { origin: ORIGIN })
+  const enginePage = await engineContext.newPage()
+  await enginePage.route(`${ORIGIN}/**`, route => route.fulfill({ status: 200, contentType: 'text/html', body: '<!doctype html><title>Provider check</title>' }))
+  await enginePage.goto(`${ORIGIN}/provider-check`)
+  const outcome = await enginePage.evaluate(async ({ model, text }) => {
+    try {
+      const response = await fetch('http://localhost:11434/api/chat', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ model, stream: false, messages: [{ role: 'user', content: text }] }) })
+      return { readable: true, status: response.status }
+    }
+    catch (error) {
+      return { readable: false, error: error instanceof Error ? error.message : String(error) }
+    }
+  }, { model: OLLAMA_MODEL, text: TEXT })
+  results.push({ provider: `Ollama (local), ${engineName}`, ...outcome, realKey: false })
+  await engineBrowser.close()
+}
+
 console.log(`Origin: ${ORIGIN}\n`)
 for (const result of results) {
-  const verdict = result.readable ? `browser access works (status ${result.status}${result.realKey ? ', real key' : ', fake key'})` : `blocked or unreachable (${result.error})`
-  console.log(`${result.provider.padEnd(42)} ${verdict}`)
-  console.log(`${''.padEnd(42)} preflight: ${result.preflight ?? 'none seen'}, access-control-allow-origin: ${result.allowOrigin ?? 'none seen'}`)
+  const ollama = result.provider.startsWith('Ollama')
+  const verdict = result.readable ? `browser access works (status ${result.status}${ollama ? '' : result.realKey ? ', real key' : ', fake key'})` : `blocked or unreachable (${result.error})`
+  console.log(`${result.provider.padEnd(62)} ${verdict}`)
+  if (!ollama) console.log(`${''.padEnd(62)} access-control-allow-origin: ${result.allowOrigin ?? 'none seen'}`)
 }

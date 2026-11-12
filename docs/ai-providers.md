@@ -25,15 +25,15 @@ Still to confirm with a real key (a successful answer, not only an error): all f
 
 ### Ollama (local)
 
-Ollama only accepts browser calls from `127.0.0.1` and `0.0.0.0` by default; other origins must be added with `OLLAMA_ORIGINS`, for example `OLLAMA_ORIGINS=https://painfold.com` ([Ollama FAQ](https://docs.ollama.com/faq)). Ollama was not installed on the test machine, so a small stand-in server on port 11434, answering as Ollama does with that setting, was called from a page at `https://painfold.com` in three browser engines (Playwright):
+Ollama only accepts browser calls from `127.0.0.1` and `0.0.0.0` by default; other origins must be added with `OLLAMA_ORIGINS`, for example `OLLAMA_ORIGINS=https://painfold.com` ([Ollama FAQ](https://docs.ollama.com/faq)). The same script calls a running Ollama (0.40.16, model `llama3.2:3b`) from a page at `https://painfold.com` in three browser engines. Result on 13 November 2026:
 
-| Browser engine | Ollama allows painfold.com | Ollama does not |
+| Browser engine | Ollama with `OLLAMA_ORIGINS=https://painfold.com` | Ollama with its defaults |
 |---|---|---|
-| Chromium (Chrome, Edge) | Works once the person allows **local network access** for the site; Chrome asks once (from Chrome 142). Blocked until then: "Permission was denied for this request". | Blocked |
+| Chromium (Chrome, Edge) | Works once the person allows **local network access** for the site; Chrome asks once (from Chrome 142). Blocked until then. | Blocked |
 | Firefox | Works | Blocked |
 | WebKit (Safari) | **Blocked**: an https page may not call `http://localhost` ("requested insecure content … blocked") | Blocked |
 
-So with Ollama, painfold.com works in Chrome, Edge and Firefox, not in Safari. For Safari, the way is Painfold served from `http://localhost` itself (the Docker image, #75). Still to confirm: the same check against a real Ollama.
+So with Ollama, painfold.com works in Chrome, Edge and Firefox, after one setting in Ollama and, in Chrome and Edge, one permission. It does not work in Safari; for Safari, the way is Painfold served from `http://localhost` itself (the Docker image, #75). The settings screen (#124) must explain both steps and say that Safari is not supported for Ollama.
 
 ## Terms: training, retention, location
 
