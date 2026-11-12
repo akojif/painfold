@@ -24,7 +24,7 @@ test('the roadmap page is prerendered and lists every stage with the current one
   await expect(stages.first()).toContainText('Available')
   await expect(stages.nth(1)).toHaveAttribute('aria-current', 'step')
   await expect(stages.nth(1)).toContainText('Current stage')
-  await expect(stages.nth(1)).toContainText('In progress')
+  await expect(stages.nth(1)).toContainText('Available')
   await expect(stages.nth(2)).toContainText('Next')
   await expect(stages.nth(3)).toContainText('Planned')
   await expect(page.getByRole('link', { name: 'Read the full roadmap on GitHub' })).toHaveAttribute('href', 'https://github.com/akojif/painfold/blob/main/ROADMAP.md')
