@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { PII_TYPES, type PiiType } from '~~/core/pii-types'
-import { OverlapError, type Decision, type Finding } from '~~/core/review/review'
+import { OverlapError, type Decision, type Finding, type Warning } from '~~/core/review/review'
 import type { CellSelection } from '~/utils/selection'
 import type { ValueEntry, ValueGroup } from '~/utils/value-list'
 
@@ -28,6 +28,8 @@ const { busy: checkingNames } = useNameScan()
 const view = ref<'value' | 'row'>('value')
 const onlyWithFindings = ref(false)
 const selectedId = ref<number>()
+// A warning is selected by its key; selecting one clears the selected finding and the other way round.
+const selectedWarningKey = ref<string>()
 const motions = shallowRef<ReadonlyMap<string, RemovalMotion>>(new Map())
 const marking = ref<CellSelection & { text: string }>()
 const problem = ref<string>()
@@ -42,6 +44,9 @@ const all = computed<readonly Finding[]>(() => (revision.value, [...(review.valu
 const counts = computed(() => (revision.value, review.value?.counts() ?? { total: 0, reviewed: 0, left: 0 }))
 const kept = computed(() => (revision.value, all.value.filter(finding => review.value?.decisionFor(finding.key) === 'keep').length))
 const selected = computed(() => all.value.find(finding => finding.id === selectedId.value))
+const warnings = computed<readonly Warning[]>(() => (revision.value, [...(review.value?.warnings ?? [])]))
+const selectedWarning = computed(() => warnings.value.find(warning => warning.key === selectedWarningKey.value))
+const warningCounts = computed(() => (revision.value, review.value?.warningCounts() ?? { total: 0, removed: 0, dismissed: 0, open: 0 }))
 const finished = computed(() => counts.value.total > 0 && counts.value.left === 0)
 
 // One entry per distinct value, grouped by type, in order of first appearance within a type.
@@ -80,9 +85,36 @@ function showMore(type: PiiType) {
   shownPerType.value = { ...shownPerType.value, [type]: (shownPerType.value[type] ?? VALUE_BATCH) + VALUE_BATCH }
 }
 
-// N and P step through values in the By value view and through findings in the By row view.
-const navigable = computed(() => (view.value === 'value' ? values.value.map(entry => entry.finding) : all.value))
-const position = (finding?: Finding) => navigable.value.findIndex(item => (view.value === 'value' ? item.key === finding?.key : item.id === finding?.id))
+// N and P step through values in the By value view and through findings in the
+// By row view. Warnings come after the values, and in reading order among the findings.
+type Item = { kind: 'finding', finding: Finding } | { kind: 'warning', warning: Warning }
+const navigable = computed<Item[]>(() => {
+  const warningItems = warnings.value.map(warning => ({ kind: 'warning' as const, warning }))
+  if (view.value === 'value') return [...values.value.map(entry => ({ kind: 'finding' as const, finding: entry.finding })), ...warningItems]
+  const where = (item: Item) => (item.kind === 'finding' ? item.finding : item.warning)
+  return [...all.value.map(finding => ({ kind: 'finding' as const, finding })), ...warningItems]
+    .sort((a, b) => where(a).row - where(b).row || where(a).column - where(b).column || where(a).start - where(b).start)
+})
+const current = computed<Item | undefined>(() => {
+  if (selectedWarning.value) return { kind: 'warning', warning: selectedWarning.value }
+  return selected.value ? { kind: 'finding', finding: selected.value } : undefined
+})
+const position = (item?: Item) => navigable.value.findIndex((other) => {
+  if (!item || other.kind !== item.kind) return false
+  if (other.kind === 'warning') return other.warning.key === (item as typeof other).warning.key
+  const finding = (item as typeof other).finding
+  return view.value === 'value' ? other.finding.key === finding.key : other.finding.id === finding.id
+})
+const isPending = (item: Item) => item.kind === 'finding' ? !review.value?.decisionFor(item.finding.key) : !review.value?.warningDecisionFor(item.warning.key)
+
+const warningsByCell = computed(() => {
+  const byCell = new Map<string, Warning[]>()
+  for (const warning of warnings.value) {
+    const key = `${warning.row}:${warning.column}`
+    byCell.set(key, [...(byCell.get(key) ?? []), warning])
+  }
+  return byCell
+})
 
 const findingsByCell = computed(() => {
   const byCell = new Map<string, Finding[]>()
@@ -98,12 +130,13 @@ const findingsByCell = computed(() => {
 const rowIndices = computed(() => {
   if (!table.value) return []
   if (!onlyWithFindings.value) return table.value.rows.map((_, index) => index)
-  return [...new Set(all.value.map(finding => finding.row))]
+  return [...new Set([...all.value.map(finding => finding.row), ...warnings.value.map(warning => warning.row)])].sort((a, b) => a - b)
 })
 const shownRows = computed(() => rowIndices.value.slice(0, visibleCount.value))
 
 // The rows the selected value appears in, for the By value view.
 const valueRows = computed(() => {
+  if (selectedWarning.value) return [selectedWarning.value.row]
   const finding = selected.value
   if (!finding || !review.value) return []
   return [...new Set((revision.value, review.value.copiesOf(finding.key)).map(copy => copy.row))]
@@ -123,8 +156,9 @@ function cellsFor(row: number) {
   const cells = ordered.flatMap((column) => {
     const text = table.value!.rows[row]![column] ?? ''
     const findings = findingsByCell.value.get(`${row}:${column}`) ?? []
-    const show = column === feedbackColumn.value || freeTextColumns.value.has(column) || findings.length > 0
-    return show ? [{ column, text, findings }] : []
+    const cellWarnings = warningsByCell.value.get(`${row}:${column}`) ?? []
+    const show = column === feedbackColumn.value || freeTextColumns.value.has(column) || findings.length > 0 || cellWarnings.length > 0
+    return show ? [{ column, text, findings, warnings: cellWarnings }] : []
   })
   return cells.map(cell => ({ ...cell, label: cells.length > 1 || cell.column !== feedbackColumn.value ? table.value!.columns[cell.column] : undefined }))
 }
@@ -137,6 +171,7 @@ const progress = computed(() => (counts.value.total === 0 ? 1 : counts.value.rev
 
 async function select(id: number | undefined, focus = true) {
   selectedId.value = id
+  if (id !== undefined) selectedWarningKey.value = undefined
   problem.value = undefined
   const finding = selected.value
   if (!finding) return
@@ -158,30 +193,61 @@ async function select(id: number | undefined, focus = true) {
   element?.scrollIntoView({ block: view.value === 'value' ? 'nearest' : 'center' })
 }
 
+async function selectWarning(key: string | undefined, focus = true) {
+  selectedWarningKey.value = key
+  selectedId.value = undefined
+  problem.value = undefined
+  const warning = selectedWarning.value
+  if (!warning) return
+  if (view.value === 'row') {
+    const index = rowIndices.value.indexOf(warning.row)
+    if (index >= visibleCount.value) visibleCount.value = index + BATCH
+  }
+  if (!focus) return
+  await nextTick()
+  const element = document.querySelector<HTMLElement>(view.value === 'value' ? `[data-warning-value="${key}"]` : `[data-warning="${key}"]`)
+  element?.focus({ preventScroll: true })
+  element?.scrollIntoView({ block: view.value === 'value' ? 'nearest' : 'center' })
+}
+
+function selectItem(item: Item | undefined, focus = true) {
+  if (item?.kind === 'warning') selectWarning(item.warning.key, focus)
+  else select(item?.finding.id, focus)
+}
+
 function step(direction: 1 | -1) {
   const list = navigable.value
   if (list.length === 0) return
-  const index = position(selected.value)
+  const index = position(current.value)
   const next = index === -1 ? (direction === 1 ? 0 : list.length - 1) : Math.min(list.length - 1, Math.max(0, index + direction))
-  select(list[next]!.id)
+  selectItem(list[next])
 }
 
-function nextPending(after: Finding): Finding | undefined {
+function nextPending(after: Item): Item | undefined {
   const list = navigable.value
   const index = position(after)
-  const pending = (finding: Finding) => !review.value?.decisionFor(finding.key)
-  return list.slice(index + 1).find(pending) ?? list.slice(0, index).find(pending)
+  return list.slice(index + 1).find(isPending) ?? list.slice(0, index).find(isPending)
 }
 
-/** Decides the selected value. Without a pointer event the decision came from the keyboard. */
+/** Removes or keeps the selected warning: kept means dismissed, the text stays. */
+function decideWarning(warning: Warning, decision: Decision, event?: MouseEvent) {
+  session.change(current => current.decideWarning(warning.key, decision === 'remove' ? 'remove' : 'dismiss'))
+  motions.value = decision === 'remove' ? new Map([[warning.key, motionFor(event)]]) : new Map()
+  announcement.value = t(`warning.announce.${decision === 'remove' ? 'remove' : 'dismiss'}`, { left: number(warningCounts.value.open) })
+  const next = nextPending({ kind: 'warning', warning })
+  if (next) selectItem(next, view.value === 'row' || !event)
+}
+
+/** Decides the selected value or warning. Without a pointer event the decision came from the keyboard. */
 function decide(decision: Decision, event?: MouseEvent) {
+  if (selectedWarning.value) return decideWarning(selectedWarning.value, decision, event)
   const finding = selected.value
   if (!finding) return
   session.change(current => current.decide(finding.key, decision))
   motions.value = decision === 'remove' ? new Map([[finding.key, motionFor(event)]]) : new Map()
   announcement.value = t(`review.announce.${decision}`, { type: t(`typeOne.${finding.type}`), left: number(counts.value.left) })
-  const next = nextPending(finding)
-  if (next) select(next.id, view.value === 'row' || !event)
+  const next = nextPending({ kind: 'finding', finding })
+  if (next) selectItem(next, view.value === 'row' || !event)
 }
 
 function undo() {
@@ -189,6 +255,15 @@ function undo() {
   motions.value = new Map()
   announcement.value = t(undone ? 'review.announce.undo' : 'review.announce.nothingToUndo')
   if (selectedId.value && !selected.value) selectedId.value = undefined
+  if (selectedWarningKey.value && !selectedWarning.value) selectedWarningKey.value = undefined
+}
+
+// Warnings are kept unless removed; removing all of them at once fades, like other bulk removals.
+function removeWarnings() {
+  const keys = warnings.value.filter(warning => !review.value?.warningDecisionFor(warning.key)).map(warning => warning.key)
+  session.change(current => current.decideAllWarnings('remove'))
+  motions.value = new Map(keys.map(key => [key, 'fade' as const]))
+  announcement.value = t('warning.announce.removeAll')
 }
 
 // Bulk removals fade: a wipe across many tokens at once would be noise.
@@ -240,7 +315,7 @@ function onKeydown(event: KeyboardEvent) {
     return
   }
   if (target.closest('input, select, textarea, [contenteditable="true"]')) return
-  const onFinding = Boolean(target.closest('[data-finding], [data-value]'))
+  const onFinding = Boolean(target.closest('[data-finding], [data-value], [data-warning], [data-warning-value]'))
   const actions: Record<string, () => void> = {
     [SHORTCUTS.next]: () => step(1),
     [SHORTCUTS.previous]: () => step(-1),
@@ -266,6 +341,7 @@ function onTabKey(event: KeyboardEvent) {
 watch(view, () => {
   motions.value = new Map()
   // Keep the same value selected; in the By value view that is its first appearance.
+  if (selectedWarning.value) return selectWarning(selectedWarningKey.value, false)
   if (view.value === 'value' && selected.value) selectedId.value = values.value.find(entry => entry.key === selected.value!.key)?.finding.id
   select(selectedId.value, false)
 })
@@ -274,8 +350,9 @@ watch(onlyWithFindings, () => (visibleCount.value = BATCH))
 let observer: IntersectionObserver | undefined
 onMounted(() => {
   window.addEventListener('keydown', onKeydown)
-  const first = navigable.value.find(finding => !review.value?.decisionFor(finding.key)) ?? navigable.value[0]
-  select(first?.id, false)
+  // Personal data first: warnings come after it in the list and never hold up the review.
+  const first = navigable.value.find(item => item.kind === 'finding' && isPending(item)) ?? navigable.value[0]
+  selectItem(first, false)
   observer = new IntersectionObserver((entries) => {
     if (entries.some(entry => entry.isIntersecting)) visibleCount.value += BATCH
   }, { rootMargin: '600px' })
@@ -306,18 +383,22 @@ onBeforeUnmount(() => {
             :text="table.fileName"
           />
         </div>
-        <i18n-t
-          keypath="review.progress"
-          tag="p"
-          class="text-sm text-fg-muted tabular-nums"
-        >
-          <template #reviewed>
-            <span class="font-medium text-fg">{{ number(counts.reviewed) }}</span>
-          </template>
-          <template #left>
-            {{ number(counts.left) }}
-          </template>
-        </i18n-t>
+        <div class="text-sm text-fg-muted tabular-nums sm:text-right">
+          <i18n-t
+            keypath="review.progress"
+            tag="p"
+          >
+            <template #reviewed>
+              <span class="font-medium text-fg">{{ number(counts.reviewed) }}</span>
+            </template>
+            <template #left>
+              {{ number(counts.left) }}
+            </template>
+          </i18n-t>
+          <p v-if="warningCounts.open > 0">
+            {{ $t('warning.toCheck', { n: number(warningCounts.open) }, warningCounts.open) }}
+          </p>
+        </div>
       </div>
       <div
         role="progressbar"
@@ -419,16 +500,20 @@ onBeforeUnmount(() => {
         class="mt-6 grid items-start gap-8 lg:grid-cols-[20rem_minmax(0,1fr)]"
       >
         <div
-          v-if="values.length > 0"
+          v-if="values.length > 0 || warnings.length > 0"
           class="overflow-y-auto rounded-md border border-line bg-surface max-lg:max-h-[50vh] lg:sticky lg:top-20 lg:max-h-[calc(100dvh-7rem)]"
         >
           <ValueList
             class="pb-6"
             :groups="groups"
+            :warnings="warnings"
             :selected-key="selected?.key"
+            :selected-warning-key="selectedWarningKey"
             :motions="motions"
             @select="select($event, false)"
+            @select-warning="selectWarning($event, false)"
             @remove-type="removeLeft($event)"
+            @remove-warnings="removeWarnings"
             @show-more="showMore"
           />
           <!-- Fades the last visible values, so the list reads as scrollable. -->
@@ -440,6 +525,7 @@ onBeforeUnmount(() => {
         <div class="min-w-0">
           <MarginNote
             :finding="selected"
+            :warning="selectedWarning"
             :marking="marking"
             :problem="problem"
             @remove="decide('remove', $event)"
@@ -459,8 +545,10 @@ onBeforeUnmount(() => {
               :row="row"
               :cells="cellsFor(row)"
               :selected-id="selectedId"
+              :selected-warning-key="selectedWarningKey"
               :motions="motions"
               @select="(id) => select(id, false)"
+              @select-warning="(key) => selectWarning(key, false)"
             />
           </ol>
           <p
@@ -487,8 +575,10 @@ onBeforeUnmount(() => {
               :row="row"
               :cells="cellsFor(row)"
               :selected-id="selectedId"
+              :selected-warning-key="selectedWarningKey"
               :motions="motions"
               @select="(id) => select(id)"
+              @select-warning="(key) => selectWarning(key)"
             />
           </ol>
           <p
@@ -508,6 +598,7 @@ onBeforeUnmount(() => {
           class="lg:mt-4"
           docked
           :finding="selected"
+          :warning="selectedWarning"
           :marking="marking"
           :problem="problem"
           @remove="decide('remove', $event)"

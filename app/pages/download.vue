@@ -21,6 +21,11 @@ const fileName = computed(() => cleanedFileName(table.value?.fileName ?? ''))
 const removed = computed(() => (revision.value, review.value ? [...removedByType(review.value)].sort((a, b) => b[1] - a[1]) : []))
 const notReviewed = computed(() => (revision.value, review.value?.counts().left ?? 0))
 const kept = computed(() => (revision.value, review.value?.findings.filter(finding => review.value?.decisionFor(finding.key) === 'keep').length ?? 0))
+// Warnings for text that could identify someone: kept unless the reviewer removed them.
+const warnings = computed(() => (revision.value, review.value?.warningCounts() ?? { total: 0, removed: 0, dismissed: 0, open: 0 }))
+const warningsNote = computed(() => warnings.value.total > 0
+  ? t('warning.summary', { removed: number(warnings.value.removed), kept: number(warnings.value.total - warnings.value.removed) })
+  : undefined)
 const dropped = computed(() => table.value?.columns.filter((_, index) => roles.value[index] === 'drop') ?? [])
 const unchecked = computed(() => table.value?.columns.filter((_, index) => roles.value[index] === 'keep') ?? [])
 
@@ -52,6 +57,7 @@ function downloadReport() {
     namesNote.value,
     ...(notReviewed.value > 0 ? [t('download.notReviewed', { n: number(notReviewed.value) }, notReviewed.value)] : []),
     ...(kept.value > 0 ? [t('download.kept', { n: number(kept.value) }, kept.value)] : []),
+    ...(warningsNote.value ? [warningsNote.value] : []),
     ...(dropped.value.length > 0 ? [t('download.dropped', { columns: dropped.value.join(', ') })] : []),
     ...(unchecked.value.length > 0 ? [t('download.unchecked', { columns: unchecked.value.join(', ') })] : []),
   ]
@@ -171,6 +177,9 @@ function downloadReport() {
           </li>
           <li v-if="kept > 0">
             {{ $t('download.kept', { n: number(kept) }, kept) }}
+          </li>
+          <li v-if="warningsNote">
+            {{ warningsNote }}
           </li>
           <li v-if="dropped.length > 0">
             {{ $t('download.dropped', { columns: dropped.join(', ') }) }}
