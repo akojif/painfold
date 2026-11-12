@@ -565,6 +565,7 @@
     "groups": {
       "heading": "By name-origin group",
       "note": "The groups exist only in the test data, so that names from every community are measured. Painfold never infers anyone's origin.",
+      "perLanguage": "Per language, each group has only 12 or 13 test names, so one miss moves it by about 8 points. The target applies to each group across both languages.",
       "target": "Target {target}",
       "below": "below target",
       "detail": "As a name {typeCorrect}, without the list {withoutList}",
@@ -607,6 +608,7 @@
     "gaps": {
       "heading": "Known gaps",
       "items": [
+        "English names in English sentences are the weakest area: 11 of 13 are removed. That is too few names to judge one language on its own; a larger test set is planned (#82).",
         "Nicknames after a greeting or thank-you that are not on the first-name list, such as \"cheers ollie\".",
         "Names at the start of a sentence, with nothing before them: \"Sanne van der Berg says…\".",
         "Some particles and multi-part names: \"Saif ur Rehman\", \"Tesfaye Bekele\".",

@@ -181,22 +181,26 @@ const GITHUB = 'https://github.com/akojif/painfold/blob/main'
       <p class="mt-1 max-w-measure text-sm text-fg-muted">
         {{ $t('accuracy.groups.note') }}
       </p>
+      <p
+        v-if="language !== 'both'"
+        class="mt-1 max-w-measure text-sm text-fg-muted"
+      >
+        {{ $t('accuracy.groups.perLanguage') }}
+      </p>
       <ul class="mt-4 divide-y divide-line border-y border-line">
         <li
           v-for="row in groupRows"
           :key="row.group"
           class="grid grid-cols-[minmax(0,1fr)_3.5rem] items-center gap-x-4 gap-y-1 py-2.5 sm:grid-cols-[16rem_minmax(0,1fr)_3.5rem]"
         >
-          <span class="text-sm max-sm:col-span-2">
-            {{ $t(`accuracy.groups.names.${row.group}`) }}
-            <span
-              v-if="share(row.removal) < data.target"
-              class="text-danger"
-            >, {{ $t('accuracy.groups.below') }}</span>
-          </span>
+          <!-- The target applies to each group across both languages, so it is only marked there. -->
+          <span class="text-sm max-sm:col-span-2">{{ $t(`accuracy.groups.names.${row.group}`) }}<span
+            v-if="language === 'both' && share(row.removal) < data.target"
+            class="text-danger"
+          >, {{ $t('accuracy.groups.below') }}</span></span>
           <AccuracyBar
             :value="share(row.removal)"
-            :target="data.target"
+            :target="language === 'both' ? data.target : undefined"
           />
           <span class="text-right font-mono text-sm tabular-nums">{{ percent(share(row.removal)) }}</span>
           <span class="col-span-full text-xs text-fg-muted tabular-nums sm:col-start-2">
