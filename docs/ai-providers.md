@@ -4,7 +4,7 @@ Stage 3 sends cleaned feedback text to an AI the user chooses: their own API key
 
 ## Decision
 
-- **First:** Anthropic and Ollama. **Then:** OpenAI. **Mistral:** browser access works; whether it is offered depends on how its training default is handled (see below).
+- **First:** Anthropic and Ollama. **Then:** OpenAI, then Mistral (the EU option). Mistral's API may use requests for training unless the account switches it off, so before the first request to Mistral the consent step asks the person to confirm that "Anonymous improvement data" is off (decided 13 November 2026, see below).
 - The default model is Claude Haiku 5.5 until the evaluation's dev baseline decides (#129).
 - The Python engine (#69) is not needed for v0.3: Ollama covers "nothing leaves the machine" without a server.
 
@@ -46,7 +46,7 @@ From the providers' own pages unless noted, as read on 12 and 13 November 2026. 
 | Mistral | **Depends on an account setting.** Commercial Terms of Service §4.2 (effective 25 September 2026): Mistral "will not use Customer Data or Outputs to train its artificial intelligence models except" where a product's opt-in or opt-out default applies, and for Feedback. Data Processing Addendum §2.3 (effective 27 July 2026): Mistral may train as controller "unless Customer is or has opted-out of training". The [help article](https://help.mistral.ai/en/articles/455207-can-i-opt-out-of-my-input-or-output-data-being-used-for-training) names the opt-out for "Mistral Studio and API" (Admin panel, Privacy, "Anonymous improvement data") but not its default. | Not stated in the terms; secondary sources say about 30 days; zero retention by approval | EU by default (Paris); a separate EU endpoint exists |
 | Ollama | Nothing leaves the machine: "We don't see your prompts or data when you run locally" ([Ollama FAQ](https://docs.ollama.com/faq)) | None | The user's machine |
 
-**Mistral, open decision.** Painfold cannot see a Mistral account's setting. Options: (a) offer Mistral and ask the user to confirm, before the first request, that "Anonymous improvement data" is switched off; (b) offer it with the warning only; (c) wait until Mistral states the API default as off. Recommended: (a).
+**Mistral, decided.** Painfold cannot see a Mistral account's setting. Before the first request to Mistral, the consent step asks the person to confirm that "Anonymous improvement data" is switched off, with the exact path (Admin panel, Privacy). Rejected: a warning only (too easy to click past), and waiting until Mistral states the API default (no EU-by-default option until then). Re-check Mistral's help article before Mistral ships; if it states the API default as off, the confirmation can become a note.
 
 ## CSP and network design (for slice 2, #124)
 
