@@ -1,6 +1,8 @@
 import type { ColumnRole, RoleSuggestion } from '~~/core/columns/roles'
 import { guessFeedbackColumn, suggestRoles } from '~~/core/columns/roles'
-import type { CellDetections } from '~~/core/detect/table'
+import type { ItemDetections } from '~~/core/detect/items'
+import { itemsFromTable, sheetIndexOf, toCellDetections } from '~~/core/items/table'
+import type { ItemSet } from '~~/core/items/types'
 import type { ImportedTable } from '~~/core/import'
 import { Review } from '~~/core/review/review'
 
@@ -14,6 +16,8 @@ const suggestions = shallowRef<RoleSuggestion[]>([])
 const roles = ref<ColumnRole[]>([])
 const feedbackColumn = ref<number>()
 const review = shallowRef<Review>()
+// The feedback items the review was started with (core/items/): the checked cells.
+const items = shallowRef<ItemSet>()
 const revision = ref(0)
 // The column choices as suggested when the file was opened, as they were when
 // the review started, and the state of the review when the cleaned file was
@@ -32,6 +36,7 @@ export function useSession() {
     roles.value = suggestions.value.map(suggestion => suggestion.role)
     feedbackColumn.value = undefined
     review.value = undefined
+    items.value = undefined
     downloadedAt.value = undefined
     setFeedbackColumn(guessFeedbackColumn(imported))
     suggestedChoices.value = choices.value
@@ -47,9 +52,16 @@ export function useSession() {
 
   const scanColumns = computed(() => roles.value.flatMap((role, index) => (role === 'scan' ? [index] : [])))
 
-  function startReview(cells: CellDetections[]) {
+  /** The checked cells as feedback items, with the rows as units: what detection runs on. */
+  function itemsToCheck(): ItemSet | undefined {
+    if (!table.value) return undefined
+    return itemsFromTable({ ...table.value, sheetIndex: sheetIndexOf(table.value) }, roles.value)
+  }
+
+  function startReview(set: ItemSet, results: ItemDetections[]) {
     if (!table.value) return
-    review.value = new Review(table.value.rows, scanColumns.value, cells)
+    items.value = set
+    review.value = new Review(table.value.rows, scanColumns.value, toCellDetections(set.items, results))
     reviewedChoices.value = choices.value
     revision.value++
   }
@@ -87,10 +99,11 @@ export function useSession() {
     roles.value = []
     feedbackColumn.value = undefined
     review.value = undefined
+    items.value = undefined
     downloadedAt.value = undefined
     suggestedChoices.value = ''
     reviewedChoices.value = ''
   }
 
-  return { table, isSample, suggestions, roles, feedbackColumn, review, revision, scanColumns, columnsChanged, hasWork, load, setFeedbackColumn, startReview, change, markDownloaded, clear }
+  return { table, isSample, suggestions, roles, feedbackColumn, review, items, revision, scanColumns, columnsChanged, hasWork, load, setFeedbackColumn, itemsToCheck, startReview, change, markDownloaded, clear }
 }

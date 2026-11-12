@@ -11,7 +11,7 @@ import { spawn } from 'node:child_process'
 import { readdirSync } from 'node:fs'
 import { chromium, type Page } from '@playwright/test'
 import type { Detection } from '../core/detect/types.ts'
-import type { CellDetections } from '../core/detect/table.ts'
+import type { ItemDetections } from '../core/detect/items.ts'
 import { ORT_PREFIX } from '../deploy/model.ts'
 import { ortVersion } from '../deploy/ort-version.ts'
 
@@ -52,17 +52,17 @@ export async function namesInPage(page: Page, texts: readonly string[], { firstN
       const onMessage = ({ data }: MessageEvent) => {
         if (data.id !== id) return
         if (data.kind === 'result' || data.kind === 'error') names.removeEventListener('message', onMessage)
-        if (data.kind === 'result') resolve(data.cells)
+        if (data.kind === 'result') resolve(data.items)
         if (data.kind === 'error') reject(new Error(data.message))
       }
       names.addEventListener('message', onMessage)
-      names.postMessage({ kind: 'names', id, rows: texts.map(text => [text]), columns: [0], ortPath, firstNames })
+      names.postMessage({ kind: 'names', id, items: texts.map((text, index) => ({ id: String(index), text })), ortPath, firstNames })
     })
     return { cells, milliseconds: performance.now() - started, threads: crossOriginIsolated }
   }, { worker: workerPath(), ortPath, texts: [...texts], firstNames })
 
   const detections: Detection[][] = texts.map(() => [])
-  for (const cell of run.cells as CellDetections[]) detections[cell.row] = cell.detections
+  for (const item of run.cells as ItemDetections[]) detections[Number(item.id)] = item.detections
   return { detections, milliseconds: run.milliseconds, threads: run.threads }
 }
 

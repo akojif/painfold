@@ -1,3 +1,4 @@
+import { textItems, toCellDetections } from '~~/core/items/table'
 import { NameModelStopped } from './useNameModel'
 
 // Finding names and places in the background while the rule findings are
@@ -31,19 +32,23 @@ export function useNameScan() {
 
   async function run() {
     const review = session.review.value
-    if (!review || status.value === 'running') return
+    const set = session.items.value
+    if (!review || !set || status.value === 'running') return
     const scan = ++current
     status.value = 'running'
     done.value = 0
-    total.value = review.rows.length
+    total.value = set.units.length
     found.value = { names: 0, places: 0 }
+    // The items in batches of BATCH units (rows), so progress counts rows as before.
+    const byUnit = new Map<string, typeof set.items>()
+    for (const item of set.items) byUnit.set(item.unit, [...(byUnit.get(item.unit) ?? []), item])
     try {
-      for (let start = 0; start < review.rows.length; start += BATCH) {
-        const rows = review.rows.slice(start, start + BATCH).map(row => [...row])
-        const cells = await model.names(rows, [...review.columns])
+      for (let start = 0; start < set.units.length; start += BATCH) {
+        const batch = set.units.slice(start, start + BATCH).flatMap(unit => byUnit.get(unit.id) ?? [])
+        const results = await model.names(textItems(batch))
         if (scan !== current || session.review.value !== review) return
-        session.change(current => current.addDetected(cells.map(cell => ({ ...cell, row: cell.row + start }))))
-        done.value = Math.min(start + BATCH, review.rows.length)
+        session.change(current => current.addDetected(toCellDetections(batch, results)))
+        done.value = Math.min(start + BATCH, set.units.length)
       }
       // Counted from the review, so a check that is run again after skipping counts every name once.
       const detected = review.findings.filter(finding => finding.source === 'detected')

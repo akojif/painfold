@@ -13,6 +13,9 @@
 //   header. Never the sheet's name, which can hold personal data, since ids
 //   may later appear in quotes, links and exports.
 import type { ColumnRole } from '../columns/roles.ts'
+import type { ItemCounts, ItemDetections, TextItem } from '../detect/items.ts'
+import type { CellDetections } from '../detect/table.ts'
+import type { PiiType } from '../pii-types.ts'
 import type { Item, ItemSet, Unit } from './types.ts'
 
 /** sheetIndex: the sheet's position in the workbook, 0 for CSV. */
@@ -63,4 +66,42 @@ export function rebuildTable(table: TableInput, roles: readonly ColumnRole[], cl
     header: shown.map(column => table.columns[column]!),
     rows: table.rows.map((cells, row) => shown.map(column => byCell.get(cellId(row, column, sheet)) ?? cells[column] ?? '')),
   }
+}
+
+/** Items for the given columns, as if only they were checked: for the column step's survey. */
+export function itemsForColumns(table: TableInput, columns: readonly number[]): Item[] {
+  const roles: ColumnRole[] = table.columns.map((_, column) => (columns.includes(column) ? 'scan' : 'drop'))
+  return itemsFromTable(table, roles).items
+}
+
+/** What the workers need of each item: its id, text and unit, not where it came from. */
+export const textItems = (items: readonly Item[]): TextItem[] => items.map(({ id, text, unit }) => ({ id, text, unit }))
+
+/** How much personal data each column holds, as counts per type. */
+export type ColumnCounts = { column: number, counts: Partial<Record<PiiType, number>> }
+
+/** Adds up the survey's counts per item by the item's column: only counts, never the values themselves. */
+export function countsByColumn(items: readonly Item[], counts: readonly ItemCounts[]): ColumnCounts[] {
+  const columnOf = new Map(items.map(item => [item.id, item.source.kind === 'cell' ? item.source.column : -1]))
+  const byColumn = new Map<number, Partial<Record<PiiType, number>>>()
+  for (const { id, counts: itemCounts } of counts) {
+    const column = columnOf.get(id)
+    if (column === undefined || column < 0) continue
+    const total = byColumn.get(column) ?? {}
+    for (const [type, n] of Object.entries(itemCounts) as [PiiType, number][]) total[type] = (total[type] ?? 0) + n
+    byColumn.set(column, total)
+  }
+  return [...byColumn].map(([column, counts]) => ({ column, counts })).sort((a, b) => a.column - b.column)
+}
+
+/**
+ * The workers' results as findings per cell, for the review, which still
+ * works on rows and columns until it moves to items (#86, PR 3).
+ */
+export function toCellDetections(items: readonly Item[], results: readonly ItemDetections[]): CellDetections[] {
+  const byId = new Map(items.map(item => [item.id, item]))
+  return results.flatMap(({ id, detections }) => {
+    const source = byId.get(id)?.source
+    return source?.kind === 'cell' ? [{ row: source.row, column: source.column, detections }] : []
+  })
 }
