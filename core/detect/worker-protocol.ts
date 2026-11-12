@@ -8,27 +8,29 @@
 import { chunkText, mergeOverlapping } from './chunks.ts'
 import { withNameRules } from './name-cues.ts'
 import { nameDetections, type ModelToken } from './names.ts'
-import { countByColumn, detectTable, type CellDetections, type ColumnCounts } from './table.ts'
+import { countTypes, detectItems, unitProgress, type ItemCounts, type ItemDetections, type TextItem } from './items.ts'
 import type { Detection } from './types.ts'
 
-// detect: every finding in the given columns, for review.
-// survey: only how much personal data each column holds, so a column kept
-// as is can be flagged before anything is reviewed.
-export type DetectRequest = { kind: 'detect' | 'survey', id: number, rows: string[][], columns: number[] }
+// Both workers get feedback items (core/items/): texts with ids, and the unit
+// each belongs to, which progress counts. They never see rows or columns.
+// detect: every finding in the items, for review.
+// survey: only how much personal data each item holds, so a column kept as is
+// can be flagged before anything is reviewed.
+export type DetectRequest = { kind: 'detect' | 'survey', id: number, items: TextItem[] }
 
 export type DetectResponse
   = | { kind: 'progress', id: number, done: number, total: number }
-    | { kind: 'result', id: number, cells: CellDetections[] }
-    | { kind: 'survey', id: number, columns: ColumnCounts[] }
+    | { kind: 'result', id: number, items: ItemDetections[] }
+    | { kind: 'survey', id: number, counts: ItemCounts[] }
     | { kind: 'error', id: number, message: string }
 
 // load: download the name model (or open it from the browser's cache).
-// names: names and places in the given columns, loading the model first if needed.
+// names: names and places in the items, loading the model first if needed.
 // ortPath is where this build serves the ONNX Runtime WebAssembly files.
 // firstNames: false leaves out the first-name list, only to measure what it adds (scripts/eval-names.ts).
 export type NameRequest
   = | { kind: 'load', id: number, ortPath: string }
-    | { kind: 'names', id: number, rows: string[][], columns: number[], ortPath: string, firstNames?: boolean }
+    | { kind: 'names', id: number, items: TextItem[], ortPath: string, firstNames?: boolean }
 
 // resources: the requests the worker made, for the "What leaves your browser"
 // panel, which cannot see a worker's requests on its own.
@@ -36,7 +38,7 @@ export type NameResponse
   = | { kind: 'model-progress', id: number, loaded: number }
     | { kind: 'loaded', id: number }
     | { kind: 'progress', id: number, done: number, total: number }
-    | { kind: 'result', id: number, cells: CellDetections[] }
+    | { kind: 'result', id: number, items: ItemDetections[] }
     | { kind: 'error', id: number, message: string }
     | { kind: 'resources', entries: ResourceRecord[] }
 
@@ -48,11 +50,11 @@ const errorMessage = (error: unknown) => (error instanceof Error ? error.message
 
 export function handleDetectRequest(request: DetectRequest, send: (response: DetectResponse) => void): void {
   try {
-    const cells = detectTable(request.rows, request.columns, {
+    const items = detectItems(request.items, {
       onProgress: (done, total) => send({ kind: 'progress', id: request.id, done, total }),
     })
-    if (request.kind === 'survey') send({ kind: 'survey', id: request.id, columns: countByColumn(cells) })
-    else send({ kind: 'result', id: request.id, cells })
+    if (request.kind === 'survey') send({ kind: 'survey', id: request.id, counts: countTypes(items) })
+    else send({ kind: 'result', id: request.id, items })
   }
   catch (error) {
     send({ kind: 'error', id: request.id, message: errorMessage(error) })
@@ -84,8 +86,9 @@ async function modelDetections(text: string, model: NameModel): Promise<Detectio
 
 /**
  * Loads the name model; for a names request, then finds names and places in
- * the given columns, with the model and the cue rules together (name-cues.ts). Identical texts are labelled once, and cells without
- * letters are skipped: they cannot hold a name.
+ * the items, with the model and the cue rules together (name-cues.ts).
+ * Identical texts are labelled once, and items without letters are skipped:
+ * they cannot hold a name. Progress counts units, as for the rules.
  */
 export async function handleNameRequest(request: NameRequest, send: (response: NameResponse) => void, model: NameModel): Promise<void> {
   try {
@@ -94,23 +97,22 @@ export async function handleNameRequest(request: NameRequest, send: (response: N
       send({ kind: 'loaded', id: request.id })
       return
     }
-    const cells: CellDetections[] = []
+    const results: ItemDetections[] = []
     const seen = new Map<string, ReturnType<typeof nameDetections>>()
     const firstNames = request.firstNames ?? true
-    for (const [row, values] of request.rows.entries()) {
-      for (const column of request.columns) {
-        const text = values[column] ?? ''
-        if (!/\p{L}/u.test(text)) continue
+    const progress = unitProgress(request.items, PROGRESS_EVERY, (done, total) => send({ kind: 'progress', id: request.id, done, total }))
+    for (const [index, { id, text }] of request.items.entries()) {
+      if (/\p{L}/u.test(text)) {
         let detections = seen.get(text)
         if (!detections) {
           detections = withNameRules(text, await modelDetections(text, model), { firstNames })
           seen.set(text, detections)
         }
-        if (detections.length > 0) cells.push({ row, column, detections: detections.map(found => ({ ...found })) })
+        if (detections.length > 0) results.push({ id, detections: detections.map(found => ({ ...found })) })
       }
-      if ((row + 1) % PROGRESS_EVERY === 0 || row + 1 === request.rows.length) send({ kind: 'progress', id: request.id, done: row + 1, total: request.rows.length })
+      progress(index)
     }
-    send({ kind: 'result', id: request.id, cells })
+    send({ kind: 'result', id: request.id, items: results })
   }
   catch (error) {
     send({ kind: 'error', id: request.id, message: errorMessage(error) })

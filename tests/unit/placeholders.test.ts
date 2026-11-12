@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest'
 import { detect } from '../../core/detect'
 import { detectTable } from '../../core/detect/table'
+import { detectItems } from '../../core/detect/items'
 import { handleDetectRequest, type DetectResponse } from '../../core/detect/worker-protocol'
+import { countsByColumn, itemsForColumns, textItems } from '../../core/items/table'
 import { normalizeValue, PlaceholderMap, placeholderLabel, redact } from '../../core/redact/placeholders'
 
 describe('PlaceholderMap', () => {
@@ -72,27 +74,49 @@ describe('detectTable', () => {
   })
 })
 
+describe('detectItems', () => {
+  const items = [
+    { id: 'a', text: 'a@example.com', unit: 'r0' },
+    { id: 'b', text: 'kept@example.com', unit: 'r0' },
+    { id: 'c', text: 'nothing here', unit: 'r1' },
+    { id: 'd', text: 'IP 192.0.2.1', unit: 'r2' },
+  ]
+
+  it('returns only items with detections, by id', () => {
+    expect(detectItems(items).map(({ id }) => id)).toEqual(['a', 'b', 'd'])
+  })
+
+  it('reports progress by unit, per batch and at the end, however many items a unit has', () => {
+    const progress: Array<[number, number]> = []
+    detectItems(items, { batchSize: 2, onProgress: (done, total) => progress.push([done, total]) })
+    expect(progress).toEqual([[2, 3], [3, 3]])
+  })
+})
+
 describe('detection worker protocol', () => {
   it('sends progress, then the result, tagged with the request id', () => {
     const sent: DetectResponse[] = []
-    handleDetectRequest({ kind: 'detect', id: 7, rows: [['a@example.com']], columns: [0] }, response => sent.push(response))
+    handleDetectRequest({ kind: 'detect', id: 7, items: [{ id: 'x', text: 'a@example.com' }] }, response => sent.push(response))
     expect(sent.map(response => response.kind)).toEqual(['progress', 'result'])
     expect(sent.every(response => response.id === 7)).toBe(true)
     const result = sent.at(-1)!
-    expect(result.kind === 'result' && result.cells[0]!.detections[0]!.value).toBe('a@example.com')
+    expect(result.kind === 'result' && result.items[0]!.detections[0]!.value).toBe('a@example.com')
   })
 
-  it('surveys columns as counts per type, without any values', () => {
+  it('surveys items as counts per type, without any values, and the adapter adds them up per column', () => {
     const sent: DetectResponse[] = []
-    const rows = [['a@example.com, b@example.com', '+43 660 234 2972'], ['c@example.com', 'nothing here']]
-    handleDetectRequest({ kind: 'survey', id: 3, rows, columns: [0, 1] }, response => sent.push(response))
-    expect(sent.at(-1)).toEqual({ kind: 'survey', id: 3, columns: [{ column: 0, counts: { EMAIL: 3 } }, { column: 1, counts: { PHONE: 1 } }] })
+    const table = { columns: ['mail', 'phone'], rows: [['a@example.com, b@example.com', '+43 660 234 2972'], ['c@example.com', 'nothing here']] }
+    const surveyed = itemsForColumns(table, [0, 1])
+    handleDetectRequest({ kind: 'survey', id: 3, items: textItems(surveyed) }, response => sent.push(response))
+    const survey = sent.at(-1)!
+    expect(survey.kind).toBe('survey')
     expect(JSON.stringify(sent)).not.toContain('example.com')
+    expect(countsByColumn(surveyed, survey.kind === 'survey' ? survey.counts : [])).toEqual([{ column: 0, counts: { EMAIL: 3 } }, { column: 1, counts: { PHONE: 1 } }])
   })
 
   it('reports a failure without echoing the text that was scanned', () => {
     const sent: DetectResponse[] = []
-    const broken = { kind: 'detect' as const, id: 1, rows: null as unknown as string[][], columns: [0] }
+    const broken = { kind: 'detect' as const, id: 1, items: null as unknown as [] }
     handleDetectRequest(broken, response => sent.push(response))
     expect(sent).toHaveLength(1)
     expect(sent[0]).toMatchObject({ kind: 'error', id: 1 })

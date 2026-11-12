@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { ColumnCounts } from '~~/core/detect/table'
+import { countsByColumn, itemsForColumns, textItems, type ColumnCounts } from '~~/core/items/table'
 
 definePageMeta({ step: 1 })
 
@@ -7,7 +7,7 @@ const { t } = useI18n()
 const localePath = useLocalePath()
 const { number } = useFormat()
 const session = useSession()
-const { table, isSample, roles, scanColumns, review, columnsChanged } = session
+const { table, isSample, roles, review, columnsChanged } = session
 const mayDiscard = useDiscardGuard()
 const { confirm } = useConfirm()
 const detection = useDetection()
@@ -40,8 +40,9 @@ watch(table, async (current) => {
   columnCounts.value = undefined
   if (!current) return
   try {
-    const counts = await detection.survey(current.rows, current.columns.map((_, index) => index))
-    if (table.value === current) columnCounts.value = counts
+    const surveyed = itemsForColumns(current, current.columns.map((_, index) => index))
+    const counts = await detection.survey(textItems(surveyed))
+    if (table.value === current) columnCounts.value = countsByColumn(surveyed, counts)
   }
   catch {
     // Without the survey there are no warnings; checking still works as before.
@@ -110,7 +111,8 @@ async function findPersonalData() {
   detecting.value = true
   detectionFailed.value = false
   try {
-    session.startReview(await detection.run(table.value.rows, scanColumns.value))
+    const set = session.itemsToCheck()!
+    session.startReview(set, await detection.run(textItems(set.items)))
     await navigateTo(localePath('/review'))
   }
   catch {
