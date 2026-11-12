@@ -1,11 +1,13 @@
 <script setup lang="ts">
 // Found and correct per kind of personal data, for one set of the Accuracy page.
+// labels: where each row's name comes from (typeMany.EMAIL, or warning.kind.age for the warnings).
 type Score = { labelled: number, found: number, detected: number, correct: number }
-defineProps<{
+withDefaults(defineProps<{
   rows: Array<{ type: string, score: Score }>
   precision: (score: Score) => number | undefined
   share: (counts: { labelled: number, found: number }) => number
-}>()
+  labels?: string
+}>(), { labels: 'typeMany' })
 const { number, percent } = useFormat()
 </script>
 
@@ -49,7 +51,7 @@ const { number, percent } = useFormat()
           scope="row"
           class="py-1.5 pr-2 font-normal hyphens-auto [overflow-wrap:anywhere] sm:pr-3"
         >
-          {{ $t(`typeMany.${row.type}`) }}
+          {{ $t(`${labels}.${row.type}`) }}
         </th>
         <td class="py-1.5 pr-2 text-right font-mono whitespace-nowrap tabular-nums sm:pr-3">
           {{ percent(share(row.score)) }}

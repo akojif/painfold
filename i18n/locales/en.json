@@ -631,6 +631,10 @@
       "heading": "Method and data",
       "docs": "All numbers and the method",
       "data": "The test data"
+    },
+    "warnings": {
+      "heading": "Could identify someone",
+      "text": "Painfold warns about text that can point to one person together with other details: exact ages, “the only …”, job titles with a small place, and roles one person holds. Warnings are never removed on their own. Measured on {n} hand-written warnings, with the places given; the set is small and was written by the same author as the rules, so expect real feedback to score lower."
     }
   },
   "smallScreen": {
