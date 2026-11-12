@@ -11,9 +11,9 @@ const NUMBER = String.raw`(?<![\p{L}\p{N}.,/])(\d{1,3})(?![\p{N}]|[.,]\d)`
 // What may follow a bare age ("ich bin 42", "I'm 42"): the end, punctuation, "und", "and" or "years".
 const BARE_END = String.raw`(?=\s*(?:$|[.,;:!?)]|und\b|and\b|jahre\b|years\b))`
 
-type Rule = { pattern: RegExp, needsPerson?: boolean }
+type Rule = { pattern: RegExp, needsPerson?: boolean, personBefore?: boolean }
 
-const rule = (pattern: string, needsPerson = false): Rule => ({ pattern: new RegExp(pattern, 'giu'), needsPerson })
+const rule = (pattern: string, needsPerson = false, personBefore = false): Rule => ({ pattern: new RegExp(pattern, 'giu'), needsPerson, personBefore })
 
 // The match's first group is the span that warns.
 const RULES: readonly Rule[] = [
@@ -33,6 +33,9 @@ const RULES: readonly Rule[] = [
   rule(String.raw`(${NUMBER}\s*(?:years?\s+old|y\/o|yo|yrs?\s+old))(?![\p{L}])`),
   // a 42-year-old (needs a person after it, or nothing: "I'm a 42-year-old.").
   rule(String.raw`(${NUMBER}\s*-?\s*years?\s*-?\s*old)(?![\p{L}])`, true),
+  // Last, so a longer phrase found above wins ("my mother is 81 years old").
+  // Meine Mutter ist 84; my dad is 84 (the word before "ist" or "is" must be a person, so "der Preis ist 84" does not warn).
+  rule(String.raw`(\p{L}+)\s+(?:ist|is)\s+${NUMBER}${BARE_END}`, false, true),
 ]
 
 /** The word after a position, lowercased, skipping spaces and hyphens ("42-jährige Steuerberaterin" → "steuerberaterin"). */
@@ -45,12 +48,14 @@ const plausible = (age: number) => age >= 1 && age <= 120
 /** Exact ages in a text, as warnings of type AGE. */
 export function findAges(text: string): IndirectWarning[] {
   const found: IndirectWarning[] = []
-  for (const { pattern, needsPerson } of RULES) {
+  for (const { pattern, needsPerson, personBefore } of RULES) {
     for (const match of text.matchAll(pattern)) {
-      const span = match[1]!
+      if (personBefore && !isPersonNoun(match[1]!)) continue
+      // With a person before it, the age is the second group.
+      const span = personBefore ? match[2]! : match[1]!
       const age = Number(/\d+/.exec(span)![0])
       if (!plausible(age)) continue
-      const start = match.index + match[0].indexOf(span)
+      const start = match.index + match[0].lastIndexOf(span)
       const end = start + span.length
       if (needsPerson && !/Jährig/u.test(span)) {
         const word = nextWord(text, end)

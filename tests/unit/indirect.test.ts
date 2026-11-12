@@ -31,6 +31,8 @@ describe('exact ages', () => {
     ['My mother is 81 years old.', 'age:81 years old'],
     ['Aged 35, I still could not find the button.', 'age:35'],
     ['My 7-year-old son broke it.', 'age:7-year-old'],
+    ['Meine Mutter ist 84 und kommt nicht zurecht.', 'age:84'],
+    ['My dad is 79, so the font matters.', 'age:79'],
   ])('%s', (text, expected) => {
     expect(warnings(text)).toEqual([expected])
   })
@@ -46,6 +48,8 @@ describe('exact ages', () => {
     'Bestellung 42 kam nicht an.',
     'I am 200 years old, said the tortoise.',
     'Mitte 40 und immer noch keine Lösung.',
+    'Der Preis ist 84 und viel zu hoch.',
+    'The total is 42, not 24.',
   ])('not an age: %s', (text) => {
     expect(warnings(text)).toEqual([])
   })
@@ -150,5 +154,31 @@ describe('findIndirect', () => {
 
   it('finds nothing in plain feedback', () => {
     expect(warnings('Der Export als CSV dauert zu lange, bitte beheben.')).toEqual([])
+  })
+})
+
+describe('the indirect-identifier evaluation', () => {
+  it('counts found, missed and wrong warnings per kind and language', async () => {
+    const { evaluateIndirect } = await import('../../scripts/eval-indirect')
+    const text = 'Ich bin 42 Jahre alt. The only problem is speed.'
+    const mistakes: Array<{ kind: string }> = []
+    const scores = evaluateIndirect([
+      { id: 'a', lang: 'de', split: 'dev', text, places: [], warnings: [{ start: 8, end: 20, reason: 'age', text: '42 Jahre alt' }] },
+      { id: 'b', lang: 'en', split: 'dev', text: 'Ich bin die einzige Ärztin.', places: [], warnings: [] },
+      { id: 'c', lang: 'en', split: 'dev', text: 'My mum turned 80.', places: [], warnings: [{ start: 14, end: 16, reason: 'age', text: '80' }] },
+    ], mistakes as never)
+    expect(scores.age.de).toEqual({ labelled: 1, found: 1, detected: 1, correct: 1 })
+    expect(scores.age.en).toEqual({ labelled: 1, found: 0, detected: 0, correct: 0 })
+    expect(scores.only.en).toEqual({ labelled: 0, found: 0, detected: 1, correct: 0 })
+    expect(mistakes.map(mistake => mistake.kind)).toEqual(['wrong', 'missed'])
+  })
+
+  it('has a dev and a test split, with invented texts only', async () => {
+    const { readIndirect } = await import('../../scripts/eval-indirect')
+    expect(readIndirect('dev')).toHaveLength(40)
+    expect(readIndirect('test')).toHaveLength(40)
+    for (const item of readIndirect()) {
+      for (const span of [...item.warnings, ...item.places]) expect(item.text.slice(span.start, span.end), item.id).toBe('text' in span ? span.text : span.value)
+    }
   })
 })

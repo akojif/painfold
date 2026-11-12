@@ -57,6 +57,9 @@ function typeRows(set: 'hard-cases' | 'generated') {
     .map(([type, byLang]) => ({ type, score: pick(byLang as Record<Lang, Score>) }))
     .filter(row => row.score.labelled > 0)
 }
+// Warnings for text that could identify someone, per kind, on their test split.
+const warningRows = computed(() => Object.entries(data.indirect).map(([type, byLang]) => ({ type, score: pick(byLang) })))
+const warningCount = computed(() => warningRows.value.reduce((total, row) => total + row.score.labelled, 0))
 const precision = (score: Score) => (score.detected === 0 ? undefined : score.correct / score.detected)
 
 const GITHUB = 'https://github.com/akojif/painfold/blob/main'
@@ -275,6 +278,28 @@ const GITHUB = 'https://github.com/akojif/painfold/blob/main'
           :share="share"
         />
       </details>
+    </section>
+
+    <section
+      class="mt-10"
+      aria-labelledby="warnings"
+    >
+      <h2
+        id="warnings"
+        class="text-md font-semibold"
+      >
+        {{ $t('accuracy.warnings.heading') }}
+      </h2>
+      <p class="mt-2 max-w-measure text-fg-muted">
+        {{ $t('accuracy.warnings.text', { n: number(warningCount) }) }}
+      </p>
+      <AccuracyTypeTable
+        class="mt-4"
+        labels="warning.kind"
+        :rows="warningRows"
+        :precision="precision"
+        :share="share"
+      />
     </section>
 
     <section
