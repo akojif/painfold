@@ -86,6 +86,21 @@ Every page address ends in a slash: `/roadmap/`, `/de/`, `/de/accuracy/`. That w
 - The hosts redirect the form without a slash, keeping the query: Cloudflare (`html_handling: auto-trailing-slash`) and the local test server.
 - `tests/e2e/addresses.spec.ts` checks every page, including the review and download steps: each link, canonical and hreflang link ends in a slash, and each address without one redirects.
 
+## Indirect identifiers
+
+Text that is not personal data on its own but can point to one person, such as "the only female CFO in Wels" or "a 42-year-old tax adviser in Wels" (#66). Painfold warns about it and never removes it on its own. `core/detect/indirect/` finds three kinds, in German and English:
+
+- **Exact ages** (`age.ts`): "42 Jahre alt", "die 42-Jährige", "mit 42 Jahren", "Alter: 42", "ich bin 42", "a 42-year-old", "aged 42". An age before a noun only warns when the noun is a person ("10-jährige Erfahrung" and "a 5-year-old laptop" don't).
+- **"The only …"** (`roles-in-text.ts`): "die einzige Ärztin", "the only female CFO".
+- **Roles** (`roles.ts`, `roles-in-text.ts`):
+  - A common job title warns only with a place in the same sentence that isn't a large city: "Steuerberaterin in Wels" warns, "Lehrerin in Graz" doesn't.
+  - A unique role (a mayor, a bishop, a school principal, a CEO) warns with any place, with an organisation ("Direktorin der Volksschule …") or when the writer holds it ("I am the mayor").
+  - German feminine and gender-inclusive forms ("Lehrer:in", "LehrerIn") and compounds ("Volksschuldirektorin") count.
+
+Places come from the name model. Without it, ages, "the only …" and unique roles linked to an organisation or the writer are still found.
+
+Large cities (`large-cities.ts`) are those with 100,000 or more residents. The list has the six in Austria, from Statistik Austria, and the 79 in Germany, from the statistical state offices, with English names such as Vienna and Munich. The source and the date it was checked are in the file; re-check when new figures are published. A place that isn't on the list warns, so a missing city adds a warning but never hides one.
+
 ## Name model
 
 Names and places are found by [Davlan/distilbert-base-multilingual-cased-ner-hrl](https://huggingface.co/Davlan/distilbert-base-multilingual-cased-ner-hrl) (AFL-3.0), in the int8 ONNX export by [Xenova](https://huggingface.co/Xenova/distilbert-base-multilingual-cased-ner-hrl). It was trained on news text, including CoNLL-2003 for German and English; the CoNLL source texts are themselves licensed, which is a common grey area for models trained on them.
