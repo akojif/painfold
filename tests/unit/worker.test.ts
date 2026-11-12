@@ -126,8 +126,10 @@ describe('wrangler.jsonc', () => {
     expect(config.assets.not_found_handling).toBe('404-page')
   })
 
-  it('serves production at painfold.com', () => {
+  it('serves production at painfold.com only, and previews on workers.dev', () => {
     expect(config.routes).toEqual([{ pattern: 'painfold.com', custom_domain: true }])
+    expect(config.workers_dev).toBe(false)
+    expect(config.preview_urls).toBe(true)
   })
 
   it('keeps no logs and sends no metrics', () => {
