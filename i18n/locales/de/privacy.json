@@ -1,0 +1,186 @@
+{
+  "privacy": {
+    "notice": "Ihre Datei wird nie hochgeladen. Sie bleibt in diesem Browser."
+  },
+  "network": {
+    "none": "Keine Daten haben diesen Browser verlassen.",
+    "foreign": "1 Anfrage ging an eine andere Website. | {n} Anfragen gingen an andere Websites.",
+    "explain": "Jede Anfrage, die diese Seite seit dem Öffnen gestellt hat. Ihre Datei wird hier gelesen, geprüft und bereinigt und nie irgendwohin gesendet.",
+    "destination": "Ziel",
+    "what": "Was",
+    "size": "Größe",
+    "kind": {
+      "code": "App-Code",
+      "style": "Stile",
+      "font": "Schrift",
+      "data": "App-Daten",
+      "other": "Sonstiges",
+      "model": "Namensmodell",
+      "runtime": "Modell-Laufzeit"
+    },
+    "otherSite": "Andere Website",
+    "allOwn": "Alle Anfragen gingen an diese Website ({host}): der eigene Code, die Schriften und die Texte der App und, falls geladen, das Namensmodell.",
+    "bytes": "{n} B",
+    "kilobytes": "{n} kB",
+    "close": "Schließen",
+    "stored": "Aus diesem Browser",
+    "megabytes": "{n} MB"
+  },
+  "report": {
+    "title": "Painfold-Bereinigungsbericht",
+    "original": "Originaldatei",
+    "cleaned": "Bereinigte Datei",
+    "date": "Bereinigt am",
+    "version": "Painfold-Version",
+    "rows": "Zeilen",
+    "removedHeading": "Durch Platzhalter ersetzt",
+    "nothingRemoved": "Es wurde nichts gefunden oder markiert.",
+    "limitsHeading": "Grenzen",
+    "nameModel": "Namensmodell"
+  },
+  "nameModel": {
+    "heading": "Namen und Orte",
+    "explain": "Für Namen und Orte braucht es ein Namensmodell: {size}, einmal von dieser Website geladen und in diesem Browser gespeichert. Ihre Datei wird nirgendwohin gesendet.",
+    "download": "Namensmodell herunterladen ({size})",
+    "downloadInline": "Namensmodell herunterladen ({size})",
+    "notChecked": "Namen werden nicht geprüft.",
+    "costly": "Das ist ein großer Download. Am besten über WLAN.",
+    "progress": "Namensmodell wird geladen: {loaded} von {total} MB",
+    "progressLabel": "Download des Namensmodells",
+    "background": "Sie können die Prüfung schon starten. Der Download läuft im Hintergrund weiter.",
+    "cancel": "Abbrechen",
+    "stored": "Namensmodell in diesem Browser gespeichert ({size}).",
+    "notStored": "Dieser Browser hatte keinen Platz, um das Namensmodell zu behalten. Es funktioniert für diesen Besuch und wird beim nächsten Mal neu geladen.",
+    "remove": "Entfernen",
+    "failed": "Der Download hat bei {loaded} von {total} MB aufgehört. Prüfen Sie die Verbindung und versuchen Sie es erneut.",
+    "withoutIt": "Alles andere wird auch ohne das Modell geprüft.",
+    "retry": "Erneut versuchen",
+    "offline": "Sie sind offline. Das Namensmodell kann geladen werden, sobald Sie wieder online sind; alles andere funktioniert schon jetzt.",
+    "offlineInline": "Namen werden nicht geprüft. Sie sind offline.",
+    "megabytes": "{n} MB",
+    "announce": {
+      "started": "Namensmodell wird geladen.",
+      "done": "Namensmodell geladen.",
+      "failed": "Der Download des Namensmodells hat aufgehört.",
+      "cancelled": "Download abgebrochen.",
+      "removed": "Namensmodell aus diesem Browser entfernt.",
+      "offline": "Sie sind offline."
+    },
+    "smallScreen": "Namen werden auf einem größeren Bildschirm geprüft. Alles andere funktioniert hier."
+  },
+  "nameScan": {
+    "running": "Namen werden geprüft: {done} von {total} Zeilen",
+    "stop": "Stoppen",
+    "done": "Namen und Orte geprüft.",
+    "names": "keine Namen | 1 Name | {n} Namen",
+    "places": "keine Orte | 1 Ort | {n} Orte",
+    "skipped": "Namen wurden in {done} von {total} Zeilen geprüft, dann übersprungen. Namen in den übrigen Zeilen werden im Download nicht entfernt.",
+    "skippedNone": "Namen wurden für diese Datei übersprungen. Sie werden im Download nicht entfernt.",
+    "checkAnyway": "Namen doch prüfen",
+    "failed": "Die Namensprüfung wurde abgebrochen. Die übrigen Treffer sind davon nicht betroffen.",
+    "retry": "Erneut versuchen",
+    "downloadWaits": "Der Download ist verfügbar, sobald die Namen geprüft sind.",
+    "confirm": {
+      "title": "Namen für diese Datei überspringen?",
+      "body": "Namen werden im Download nicht entfernt.",
+      "skip": "Namen überspringen",
+      "keep": "Weiter prüfen"
+    },
+    "announce": {
+      "started": "Namen werden geprüft.",
+      "done": "Namen geprüft: {names} und {places} hinzugefügt."
+    }
+  },
+  "importNotes": {
+    "document": "Dokumente und Transkripte stehen auf der Roadmap. Derzeit liest Painfold CSV- und Excel-Dateien.",
+    "roadmap": "Zur Roadmap"
+  },
+  "smallScreen": {
+    "title": "Painfold mag größere Bildschirme",
+    "body": "Auf diesem Handy sieht es gut aus, aber Hunderte Zeilen prüft man besser am Laptop. Ihre Daumen werden es Ihnen danken. Öffnen Sie Painfold am Computer: Ihre Datei bleibt dort genauso privat.",
+    "copy": "Link kopieren",
+    "copied": "Link kopiert",
+    "copyManually": "Kopieren Sie diese Adresse von Hand:",
+    "continue": "Trotzdem weiter"
+  },
+  "warning": {
+    "heading": "Könnte jemanden erkennbar machen",
+    "title": "Könnte jemanden erkennbar machen, Zeile {row}",
+    "kind": {
+      "age": "Genaues Alter",
+      "only": "„Die einzige …“",
+      "role-place": "Beruf mit Ort",
+      "unique-role": "Rolle, die eine Person innehat"
+    },
+    "short": {
+      "age": "Alter",
+      "only": "die einzige",
+      "role-place": "Beruf und Ort",
+      "unique-role": "Rolle"
+    },
+    "why": {
+      "age": "Ein genaues Alter kann zusammen mit anderen Angaben auf eine Person hinweisen.",
+      "only": "Das beschreibt eine Person.",
+      "role-place": "Zusammen mit {place} kann dieser Beruf auf eine Person hinweisen.",
+      "unique-role": "Diese Rolle hat eine Person inne.",
+      "unique-role-place": "Diese Rolle hat in {place} eine Person inne."
+    },
+    "placeRemoved": "{place} wird entfernt, damit ist das jetzt weniger eindeutig.",
+    "open": "Bleibt in der Datei, außer Sie entfernen es. Beim Entfernen wird es durch {placeholder} ersetzt.",
+    "removed": "Entfernt. In der bereinigten Datei steht hier {placeholder}.",
+    "kept": "So belassen, wie es geschrieben ist.",
+    "state": {
+      "pending": "nicht geprüft",
+      "remove": "entfernt",
+      "dismiss": "behalten"
+    },
+    "markLabel": "Könnte jemanden erkennbar machen: {kind}, {state}: {text}",
+    "valueLabel": "Könnte jemanden erkennbar machen: {kind}, Zeile {row}, {state}: {text}",
+    "toCheck": "1 Hinweis zu prüfen | {n} Hinweise zu prüfen",
+    "removeAllLabel": "Den noch nicht geprüften Hinweis entfernen | Alle {n} noch nicht geprüften Hinweise entfernen",
+    "announce": {
+      "remove": "Entfernt. Noch {left} Hinweise zu prüfen.",
+      "dismiss": "Behalten. Noch {left} Hinweise zu prüfen.",
+      "removeAll": "Alle offenen Hinweise sind entfernt."
+    },
+    "summary": "Könnte jemanden erkennbar machen: {removed} entfernt, {kept} behalten."
+  },
+  "start": {
+    "privacy": "Ihre Datei wird nie hochgeladen. Sie bleibt in diesem Browser.",
+    "dropOverlay": "Zum Öffnen loslassen. Nichts wird hochgeladen."
+  },
+  "review": {
+    "limits": "Die automatische Erkennung kann personenbezogene Daten übersehen. Prüfen Sie die Ergebnisse, bevor Sie die bereinigte Datei weitergeben. Painfold unterstützt Sie beim Datenschutz, ist aber keine Rechtsberatung und macht Ihre Verarbeitung nicht von sich aus DSGVO-konform."
+  },
+  "columns": {
+    "warning": "Enthält {found}.",
+    "checkInstead": "Stattdessen prüfen",
+    "masked": "Werte ausgeblendet, weil diese Spalte weggelassen wird",
+    "reason": {
+      "names": "Sieht nach Namen aus",
+      "emails": "Sieht nach E-Mail-Adressen aus",
+      "phones": "Sieht nach Telefonnummern aus",
+      "birthDates": "Sieht nach Geburtsdaten aus",
+      "addresses": "Sieht nach Adressen aus",
+      "ids": "Sieht nach persönlichen Kennnummern aus",
+      "noText": "Nur Zahlen und Datumsangaben"
+    },
+    "help": "Prüfen: wird nach personenbezogenen Daten durchsucht. Unverändert: wird ohne Prüfung in die bereinigte Datei übernommen. Weglassen: kommt nicht in die bereinigte Datei."
+  },
+  "download": {
+    "names": {
+      "checked": "Namen und Orte wurden mit dem Namensmodell geprüft.",
+      "partly": "Namen wurden in {done} von {total} Zeilen geprüft; für die übrigen wurde die Prüfung übersprungen, dort wurden Namen nicht entfernt.",
+      "skipped": "Namen wurden nicht geprüft: Die Prüfung wurde für diese Datei übersprungen.",
+      "failed": "Namen wurden nicht geprüft: Das Namensmodell konnte nicht laufen.",
+      "notChecked": "Namen und Orte wurden nicht geprüft: Das Namensmodell wurde nicht heruntergeladen.",
+      "smallScreen": "Namen wurden nicht geprüft: Das geschieht auf einem größeren Bildschirm."
+    },
+    "mapStays": "Die Liste der Originalwerte hinter den Platzhaltern bleibt in diesem Browser und ist weg, sobald Sie den Tab schließen.",
+    "reportExplain": "Die bereinigte Datei enthält nur Ihre Daten. Der Bereinigungsbericht listet auf, was ersetzt wurde, mit Datum, Painfold-Version und den Grenzen der automatischen Erkennung.",
+    "notReviewed": "Enthält 1 Treffer, der nicht geprüft wurde. | Enthält {n} Treffer, die nicht geprüft wurden."
+  },
+  "importErrors": {
+    "unsupported-format": "Dieser Dateityp wird nicht unterstützt. Painfold liest CSV-, TSV- und Excel-Dateien (.xlsx)."
+  }
+}

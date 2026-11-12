@@ -1,0 +1,77 @@
+{
+  "review": {
+    "heading": "{findings} in {rows}",
+    "findings": "No findings | 1 finding | {n} findings",
+    "progress": "{reviewed} reviewed, {left} left",
+    "progressLabel": "Reviewed",
+    "onlyWithFindings": "Only rows with findings",
+    "row": "Row {n}",
+    "nothingFound": "Nothing found in this row",
+    "noFindings": "No findings. Select any text that should be removed and press M, or continue.",
+    "state": {
+      "pending": "not reviewed",
+      "remove": "removed",
+      "keep": "kept"
+    },
+    "markLabel": "{type}, {state}: {text}",
+    "note": {
+      "title": "{type}, row {row}",
+      "copies": "Appears in 1 row. Removing it replaces it with {placeholder}. | Appears in {n} rows. Removing it replaces every copy with {placeholder}.",
+      "removed": "Removed in every copy.",
+      "kept": "Kept in every copy.",
+      "nothingSelected": "Select a finding to review it.",
+      "formOf": "Looks like a form of “{marked}”, which you marked. Removing it replaces it with {placeholder}."
+    },
+    "remove": "Remove",
+    "keep": "Keep",
+    "undo": "Undo",
+    "keys": {
+      "label": "Keyboard shortcuts",
+      "next": "next and previous finding",
+      "mark": "mark selected text as missed",
+      "undo": "undo"
+    },
+    "mark": {
+      "button": "Mark selected text as missed",
+      "heading": "Mark “{text}” as personal data",
+      "type": "Type",
+      "confirm": "Mark as personal data",
+      "cancel": "Cancel",
+      "noSelection": "Select the missed text in a row first, then press M.",
+      "oneCell": "Select text within one cell.",
+      "overlap": "The selection overlaps a finding. Select only the missed text.",
+      "done": "{type} marked in 1 row. | {type} marked in {n} rows.",
+      "forms": "1 possible form to review. | {n} possible forms to review."
+    },
+    "removeAll": "Remove all {n} left",
+    "continue": "Continue to download",
+    "willRemove": "1 not reviewed will be removed. | {n} not reviewed will be removed.",
+    "announce": {
+      "remove": "{type} removed, {left} left.",
+      "keep": "{type} kept, {left} left.",
+      "removeAll": "All findings left are removed.",
+      "removeType": "All {type} removed.",
+      "undo": "Undone.",
+      "nothingToUndo": "Nothing to undo."
+    },
+    "views": {
+      "label": "View",
+      "byValue": "By value",
+      "byRow": "By row"
+    },
+    "valuesLabel": "Values found",
+    "removeAllOfType": "Remove 1 {one} | Remove all {n} {many}",
+    "valueLabel": "{type}, {state}: {text}",
+    "inRows": "In 1 row. Removing it replaces it with {placeholder}. | In {n} rows. Removing it replaces every copy with {placeholder}.",
+    "finished": {
+      "title": "All findings are reviewed.",
+      "body": "{removed} removed, {kept} kept. Next: download the cleaned file and the cleaning report.",
+      "action": "Continue to download"
+    },
+    "removeAllShort": "Remove 1 | Remove all {n}",
+    "keptTag": "Kept",
+    "moreRows": "And 1 more row. | And {n} more rows.",
+    "noRows": "No rows with findings.",
+    "showMoreOfType": "Show {n} more"
+  }
+}

@@ -29,34 +29,35 @@ Every end-to-end test fails if the page contacts any origin other than the app i
 
 The interface is in English and German. English lives at `/`, German under `/de/` (`prefix_except_default`), so every page is prerendered in both languages and German pages can be shared and indexed; each page links to the other language with `hreflang`.
 
-- Every change adds both languages: `i18n/locales/en.json` and `i18n/locales/de.json`. `tests/unit/locales.test.ts` fails if a message exists in one language only, or if placeholders or plural forms differ.
+- The text lives in one file per area and language: `i18n/locales/<en|de>/<area>.json`, for the areas common, start, columns, review, download, roadmap, accuracy, privacy and errors (`i18n/messages.ts` lists them). @nuxtjs/i18n merges a language's files deeply, so one key can be split across files, such as `start` in `start.json` with `start.privacy` in `privacy.json`.
+- Every change adds both languages, in the matching file. `tests/unit/locales.test.ts` fails if a message exists in one language only or in a different file, if placeholders or plural forms differ, or if a message is defined in two files.
 - German is plain and uses "Sie". The German locale is `de-AT`, so numbers, lists and any written dates follow Austrian conventions ("Jänner"). Dates in the cleaning report stay ISO (2026-11-10), which reads the same in both languages.
 - The language is chosen like this: an explicit `/de/` address always wins; only the root `/` follows a saved choice (`painfold-language` in `localStorage`) or, without one, the browser language, in a small inline script before first paint. The switch in the header saves the choice and moves to the same page in the other language inside the app, so an open file and the review are kept. No cookie is set.
 - Known limit: a missing address under `/de/` is answered with the single prerendered 404 page, which is in English until the app has loaded, then German.
 
 ### German texts to review before release
 
-These are where precise wording matters most; a native speaker should review them before each release that changes them:
+These are where precise wording matters most; a native speaker should review them before each release that changes them. They are all in **`i18n/locales/de/privacy.json`** (and the English in `en/privacy.json`), except the Accuracy page, which stays whole in `accuracy.json`, and the product terms, which are used everywhere. A unit test keeps this list and `privacy.json` in step:
 
 - The privacy notice and the start screen's privacy line (`privacy.notice`, `start.privacy`, `start.dropOverlay`).
 - The limits notice (`review.limits`), also used in the cleaning report.
 - The "What leaves your browser" panel (`network.none`, `network.explain`, `network.allOwn`, `network.foreign`, `network.stored`).
 - The name model download: what is downloaded and kept, and the failure and offline messages (`nameModel.*`). "Namensmodell" is the chosen term.
 - The small-screen sheet (`smallScreen.*`: "Painfold mag größere Bildschirme" and its text, which should stay warm and a little playful) and the small-screen notes (`nameModel.smallScreen`, `download.names.smallScreen`).
-- The Accuracy page (`accuracy.*`): the opening sentence ("Von 100 Namen in Ihrem Feedback entfernt Painfold etwa 97 …"), the findings, how it is measured, the name-origin groups ("Herkunftsgruppe"), the known gaps and the model's licence note.
+- The Accuracy page (`accuracy.*`, in `accuracy.json`): the opening sentence ("Von 100 Namen in Ihrem Feedback entfernt Painfold etwa 97 …"), the findings, how it is measured, the name-origin groups ("Herkunftsgruppe"), the known gaps and the model's licence note.
 - Opening files: the note about documents and transcripts and the unsupported-file message (`importNotes.*`, `importErrors.unsupported-format`).
 - Names in the review and the download: the check, Stop and its question, and what the cleaning report says (`nameScan.*`, `download.names.*`).
 - Column warnings and reasons (`columns.warning`, `columns.checkInstead`, `columns.masked`, `columns.reason.*`, `columns.help`).
 - What the download contains and what is kept (`download.mapStays`, `download.reportExplain`, `download.notReviewed`) and the cleaning report (`report.*`).
 - The warnings for text that could identify someone (`warning.*`): "Könnte jemanden erkennbar machen" as the heading, "Hinweis" for a warning, and the reasons, especially "Beruf mit Ort" and "Rolle, die eine Person innehat".
-- Terms chosen for this product: the column roles "Prüfen / Unverändert / Weglassen", "Treffer" for a finding, and "UID-Nummer" for VAT ID.
+- Terms chosen for this product, in the files where they are used: the column roles "Prüfen / Unverändert / Weglassen" (`columns.json`), "Treffer" for a finding (`review.json` and others), and "UID-Nummer" for VAT ID (`common.json`).
 
 Open questions for the reviewer:
 
 - "Aufgaben, Probleme und Wünsche" for jobs, pains and gains, or keeping the canvas terms "Jobs, Pains und Gains", which German-speaking product teams often use?
 - "Kunden", "Kund:innen" or "Kundschaft" in the headline, the roadmap and elsewhere?
 
-The review happens before the v0.2.0 release.
+The review happens before the v0.2.1 release (#110).
 
 
 

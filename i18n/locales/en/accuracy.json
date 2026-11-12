@@ -1,0 +1,108 @@
+{
+  "accuracy": {
+    "title": "Accuracy",
+    "heading": "How well Painfold finds personal data",
+    "lead": "Out of 100 names in your feedback, Painfold removes about {n}. That's why you review every finding before sharing.",
+    "findingsLabel": "In short",
+    "findings": {
+      "names": "Names: {removal} are removed in German and English feedback, and at least {min} in every one of {groups} name-origin groups.",
+      "rules": "Emails, phone numbers, IBANs and the other kinds of personal data: {removal} of the values in hand-written hard cases are removed.",
+      "targetMet": "Stage 2 target, at least {target} of names removed in every group: met.",
+      "targetMissed": "Stage 2 target, at least {target} of names removed in every group: not met yet."
+    },
+    "language": "Language",
+    "languages": {
+      "both": "Both languages",
+      "de": "German",
+      "en": "English"
+    },
+    "measured": {
+      "heading": "How it's measured",
+      "sets": "Painfold is measured on made-up feedback with known personal data, in German and English: hand-written hard cases, hand-written names typical of 13 communities living in Austria, long texts, and generated messages.",
+      "browser": "The name model is measured in a browser, the way it runs for you. Its rules were tuned on a separate set of sentences; the test sentences were checked only once, after tuning. They were written by the same person who tuned the rules, so a test set written by someone else is planned.",
+      "terms": "Removed: the value is gone from the cleaned file, whatever kind of data it was taken for. Removed as a name: removed and recognised as a name."
+    },
+    "names": {
+      "heading": "Names",
+      "removal": "Removed",
+      "typeCorrect": "Removed as a name",
+      "withoutList": "Removed without the first-name list",
+      "count": "{n} test names",
+      "list": "{onList} of {total} test names contain a first name from Painfold's list. The list is used only right after a greeting, a thank-you, a sign-off or an introduction (\"hi anna\", \"LG Markus\")."
+    },
+    "groups": {
+      "heading": "By name-origin group",
+      "note": "The groups exist only in the test data, so that names from every community are measured. Painfold never infers anyone's origin.",
+      "perLanguage": "Per language, each group has only 12 or 13 test names, so one miss moves it by about 8 points. The target applies to each group across both languages.",
+      "target": "Target {target}",
+      "below": "below target",
+      "detail": "As a name {typeCorrect}, without the list {withoutList}",
+      "names": {
+        "german-speaking": "German-speaking",
+        "english": "English",
+        "bosnian-serbian-croatian": "Bosnian, Serbian, Croatian",
+        "turkish": "Turkish",
+        "romanian": "Romanian",
+        "hungarian": "Hungarian",
+        "polish": "Polish",
+        "ukrainian": "Ukrainian",
+        "arabic": "Arabic",
+        "afghan": "Afghan",
+        "african": "African",
+        "south-asian": "South Asian",
+        "east-asian": "East Asian"
+      }
+    },
+    "long": {
+      "heading": "Names in long texts",
+      "note": "The name model reads about 300 words at a time, so longer texts are checked in overlapping parts. These texts are four to five times that long.",
+      "positions": [
+        "At the start",
+        "In the middle",
+        "At the end"
+      ]
+    },
+    "rules": {
+      "heading": "Other personal data",
+      "note": "Hand-written hard cases: values written in unusual ways, pasted or disguised, and look-alikes that must not be removed, such as order numbers.",
+      "type": "Kind of data",
+      "found": "Found",
+      "correct": "Correct",
+      "values": "Values",
+      "explain": "Found: the share of values removed as the right kind of data. Correct: the share of findings that really were that kind of data.",
+      "generated": "Generated data (a check that nothing broke)",
+      "generatedNote": "Messages built from the same templates as the sample file. The detectors could be tuned to these sentences, so the numbers are high by design: they show that nothing broke."
+    },
+    "gaps": {
+      "heading": "Known gaps",
+      "items": [
+        "English names in English sentences are the weakest area: 11 of 13 are removed. That is too few names to judge one language on its own; a larger test set is planned (#82).",
+        "Nicknames after a greeting or thank-you that are not on the first-name list, such as \"cheers ollie\".",
+        "Names at the start of a sentence, with nothing before them: \"Sanne van der Berg says…\".",
+        "Some particles and multi-part names: \"Saif ur Rehman\", \"Tesfaye Bekele\".",
+        "Small towns: in \"Mehmet Aydın aus Wels\" the name is removed, but not \"Wels\".",
+        "Email addresses spelled out to fool spam filters (\"name AT example DOT net\").",
+        "English addresses that start with a flat number (\"Flat 2, 14 Market Street\").",
+        "A few document numbers that look like an Austrian social security number are removed although they are not one."
+      ],
+      "mark": "Anything missed can be marked in the review with M."
+    },
+    "speed": {
+      "heading": "Speed",
+      "text": "A file with 5,000 rows is checked for emails, phone numbers and the other rule-based data in about 1.5 seconds. With the name model in your browser, names in it take 70 to 115 seconds, checked in the background while you review."
+    },
+    "model": {
+      "heading": "The name model",
+      "text": "Names and places are found by {model} ({license}), a multilingual model trained on news text, including the CoNLL-2003 data set. The CoNLL texts are themselves licensed, which is a grey area for models trained on them. Painfold serves the model from its own site and runs it in your browser."
+    },
+    "method": {
+      "heading": "Method and data",
+      "docs": "All numbers and the method",
+      "data": "The test data"
+    },
+    "warnings": {
+      "heading": "Could identify someone",
+      "text": "Painfold warns about text that can point to one person together with other details: exact ages, “the only …”, job titles with a small place, and roles one person holds. Warnings are never removed on their own. Measured on {n} hand-written warnings, with the places given; the set is small and was written by the same author as the rules, so expect real feedback to score lower."
+    }
+  }
+}

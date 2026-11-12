@@ -1,0 +1,153 @@
+{
+  "app": {
+    "name": "Painfold",
+    "tagline": "Finden Sie, was Ihren Kunden wehtut, ohne preiszugeben, wer sie sind."
+  },
+  "nav": {
+    "label": "Schritte",
+    "done": "erledigt",
+    "steps": {
+      "import": "Importieren",
+      "review": "Prüfen",
+      "download": "Herunterladen"
+    },
+    "startOver": "Neu beginnen",
+    "newTab": "(öffnet in neuem Tab)"
+  },
+  "footer": {
+    "source": "Open Source",
+    "roadmap": "Roadmap",
+    "credit": "Entwickelt von {name}",
+    "factsLabel": "Über Painfold",
+    "noCookies": "Keine Cookies",
+    "noAccount": "Kein Konto",
+    "accuracy": "Genauigkeit"
+  },
+  "types": {
+    "EMAIL": "E-Mail-Adressen",
+    "PHONE": "Telefonnummern",
+    "IBAN": "IBANs",
+    "CARD": "Kartennummern",
+    "SVNR": "österreichische Sozialversicherungsnummern",
+    "VAT_ID": "UID-Nummern",
+    "URL": "Links",
+    "IP": "IP-Adressen",
+    "DATE_OF_BIRTH": "Geburtsdaten",
+    "ADDRESS": "Adressen",
+    "POSTCODE": "Postleitzahlen",
+    "NAME": "Namen",
+    "PLACE": "Orte"
+  },
+  "file": {
+    "rows": "keine Zeilen | 1 Zeile | {n} Zeilen",
+    "chooseAnother": "Andere Datei wählen",
+    "sheet": "Tabellenblatt",
+    "sample": "Beispieldatei mit erfundenen Daten.",
+    "ragged": "1 Zeile hatte eine andere Anzahl an Zellen als die Kopfzeile und wurde aufgefüllt. | {n} Zeilen hatten eine andere Anzahl an Zellen als die Kopfzeile und wurden aufgefüllt."
+  },
+  "header": {
+    "outbound": "Was Ihren Browser verlässt",
+    "bytes": "0 Bytes | 1 Byte | {n} Bytes"
+  },
+  "typeOne": {
+    "EMAIL": "E-Mail-Adresse",
+    "PHONE": "Telefonnummer",
+    "IBAN": "IBAN",
+    "CARD": "Kartennummer",
+    "SVNR": "Sozialversicherungsnummer",
+    "VAT_ID": "UID-Nummer",
+    "URL": "Link",
+    "IP": "IP-Adresse",
+    "DATE_OF_BIRTH": "Geburtsdatum",
+    "ADDRESS": "Adresse",
+    "POSTCODE": "Postleitzahl",
+    "NAME": "Name",
+    "PLACE": "Ort"
+  },
+  "typeShort": {
+    "EMAIL": "E-Mail",
+    "PHONE": "Telefon",
+    "IBAN": "IBAN",
+    "CARD": "Karte",
+    "SVNR": "SV-Nummer",
+    "VAT_ID": "UID",
+    "URL": "Link",
+    "IP": "IP",
+    "DATE_OF_BIRTH": "Geburtsdatum",
+    "ADDRESS": "Adresse",
+    "POSTCODE": "PLZ",
+    "NAME": "Name",
+    "PLACE": "Ort"
+  },
+  "typeMany": {
+    "EMAIL": "E-Mail-Adressen",
+    "PHONE": "Telefonnummern",
+    "IBAN": "IBANs",
+    "CARD": "Kartennummern",
+    "SVNR": "Sozialversicherungsnummern",
+    "VAT_ID": "UID-Nummern",
+    "URL": "Links",
+    "IP": "IP-Adressen",
+    "DATE_OF_BIRTH": "Geburtsdaten",
+    "ADDRESS": "Adressen",
+    "POSTCODE": "Postleitzahlen",
+    "NAME": "Namen",
+    "PLACE": "Orte"
+  },
+  "theme": {
+    "label": "Darstellung",
+    "system": "Systemeinstellung verwenden",
+    "light": "Hell",
+    "dark": "Dunkel"
+  },
+  "typeManyLower": {
+    "EMAIL": "E-Mail-Adressen",
+    "PHONE": "Telefonnummern",
+    "IBAN": "IBANs",
+    "CARD": "Kartennummern",
+    "SVNR": "SV-Nummern",
+    "VAT_ID": "UID-Nummern",
+    "URL": "Links",
+    "IP": "IP-Adressen",
+    "DATE_OF_BIRTH": "Geburtsdaten",
+    "ADDRESS": "Adressen",
+    "POSTCODE": "Postleitzahlen",
+    "NAME": "Namen",
+    "PLACE": "Orte"
+  },
+  "typeOneLower": {
+    "EMAIL": "E-Mail-Adresse",
+    "PHONE": "Telefonnummer",
+    "IBAN": "IBAN",
+    "CARD": "Kartennummer",
+    "SVNR": "SV-Nummer",
+    "VAT_ID": "UID-Nummer",
+    "URL": "Link",
+    "IP": "IP-Adresse",
+    "DATE_OF_BIRTH": "Geburtsdatum",
+    "ADDRESS": "Adresse",
+    "POSTCODE": "Postleitzahl",
+    "NAME": "Name",
+    "PLACE": "Ort"
+  },
+  "language": {
+    "label": "Sprache",
+    "en": "Englisch",
+    "de": "Deutsch"
+  },
+  "discard": {
+    "title": "Neu beginnen?",
+    "body": "Ihre Datei und Ihre Prüfentscheidungen werden gelöscht. Es wurde nichts hochgeladen, also bleibt auch nirgendwo anders etwas gespeichert.",
+    "confirm": "Neu beginnen",
+    "cancel": "Weiterarbeiten"
+  },
+  "resetReview": {
+    "title": "Prüfung zurücksetzen?",
+    "body": "Personenbezogene Daten werden mit der neuen Spaltenauswahl neu gesucht, und Ihre Prüfentscheidungen werden gelöscht.",
+    "confirm": "Neu suchen",
+    "cancel": "Weiterarbeiten"
+  },
+  "toast": {
+    "close": "Schließen"
+  }
+}

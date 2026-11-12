@@ -1,0 +1,71 @@
+{
+  "roadmap": {
+    "title": "Roadmap",
+    "intro": "Painfold hilft Ihnen zu verstehen, was Ihren Kunden wehtut. Der erste Schritt: Ihr Feedback vertraulich bereinigen.",
+    "current": "Aktuelle Phase",
+    "status": {
+      "available": "Verfügbar",
+      "inProgress": "In Arbeit",
+      "planned": "Geplant",
+      "next": "Als Nächstes"
+    },
+    "stagesLabel": "Phasen",
+    "full": "Die ganze Roadmap auf GitHub lesen",
+    "stages": {
+      "clean": {
+        "name": "Bereinigen",
+        "summary": "Personenbezogene Daten in Ihrem Browser aus einer Feedback-Datei entfernen und die bereinigte Datei herunterladen.",
+        "points": [
+          "E-Mail-Adressen, Telefonnummern, IBANs und acht weitere Arten personenbezogener Daten",
+          "Jeden Treffer vor dem Download prüfen und korrigieren",
+          "Nichts wird hochgeladen"
+        ]
+      },
+      "names": {
+        "name": "Namen",
+        "summary": "Auch Namen und Orte finden, mit einem Modell, das in Ihrem Browser läuft.",
+        "points": [
+          "Personen und Orte auf Deutsch und Englisch",
+          "Eine Oberfläche auf Deutsch und Englisch",
+          "Veröffentlichte Genauigkeit für jede Art personenbezogener Daten"
+        ]
+      },
+      "jobs": {
+        "name": "Aufgaben, Probleme und Wünsche",
+        "summary": "Sehen, was Ihre Kunden erledigen wollen, was sie stört und was sie sich wünschen.",
+        "points": [
+          "Ihr eigener KI-Schlüssel oder ein lokales Modell",
+          "Vor der Analyse genau sehen, was gesendet wird",
+          "Jedes Zitat wird mit Ihren Daten abgeglichen"
+        ]
+      },
+      "report": {
+        "name": "Bericht",
+        "summary": "Ein Bericht, mit dem Ihr Team in einem Meeting arbeiten kann.",
+        "points": [
+          "Die drei wichtigsten Erkenntnisse zuerst",
+          "Segmente und Trends, wenn Ihre Datei sie hergibt",
+          "Chancen als „Wie könnten wir …“-Fragen"
+        ]
+      },
+      "sources": {
+        "name": "Transkripte und Dokumente",
+        "summary": "Auch Interview-Transkripte und Dokumente bereinigen und auswerten, nicht nur Tabellen.",
+        "points": [
+          "Zuerst Transkripte (TXT, VTT, SRT), dann DOCX und PDF",
+          "Sprecher einheitlich ersetzt, Dokument-Metadaten entfernt",
+          "Bereinigter Text als TXT oder Markdown"
+        ]
+      },
+      "launch": {
+        "name": "Start",
+        "summary": "Painfold in 30 Sekunden ausprobieren oder auf Ihren eigenen Servern betreiben.",
+        "points": [
+          "Eine Demo mit fertigen Ergebnissen, ohne API-Schlüssel",
+          "Ein Docker-Image zum Selbst-Hosten mit einem lokalen Modell",
+          "Dokumentation für Teams"
+        ]
+      }
+    }
+  }
+}

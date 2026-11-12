@@ -1,0 +1,77 @@
+{
+  "review": {
+    "heading": "{findings} in {rows}",
+    "findings": "Keine Treffer | 1 Treffer | {n} Treffer",
+    "progress": "{reviewed} geprüft, {left} offen",
+    "progressLabel": "Geprüft",
+    "onlyWithFindings": "Nur Zeilen mit Treffern",
+    "row": "Zeile {n}",
+    "nothingFound": "In dieser Zeile wurde nichts gefunden",
+    "noFindings": "Keine Treffer. Markieren Sie Text, der entfernt werden soll, und drücken Sie M, oder fahren Sie fort.",
+    "state": {
+      "pending": "nicht geprüft",
+      "remove": "entfernt",
+      "keep": "behalten"
+    },
+    "markLabel": "{type}, {state}: {text}",
+    "note": {
+      "title": "{type}, Zeile {row}",
+      "copies": "Kommt in 1 Zeile vor. Beim Entfernen wird der Wert durch {placeholder} ersetzt. | Kommt in {n} Zeilen vor. Beim Entfernen wird jedes Vorkommen durch {placeholder} ersetzt.",
+      "removed": "In jedem Vorkommen entfernt.",
+      "kept": "In jedem Vorkommen behalten.",
+      "nothingSelected": "Wählen Sie einen Treffer aus, um ihn zu prüfen.",
+      "formOf": "Sieht aus wie eine Form von „{marked}“, das Sie markiert haben. Beim Entfernen wird es durch {placeholder} ersetzt."
+    },
+    "remove": "Entfernen",
+    "keep": "Behalten",
+    "undo": "Rückgängig",
+    "keys": {
+      "label": "Tastenkürzel",
+      "next": "nächster und vorheriger Treffer",
+      "mark": "markierten Text als übersehen kennzeichnen",
+      "undo": "rückgängig machen"
+    },
+    "mark": {
+      "button": "Markierten Text als übersehen kennzeichnen",
+      "heading": "„{text}“ als personenbezogene Daten kennzeichnen",
+      "type": "Art",
+      "confirm": "Als personenbezogene Daten kennzeichnen",
+      "cancel": "Abbrechen",
+      "noSelection": "Markieren Sie zuerst den übersehenen Text in einer Zeile und drücken Sie dann M.",
+      "oneCell": "Markieren Sie Text innerhalb einer Zelle.",
+      "overlap": "Die Auswahl überschneidet sich mit einem Treffer. Markieren Sie nur den übersehenen Text.",
+      "done": "{type} in 1 Zeile gekennzeichnet. | {type} in {n} Zeilen gekennzeichnet.",
+      "forms": "1 mögliche Form zu prüfen. | {n} mögliche Formen zu prüfen."
+    },
+    "removeAll": "Alle {n} offenen entfernen",
+    "continue": "Weiter zum Download",
+    "willRemove": "1 nicht geprüfter Treffer wird entfernt. | {n} nicht geprüfte Treffer werden entfernt.",
+    "announce": {
+      "remove": "{type} entfernt, {left} offen.",
+      "keep": "{type} behalten, {left} offen.",
+      "removeAll": "Alle offenen Treffer wurden entfernt.",
+      "removeType": "Alle {type} entfernt.",
+      "undo": "Rückgängig gemacht.",
+      "nothingToUndo": "Nichts rückgängig zu machen."
+    },
+    "views": {
+      "label": "Ansicht",
+      "byValue": "Nach Wert",
+      "byRow": "Nach Zeile"
+    },
+    "valuesLabel": "Gefundene Werte",
+    "removeAllOfType": "1 {one} entfernen | Alle {n} {many} entfernen",
+    "valueLabel": "{type}, {state}: {text}",
+    "inRows": "In 1 Zeile. Beim Entfernen wird der Wert durch {placeholder} ersetzt. | In {n} Zeilen. Beim Entfernen wird jedes Vorkommen durch {placeholder} ersetzt.",
+    "finished": {
+      "title": "Alle Treffer sind geprüft.",
+      "body": "{removed} entfernt, {kept} behalten. Als Nächstes: die bereinigte Datei und den Bereinigungsbericht herunterladen.",
+      "action": "Weiter zum Download"
+    },
+    "removeAllShort": "1 entfernen | Alle {n} entfernen",
+    "keptTag": "Behalten",
+    "moreRows": "Und 1 weitere Zeile. | Und {n} weitere Zeilen.",
+    "noRows": "Keine Zeilen mit Treffern.",
+    "showMoreOfType": "{n} weitere anzeigen"
+  }
+}
