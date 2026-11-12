@@ -14,7 +14,7 @@ export interface RoadmapStage {
 
 export const ROADMAP_STAGES: readonly RoadmapStage[] = [
   { id: 'clean', version: 'v0.1', status: 'available' },
-  { id: 'names', version: 'v0.2', status: 'inProgress' },
+  { id: 'names', version: 'v0.2', status: 'available' },
   { id: 'jobs', version: 'v0.3', status: 'next' },
   { id: 'report', version: 'v0.4', status: 'planned' },
   { id: 'sources', version: 'v0.5', status: 'planned' },
