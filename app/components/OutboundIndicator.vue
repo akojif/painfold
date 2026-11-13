@@ -3,9 +3,9 @@ import type { NetworkEntry } from '~/composables/useNetworkLog'
 
 const { t } = useI18n()
 const { number } = useFormat()
-const { entries, foreign, foreignBytes } = useNetworkLog()
+const { entries, ai, foreign, sentBytes } = useNetworkLog()
 const dialog = useTemplateRef<HTMLDialogElement>('dialog')
-const label = computed(() => t('header.bytes', { n: number(foreignBytes.value) }, foreignBytes.value))
+const label = computed(() => t('header.bytes', { n: number(sentBytes.value) }, sentBytes.value))
 
 function size(entry: NetworkEntry) {
   if (entry.stored) return t('network.stored')
@@ -60,9 +60,9 @@ function size(entry: NetworkEntry) {
         </div>
         <p
           class="font-semibold"
-          :class="foreign.length > 0 ? 'text-danger' : 'text-accent'"
+          :class="foreign.length > 0 ? 'text-danger' : ai.length > 0 ? 'text-fg' : 'text-accent'"
         >
-          {{ foreign.length > 0 ? $t('network.foreign', { n: foreign.length }, foreign.length) : $t('network.none') }}
+          {{ foreign.length > 0 ? $t('network.foreign', { n: foreign.length }, foreign.length) : ai.length > 0 ? $t('network.toAi', { n: ai.length }, ai.length) : $t('network.none') }}
         </p>
         <p class="text-sm text-fg-muted">
           {{ $t('network.explain') }}
@@ -100,11 +100,11 @@ function size(entry: NetworkEntry) {
                 <td class="max-w-0 py-1.5 pr-3">
                   <span
                     class="block truncate font-mono text-xs"
-                    :class="{ 'text-danger': !entry.own }"
+                    :class="{ 'text-danger': !entry.own && entry.kind !== 'ai' }"
                   >{{ entry.own ? entry.url : entry.host }}</span>
                 </td>
                 <td class="py-1.5 pr-3 whitespace-nowrap text-fg-muted">
-                  {{ entry.own ? $t(`network.kind.${entry.kind}`) : $t('network.otherSite') }}
+                  {{ entry.own || entry.kind === 'ai' ? $t(`network.kind.${entry.kind}`) : $t('network.otherSite') }}
                 </td>
                 <td
                   class="py-1.5 text-right whitespace-nowrap tabular-nums"
@@ -117,10 +117,16 @@ function size(entry: NetworkEntry) {
           </table>
         </div>
         <p
-          v-if="foreign.length === 0"
+          v-if="foreign.length === 0 && ai.length === 0"
           class="text-sm text-fg-muted"
         >
           {{ $t('network.allOwn', { host: entries[0]?.host ?? '' }) }}
+        </p>
+        <p
+          v-else-if="foreign.length === 0"
+          class="text-sm text-fg-muted"
+        >
+          {{ $t('network.aiOnly') }}
         </p>
       </div>
     </dialog>

@@ -8,7 +8,7 @@ import { readFileSync } from 'node:fs'
 export const LANGUAGES = ['en', 'de'] as const
 export type Language = typeof LANGUAGES[number]
 
-export const AREAS = ['common', 'start', 'columns', 'review', 'download', 'roadmap', 'accuracy', 'privacy', 'errors'] as const
+export const AREAS = ['common', 'start', 'columns', 'review', 'download', 'analyze', 'roadmap', 'accuracy', 'privacy', 'errors'] as const
 export type Area = typeof AREAS[number]
 
 /** The files of one language, relative to i18n/locales/, for nuxt.config.ts. */

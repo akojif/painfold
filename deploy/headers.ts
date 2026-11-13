@@ -16,7 +16,15 @@ import { ORT_PREFIX } from './model.ts'
 
 type Directives = Record<string, string[]>
 
-// Stage 1 makes no network requests beyond the app's own files.
+/**
+ * The AI endpoints a page may call (Stage 3), and nothing else: Anthropic, and
+ * Ollama on its default port on this computer (docs/ai-providers.md). Only
+ * pages get them; app files and workers stay limited to this site. A provider
+ * is added here when it ships, and the tests check this exact list.
+ */
+export const AI_ENDPOINTS: readonly string[] = ['https://api.anthropic.com', 'http://localhost:11434', 'http://127.0.0.1:11434']
+
+// The app's own files, and, for pages, the AI endpoints above.
 const directives: Directives = {
   'default-src': ["'none'"],
   'script-src': ["'self'"],
@@ -38,7 +46,7 @@ function serialize(policy: Directives): string {
 /** The policy for HTML pages, delivered in a <meta> tag. */
 export function documentPolicy(scriptHashes: string[]): string {
   const hashes = [...new Set(scriptHashes)].sort().map(hash => `'sha256-${hash}'`)
-  return serialize({ ...directives, 'script-src': [...directives['script-src']!, ...hashes] })
+  return serialize({ ...directives, 'script-src': [...directives['script-src']!, ...hashes], 'connect-src': [...directives['connect-src']!, ...AI_ENDPOINTS] })
 }
 
 /**

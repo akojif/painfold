@@ -107,6 +107,8 @@ export function useSession() {
   }
 
   function clear() {
+    // Start over also forgets an API key that was not to be remembered.
+    useAiSettings().forgetKey()
     table.value = undefined
     isSample.value = false
     suggestions.value = []

@@ -48,7 +48,7 @@ From the providers' own pages unless noted, as read on 12 and 13 November 2026. 
 
 **Mistral, decided.** Painfold cannot see a Mistral account's setting. Before the first request to Mistral, the consent step asks the person to confirm that "Anonymous improvement data" is switched off, with the exact path (Admin panel, Privacy). Rejected: a warning only (too easy to click past), and waiting until Mistral states the API default (no EU-by-default option until then). Re-check Mistral's help article before Mistral ships; if it states the API default as off, the confirmation can become a note.
 
-## CSP and network design (for slice 2, #124)
+## CSP and network design (built in slice 2, #124)
 
 - `connect-src` names exactly the endpoints of the providers that ship, nothing else: `'self'`, then `https://api.anthropic.com` and `http://localhost:11434 http://127.0.0.1:11434` in slice 2; `https://api.openai.com`, `https://api.mistral.ai` and `https://api.eu.mistral.ai` when those providers ship. The unit test that requires "no policy names a host" becomes a test that the policy names exactly these hosts. Only Ollama's default port is allowed; another port needs a change to the policy, which keeps the local network closed to the page otherwise.
 - The code sends only to the provider the user chose; a test checks it.

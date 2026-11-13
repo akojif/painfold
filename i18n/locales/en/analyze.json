@@ -1,0 +1,65 @@
+{
+  "analyze": {
+    "title": "Analyze",
+    "heading": "Where should the analysis run?",
+    "lead": "Painfold sends the cleaned feedback to an AI, which finds what your customers are trying to do, what gets in their way and what they wish for. You choose the AI, and you see exactly what is sent before anything goes.",
+    "where": {
+      "label": "Where the analysis runs",
+      "key": "With your API key",
+      "local": "On this computer (Ollama)"
+    },
+    "model": "Model",
+    "modelNote": {
+      "claude-haiku-5-5": "Fast and cheapest",
+      "claude-sonnet-5-5": "More careful, about 20 times the price"
+    },
+    "key": {
+      "label": "API key",
+      "show": "Show",
+      "hide": "Hide",
+      "remember": "Remember on this device",
+      "get": "Get an API key from Anthropic",
+      "newTab": "(opens in a new tab)"
+    },
+    "test": {
+      "button": "Test connection",
+      "testing": "Testing…",
+      "ok": "Connected to {model}.",
+      "okLocal": "Connected to {model} on this computer.",
+      "needKey": "Enter your API key first."
+    },
+    "problem": {
+      "unreachable": "Anthropic could not be reached. Check your internet connection and try again.",
+      "browserBlocked": "Your Anthropic organisation does not allow calls from browsers. An admin can allow them in the Anthropic Console.",
+      "invalidKey": "Anthropic did not accept this key. Check it and try again.",
+      "noAccess": "This key has no access to {model}.",
+      "rateLimited": "Too many requests right now. Wait a minute and try again.",
+      "overloaded": "Anthropic is busy right now. Try again in a minute.",
+      "modelMissing": "{model} is not available for this key.",
+      "other": "Something went wrong. Try again in a moment."
+    },
+    "ollama": {
+      "steps": "Three steps, once:",
+      "install": "Install Ollama and a model",
+      "installNote": "From ollama.com. Then download a model in a terminal, for example:",
+      "origins": "Allow this site in Ollama",
+      "originsNote": "Ollama only answers websites you allow. Run this in a terminal, then restart Ollama:",
+      "system": "Your system",
+      "systems": {
+        "mac": "macOS",
+        "windows": "Windows",
+        "linux": "Linux"
+      },
+      "permission": "Allow local network access",
+      "permissionNote": "Chrome and Edge ask once whether this site may reach programs on your computer. Choose Allow.",
+      "check": "Check again",
+      "checking": "Checking…",
+      "found": "Ollama is running and answers this site.",
+      "notFound": "Painfold cannot reach Ollama. It may not be running, it may not allow this site yet, or the browser’s permission was refused.",
+      "noModels": "Ollama is running but has no models yet. Download one with the command in step 1.",
+      "safari": "Safari does not let websites reach programs on this computer, so Ollama cannot be used here. Use Chrome, Edge or Firefox.",
+      "copy": "Copy",
+      "copied": "Copied"
+    }
+  }
+}
