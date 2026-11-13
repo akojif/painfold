@@ -112,6 +112,14 @@ Which AI providers Painfold can call straight from the browser, their terms (tra
 - **The pages' CSP** allows exactly `AI_ENDPOINTS` in `deploy/headers.ts` (Anthropic, and Ollama on `localhost:11434` and `127.0.0.1:11434`). App files and workers stay limited to this site. Unit tests check the exact list, and that the providers only call endpoints on it.
 - **End-to-end tests** stand in for Anthropic and Ollama with Playwright. Only those tests may reach those origins (`test.use({ allowedOrigins })`); every other test still fails on any request to another site.
 
+## Analysis evaluation: labelling
+
+The Stage 3 analysis is measured against hand labels (#129), as names are: items and prompts are written by one person, the labels by others. `data/README.md` describes the files.
+
+- `python3 scripts/labelling/make_sheets.py` writes the two labelling spreadsheets from `data/eval/analysis/items.jsonl`. It needs Python 3 with openpyxl (MIT), used only for this: SheetJS, which the app uses, cannot write dropdowns. The generated files are committed, so labelling and converting need neither.
+- `npm run labels:convert -- <filled files>` checks filled spreadsheets (`scripts/labels.ts`, unit-tested) and writes `labels-<lang>.jsonl` only when there are no problems; every problem is listed with its row.
+- Types: bug, feature request, question, praise, complaint and other. CLAUDE.md names the first four; complaint (price, support, a decision) and other were added because many messages fit none of them.
+
 ## Indirect identifiers
 
 Text that is not personal data on its own but can point to one person, such as "the only female CFO in Wels" or "a 42-year-old tax adviser in Wels" (#66). Painfold warns about it and never removes it on its own. `core/detect/indirect/` finds three kinds, in German and English:
