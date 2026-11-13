@@ -105,6 +105,14 @@ Every file becomes a list of **items**, each a piece of text and where it came f
 
 Which AI providers Painfold can call straight from the browser, their terms (training, retention, location), and the CSP design for Stage 3 are recorded in [docs/ai-providers.md](ai-providers.md). `npm run check:providers` repeats the browser check: one request with the word "Hello" and a fake key per provider, from a page at the production origin.
 
+## Analysis evaluation: labelling
+
+The Stage 3 analysis is measured against hand labels (#129), as names are: items and prompts are written by one person, the labels by others. `data/README.md` describes the files.
+
+- `python3 scripts/labelling/make_sheets.py` writes the two labelling spreadsheets from `data/eval/analysis/items.jsonl`. It needs Python 3 with openpyxl (MIT), used only for this: SheetJS, which the app uses, cannot write dropdowns. The generated files are committed, so labelling and converting need neither.
+- `npm run labels:convert -- <filled files>` checks filled spreadsheets (`scripts/labels.ts`, unit-tested) and writes `labels-<lang>.jsonl` only when there are no problems; every problem is listed with its row.
+- Types: bug, feature request, question, praise, complaint and other. CLAUDE.md names the first four; complaint (price, support, a decision) and other were added because many messages fit none of them.
+
 ## Indirect identifiers
 
 Text that is not personal data on its own but can point to one person, such as "the only female CFO in Wels" or "a 42-year-old tax adviser in Wels" (#66). Painfold warns about it and never removes it on its own. `core/detect/indirect/` finds three kinds, in German and English:
