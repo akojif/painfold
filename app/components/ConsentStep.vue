@@ -2,7 +2,7 @@
 // Stage 3, slice 3 (#125): exactly what will be sent, to whom, how many texts,
 // the provider's terms and an estimated cost, before anything is sent. The
 // preview and the download are the same payload object the analysis sends
-// (core/ai/payload.ts). Sending itself arrives in slice 4 (#126).
+// (core/ai/payload.ts), and the button sends exactly it (useTagging, #126).
 import { estimate } from '~~/core/ai/cost'
 import { buildPayload, payloadFileName, payloadJson } from '~~/core/ai/payload'
 import { ANTHROPIC_MODELS } from '~~/core/ai/providers'
@@ -37,6 +37,25 @@ const money = (dollars: number) => new Intl.NumberFormat(undefined, { style: 'cu
 
 const namesChecked = computed(() => nameScan.status.value === 'done')
 const namesConfirmed = ref(false)
+
+const { key } = useAiSettings()
+const tagging = useTagging()
+// What is still needed before the button sends: in this order, the first one shown.
+const missing = computed(() => {
+  if (where.value === 'key' && !key.value.trim()) return 'needKey'
+  if (where.value === 'local' && !ollamaModel.value) return 'needOllama'
+  if (!namesChecked.value && !namesConfirmed.value) return 'needNames'
+  if (leaks.value.length > 0) return 'leak'
+  return undefined
+})
+const busy = computed(() => tagging.state.value === 'running' || tagging.state.value === 'stopping')
+const share = computed(() => (tagging.progress.value.total === 0 ? 0 : tagging.progress.value.done / tagging.progress.value.total))
+const outcome = computed(() => tagging.result.value)
+
+function send() {
+  if (!built.value || missing.value || busy.value) return
+  void tagging.start(built.value.payload, built.value.itemOf)
+}
 
 const query = ref('')
 const shown = ref(PREVIEW)
@@ -208,21 +227,101 @@ function download() {
 
       <div class="mt-6">
         <button
+          v-if="!busy"
           type="button"
-          disabled
-          class="h-9 rounded-md bg-fg px-3.5 font-medium text-canvas opacity-50"
-          aria-describedby="send-note"
+          class="focus-ring press h-9 rounded-md bg-fg px-3.5 font-medium text-canvas disabled:opacity-50"
+          :disabled="Boolean(missing)"
+          :aria-describedby="missing ? 'send-note' : undefined"
+          @click="send"
         >
           {{ provider === 'anthropic'
             ? $t('consent.send', { n: number(payload.texts.length), provider: 'Anthropic' })
             : $t('consent.sendLocal', { n: number(payload.texts.length), model: modelName }) }}
         </button>
         <p
+          v-if="missing && !busy"
           id="send-note"
           class="mt-2 text-sm text-fg-muted"
         >
-          {{ $t('consent.notYet') }}
+          {{ $t(`analyze.run.${missing}`) }}
         </p>
+
+        <div
+          v-if="tagging.state.value !== 'idle'"
+          class="mt-6"
+          aria-labelledby="run-heading"
+          role="region"
+        >
+          <p
+            id="run-heading"
+            class="font-medium"
+          >
+            {{ $t(tagging.state.value === 'done' ? 'analyze.run.headingDone' : 'analyze.run.heading', { n: number(tagging.progress.value.total), model: modelName }) }}
+          </p>
+          <div
+            role="progressbar"
+            :aria-label="$t('analyze.run.progressLabel')"
+            aria-valuemin="0"
+            :aria-valuemax="tagging.progress.value.total"
+            :aria-valuenow="tagging.progress.value.done"
+            class="mt-3 h-0.5 overflow-hidden rounded-full bg-line"
+          >
+            <div
+              class="h-full origin-left bg-accent transition-transform duration-200 ease-out motion-reduce:transition-none"
+              :style="{ transform: `scaleX(${share})` }"
+            />
+          </div>
+          <p
+            class="mt-2 text-sm text-fg-muted tabular-nums"
+            role="status"
+          >
+            <template v-if="tagging.state.value === 'running'">
+              {{ $t('analyze.run.count', { done: number(tagging.progress.value.done), total: number(tagging.progress.value.total) }) }}
+            </template>
+            <template v-else-if="tagging.state.value === 'stopping'">
+              {{ $t('analyze.run.stopping') }}
+            </template>
+            <template v-else-if="tagging.state.value === 'stopped' && outcome?.stopped === 'cancelled'">
+              {{ $t('analyze.run.cancelled', { done: number(tagging.progress.value.done), total: number(tagging.progress.value.total) }) }}
+            </template>
+            <template v-else-if="tagging.state.value === 'stopped' && outcome?.stopped">
+              <span class="text-danger">{{ provider === 'anthropic' ? $t(`analyze.problem.${outcome.stopped}`, { model: modelName }) : $t('analyze.ollama.notFound') }}</span>
+              {{ $t('analyze.run.paused', { done: number(tagging.progress.value.done), total: number(tagging.progress.value.total) }) }}
+            </template>
+            <template v-else-if="tagging.state.value === 'done' && outcome">
+              {{ $t('analyze.run.done', { n: number(outcome.tagged.size) }, outcome.tagged.size) }}
+            </template>
+          </p>
+          <ul
+            v-if="tagging.state.value === 'done' && outcome && (outcome.droppedQuotes > 0 || outcome.failed.size > 0)"
+            class="mt-1 space-y-1 text-sm text-fg-muted"
+          >
+            <li v-if="outcome.droppedQuotes > 0">
+              {{ $t('analyze.run.droppedQuotes', { n: number(outcome.droppedQuotes) }, outcome.droppedQuotes) }}
+            </li>
+            <li v-if="outcome.failed.size > 0">
+              {{ $t('analyze.run.notAnalysed', { n: number(outcome.failed.size) }, outcome.failed.size) }}
+            </li>
+          </ul>
+          <div class="mt-3 flex gap-2">
+            <button
+              v-if="tagging.state.value === 'running'"
+              type="button"
+              class="focus-ring press h-9 rounded-md border border-line px-3.5 hover:border-line-strong"
+              @click="tagging.cancel()"
+            >
+              {{ $t('analyze.run.cancel') }}
+            </button>
+            <button
+              v-if="tagging.state.value === 'stopped'"
+              type="button"
+              class="focus-ring press h-9 rounded-md bg-fg px-3.5 font-medium text-canvas"
+              @click="tagging.resume()"
+            >
+              {{ $t('analyze.run.resume') }}
+            </button>
+          </div>
+        </div>
       </div>
     </template>
   </section>

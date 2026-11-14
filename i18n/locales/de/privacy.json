@@ -224,7 +224,6 @@
     "download": "Genau das herunterladen, was gesendet wird (.json)",
     "send": "{n} bereinigte Texte an {provider} senden",
     "sendLocal": "{n} bereinigte Texte mit {model} analysieren",
-    "notYet": "Das Senden kommt mit dem nächsten Teil dieses Schritts.",
     "noReview": "Öffnen und prüfen Sie zuerst eine Datei: Nur bereinigter Text kann gesendet werden.",
     "openFile": "Datei öffnen",
     "nothing": "In den geprüften Spalten gibt es keinen Text zum Analysieren."

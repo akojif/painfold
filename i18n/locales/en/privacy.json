@@ -224,7 +224,6 @@
     "download": "Download exactly what will be sent (.json)",
     "send": "Send {n} cleaned texts to {provider}",
     "sendLocal": "Analyze {n} cleaned texts with {model}",
-    "notYet": "Sending comes with the next part of this step.",
     "noReview": "Open a file and review it first: only cleaned text can be sent.",
     "openFile": "Open a file",
     "nothing": "There is no text to analyze in the checked columns."

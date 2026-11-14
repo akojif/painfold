@@ -60,6 +60,24 @@
       "safari": "Safari does not let websites reach programs on this computer, so Ollama cannot be used here. Use Chrome, Edge or Firefox.",
       "copy": "Copy",
       "copied": "Copied"
+    },
+    "run": {
+      "heading": "Analyzing {n} cleaned texts with {model}",
+      "headingDone": "Analysed {n} cleaned texts with {model}",
+      "progressLabel": "Texts analysed",
+      "count": "{done} of {total}",
+      "cancel": "Cancel",
+      "stopping": "Stopping: the requests already sent are finishing, nothing new is sent.",
+      "cancelled": "Stopped: {done} of {total} texts are analysed. Nothing more was sent.",
+      "paused": "Paused at {done} of {total}. Resume sends only the texts not analysed yet.",
+      "resume": "Resume",
+      "done": "1 text analysed. | {n} texts analysed.",
+      "droppedQuotes": "1 quote did not match its text word for word and was left out. | {n} quotes did not match their text word for word and were left out.",
+      "notAnalysed": "1 text could not be analysed. | {n} texts could not be analysed.",
+      "needKey": "Enter your API key above first.",
+      "needOllama": "Choose a model in Ollama above first.",
+      "needNames": "Confirm the line about names first.",
+      "leak": "Nothing can be sent while something you removed would be in it."
     }
   }
 }

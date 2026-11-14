@@ -76,6 +76,8 @@ export function useSession() {
     if (!table.value) return
     items.value = set
     review.value = new Review(set.items, results)
+    // A new review means a new analysis.
+    useTagging().reset()
     reviewedChoices.value = choices.value
     revision.value++
   }
@@ -107,8 +109,9 @@ export function useSession() {
   }
 
   function clear() {
-    // Start over also forgets an API key that was not to be remembered.
+    // Start over also forgets an API key that was not to be remembered, and any analysis.
     useAiSettings().forgetKey()
+    useTagging().reset()
     table.value = undefined
     isSample.value = false
     suggestions.value = []
