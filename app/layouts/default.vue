@@ -18,15 +18,36 @@ const { table, hasWork } = session
 const mayDiscard = useDiscardGuard()
 // Pages outside the cleaning flow (the roadmap) have no step.
 const step = computed(() => route.meta.step as number | undefined)
-// The empty start screen explains the product instead; steps appear once a file is open.
-const showSteps = computed(() => step.value !== undefined && (step.value > 1 || Boolean(table.value)))
+// The empty start screen explains the product instead; steps appear once a file
+// is open. Without one, a later step is only reached on a small screen from a
+// direct link (#139), where the steps would claim an import that never happened.
+const showSteps = computed(() => step.value !== undefined && Boolean(table.value))
 // The empty start screen states the privacy notice in its own content; every other page states it here.
 const showNotice = computed(() => step.value !== 1 || Boolean(table.value))
 const facts = computed(() => [...(showNotice.value ? ['privacy.notice', 'privacy.noticeAi'] : []), 'footer.noCookies', 'footer.noAccount'])
 // A file can be dropped anywhere, on every step. Without this a browser would
 // open a dropped file itself and leave the app, losing everything in memory.
+// Below 768 px a dropped file is caught but ignored (#139).
 const { openPicked } = useOpenFile()
-const { dragging } = useFileDrop(file => void openPicked(file, { dropped: true }))
+const { narrow } = useSmallScreen()
+const { dragging } = useFileDrop(file => void openPicked(file, { dropped: true }), () => !narrow.value)
+
+// The working flow (#139): Review, Download, Analyze and Report, and the column
+// step on the start page once a file is open. Below 768 px it shows
+// SmallScreenNotice instead. A media query hides the page from the first
+// paint, and the page stays mounted when a file is open, so narrowing the
+// window mid-flow loses nothing and widening it brings the page straight back.
+// The router's route, not useRoute(): in a layout that one only moves on once
+// the next page has rendered, and the guard decides whether it renders.
+const current = useRouter().currentRoute
+const working = computed(() => Boolean(current.value.meta.working) || (current.value.meta.step === 1 && Boolean(table.value)))
+const mounted = ref(false)
+// With no file open (a direct link), a small screen never renders a working page at all.
+const renderPage = computed(() => !(mounted.value && narrow.value && working.value && !table.value))
+// Widened with nothing to review: where the page's own guard would have sent it.
+watch(narrow, (now) => {
+  if (!now && current.value.meta.needsReview && !session.review.value) void navigateTo(localePath('/'))
+})
 
 /** Back to the start screen with nothing open, after asking if work would be lost. */
 async function startOver() {
@@ -51,7 +72,10 @@ function onBeforeUnload(event: BeforeUnloadEvent) {
   event.preventDefault()
   event.returnValue = ''
 }
-onMounted(() => window.addEventListener('beforeunload', onBeforeUnload))
+onMounted(() => {
+  mounted.value = true
+  window.addEventListener('beforeunload', onBeforeUnload)
+})
 onBeforeUnmount(() => window.removeEventListener('beforeunload', onBeforeUnload))
 </script>
 
@@ -96,7 +120,18 @@ onBeforeUnmount(() => window.removeEventListener('beforeunload', onBeforeUnload)
         </button>
       </div>
       <main class="flex flex-1 flex-col py-8 sm:py-10">
-        <slot />
+        <SmallScreenNotice
+          v-if="working"
+          class="md:hidden"
+          :file-open="Boolean(table)"
+        />
+        <div
+          v-if="renderPage"
+          class="flex flex-1 flex-col"
+          :class="{ 'max-md:hidden': working }"
+        >
+          <slot />
+        </div>
       </main>
     </div>
 

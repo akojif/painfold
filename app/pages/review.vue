@@ -6,9 +6,12 @@ import type { ValueEntry, ValueGroup } from '~/utils/value-list'
 
 definePageMeta({
   step: 2,
+  // Below 768 px the layout shows SmallScreenNotice instead, also from a direct link (#139).
+  working: true,
+  needsReview: true,
   // Nothing to review without a checked file; this runs in the browser only.
   middleware: () => {
-    if (import.meta.client && !useSession().review.value) return navigateTo(useLocalePath()('/'))
+    if (import.meta.client && !useSession().review.value && !useSmallScreen().narrow.value) return navigateTo(useLocalePath()('/'))
   },
 })
 

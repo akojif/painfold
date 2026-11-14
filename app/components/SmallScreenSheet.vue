@@ -1,19 +1,15 @@
 <script setup lang="ts">
-// The friendly note a phone gets when it reaches for a file: Painfold likes a
-// bigger screen. Copy link puts the address on the clipboard (or shows it to
-// copy by hand where the browser does not allow that); Continue anyway runs
-// the action that was tapped, now and for the rest of the visit. A native
-// modal dialog: focus stays inside, Escape closes it. It slides up from the
-// bottom in 220 ms with transform and opacity; with reduced motion it simply
-// appears.
-const emit = defineEmits<{ continue: [] }>()
+// The friendly note a phone gets when it reaches for a file: Painfold needs a
+// bigger screen (#139). Copy link puts the address on the clipboard (or shows
+// it to copy by hand where the browser does not allow that); Close closes it.
+// There is no way on into the flow here. A native modal dialog: focus stays
+// inside, Escape closes it. It slides up from the bottom in 220 ms with
+// transform and opacity; with reduced motion it simply appears.
 const { t } = useI18n()
-const localePath = useLocalePath()
+const { link, copied, copy } = useCopyLink()
 
 const dialog = useTemplateRef<HTMLDialogElement>('dialog')
 const shown = ref(false)
-const copied = ref<'yes' | 'manual'>()
-const link = computed(() => (import.meta.client ? new URL(localePath('/'), location.origin).href : ''))
 
 function open() {
   copied.value = undefined
@@ -25,21 +21,6 @@ function close() {
   dialog.value?.close()
 }
 defineExpose({ open })
-
-async function copy() {
-  try {
-    await navigator.clipboard.writeText(link.value)
-    copied.value = 'yes'
-  }
-  catch {
-    copied.value = 'manual'
-  }
-}
-
-function continueAnyway() {
-  close()
-  emit('continue')
-}
 </script>
 
 <template>
@@ -83,9 +64,9 @@ function continueAnyway() {
         <button
           type="button"
           class="press focus-ring h-11 rounded-md border border-line px-4 hover:border-line-strong"
-          @click="continueAnyway"
+          @click="close"
         >
-          {{ $t('smallScreen.continue') }}
+          {{ $t('smallScreen.close') }}
         </button>
       </div>
       <p

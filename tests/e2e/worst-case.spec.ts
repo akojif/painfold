@@ -38,7 +38,7 @@ const hiddenTruncation = (page: Page) => page.evaluate(() => [...document.queryS
   .filter(element => element.scrollWidth > element.clientWidth && !element.closest('[title], [aria-label]'))
   .map(element => element.textContent!.trim().slice(0, 60)))
 
-for (const width of [1280, 390, 320]) {
+for (const width of [1280, 768]) {
   test.describe(`at ${width}px`, () => {
     test.use({ viewport: { width, height: 900 } })
 
@@ -89,8 +89,9 @@ test('long file names and links keep their end visible, with the full text as a 
   await expect(link).toContainText('herbst-aktion-2026')
 })
 
-test.describe('at 320px', () => {
-  test.use({ viewport: { width: 320, height: 900 } })
+// The narrowest screen the flow runs on (#139).
+test.describe('at 768px', () => {
+  test.use({ viewport: { width: 768, height: 900 } })
 
   test('the header and the stepper stay on one line each', async ({ page }) => {
     await open(page, FILES.worst)
@@ -154,7 +155,7 @@ async function openColumns(page: Page, file: { name: string, text: string }) {
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Choose what to check')
 }
 
-for (const width of [1280, 390, 320]) {
+for (const width of [1280, 768]) {
   test.describe(`column step at ${width}px`, () => {
     test.use({ viewport: { width, height: 900 } })
 

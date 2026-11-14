@@ -69,8 +69,7 @@
       "cancelled": "Download abgebrochen.",
       "removed": "Namensmodell aus diesem Browser entfernt.",
       "offline": "Sie sind offline."
-    },
-    "smallScreen": "Namen werden auf einem größeren Bildschirm geprüft. Alles andere funktioniert hier."
+    }
   },
   "nameScan": {
     "running": "Namen werden geprüft: {done} von {total} Zeilen",
@@ -101,11 +100,14 @@
   },
   "smallScreen": {
     "title": "Painfold mag größere Bildschirme",
-    "body": "Auf diesem Handy sieht es gut aus, aber Hunderte Zeilen prüft man besser am Laptop. Ihre Daumen werden es Ihnen danken. Öffnen Sie Painfold am Computer: Ihre Datei bleibt dort genauso privat.",
+    "body": "Hunderte Zeilen prüft man am besten am Laptop. Öffnen Sie Painfold auf Ihrem Computer: Ihre Datei bleibt dort genauso privat.",
     "copy": "Link kopieren",
     "copied": "Link kopiert",
     "copyManually": "Kopieren Sie diese Adresse von Hand:",
-    "continue": "Trotzdem weiter"
+    "close": "Schließen",
+    "start": "Zur Startseite",
+    "pausedTitle": "Ihre Datei ist noch geöffnet",
+    "paused": "Machen Sie dieses Fenster mindestens 768 Pixel breit, um weiterzumachen. Es ist nichts verloren gegangen."
   },
   "warning": {
     "heading": "Könnte jemanden erkennbar machen",
@@ -178,8 +180,7 @@
       "partly": "Namen wurden in {done} von {total} Zeilen geprüft; für die übrigen wurde die Prüfung übersprungen, dort wurden Namen nicht entfernt.",
       "skipped": "Namen wurden nicht geprüft: Die Prüfung wurde für diese Datei übersprungen.",
       "failed": "Namen wurden nicht geprüft: Das Namensmodell konnte nicht laufen.",
-      "notChecked": "Namen und Orte wurden nicht geprüft: Das Namensmodell wurde nicht heruntergeladen.",
-      "smallScreen": "Namen wurden nicht geprüft: Das geschieht auf einem größeren Bildschirm."
+      "notChecked": "Namen und Orte wurden nicht geprüft: Das Namensmodell wurde nicht heruntergeladen."
     },
     "mapStays": "Die Liste der Originalwerte hinter den Platzhaltern bleibt in diesem Browser und ist weg, sobald Sie den Tab schließen.",
     "reportExplain": "Die bereinigte Datei enthält nur Ihre Daten. Der Bereinigungsbericht listet auf, was ersetzt wurde, mit Datum, Painfold-Version und den Grenzen der automatischen Erkennung.",

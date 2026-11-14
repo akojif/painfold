@@ -65,20 +65,13 @@ function onInputChange(event: Event) {
   if (file) void openPicked(file)
 }
 
-// On a small screen the two actions first suggest a laptop; Continue anyway
-// runs the one that was tapped (SmallScreenSheet.vue).
-const { suggestBiggerScreen, continued } = useSmallScreen()
+// On a small screen the two actions open the note that Painfold needs a
+// bigger screen instead (SmallScreenSheet.vue, #139).
+const { narrow } = useSmallScreen()
 const smallScreenSheet = useTemplateRef<{ open: () => void }>('smallScreenSheet')
-let pending: (() => void) | undefined
 function act(action: () => void) {
-  if (!suggestBiggerScreen()) return action()
-  pending = action
-  smallScreenSheet.value?.open()
-}
-function onContinueAnyway() {
-  continued.value = true
-  pending?.()
-  pending = undefined
+  if (narrow.value) smallScreenSheet.value?.open()
+  else action()
 }
 const onChoose = () => act(() => input.value?.click())
 const onSample = () => act(() => void openSample())
@@ -222,10 +215,7 @@ async function findPersonalData() {
         </ol>
       </div>
 
-      <SmallScreenSheet
-        ref="smallScreenSheet"
-        @continue="onContinueAnyway"
-      />
+      <SmallScreenSheet ref="smallScreenSheet" />
     </section>
 
     <div

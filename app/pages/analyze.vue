@@ -5,6 +5,9 @@
 // flow (Import, Review, Analyze, Report) when the analysis can run (slice 4).
 import { ANTHROPIC, ANTHROPIC_MODELS, anthropicRequest, OLLAMA, ollamaModels, ollamaModelsRequest, ollamaRequest, TEST_TEXT, type AiProblem, type ModelChoice } from '~~/core/ai/providers'
 
+// Part of the working flow: below 768 px the layout shows SmallScreenNotice instead (#139).
+definePageMeta({ working: true })
+
 const { t } = useI18n()
 // An example model: small enough for most laptops, good enough to test with.
 const PULL = 'ollama pull llama3.2:3b'

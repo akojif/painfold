@@ -25,6 +25,17 @@ Run `npm run generate` before `npm run test:e2e`, or use `npm run verify -- e2e`
 
 Every end-to-end test fails if the page contacts any origin other than the app itself.
 
+## Screen size
+
+Painfold needs a screen at least 768 pixels wide (#139). Below that, by width rather than by device (`useSmallScreen`, `(max-width: 767px)`), phones see what it does:
+
+- The start page, roadmap, accuracy page, 404 and footer stay fully readable.
+- Both start actions open a sheet (`SmallScreenSheet.vue`) with Copy link and Close. There is no way on into the flow.
+- A dropped file is caught but ignored.
+- Working routes (review, download, analyze, report, and the column step once a file is open) are marked `working` in their page meta. The layout shows `SmallScreenNotice.vue` in their place: from a direct link, the sheet's message with Copy link and the way to the start page; with a file open, a note that the file is still there. A media query hides the page from the first paint. With a file open the page stays mounted, so narrowing the window loses nothing, and widening it brings the page back without a reload.
+
+The flow is tested at desktop widths only; tests at 320 and 390 pixels cover the informational pages, the sheet and the guard.
+
 ## Translations
 
 The interface is in English and German. English lives at `/`, German under `/de/` (`prefix_except_default`), so every page is prerendered in both languages and German pages can be shared and indexed; each page links to the other language with `hreflang`.
@@ -43,7 +54,7 @@ These are where precise wording matters most; a native speaker should review the
 - The limits notice (`review.limits`), also used in the cleaning report.
 - The "What leaves your browser" panel (`network.none`, `network.explain`, `network.allOwn`, `network.foreign`, `network.stored`).
 - The name model download: what is downloaded and kept, and the failure and offline messages (`nameModel.*`). "Namensmodell" is the chosen term.
-- The small-screen sheet (`smallScreen.*`: "Painfold mag größere Bildschirme" and its text, which should stay warm and a little playful) and the small-screen notes (`nameModel.smallScreen`, `download.names.smallScreen`).
+- The small-screen sheet and notice (`smallScreen.*`: "Painfold mag größere Bildschirme", its text, which should stay warm, and the note when a window is narrowed with a file open).
 - The Accuracy page (`accuracy.*`, in `accuracy.json`): the opening sentence ("Von 100 Namen in Ihrem Feedback entfernt Painfold etwa 97 …"), the findings, how it is measured, the name-origin groups ("Herkunftsgruppe"), the known gaps and the model's licence note.
 - Opening files: the note about documents and transcripts and the unsupported-file message (`importNotes.*`, `importErrors.unsupported-format`).
 - Names in the review and the download: the check, Stop and its question, and what the cleaning report says (`nameScan.*`, `download.names.*`).

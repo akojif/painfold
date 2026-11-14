@@ -5,8 +5,11 @@ import { NAME_MODEL } from '~~/deploy/model'
 
 definePageMeta({
   step: 3,
+  // Below 768 px the layout shows SmallScreenNotice instead, also from a direct link (#139).
+  working: true,
+  needsReview: true,
   middleware: () => {
-    if (import.meta.client && !useSession().review.value) return navigateTo(useLocalePath()('/'))
+    if (import.meta.client && !useSession().review.value && !useSmallScreen().narrow.value) return navigateTo(useLocalePath()('/'))
   },
 })
 
@@ -34,7 +37,6 @@ const { version } = useRuntimeConfig().public
 // Whether names and places were checked, for the summary and the cleaning report.
 // The download waits while they are still being checked (see the review).
 const nameScan = useNameScan()
-const { narrow } = useSmallScreen()
 const checkingNames = nameScan.busy
 const namesChecked = computed(() => nameScan.status.value === 'done' || (nameScan.status.value === 'skipped' && nameScan.done.value > 0))
 const namesNote = computed(() => {
@@ -42,7 +44,7 @@ const namesNote = computed(() => {
   if (status.value === 'done') return t('download.names.checked')
   if (status.value === 'skipped') return done.value > 0 ? t('download.names.partly', { done: number(done.value), total: number(total.value) }) : t('download.names.skipped')
   if (status.value === 'failed') return t('download.names.failed')
-  return narrow.value ? t('download.names.smallScreen') : t('download.names.notChecked')
+  return t('download.names.notChecked')
 })
 
 function download() {

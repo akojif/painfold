@@ -8,6 +8,9 @@ import { LOW_CONFIDENCE_BELOW } from '~~/core/ai/themes'
 import { ANTHROPIC_MODELS } from '~~/core/ai/providers'
 import { reportOf } from '~~/core/ai/results'
 
+// Part of the working flow: below 768 px the layout shows SmallScreenNotice instead (#139).
+definePageMeta({ working: true })
+
 const { t } = useI18n()
 const localePath = useLocalePath()
 const { number } = useFormat()
