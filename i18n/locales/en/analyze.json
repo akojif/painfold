@@ -77,7 +77,14 @@
       "needKey": "Enter your API key above first.",
       "needOllama": "Choose a model in Ollama above first.",
       "needNames": "Confirm the line about names first.",
-      "leak": "Nothing can be sent while something you removed would be in it."
+      "leak": "Nothing can be sent while something you removed would be in it.",
+      "merging": "Grouping similar jobs, pains and gains…",
+      "mergeCancelled": "Stopped before the grouping finished. Every text is analysed; Resume groups the rest.",
+      "mergePaused": "Every text is analysed; the grouping paused. Resume groups the rest.",
+      "themes": "Grouped into {jobs}, {pains} and {gains}.",
+      "jobs": "1 job | {n} jobs",
+      "pains": "1 pain | {n} pains",
+      "gains": "1 gain | {n} gains"
     }
   }
 }

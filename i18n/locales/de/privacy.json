@@ -226,6 +226,9 @@
     "sendLocal": "{n} bereinigte Texte mit {model} analysieren",
     "noReview": "Öffnen und prüfen Sie zuerst eine Datei: Nur bereinigter Text kann gesendet werden.",
     "openFile": "Datei öffnen",
-    "nothing": "In den geprüften Spalten gibt es keinen Text zum Analysieren."
+    "nothing": "In den geprüften Spalten gibt es keinen Text zum Analysieren.",
+    "after": "Danach",
+    "afterValue": "Die kurzen Bezeichnungen, die die KI gefunden hat, etwa „Export dauert zu lange“, gehen noch einmal an sie, um ähnliche zu gruppieren. Nie die Texte oder Zitate.",
+    "mergeInstructions": "Painfolds Anweisungen zum Gruppieren, mit den Bezeichnungen gesendet"
   }
 }

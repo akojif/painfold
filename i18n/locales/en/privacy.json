@@ -226,6 +226,9 @@
     "sendLocal": "Analyze {n} cleaned texts with {model}",
     "noReview": "Open a file and review it first: only cleaned text can be sent.",
     "openFile": "Open a file",
-    "nothing": "There is no text to analyze in the checked columns."
+    "nothing": "There is no text to analyze in the checked columns.",
+    "after": "Afterwards",
+    "afterValue": "The short labels the AI found, such as “Export takes too long”, go back to it once more, to group similar ones. Never the texts or quotes.",
+    "mergeInstructions": "Painfold’s instructions for grouping, sent with the labels"
   }
 }

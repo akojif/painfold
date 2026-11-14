@@ -46,6 +46,25 @@ const defaultWait = (seconds: number, signal: AbortSignal) => new Promise<void>(
   signal.addEventListener('abort', () => (clearTimeout(timer), resolve()), { once: true })
 })
 
+/**
+ * Sends one request until it is answered: waits as the provider asks when it
+ * is busy, or backs off, and gives up after the last wait. Returns the
+ * answer's body, the problem that stopped it, or nothing when cancelled.
+ */
+export async function sendWithRetries(send: () => Promise<BatchReply>, signal: AbortSignal, wait: RunOptions['wait'] = defaultWait): Promise<{ body: string } | { stopped: AiProblem } | undefined> {
+  for (let attempt = 0; ; attempt++) {
+    if (signal.aborted) return undefined
+    const reply = await send()
+    if (reply.ok) return { body: reply.body }
+    if (signal.aborted) return undefined
+    // No retry fixes a key or access problem.
+    if (PAUSE.has(reply.problem)) return { stopped: reply.problem }
+    // Busy, rate-limited or unreachable: wait as asked, or back off, then try again.
+    if (attempt >= BACKOFF.length) return { stopped: reply.problem }
+    await wait!(reply.retryAfter ?? BACKOFF[attempt]!, signal)
+  }
+}
+
 export async function runTagging(options: RunOptions): Promise<RunResult> {
   const { payload, send, signal, onProgress, wait = defaultWait, concurrency = 2 } = options
   const result: RunResult = { tagged: new Map(options.done ?? []), failed: new Set(), droppedQuotes: 0, droppedLabels: 0, usage: { input: 0, output: 0 } }
@@ -56,21 +75,12 @@ export async function runTagging(options: RunOptions): Promise<RunResult> {
 
   async function handle(batch: PayloadText[]): Promise<void> {
     let invalidRetries = 1
-    for (let attempt = 0; ; attempt++) {
+    for (;;) {
       if (signal.aborted || result.stopped) return
-      const reply = await send(batch)
-      if (!reply.ok) {
-        if (signal.aborted) return
-        if (PAUSE.has(reply.problem)) {
-          result.stopped ??= reply.problem
-          return
-        }
-        // Busy, rate-limited or unreachable: wait as asked, or back off, then try again.
-        if (attempt < BACKOFF.length) {
-          await wait(reply.retryAfter ?? BACKOFF[attempt]!, signal)
-          continue
-        }
-        result.stopped ??= reply.problem
+      const reply = await sendWithRetries(() => send(batch), signal, wait)
+      if (!reply) return
+      if ('stopped' in reply) {
+        result.stopped ??= reply.stopped
         return
       }
       const usage = usageOf(payload.provider, reply.body)

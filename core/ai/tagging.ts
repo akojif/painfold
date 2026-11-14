@@ -56,7 +56,7 @@ export const ANSWER_SCHEMA = {
   additionalProperties: false,
 }
 
-// Tagging is classification: low effort is enough and keeps the cost down.
+// Tagging and merging are classification: low effort is enough and keeps the cost down.
 // Tuned on the dev split once it is labelled (#129).
 const EFFORT = 'low'
 const MAX_TOKENS = 16000
@@ -71,8 +71,8 @@ export function batchesOf(texts: readonly PayloadText[], size = BATCH_SIZE): Pay
 /** What one request carries besides the instructions: the batch's texts as JSON, ids and texts only. */
 export const batchContent = (batch: readonly PayloadText[]) => JSON.stringify({ texts: batch.map(({ id, text }) => ({ id, text })) })
 
-/** One batch for Anthropic: the instructions as the system prompt, the texts as the message, the answer held to the schema. */
-export function anthropicTaggingRequest(key: string, payload: AnalysisPayload, batch: readonly PayloadText[]): AiRequest {
+/** A request to Anthropic: a system prompt, one user message, and the answer held to a JSON schema at low effort. */
+export function anthropicJsonRequest(key: string, model: string, system: string, content: string, schema: object): AiRequest {
   return {
     url: `${ANTHROPIC.endpoint}/v1/messages`,
     method: 'POST',
@@ -83,29 +83,37 @@ export function anthropicTaggingRequest(key: string, payload: AnalysisPayload, b
       'anthropic-dangerous-direct-browser-access': 'true',
     },
     body: JSON.stringify({
-      model: payload.model,
+      model,
       max_tokens: MAX_TOKENS,
-      system: payload.instructions,
-      messages: [{ role: 'user', content: batchContent(batch) }],
-      output_config: { effort: EFFORT, format: { type: 'json_schema', schema: ANSWER_SCHEMA } },
+      system,
+      messages: [{ role: 'user', content }],
+      output_config: { effort: EFFORT, format: { type: 'json_schema', schema } },
     }),
   }
 }
 
-/** One batch for Ollama, with its answer held to the same schema. */
-export function ollamaTaggingRequest(payload: AnalysisPayload, batch: readonly PayloadText[]): AiRequest {
+/** The same request to Ollama, with its answer held to the schema. */
+export function ollamaJsonRequest(model: string, system: string, content: string, schema: object): AiRequest {
   return {
     url: `${OLLAMA.endpoint}/api/chat`,
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
-      model: payload.model,
+      model,
       stream: false,
-      format: ANSWER_SCHEMA,
-      messages: [{ role: 'system', content: payload.instructions }, { role: 'user', content: batchContent(batch) }],
+      format: schema,
+      messages: [{ role: 'system', content: system }, { role: 'user', content }],
     }),
   }
 }
+
+/** One batch for Anthropic: the instructions as the system prompt, the texts as the message, the answer held to the schema. */
+export const anthropicTaggingRequest = (key: string, payload: AnalysisPayload, batch: readonly PayloadText[]) =>
+  anthropicJsonRequest(key, payload.model, payload.instructions, batchContent(batch), ANSWER_SCHEMA)
+
+/** One batch for Ollama, with its answer held to the same schema. */
+export const ollamaTaggingRequest = (payload: AnalysisPayload, batch: readonly PayloadText[]) =>
+  ollamaJsonRequest(payload.model, payload.instructions, batchContent(batch), ANSWER_SCHEMA)
 
 /** Why an answer could not be used: cut off (too long for one answer), refused, or not the agreed shape. */
 export type AnswerProblem = 'cutOff' | 'refused' | 'invalid'
@@ -143,8 +151,8 @@ export function usageOf(provider: AnalysisPayload['provider'], body: string): { 
   }
 }
 
-const tidy = (text: string) => text.replace(/\s+/g, ' ').trim()
-const PLACEHOLDER = /\[[A-Z_]+_\d+\]/
+export const tidy = (text: string) => text.replace(/\s+/g, ' ').trim()
+export const PLACEHOLDER = /\[[A-Z_]+_\d+\]/
 
 /** Whether a quote appears word for word in the text; only differences in spaces and line breaks are ignored. */
 export const quoteFits = (quote: string, text: string) => tidy(quote).length > 0 && tidy(text).includes(tidy(quote))
