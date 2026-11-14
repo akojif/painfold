@@ -66,7 +66,7 @@
       "started": "Downloading the name model.",
       "done": "Name model downloaded.",
       "failed": "The name model download stopped.",
-      "cancelled": "Download cancelled.",
+      "cancelled": "Download canceled.",
       "removed": "Name model removed from this browser.",
       "offline": "You're offline."
     },

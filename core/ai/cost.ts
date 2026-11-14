@@ -13,9 +13,11 @@
 //   270 tokens per text instead of the ~80 the JSON alone needs.
 // Claude Sonnet 5.5 is not measured yet; it may think more per text.
 //
-// Merging (#127) adds one request per kind with the labels found. Its share is
-// an estimate from the same run (about 1.6 distinct labels per text, about 12
-// tokens each as sent) and is not measured yet: try:tagging reports it.
+// Merging (#127) adds one request per kind with the labels found: about 20
+// tokens in per text (the labels as sent), and about 2,500 tokens of thinking
+// per request plus 8 per text in the answer. Measured on a second run with
+// Haiku 5.5 (sample file, 2026-11-14): 9,801 tokens in and 9,181 out for the
+// merging, 31,453 in and 62,750 out ($0.0345) in all.
 import { BATCH_SIZE, type AnalysisPayload } from './payload.ts'
 
 /** US dollars per million tokens, from the provider's price list on the date checked. */
@@ -40,8 +42,8 @@ const OVERHEAD: Record<AnalysisPayload['provider'], { perBatch: number, outputPe
 const MERGE_REQUESTS = 3
 const MERGE_INPUT_PER_TEXT = 20
 const MERGE_OUTPUT_PER_TEXT = 8
-// Thinking before each merge answer: a guess until measured.
-const MERGE_OUTPUT_PER_REQUEST: Record<AnalysisPayload['provider'], number> = { anthropic: 1000, ollama: 0 }
+// Thinking before each merge answer.
+const MERGE_OUTPUT_PER_REQUEST: Record<AnalysisPayload['provider'], number> = { anthropic: 2500, ollama: 0 }
 
 export type Estimate = { inputTokens: number, outputTokens: number, cost?: { low: number, high: number } }
 

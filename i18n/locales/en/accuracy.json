@@ -20,7 +20,7 @@
       "heading": "How it's measured",
       "sets": "Painfold is measured on made-up feedback with known personal data, in German and English: hand-written hard cases, hand-written names typical of 13 communities living in Austria, long texts, and generated messages.",
       "browser": "The name model is measured in a browser, the way it runs for you. Its rules were tuned on a separate set of sentences; the test sentences were checked only once, after tuning. They were written by the same person who tuned the rules, so a test set written by someone else is planned.",
-      "terms": "Removed: the value is gone from the cleaned file, whatever kind of data it was taken for. Removed as a name: removed and recognised as a name."
+      "terms": "Removed: the value is gone from the cleaned file, whatever kind of data it was taken for. Removed as a name: removed and recognized as a name."
     },
     "names": {
       "heading": "Names",
@@ -93,7 +93,7 @@
     },
     "model": {
       "heading": "The name model",
-      "text": "Names and places are found by {model} ({license}), a multilingual model trained on news text, including the CoNLL-2003 data set. The CoNLL texts are themselves licensed, which is a grey area for models trained on them. Painfold serves the model from its own site and runs it in your browser."
+      "text": "Names and places are found by {model} ({license}), a multilingual model trained on news text, including the CoNLL-2003 data set. The CoNLL texts are themselves licensed, which is a gray area for models trained on them. Painfold serves the model from its own site and runs it in your browser."
     },
     "method": {
       "heading": "Method and data",

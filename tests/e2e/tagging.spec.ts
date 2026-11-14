@@ -59,8 +59,8 @@ test('the requests hold exactly the downloaded payload, sent only after the clic
   expect(bodies).toHaveLength(0)
 
   await sendButton(page).click()
-  const run = page.getByRole('region', { name: /^Analy(?:zing|sed) \d+ cleaned texts with Claude Haiku 5\.5$/ })
-  await expect(run).toContainText(`${payload.texts.length} texts analysed.`)
+  const run = page.getByRole('region', { name: /^Analyz(?:ing|ed) \d+ cleaned texts with Claude Haiku 5\.5$/ })
+  await expect(run).toContainText(`${payload.texts.length} texts analyzed.`)
   await expect(run).toContainText('1 quote did not match its text word for word and was left out.')
   await expect(run).toContainText('Grouped into 0 jobs, 1 pain and 0 gains.')
 
@@ -95,13 +95,13 @@ test('an invalid key pauses the run with the reason; Resume sends only what is l
   })
   await reviewSampleAndOpenAnalyze(page)
   await sendButton(page).click()
-  const run = page.getByRole('region', { name: /^Analy(?:zing|sed)/ })
+  const run = page.getByRole('region', { name: /^Analyz(?:ing|ed)/ })
   await expect(run).toContainText('Anthropic did not accept this key. Check it and try again.')
-  await expect(run).toContainText(/Paused at 0 of \d+\. Resume sends only the texts not analysed yet\./)
+  await expect(run).toContainText(/Paused at 0 of \d+\. Resume sends only the texts not analyzed yet\./)
 
   keyWorks = true
   await run.getByRole('button', { name: 'Resume' }).click()
-  await expect(run).toContainText(/\d+ texts analysed\./)
+  await expect(run).toContainText(/\d+ texts analyzed\./)
   expect(new Set(sent).size).toBe(sent.length)
 })
 
@@ -118,17 +118,17 @@ test('Cancel lets the requests in flight finish, sends nothing new, and Resume c
   })
   await reviewSampleAndOpenAnalyze(page)
   await sendButton(page).click()
-  const run = page.getByRole('region', { name: /^Analy(?:zing|sed)/ })
+  const run = page.getByRole('region', { name: /^Analyz(?:ing|ed)/ })
   await expect.poll(() => sent.length).toBeGreaterThan(50)
   await run.getByRole('button', { name: 'Cancel' }).click()
   await expect(run).toContainText('Stopping: the requests already sent are finishing, nothing new is sent.')
   const whenCancelled = sent.length
   release()
-  await expect(run).toContainText(/Stopped: \d+ of \d+ texts are analysed\. Nothing more was sent\./)
+  await expect(run).toContainText(/Stopped: \d+ of \d+ texts are analyzed\. Nothing more was sent\./)
   expect(sent.length).toBe(whenCancelled)
 
   await run.getByRole('button', { name: 'Resume' }).click()
-  await expect(run).toContainText(/\d+ texts analysed\./)
+  await expect(run).toContainText(/\d+ texts analyzed\./)
   expect(new Set(sent).size).toBe(sent.length)
 })
 
@@ -148,7 +148,7 @@ test('merging sends only the labels found, under the merge instructions shown be
   const [download] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: 'Download exactly what will be sent (.json)' }).click()])
   const payload = JSON.parse(await text(download))
   await sendButton(page).click()
-  await expect(page.getByRole('region', { name: /^Analysed/ })).toContainText('Grouped into')
+  await expect(page.getByRole('region', { name: /^Analyzed/ })).toContainText('Grouped into')
 
   expect(merges.map(merge => merge.kind)).toEqual(['pains'])
   expect(merges[0]!.system).toBe(payload.mergeInstructions)
