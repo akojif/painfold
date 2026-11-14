@@ -84,7 +84,8 @@
       "themes": "Grouped into {jobs}, {pains} and {gains}.",
       "jobs": "1 job | {n} jobs",
       "pains": "1 pain | {n} pains",
-      "gains": "1 gain | {n} gains"
+      "gains": "1 gain | {n} gains",
+      "showReport": "Show the report"
     }
   }
 }

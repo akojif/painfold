@@ -1,0 +1,50 @@
+{
+  "results": {
+    "title": "Report",
+    "heading": "What customers said",
+    "lead": "1 text analyzed with {model}. Every number is counted in this browser, and every quote appears word for word in the cleaned text. | {n} texts analyzed with {model}. Every number is counted in this browser, and every quote appears word for word in the cleaned text.",
+    "several": "A text can appear under several themes.",
+    "sections": "Sections",
+    "kinds": {
+      "jobs": {
+        "title": "Jobs",
+        "lead": "What customers are trying to get done.",
+        "few": "1 more job, found in fewer than {min} texts | {n} more jobs, each found in fewer than {min} texts",
+        "none": "No jobs were found."
+      },
+      "pains": {
+        "title": "Pains",
+        "lead": "What frustrates or blocks customers.",
+        "few": "1 more pain, found in fewer than {min} texts | {n} more pains, each found in fewer than {min} texts",
+        "none": "No pains were found."
+      },
+      "gains": {
+        "title": "Gains",
+        "lead": "What customers want, or what would delight them.",
+        "few": "1 more gain, found in fewer than {min} texts | {n} more gains, each found in fewer than {min} texts",
+        "none": "No gains were found."
+      }
+    },
+    "column": {
+      "texts": "Texts",
+      "share": "Share",
+      "intensity": "Intensity"
+    },
+    "intensity": {
+      "mild": "Mild",
+      "moderate": "Moderate",
+      "strong": "Strong",
+      "outOf": "on a scale from 1 to 3"
+    },
+    "textsWord": "text | texts",
+    "allTexts": "All {n} texts",
+    "hideTexts": "Hide the texts",
+    "noQuote": "No quote was found word for word for this theme.",
+    "empty": {
+      "heading": "No report yet",
+      "body": "The report is made from an analysis in this visit. Results stay only in this tab's memory, so they are gone after reloading or closing it.",
+      "analyze": "Go to Analyze",
+      "open": "Open a file"
+    }
+  }
+}
