@@ -29,7 +29,7 @@ test('the roadmap page is prerendered and lists every stage with the current one
   await expect(stages.nth(3)).toContainText('Planned')
   await expect(page.getByRole('link', { name: 'Read the full roadmap on GitHub' })).toHaveAttribute('href', 'https://github.com/akojif/painfold/blob/main/ROADMAP.md')
   await expect(page.getByRole('navigation', { name: 'Steps' })).toHaveCount(0)
-  await expect(page.locator('footer').getByRole('list', { name: 'About Painfold' }).getByRole('listitem')).toHaveText(['Your file is never uploaded. It stays in this browser.', 'No cookies', 'No account'])
+  await expect(page.locator('footer').getByRole('list', { name: 'About Painfold' }).getByRole('listitem')).toHaveText(['Your file is never uploaded. It stays in this browser.', 'Only the cleaned text you approve is sent to the AI you choose.', 'No cookies', 'No account'])
   const source = page.locator('footer').getByRole('link', { name: 'Open source' })
   await expect(source).toHaveAttribute('href', 'https://github.com/akojif/painfold')
   await expect(source.locator('svg')).toHaveCount(1)

@@ -22,7 +22,7 @@ const step = computed(() => route.meta.step as number | undefined)
 const showSteps = computed(() => step.value !== undefined && (step.value > 1 || Boolean(table.value)))
 // The empty start screen states the privacy notice in its own content; every other page states it here.
 const showNotice = computed(() => step.value !== 1 || Boolean(table.value))
-const facts = computed(() => [...(showNotice.value ? ['privacy.notice'] : []), 'footer.noCookies', 'footer.noAccount'])
+const facts = computed(() => [...(showNotice.value ? ['privacy.notice', 'privacy.noticeAi'] : []), 'footer.noCookies', 'footer.noAccount'])
 // A file can be dropped anywhere, on every step. Without this a browser would
 // open a dropped file itself and leave the app, losing everything in memory.
 const { openPicked } = useOpenFile()
