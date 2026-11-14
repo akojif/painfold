@@ -6,7 +6,7 @@
 //   ANTHROPIC_API_KEY=... npm run try:tagging [-- --model claude-sonnet-5-5]
 //   npm run try:tagging -- --provider ollama --model llama3.2:3b
 //
-// With Anthropic it costs real money: about one US cent for the sample with
+// With Anthropic it costs real money: about three US cents for the sample with
 // Claude Haiku 5.5. With Ollama it runs on this computer, at no cost.
 // The key is only read from the environment and never printed or stored. The
 // sample is invented, but this still sends its cleaned texts to Anthropic.
@@ -28,7 +28,7 @@ const provider = values.provider === 'ollama' ? 'ollama' : 'anthropic'
 const model = values.model ?? (provider === 'ollama' ? 'llama3.2:3b' : 'claude-haiku-5-5')
 const key = process.env.ANTHROPIC_API_KEY?.trim() ?? ''
 if (provider === 'anthropic' && !key) {
-  console.error('Set ANTHROPIC_API_KEY to run this; it costs about one cent for the sample.')
+  console.error('Set ANTHROPIC_API_KEY to run this; it costs about three US cents for the sample.')
   process.exit(2)
 }
 

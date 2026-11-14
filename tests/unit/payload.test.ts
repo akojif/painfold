@@ -82,11 +82,23 @@ describe('estimate', () => {
     const texts = Array.from({ length: 100 }, (_, index) => ({ item: `i${index}`, text: 'x'.repeat(200) }))
     const { payload } = buildPayload(texts, 'anthropic', 'claude-haiku-5-5')
     const result = estimate(payload)
-    expect(result.outputTokens).toBe(8000)
-    expect(result.inputTokens).toBeGreaterThan(100 * 200 / 3.5)
+    // 270 answer tokens per text, and the schema (1,700 tokens) on top of each of the 4 batches.
+    expect(result.outputTokens).toBe(27000)
+    expect(result.inputTokens).toBeGreaterThan(100 * 200 / 3.5 + 4 * 1700)
     const dollars = (result.inputTokens * PRICES['claude-haiku-5-5']!.input + result.outputTokens * PRICES['claude-haiku-5-5']!.output) / 1_000_000
     expect(result.cost!.low).toBeCloseTo(dollars * 0.7)
     expect(result.cost!.high).toBeCloseTo(dollars * 1.3)
+  })
+
+  it('holds the cost of the measured run on the sample file (Haiku 5.5, 2026-11-14)', () => {
+    // The sample's 200 cleaned texts in 8 batches; Anthropic reported 21,652 tokens in and 53,580 out.
+    const texts = Array.from({ length: 200 }, (_, index) => ({ item: `i${index}`, text: 'x'.repeat(93) }))
+    const { payload } = buildPayload(texts, 'anthropic', 'claude-haiku-5-5')
+    const price = PRICES['claude-haiku-5-5']!
+    const actual = (21652 * price.input + 53580 * price.output) / 1_000_000
+    const { cost } = estimate(payload)
+    expect(cost!.low).toBeLessThan(actual)
+    expect(cost!.high).toBeGreaterThan(actual)
   })
 
   it('gives no cost for a model without a price, such as one in Ollama', () => {
