@@ -392,5 +392,7 @@ async function copy(text: string) {
         {{ where === 'key' ? $t(`analyze.problem.${test.problem}`, { model: modelName }) : $t('analyze.ollama.notFound') }}
       </template>
     </p>
+
+    <ConsentStep />
   </div>
 </template>

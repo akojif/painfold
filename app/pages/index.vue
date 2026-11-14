@@ -196,6 +196,9 @@ async function findPersonalData() {
           /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg>
           {{ $t('start.privacy') }}
         </p>
+        <p class="mt-1 pl-6 text-sm text-fg-muted">
+          {{ $t('start.privacyAi') }}
+        </p>
 
         <!-- Not on phones: stacked, the three stages read as a stray list; the roadmap link in the footer covers it. -->
         <ol

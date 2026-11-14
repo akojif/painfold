@@ -1,6 +1,7 @@
 {
   "privacy": {
-    "notice": "Your file is never uploaded. It stays in this browser."
+    "notice": "Your file is never uploaded. It stays in this browser.",
+    "noticeAi": "Only the cleaned text you approve is sent to the AI you choose."
   },
   "network": {
     "none": "No data has left this browser.",
@@ -150,7 +151,8 @@
   },
   "start": {
     "privacy": "Your file is never uploaded. It stays in this browser.",
-    "dropOverlay": "Drop to open. Nothing is uploaded."
+    "dropOverlay": "Drop to open. Nothing is uploaded.",
+    "privacyAi": "Only the cleaned text you approve is sent to the AI you choose."
   },
   "review": {
     "limits": "Automatic detection can miss personal data. Review the results before sharing the cleaned file. Painfold helps with data protection but is not legal advice and does not by itself make your processing GDPR compliant."
@@ -191,5 +193,40 @@
     "rememberNote": "Stored in this browser only, until you untick this. Otherwise it is forgotten when you close the tab or start over.",
     "localNote": "Nothing leaves this computer: Ollama runs the model here.",
     "testNote": "The test sends only the word “Hello”, never your feedback."
+  },
+  "consent": {
+    "heading": "What will be sent",
+    "count": "1 cleaned text from {file} | {n} cleaned texts from {file}",
+    "to": "To",
+    "toValue": {
+      "anthropic": "Anthropic, {model}, straight from this browser to api.anthropic.com",
+      "ollama": "{model} in Ollama on this computer"
+    },
+    "terms": "Terms",
+    "termsValue": {
+      "anthropic": "Anthropic keeps requests for up to 30 days and does not use them for training (its terms, checked on 13 November 2026).",
+      "ollama": "Nothing leaves this computer."
+    },
+    "notSent": "Not sent",
+    "notSentValue": "Your file, the personal data you removed, the column names, short values such as a channel or a plan, and the columns you kept as they are.",
+    "cost": "Cost",
+    "costValue": "About {tokens} tokens, roughly {low} to {high}.",
+    "costFree": "About {tokens} tokens, at no cost: the model runs on this computer.",
+    "names": "Names were not checked, so these texts may still contain names.",
+    "namesCheck": "Check names first",
+    "namesConfirm": "I have checked these texts for names, or they contain none.",
+    "leak": "Something you removed in the review would be sent. Nothing can be sent until this is fixed.",
+    "search": "Search the texts",
+    "showAll": "Show all {n}",
+    "showMore": "Show {n} more",
+    "noMatch": "No text matches.",
+    "instructions": "Painfold’s instructions to the AI, sent with every request",
+    "download": "Download exactly what will be sent (.json)",
+    "send": "Send {n} cleaned texts to {provider}",
+    "sendLocal": "Analyze {n} cleaned texts with {model}",
+    "notYet": "Sending comes with the next part of this step.",
+    "noReview": "Open a file and review it first: only cleaned text can be sent.",
+    "openFile": "Open a file",
+    "nothing": "There is no text to analyze in the checked columns."
   }
 }

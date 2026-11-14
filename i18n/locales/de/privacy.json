@@ -1,6 +1,7 @@
 {
   "privacy": {
-    "notice": "Ihre Datei wird nie hochgeladen. Sie bleibt in diesem Browser."
+    "notice": "Ihre Datei wird nie hochgeladen. Sie bleibt in diesem Browser.",
+    "noticeAi": "Nur der bereinigte Text, den Sie freigeben, geht an die KI, die Sie wählen."
   },
   "network": {
     "none": "Keine Daten haben diesen Browser verlassen.",
@@ -150,7 +151,8 @@
   },
   "start": {
     "privacy": "Ihre Datei wird nie hochgeladen. Sie bleibt in diesem Browser.",
-    "dropOverlay": "Zum Öffnen loslassen. Nichts wird hochgeladen."
+    "dropOverlay": "Zum Öffnen loslassen. Nichts wird hochgeladen.",
+    "privacyAi": "Nur der bereinigte Text, den Sie freigeben, geht an die KI, die Sie wählen."
   },
   "review": {
     "limits": "Die automatische Erkennung kann personenbezogene Daten übersehen. Prüfen Sie die Ergebnisse, bevor Sie die bereinigte Datei weitergeben. Painfold unterstützt Sie beim Datenschutz, ist aber keine Rechtsberatung und macht Ihre Verarbeitung nicht von sich aus DSGVO-konform."
@@ -191,5 +193,40 @@
     "rememberNote": "Nur in diesem Browser gespeichert, bis Sie das Häkchen entfernen. Sonst wird er vergessen, wenn Sie den Tab schließen oder neu beginnen.",
     "localNote": "Nichts verlässt diesen Computer: Ollama führt das Modell hier aus.",
     "testNote": "Der Test sendet nur das Wort „Hello“, nie Ihr Feedback."
+  },
+  "consent": {
+    "heading": "Was gesendet wird",
+    "count": "1 bereinigter Text aus {file} | {n} bereinigte Texte aus {file}",
+    "to": "An",
+    "toValue": {
+      "anthropic": "Anthropic, {model}, direkt aus diesem Browser an api.anthropic.com",
+      "ollama": "{model} in Ollama auf diesem Computer"
+    },
+    "terms": "Bedingungen",
+    "termsValue": {
+      "anthropic": "Anthropic speichert Anfragen bis zu 30 Tage und nutzt sie nicht zum Training (laut seinen Bedingungen, geprüft am 13. November 2026).",
+      "ollama": "Nichts verlässt diesen Computer."
+    },
+    "notSent": "Nicht gesendet",
+    "notSentValue": "Ihre Datei, die entfernten personenbezogenen Daten, die Spaltennamen, kurze Werte wie Kanal oder Tarif, und die unverändert behaltenen Spalten.",
+    "cost": "Kosten",
+    "costValue": "Etwa {tokens} Token, ungefähr {low} bis {high}.",
+    "costFree": "Etwa {tokens} Token, kostenlos: Das Modell läuft auf diesem Computer.",
+    "names": "Namen wurden nicht geprüft, diese Texte können also noch Namen enthalten.",
+    "namesCheck": "Zuerst Namen prüfen",
+    "namesConfirm": "Ich habe diese Texte auf Namen geprüft, oder sie enthalten keine.",
+    "leak": "Etwas, das Sie bei der Prüfung entfernt haben, würde gesendet. Bis das behoben ist, kann nichts gesendet werden.",
+    "search": "Texte durchsuchen",
+    "showAll": "Alle {n} anzeigen",
+    "showMore": "{n} weitere anzeigen",
+    "noMatch": "Kein Text passt.",
+    "instructions": "Painfolds Anweisungen an die KI, mit jeder Anfrage gesendet",
+    "download": "Genau das herunterladen, was gesendet wird (.json)",
+    "send": "{n} bereinigte Texte an {provider} senden",
+    "sendLocal": "{n} bereinigte Texte mit {model} analysieren",
+    "notYet": "Das Senden kommt mit dem nächsten Teil dieses Schritts.",
+    "noReview": "Öffnen und prüfen Sie zuerst eine Datei: Nur bereinigter Text kann gesendet werden.",
+    "openFile": "Datei öffnen",
+    "nothing": "In den geprüften Spalten gibt es keinen Text zum Analysieren."
   }
 }
