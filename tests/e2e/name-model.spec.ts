@@ -107,7 +107,7 @@ test('Cancel stops the download and deletes what had arrived; the keyboard focus
 
   await page.keyboard.press('Enter')
   await expect(downloadButton(page)).toBeFocused()
-  await expect(page.getByText('Download cancelled.')).toBeAttached()
+  await expect(page.getByText('Download canceled.')).toBeAttached()
   expect(await cachedFiles(page)).toEqual([])
 })
 

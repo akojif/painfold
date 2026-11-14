@@ -78,3 +78,29 @@ describe('locale files', () => {
     for (const key of REVIEW_LIST) expect(privacy.some(path => path === key || path.startsWith(`${key}.`) || path.startsWith(`${key}[`)), key).toBe(true)
   })
 })
+
+// The English interface uses American spelling. Common British spellings,
+// matched as whole words in the text (never in keys), so they cannot come back.
+const BRITISH = [
+  // Not "analyses": also the plural of analysis.
+  /\banalys(?:e|ed|ing)\b/i,
+  /\b\w*(?:organis|recognis|optimis|summaris|customis|prioritis|authoris|initialis|minimis|normalis|visualis|anonymis|pseudonymis|standardis|categoris|synchronis|apologis|finalis|utilis|realis|memoris|personalis|emphasis(?:e|ed|es|ing))(?:e|ed|es|ing|ation|ations|er|ers)\b/i,
+  /\b(?:behaviour|colour|favour|honour|labour|neighbour|flavour|humour|rumour)\w*\b/i,
+  /\b(?:cancelled|cancelling|labelled|labelling|modelled|modelling|travelled|travelling|levelled|signalled|totalled)\b/i,
+  /\b(?:centre|centres|licence|licences|defence|offence|catalogue|dialogue|programme|programmes|grey|whilst|amongst|judgement|cheque|fulfil|enrol|enrolment|practise|metre|litre|fibre|ageing|acknowledgement)\b/i,
+]
+
+describe('American English', () => {
+  it('the English interface text has no British spellings', () => {
+    const found = [...english].flatMap(([key, text]) => BRITISH.flatMap(pattern => text.match(pattern)?.map(word => `${key}: ${word}`) ?? []))
+    expect(found).toEqual([])
+  })
+
+  it('the check catches the spellings it is meant to', () => {
+    const caught = (text: string) => BRITISH.some(pattern => pattern.test(text))
+    for (const text of ['Analysed 200 texts', 'not analysed yet', 'your organisation', 'expected behaviour', 'Download cancelled.', 'colours', 'a grey area', 'we recognised it'])
+      expect(caught(text), text).toBe(true)
+    for (const text of ['Analyzed 200 texts', 'analysis', 'analyses', 'otherwise', 'advise', 'a precise surprise', 'emphasis', 'license', 'canceled', 'organization'])
+      expect(caught(text), text).toBe(false)
+  })
+})

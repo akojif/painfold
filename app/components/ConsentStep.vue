@@ -3,6 +3,8 @@
 // the provider's terms and an estimated cost, before anything is sent. The
 // preview and the download are the same payload object the analysis sends
 // (core/ai/payload.ts), and the button sends exactly it (useTagging, #126).
+// Afterwards only the labels found go back, to be merged into themes (#127);
+// the step says so before anything is sent.
 import { estimate } from '~~/core/ai/cost'
 import { buildPayload, payloadFileName, payloadJson } from '~~/core/ai/payload'
 import { ANTHROPIC_MODELS } from '~~/core/ai/providers'
@@ -11,6 +13,7 @@ import { leakedValues } from '~~/core/export/csv'
 const PREVIEW = 20
 const MORE = 100
 const localePath = useLocalePath()
+const { locale } = useI18n()
 const { number } = useFormat()
 const { table, review, items, revision } = useSession()
 const { where, model, ollamaModel } = useAiSettings()
@@ -27,7 +30,7 @@ const built = computed(() => {
   // Only feedback and other free text: short values such as a channel or a plan
   // are not feedback, and stay in the browser for segments later.
   const texts = items.value.items.filter(item => item.display !== 'short')
-  return buildPayload(texts.map(item => ({ item: item.id, text: current.cleanedItem(item.id) })), provider.value, modelId.value)
+  return buildPayload(texts.map(item => ({ item: item.id, text: current.cleanedItem(item.id) })), provider.value, modelId.value, locale.value === 'de' ? 'de' : 'en')
 })
 const payload = computed(() => built.value?.payload)
 // Never expected: a value removed in the review inside the payload blocks sending.
@@ -48,9 +51,13 @@ const missing = computed(() => {
   if (leaks.value.length > 0) return 'leak'
   return undefined
 })
-const busy = computed(() => tagging.state.value === 'running' || tagging.state.value === 'stopping')
+const busy = computed(() => ['running', 'merging', 'stopping'].includes(tagging.state.value))
 const share = computed(() => (tagging.progress.value.total === 0 ? 0 : tagging.progress.value.done / tagging.progress.value.total))
 const outcome = computed(() => tagging.result.value)
+// Why the run stopped, and in which step: tagging the texts or merging the labels.
+const stopped = computed(() => outcome.value?.stopped ?? tagging.merge.value?.stopped)
+const stoppedMerging = computed(() => !outcome.value?.stopped && Boolean(tagging.merge.value?.stopped))
+const themes = computed(() => tagging.themes.value)
 
 function send() {
   if (!built.value || missing.value || busy.value) return
@@ -120,6 +127,10 @@ function download() {
           {{ $t('consent.notSent') }}
         </dt>
         <dd>{{ $t('consent.notSentValue') }}</dd>
+        <dt class="text-fg-muted">
+          {{ $t('consent.after') }}
+        </dt>
+        <dd>{{ $t('consent.afterValue') }}</dd>
         <dt class="text-fg-muted">
           {{ $t('consent.cost') }}
         </dt>
@@ -192,6 +203,12 @@ function download() {
           {{ $t('consent.instructions') }}
         </summary>
         <pre class="mt-2 overflow-x-auto rounded-sm bg-surface p-3 font-mono text-xs whitespace-pre-wrap">{{ payload.instructions }}</pre>
+      </details>
+      <details class="mt-2 text-sm">
+        <summary class="focus-ring cursor-pointer rounded-sm text-fg-muted hover:text-fg">
+          {{ $t('consent.mergeInstructions') }}
+        </summary>
+        <pre class="mt-2 overflow-x-auto rounded-sm bg-surface p-3 font-mono text-xs whitespace-pre-wrap">{{ payload.mergeInstructions }}</pre>
       </details>
 
       <p
@@ -278,18 +295,32 @@ function download() {
             <template v-if="tagging.state.value === 'running'">
               {{ $t('analyze.run.count', { done: number(tagging.progress.value.done), total: number(tagging.progress.value.total) }) }}
             </template>
+            <template v-else-if="tagging.state.value === 'merging'">
+              {{ $t('analyze.run.merging') }}
+            </template>
             <template v-else-if="tagging.state.value === 'stopping'">
               {{ $t('analyze.run.stopping') }}
             </template>
-            <template v-else-if="tagging.state.value === 'stopped' && outcome?.stopped === 'cancelled'">
-              {{ $t('analyze.run.cancelled', { done: number(tagging.progress.value.done), total: number(tagging.progress.value.total) }) }}
+            <template v-else-if="tagging.state.value === 'stopped' && stopped === 'cancelled'">
+              {{ stoppedMerging
+                ? $t('analyze.run.mergeCancelled')
+                : $t('analyze.run.cancelled', { done: number(tagging.progress.value.done), total: number(tagging.progress.value.total) }) }}
             </template>
-            <template v-else-if="tagging.state.value === 'stopped' && outcome?.stopped">
-              <span class="text-danger">{{ provider === 'anthropic' ? $t(`analyze.problem.${outcome.stopped}`, { model: modelName }) : $t('analyze.ollama.notFound') }}</span>
-              {{ $t('analyze.run.paused', { done: number(tagging.progress.value.done), total: number(tagging.progress.value.total) }) }}
+            <template v-else-if="tagging.state.value === 'stopped' && stopped">
+              <span class="text-danger">{{ provider === 'anthropic' ? $t(`analyze.problem.${stopped}`, { model: modelName }) : $t('analyze.ollama.notFound') }}</span>
+              {{ stoppedMerging
+                ? $t('analyze.run.mergePaused')
+                : $t('analyze.run.paused', { done: number(tagging.progress.value.done), total: number(tagging.progress.value.total) }) }}
             </template>
             <template v-else-if="tagging.state.value === 'done' && outcome">
               {{ $t('analyze.run.done', { n: number(outcome.tagged.size) }, outcome.tagged.size) }}
+              <template v-if="themes">
+                {{ $t('analyze.run.themes', {
+                  jobs: $t('analyze.run.jobs', { n: number(themes.jobs.length) }, themes.jobs.length),
+                  pains: $t('analyze.run.pains', { n: number(themes.pains.length) }, themes.pains.length),
+                  gains: $t('analyze.run.gains', { n: number(themes.gains.length) }, themes.gains.length),
+                }) }}
+              </template>
             </template>
           </p>
           <ul
@@ -305,7 +336,7 @@ function download() {
           </ul>
           <div class="mt-3 flex gap-2">
             <button
-              v-if="tagging.state.value === 'running'"
+              v-if="tagging.state.value === 'running' || tagging.state.value === 'merging'"
               type="button"
               class="focus-ring press h-9 rounded-md border border-line px-3.5 hover:border-line-strong"
               @click="tagging.cancel()"

@@ -78,7 +78,7 @@ test('explains a key Anthropic does not accept, and an organisation that blocks 
   await page.unroute('https://api.anthropic.com/**')
   await anthropic(page, 401, { error: { type: 'authentication_error', message: 'CORS requests are not allowed for this Organization because of its settings.' } })
   await page.getByRole('button', { name: 'Test connection' }).click()
-  await expect(page.getByText('Your Anthropic organisation does not allow calls from browsers.')).toBeVisible()
+  await expect(page.getByText('Your Anthropic organization does not allow calls from browsers.')).toBeVisible()
 })
 
 test('asks for a key before testing, and sends nothing without one', async ({ page }) => {

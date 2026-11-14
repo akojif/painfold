@@ -12,6 +12,12 @@
 // - the answer includes the model's thinking (adaptive, on by default), about
 //   270 tokens per text instead of the ~80 the JSON alone needs.
 // Claude Sonnet 5.5 is not measured yet; it may think more per text.
+//
+// Merging (#127) adds one request per kind with the labels found: about 20
+// tokens in per text (the labels as sent), and about 2,500 tokens of thinking
+// per request plus 8 per text in the answer. Measured on a second run with
+// Haiku 5.5 (sample file, 2026-11-14): 9,801 tokens in and 9,181 out for the
+// merging, 31,453 in and 62,750 out ($0.0345) in all.
 import { BATCH_SIZE, type AnalysisPayload } from './payload.ts'
 
 /** US dollars per million tokens, from the provider's price list on the date checked. */
@@ -32,6 +38,13 @@ const OVERHEAD: Record<AnalysisPayload['provider'], { perBatch: number, outputPe
   ollama: { perBatch: 0, outputPerText: 80 },
 }
 
+// Merging: one request per kind (jobs, pains, gains).
+const MERGE_REQUESTS = 3
+const MERGE_INPUT_PER_TEXT = 20
+const MERGE_OUTPUT_PER_TEXT = 8
+// Thinking before each merge answer.
+const MERGE_OUTPUT_PER_REQUEST: Record<AnalysisPayload['provider'], number> = { anthropic: 2500, ollama: 0 }
+
 export type Estimate = { inputTokens: number, outputTokens: number, cost?: { low: number, high: number } }
 
 /** Tokens in and out for the whole payload, and the cost range where the model has a price (Ollama has none). */
@@ -39,8 +52,10 @@ export function estimate(payload: AnalysisPayload): Estimate {
   const { perBatch, outputPerText } = OVERHEAD[payload.provider]
   const batches = Math.ceil(payload.texts.length / BATCH_SIZE)
   const characters = payload.texts.reduce((sum, { id, text }) => sum + id.length + text.length, 0) + batches * payload.instructions.length
+  const merge = payload.texts.length === 0 ? 0 : MERGE_REQUESTS
   const inputTokens = Math.round(characters / CHARACTERS_PER_TOKEN) + batches * perBatch
-  const outputTokens = payload.texts.length * outputPerText
+    + merge * (Math.round(payload.mergeInstructions.length / CHARACTERS_PER_TOKEN) + perBatch) + payload.texts.length * MERGE_INPUT_PER_TEXT
+  const outputTokens = payload.texts.length * (outputPerText + MERGE_OUTPUT_PER_TEXT) + merge * MERGE_OUTPUT_PER_REQUEST[payload.provider]
   const price = PRICES[payload.model]
   if (!price) return { inputTokens, outputTokens }
   const dollars = (inputTokens * price.input + outputTokens * price.output) / 1_000_000

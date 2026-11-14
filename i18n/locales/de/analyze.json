@@ -77,7 +77,14 @@
       "needKey": "Bitte zuerst oben den API-Schlüssel eingeben.",
       "needOllama": "Bitte zuerst oben ein Modell in Ollama wählen.",
       "needNames": "Bitte zuerst den Hinweis zu Namen bestätigen.",
-      "leak": "Solange etwas Entferntes darin wäre, kann nichts gesendet werden."
+      "leak": "Solange etwas Entferntes darin wäre, kann nichts gesendet werden.",
+      "merging": "Ähnliche Aufgaben, Probleme und Wünsche werden gruppiert…",
+      "mergeCancelled": "Vor dem Ende der Gruppierung gestoppt. Alle Texte sind analysiert; Fortsetzen gruppiert den Rest.",
+      "mergePaused": "Alle Texte sind analysiert; die Gruppierung ist pausiert. Fortsetzen gruppiert den Rest.",
+      "themes": "Gruppiert in {jobs}, {pains} und {gains}.",
+      "jobs": "1 Aufgabe | {n} Aufgaben",
+      "pains": "1 Problem | {n} Probleme",
+      "gains": "1 Wunsch | {n} Wünsche"
     }
   }
 }
