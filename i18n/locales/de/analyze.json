@@ -60,6 +60,24 @@
       "safari": "Safari lässt Webseiten keine Programme auf diesem Computer erreichen, daher geht Ollama hier nicht. Bitte Chrome, Edge oder Firefox verwenden.",
       "copy": "Kopieren",
       "copied": "Kopiert"
+    },
+    "run": {
+      "heading": "{n} bereinigte Texte werden mit {model} analysiert",
+      "headingDone": "{n} bereinigte Texte mit {model} analysiert",
+      "progressLabel": "Analysierte Texte",
+      "count": "{done} von {total}",
+      "cancel": "Abbrechen",
+      "stopping": "Wird gestoppt: Die bereits gesendeten Anfragen laufen fertig, nichts Neues wird gesendet.",
+      "cancelled": "Gestoppt: {done} von {total} Texten sind analysiert. Nichts weiter wurde gesendet.",
+      "paused": "Pausiert bei {done} von {total}. Fortsetzen sendet nur die noch nicht analysierten Texte.",
+      "resume": "Fortsetzen",
+      "done": "1 Text analysiert. | {n} Texte analysiert.",
+      "droppedQuotes": "1 Zitat stand nicht wortgleich im Text und wurde weggelassen. | {n} Zitate standen nicht wortgleich im Text und wurden weggelassen.",
+      "notAnalysed": "1 Text konnte nicht analysiert werden. | {n} Texte konnten nicht analysiert werden.",
+      "needKey": "Bitte zuerst oben den API-Schlüssel eingeben.",
+      "needOllama": "Bitte zuerst oben ein Modell in Ollama wählen.",
+      "needNames": "Bitte zuerst den Hinweis zu Namen bestätigen.",
+      "leak": "Solange etwas Entferntes darin wäre, kann nichts gesendet werden."
     }
   }
 }

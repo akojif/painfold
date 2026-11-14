@@ -24,6 +24,7 @@
     "models": "node scripts/fetch-model.ts",
     "check:providers": "node scripts/check-providers.ts",
     "labels:convert": "node scripts/convert-labels.ts",
+    "try:tagging": "node scripts/try-tagging.ts",
     "models:upload": "node scripts/upload-model.ts",
     "test:model": "vitest run --config vitest.model.config.ts",
     "eval:names": "node scripts/eval-names.ts",

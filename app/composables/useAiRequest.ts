@@ -1,6 +1,6 @@
 import { classifyFailure, type AiProblem, type AiRequest, type Provider } from '~~/core/ai/providers'
 
-export type AiAnswer = { ok: true, status: number, body: string } | { ok: false, problem: AiProblem }
+export type AiAnswer = { ok: true, status: number, body: string } | { ok: false, problem: AiProblem, retryAfter?: number }
 
 /**
  * The only way Painfold sends anything to an AI. It refuses any destination
@@ -22,7 +22,10 @@ export async function sendAiRequest(provider: Provider, request: AiRequest, sign
       signal,
     })
     const text = await response.text()
-    return response.ok ? { ok: true, status: response.status, body: text } : { ok: false, problem: classifyFailure(response.status, text) }
+    if (response.ok) return { ok: true, status: response.status, body: text }
+    // How long the provider asks to wait, in seconds, when the browser may read it.
+    const retryAfter = Number(response.headers.get('retry-after'))
+    return { ok: false, problem: classifyFailure(response.status, text), ...(retryAfter > 0 ? { retryAfter } : {}) }
   }
   catch (error) {
     if (signal?.aborted) throw error
