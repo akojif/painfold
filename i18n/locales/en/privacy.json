@@ -16,7 +16,8 @@
       "data": "App data",
       "other": "Other",
       "model": "Name model",
-      "runtime": "Model runtime"
+      "runtime": "Model runtime",
+      "ai": "Sent to the AI"
     },
     "otherSite": "Another site",
     "allOwn": "All requests went to this site ({host}): the app's own code, fonts and text, and the name model if you downloaded it.",
@@ -24,7 +25,9 @@
     "kilobytes": "{n} kB",
     "close": "Close",
     "stored": "From this browser",
-    "megabytes": "{n} MB"
+    "megabytes": "{n} MB",
+    "toAi": "1 request went to the AI you chose. | {n} requests went to the AI you chose.",
+    "aiOnly": "Requests to the AI you chose are listed with the bytes sent. Everything else stayed on this site."
   },
   "report": {
     "title": "Painfold cleaning report",
@@ -182,5 +185,11 @@
   },
   "importErrors": {
     "unsupported-format": "That file type isn't supported. Painfold reads CSV, TSV and Excel (.xlsx) files."
+  },
+  "aiPrivacy": {
+    "keyNote": "Your key is sent only to Anthropic, straight from this browser. Painfold has no server and never sees it.",
+    "rememberNote": "Stored in this browser only, until you untick this. Otherwise it is forgotten when you close the tab or start over.",
+    "localNote": "Nothing leaves this computer: Ollama runs the model here.",
+    "testNote": "The test sends only the word “Hello”, never your feedback."
   }
 }

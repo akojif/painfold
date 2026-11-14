@@ -29,7 +29,7 @@ Every end-to-end test fails if the page contacts any origin other than the app i
 
 The interface is in English and German. English lives at `/`, German under `/de/` (`prefix_except_default`), so every page is prerendered in both languages and German pages can be shared and indexed; each page links to the other language with `hreflang`.
 
-- The text lives in one file per area and language: `i18n/locales/<en|de>/<area>.json`, for the areas common, start, columns, review, download, roadmap, accuracy, privacy and errors (`i18n/messages.ts` lists them). @nuxtjs/i18n merges a language's files deeply, so one key can be split across files, such as `start` in `start.json` with `start.privacy` in `privacy.json`.
+- The text lives in one file per area and language: `i18n/locales/<en|de>/<area>.json`, for the areas common, start, columns, review, download, analyze, roadmap, accuracy, privacy and errors (`i18n/messages.ts` lists them). @nuxtjs/i18n merges a language's files deeply, so one key can be split across files, such as `start` in `start.json` with `start.privacy` in `privacy.json`.
 - Every change adds both languages, in the matching file. `tests/unit/locales.test.ts` fails if a message exists in one language only or in a different file, if placeholders or plural forms differ, or if a message is defined in two files.
 - German is plain and uses "Sie". The German locale is `de-AT`, so numbers, lists and any written dates follow Austrian conventions ("Jänner"). Dates in the cleaning report stay ISO (2026-11-10), which reads the same in both languages.
 - The language is chosen like this: an explicit `/de/` address always wins; only the root `/` follows a saved choice (`painfold-language` in `localStorage`) or, without one, the browser language, in a small inline script before first paint. The switch in the header saves the choice and moves to the same page in the other language inside the app, so an open file and the review are kept. No cookie is set.
@@ -50,6 +50,7 @@ These are where precise wording matters most; a native speaker should review the
 - Column warnings and reasons (`columns.warning`, `columns.checkInstead`, `columns.masked`, `columns.reason.*`, `columns.help`).
 - What the download contains and what is kept (`download.mapStays`, `download.reportExplain`, `download.notReviewed`) and the cleaning report (`report.*`).
 - The warnings for text that could identify someone (`warning.*`): "Könnte jemanden erkennbar machen" as the heading, "Hinweis" for a warning, and the reasons, especially "Beruf mit Ort" and "Rolle, die eine Person innehat".
+- Choosing an AI: how the API key is handled and what is sent (`aiPrivacy.*`), and requests to the AI in "What leaves your browser" (`network.toAi`, `network.aiOnly`, `network.kind.ai`). The rest of the Analyze step is in `analyze.json`.
 - Terms chosen for this product, in the files where they are used: the column roles "Prüfen / Unverändert / Weglassen" (`columns.json`), "Treffer" for a finding (`review.json` and others), and "UID-Nummer" for VAT ID (`common.json`).
 
 Open questions for the reviewer:
@@ -104,6 +105,12 @@ Every file becomes a list of **items**, each a piece of text and where it came f
 ## AI providers
 
 Which AI providers Painfold can call straight from the browser, their terms (training, retention, location), and the CSP design for Stage 3 are recorded in [docs/ai-providers.md](ai-providers.md). `npm run check:providers` repeats the browser check: one request with the word "Hello" and a fake key per provider, from a page at the production origin.
+
+- **Choosing the AI** (`app/pages/analyze.vue`, not linked until slice 4 and marked noindex): the person's API key (Anthropic, Claude Haiku 5.5 by default) or Ollama on this computer, with a connection test that sends only "Hello". Providers, requests and error handling are plain code in `core/ai/providers.ts`.
+- **The key** is held in memory (`useAiSettings`) and forgotten on Start over. Only "Remember on this device" stores it, in this browser's local storage, and unticking it removes it.
+- **Every AI request goes through `sendAiRequest`** (`useAiRequest`). It refuses any destination but the chosen provider's, sends no cookies and no referrer, and logs the request in "What leaves your browser" with the bytes sent. The browser's own record (Resource Timing) can't see the size of a request to another site, so it skips the AI endpoints.
+- **The pages' CSP** allows exactly `AI_ENDPOINTS` in `deploy/headers.ts` (Anthropic, and Ollama on `localhost:11434` and `127.0.0.1:11434`). App files and workers stay limited to this site. Unit tests check the exact list, and that the providers only call endpoints on it.
+- **End-to-end tests** stand in for Anthropic and Ollama with Playwright. Only those tests may reach those origins (`test.use({ allowedOrigins })`); every other test still fails on any request to another site.
 
 ## Analysis evaluation: labelling
 

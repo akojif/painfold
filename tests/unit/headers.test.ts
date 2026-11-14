@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { assetPolicy, cloudflareHeaders, documentPolicy, headersFor } from '../../deploy/headers'
+import { AI_ENDPOINTS, assetPolicy, cloudflareHeaders, documentPolicy, headersFor } from '../../deploy/headers'
 
 function directive(policy: string, name: string): string[] {
   const entry = policy.split('; ').find(part => part.startsWith(`${name} `))
@@ -16,15 +16,23 @@ describe('documentPolicy', () => {
     expect(directive(policy, 'form-action')).toEqual(["'none'"])
   })
 
-  it('only lets the page talk to its own origin', () => {
-    expect(directive(policy, 'connect-src')).toEqual(["'self'"])
+  it('lets a page talk to its own origin and to exactly the AI endpoints, nothing else', () => {
+    expect(directive(policy, 'connect-src')).toEqual(["'self'", 'https://api.anthropic.com', 'http://localhost:11434', 'http://127.0.0.1:11434'])
+    expect(AI_ENDPOINTS).toEqual(['https://api.anthropic.com', 'http://localhost:11434', 'http://127.0.0.1:11434'])
   })
 
-  it('never names a host: every source is a keyword, a hash or data:, so the site only ever talks to itself', () => {
+  it('names no other host: apart from the AI endpoints in connect-src, every source is a keyword, a hash or data:', () => {
     for (const policy of [documentPolicy(['aaa=']), assetPolicy()]) {
-      const sources = policy.split('; ').flatMap(part => part.split(' ').slice(1))
+      const sources = policy.split('; ').flatMap((part) => {
+        const [name, ...values] = part.split(' ')
+        return name === 'connect-src' ? values.filter(value => !AI_ENDPOINTS.includes(value)) : values
+      })
       expect(sources.filter(source => !/^'[a-z-]+'$|^'sha256-[^']+'$|^data:$/.test(source)), policy).toEqual([])
     }
+  })
+
+  it('keeps app files and workers to this site: the AI is called from the page only', () => {
+    expect(directive(assetPolicy(), 'connect-src')).toEqual(["'self'"])
   })
 
   it('allows inline scripts only by hash, sorted and without duplicates', () => {

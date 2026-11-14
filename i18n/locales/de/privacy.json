@@ -16,7 +16,8 @@
       "data": "App-Daten",
       "other": "Sonstiges",
       "model": "Namensmodell",
-      "runtime": "Modell-Laufzeit"
+      "runtime": "Modell-Laufzeit",
+      "ai": "An die KI gesendet"
     },
     "otherSite": "Andere Website",
     "allOwn": "Alle Anfragen gingen an diese Website ({host}): der eigene Code, die Schriften und die Texte der App und, falls geladen, das Namensmodell.",
@@ -24,7 +25,9 @@
     "kilobytes": "{n} kB",
     "close": "Schließen",
     "stored": "Aus diesem Browser",
-    "megabytes": "{n} MB"
+    "megabytes": "{n} MB",
+    "toAi": "1 Anfrage ging an die KI, die Sie gewählt haben. | {n} Anfragen gingen an die KI, die Sie gewählt haben.",
+    "aiOnly": "Anfragen an die gewählte KI stehen mit den gesendeten Bytes in der Liste. Alles andere blieb auf dieser Seite."
   },
   "report": {
     "title": "Painfold-Bereinigungsbericht",
@@ -182,5 +185,11 @@
   },
   "importErrors": {
     "unsupported-format": "Dieser Dateityp wird nicht unterstützt. Painfold liest CSV-, TSV- und Excel-Dateien (.xlsx)."
+  },
+  "aiPrivacy": {
+    "keyNote": "Ihr Schlüssel geht nur an Anthropic, direkt aus diesem Browser. Painfold hat keinen Server und sieht ihn nie.",
+    "rememberNote": "Nur in diesem Browser gespeichert, bis Sie das Häkchen entfernen. Sonst wird er vergessen, wenn Sie den Tab schließen oder neu beginnen.",
+    "localNote": "Nichts verlässt diesen Computer: Ollama führt das Modell hier aus.",
+    "testNote": "Der Test sendet nur das Wort „Hello“, nie Ihr Feedback."
   }
 }

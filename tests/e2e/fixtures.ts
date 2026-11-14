@@ -29,18 +29,21 @@ export function waitForHydrationOnGoto(page: Page): Page {
   return page
 }
 
-export const test = base.extend<{ foreignRequests: string[] }>({
+// Every test fails if the page talks to another origin. Only the tests of the
+// AI step list the AI endpoints they stand in for (test.use({ allowedOrigins })).
+export const test = base.extend<{ foreignRequests: string[], allowedOrigins: string[] }>({
+  allowedOrigins: [[], { option: true }],
   page: async ({ page }, use) => {
     await use(waitForHydrationOnGoto(page))
   },
-  foreignRequests: [async ({ page, baseURL }, use) => {
+  foreignRequests: [async ({ page, baseURL, allowedOrigins }, use) => {
     const appOrigin = new URL(baseURL!).origin
     const foreign: string[] = []
 
     page.on('request', (request) => {
       const url = new URL(request.url())
       if (url.protocol === 'data:' || url.protocol === 'blob:') return
-      if (url.origin !== appOrigin) foreign.push(request.url())
+      if (url.origin !== appOrigin && !allowedOrigins.includes(url.origin)) foreign.push(request.url())
     })
 
     await use(foreign)

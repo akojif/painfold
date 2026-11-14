@@ -47,7 +47,7 @@ describe('locales', () => {
 
 // The texts on the native-review list (docs/development.md) live in privacy.json, so a reviewer reads one file per language.
 const REVIEW_LIST = [
-  'privacy', 'network', 'nameModel', 'smallScreen', 'importNotes', 'nameScan', 'warning', 'report',
+  'privacy', 'network', 'nameModel', 'smallScreen', 'importNotes', 'nameScan', 'warning', 'report', 'aiPrivacy',
   'start.privacy', 'start.dropOverlay', 'review.limits',
   'columns.warning', 'columns.checkInstead', 'columns.masked', 'columns.reason', 'columns.help',
   'download.names', 'download.mapStays', 'download.reportExplain', 'download.notReviewed',
