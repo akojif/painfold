@@ -8,7 +8,7 @@ import { countThemes } from '~~/core/ai/themes'
 // The analysis run (Stage 3, slices 4 and 5, #126, #127): sends the consent
 // step's payload in batches, then merges the labels found into themes, and
 // keeps the results for this visit, in memory. The themes are counted in code
-// (core/ai/themes.ts); the report (slice 6) reads them here.
+// (core/ai/themes.ts); the report (slice 6, #128) reads them here.
 export type TaggingState = 'idle' | 'running' | 'merging' | 'stopping' | 'stopped' | 'done'
 
 const state = ref<TaggingState>('idle')
@@ -20,14 +20,18 @@ const itemOf = shallowRef<ReadonlyMap<string, string>>(new Map())
 // Every count is made here, in code, from the tags and the merged themes.
 const themes = computed(() => (result.value && merge.value && !merge.value.stopped ? countThemes(result.value.tagged, merge.value.themes, itemOf.value) : undefined))
 let controller: AbortController | undefined
-let sentPayload: AnalysisPayload | undefined
+// The payload last sent: the report names its model and texts.
+const sent = shallowRef<AnalysisPayload>()
+// Each item's text exactly as sent: what its quotes were checked against, so
+// the report shows this text even if the review changes afterwards.
+const sentText = computed(() => new Map((sent.value?.texts ?? []).map(({ id, text }) => [itemOf.value.get(id) ?? id, text])))
 
 export function useTagging() {
   const { key } = useAiSettings()
 
   async function run(payload: AnalysisPayload, items: ReadonlyMap<string, string>, done?: ReadonlyMap<string, TaggedText>) {
     controller = new AbortController()
-    sentPayload = payload
+    sent.value = payload
     itemOf.value = items
     state.value = 'running'
     const outcome = await runTagging({
@@ -81,9 +85,9 @@ export function useTagging() {
 
   /** Sends only the texts not tagged yet. */
   function resume() {
-    if (!sentPayload || !result.value) return
-    if (result.value.stopped) return run(sentPayload, itemOf.value, result.value.tagged)
-    return mergeThemes(sentPayload)
+    if (!sent.value || !result.value) return
+    if (result.value.stopped) return run(sent.value, itemOf.value, result.value.tagged)
+    return mergeThemes(sent.value)
   }
 
   /** No new batch starts; the requests in flight finish and their answers are kept. */
@@ -102,5 +106,5 @@ export function useTagging() {
     progress.value = { done: 0, total: 0 }
   }
 
-  return { state: readonly(state), progress: readonly(progress), result, merge, themes, itemOf, start, resume, cancel, reset }
+  return { state: readonly(state), progress: readonly(progress), result, merge, themes, itemOf, sent, sentText, start, resume, cancel, reset }
 }

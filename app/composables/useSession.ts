@@ -26,6 +26,25 @@ const suggestedChoices = ref('')
 const reviewedChoices = ref('')
 const downloadedAt = ref<{ revision: number, choices: string }>()
 
+// Each unit's place ("Row 17"), items and kept values, for the review screen
+// and the report, and each item by its id. Built once for all callers.
+const unitIndex = computed(() => {
+  const places = new Map<string, Place>()
+  const byUnit = new Map<string, Item[]>()
+  const attributes = new Map<string, Record<string, string>>()
+  const byId = new Map<string, Item>()
+  for (const unit of items.value?.units ?? []) {
+    places.set(unit.id, placeOf(unit.source))
+    byUnit.set(unit.id, [])
+    attributes.set(unit.id, unit.attributes)
+  }
+  for (const item of items.value?.items ?? []) {
+    byUnit.get(item.unit)?.push(item)
+    byId.set(item.id, item)
+  }
+  return { places, byUnit, attributes, byId }
+})
+
 export function useSession() {
   const choices = computed(() => JSON.stringify([roles.value, feedbackColumn.value]))
 
@@ -58,19 +77,10 @@ export function useSession() {
     return itemsFromTable({ ...table.value, sheetIndex: sheetIndexOf(table.value) }, roles.value, { feedbackColumn: feedbackColumn.value })
   }
 
-  // Each unit's place ("Row 17"), and each unit's items, for the review screen.
-  const unitIndex = computed(() => {
-    const places = new Map<string, Place>()
-    const byUnit = new Map<string, Item[]>()
-    for (const unit of items.value?.units ?? []) {
-      places.set(unit.id, placeOf(unit.source))
-      byUnit.set(unit.id, [])
-    }
-    for (const item of items.value?.items ?? []) byUnit.get(item.unit)?.push(item)
-    return { places, byUnit }
-  })
   const placeOfUnit = (unit: string): Place => unitIndex.value.places.get(unit) ?? { kind: 'row', number: 0 }
   const itemsOfUnit = (unit: string): readonly Item[] => unitIndex.value.byUnit.get(unit) ?? []
+  const attributesOfUnit = (unit: string): Record<string, string> => unitIndex.value.attributes.get(unit) ?? {}
+  const itemById = (id: string): Item | undefined => unitIndex.value.byId.get(id)
 
   function startReview(set: ItemSet, results: ItemDetections[]) {
     if (!table.value) return
@@ -124,5 +134,5 @@ export function useSession() {
     reviewedChoices.value = ''
   }
 
-  return { table, isSample, suggestions, roles, feedbackColumn, review, items, placeOfUnit, itemsOfUnit, revision, scanColumns, columnsChanged, hasWork, load, setFeedbackColumn, itemsToCheck, startReview, change, markDownloaded, clear }
+  return { table, isSample, suggestions, roles, feedbackColumn, review, items, placeOfUnit, itemsOfUnit, attributesOfUnit, itemById, revision, scanColumns, columnsChanged, hasWork, load, setFeedbackColumn, itemsToCheck, startReview, change, markDownloaded, clear }
 }

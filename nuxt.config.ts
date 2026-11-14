@@ -51,8 +51,8 @@ export default defineNuxtConfig({
 
   nitro: {
     preset: 'static',
-    // /analyze/ is not linked yet (Stage 3, until v0.3.0), so it is listed here to be generated.
-    prerender: { routes: ['/roadmap/', '/accuracy/', '/analyze/', '/de/', '/de/roadmap/', '/de/accuracy/', '/de/analyze/'] },
+    // /analyze/ and /report/ are not linked yet (Stage 3, until v0.3.0), so they are listed here to be generated.
+    prerender: { routes: ['/roadmap/', '/accuracy/', '/analyze/', '/report/', '/de/', '/de/roadmap/', '/de/accuracy/', '/de/analyze/', '/de/report/'] },
   },
 
   vite: {

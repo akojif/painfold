@@ -84,7 +84,8 @@
       "themes": "Gruppiert in {jobs}, {pains} und {gains}.",
       "jobs": "1 Aufgabe | {n} Aufgaben",
       "pains": "1 Problem | {n} Probleme",
-      "gains": "1 Wunsch | {n} Wünsche"
+      "gains": "1 Wunsch | {n} Wünsche",
+      "showReport": "Bericht anzeigen"
     }
   }
 }

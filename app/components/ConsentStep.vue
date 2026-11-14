@@ -4,7 +4,8 @@
 // preview and the download are the same payload object the analysis sends
 // (core/ai/payload.ts), and the button sends exactly it (useTagging, #126).
 // Afterwards only the labels found go back, to be merged into themes (#127);
-// the step says so before anything is sent.
+// the step says so before anything is sent. When done, it leads to the
+// report (#128).
 import { estimate } from '~~/core/ai/cost'
 import { buildPayload, payloadFileName, payloadJson } from '~~/core/ai/payload'
 import { ANTHROPIC_MODELS } from '~~/core/ai/providers'
@@ -351,6 +352,13 @@ function download() {
             >
               {{ $t('analyze.run.resume') }}
             </button>
+            <NuxtLink
+              v-if="tagging.state.value === 'done' && themes"
+              :to="localePath('/report')"
+              class="focus-ring press inline-flex h-9 items-center rounded-md bg-fg px-3.5 font-medium text-canvas"
+            >
+              {{ $t('analyze.run.showReport') }}
+            </NuxtLink>
           </div>
         </div>
       </div>
