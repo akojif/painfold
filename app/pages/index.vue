@@ -20,7 +20,6 @@ const detecting = ref(false)
 const input = useTemplateRef<HTMLInputElement>('input')
 const summary = useTemplateRef<HTMLElement>('summary')
 
-const journey = [['clean', true], ['find', false], ['decide', false]] as const
 const columnCounts = shallowRef<readonly ColumnCounts[]>()
 const cleanedSummary = computed(() => {
   const count = (role: string) => roles.value.filter(current => current === role).length
@@ -131,7 +130,7 @@ async function findPersonalData() {
     <!-- One grid: on small screens headline, actions, example, then the rest; from lg two columns, the example on the right. -->
     <section
       v-if="!table"
-      class="grid flex-1 content-center gap-y-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,27rem)] lg:grid-rows-[auto_auto] lg:gap-x-16 lg:gap-y-0"
+      class="grid flex-1 content-center gap-y-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,27rem)] lg:grid-rows-[auto_auto_auto] lg:gap-x-16 lg:gap-y-0"
     >
       <div class="max-w-xl lg:col-start-1 lg:row-start-1 lg:self-end">
         <h1 class="text-2xl font-semibold text-balance sm:text-3xl">
@@ -192,28 +191,10 @@ async function findPersonalData() {
         <p class="mt-1 pl-6 text-sm text-fg-muted">
           {{ $t('start.privacyAi') }}
         </p>
-
-        <!-- Not on phones: stacked, the three stages read as a stray list; the roadmap link in the footer covers it. -->
-        <ol
-          :aria-label="$t('start.journeyLabel')"
-          class="mt-10 grid gap-4 border-t border-line pt-6 max-md:hidden sm:grid-cols-3"
-        >
-          <li
-            v-for="[key, now] in journey"
-            :key="key"
-            class="flex flex-col gap-1.5"
-          >
-            <span
-              class="self-start rounded-sm px-1.5 py-px text-xs font-medium"
-              :class="now ? 'bg-accent text-on-accent' : 'border border-line text-fg-muted'"
-            >{{ $t(`start.journey.${key}.when`) }}</span>
-            <span
-              class="text-sm"
-              :class="now ? 'font-medium text-fg' : 'text-fg-muted'"
-            >{{ $t(`start.journey.${key}.title`) }}</span>
-          </li>
-        </ol>
       </div>
+
+      <!-- Not on phones: stacked, the three steps read as a stray list; the roadmap link in the footer covers it. -->
+      <WhatPainfoldDoes class="mt-4 max-md:hidden lg:col-span-2 lg:row-start-3 lg:mt-16" />
 
       <SmallScreenSheet ref="smallScreenSheet" />
     </section>

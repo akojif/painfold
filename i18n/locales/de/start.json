@@ -10,16 +10,17 @@
     "journey": {
       "clean": {
         "title": "Datei bereinigen",
-        "when": "Jetzt"
+        "body": "Personenbezogene Daten werden zu Platzhaltern, direkt in Ihrem Browser."
       },
       "find": {
         "title": "Aufgaben, Probleme und Wünsche finden",
-        "when": "v0.3"
+        "body": "In Themen gruppiert, im Code gezählt, mit echten Zitaten."
       },
       "decide": {
         "title": "Entscheiden, was gebaut wird",
-        "when": "v0.4"
-      }
+        "body": "Die stärksten Probleme, als Fragen für Ihr Team formuliert."
+      },
+      "coming": "Kommt in {version}"
     }
   },
   "example": {

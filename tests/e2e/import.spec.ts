@@ -32,7 +32,12 @@ test.describe('start screen', () => {
     await expect(page.getByRole('button', { name: 'Try the sample file' })).toBeVisible()
     await expect(page.getByText('200 made-up tickets, no real people')).toBeVisible()
     await expect(page.getByText('Your file is never uploaded. It stays in this browser.')).toHaveCount(1)
-    await expect(page.getByRole('list', { name: 'What Painfold does' }).getByRole('listitem')).toHaveText([/^Now\s*Clean your file$/, /^v0\.3\s*Find jobs, pains and gains$/, /^v0\.4\s*Decide what to build$/])
+    // Statuses come from the roadmap: the analysis is a preview until v0.3.0 is released with its quality numbers.
+    await expect(page.getByRole('list', { name: 'What Painfold does' }).getByRole('listitem')).toHaveText([
+      /^Available\s*Clean your file\s*Personal data turns into placeholders, right in your browser\.$/,
+      /^Preview\s*Find jobs, pains and gains\s*Grouped into themes, counted in code, with real quotes\.$/,
+      /^Coming in v0\.4\s*Decide what to build\s*The strongest pains, framed as questions for your team\.$/,
+    ])
     // The hero states the privacy notice, so the footer adds only the other facts here.
     await expect(page.locator('footer').getByRole('list', { name: 'About Painfold' }).getByRole('listitem')).toHaveText(['No cookies', 'No account'])
   })
