@@ -1,4 +1,5 @@
-import type { AnalysisPayload } from '~~/core/ai/payload'
+import type { DemoItem } from '~~/core/ai/demo'
+import type { AnalysisPayload, ThemeLanguage } from '~~/core/ai/payload'
 import { ANTHROPIC, OLLAMA, type AiRequest } from '~~/core/ai/providers'
 import { runTagging, type BatchReply, type RunResult } from '~~/core/ai/run'
 import { anthropicJsonRequest, anthropicTaggingRequest, ollamaJsonRequest, ollamaTaggingRequest, type TaggedText } from '~~/core/ai/tagging'
@@ -25,6 +26,11 @@ const sent = shallowRef<AnalysisPayload>()
 // Each item's text exactly as sent: what its quotes were checked against, so
 // the report shows this text even if the review changes afterwards.
 const sentText = computed(() => new Map((sent.value?.texts ?? []).map(({ id, text }) => [itemOf.value.get(id) ?? id, text])))
+
+// The demo (#130): a stored run on the sample file, replayed here without any
+// request (core/ai/demo.ts). Set while the demo is shown; a real run ends it.
+export type DemoInfo = { model: string, createdAt: string, language: ThemeLanguage, standIn: boolean, items: Readonly<Record<string, DemoItem>> }
+const demo = shallowRef<DemoInfo>()
 
 export function useTagging() {
   const { key } = useAiSettings()
@@ -75,8 +81,28 @@ export function useTagging() {
     return answer.ok ? { ok: true, body: answer.body } : { ok: false, problem: answer.problem, retryAfter: answer.retryAfter }
   }
 
+  /**
+   * Shows the demo: the stored run, loaded from Painfold's own site as a lazy
+   * chunk and replayed through the same checks and counting as a live run,
+   * with theme names in this language. Nothing is sent.
+   */
+  async function loadDemo(language: ThemeLanguage) {
+    controller?.abort()
+    const [{ replayDemo }, { default: stored }] = await Promise.all([import('~~/core/ai/demo'), import('~~/data/demo/analysis.json')])
+    const run = stored as unknown as import('~~/core/ai/demo').DemoRun
+    const replay = await replayDemo(run, language)
+    sent.value = replay.payload
+    itemOf.value = replay.itemOf
+    result.value = replay.result
+    merge.value = replay.merge
+    progress.value = { done: replay.result.tagged.size, total: replay.payload.texts.length }
+    demo.value = { model: run.model, createdAt: run.createdAt, language, standIn: run.standIn, items: run.items }
+    state.value = 'done'
+  }
+
   /** Sends the payload, as the consent step showed it. */
   function start(payload: AnalysisPayload, items: ReadonlyMap<string, string>) {
+    demo.value = undefined
     result.value = undefined
     merge.value = undefined
     progress.value = { done: 0, total: payload.texts.length }
@@ -101,10 +127,11 @@ export function useTagging() {
   function reset() {
     controller?.abort()
     state.value = 'idle'
+    demo.value = undefined
     result.value = undefined
     merge.value = undefined
     progress.value = { done: 0, total: 0 }
   }
 
-  return { state: readonly(state), progress: readonly(progress), result, merge, themes, itemOf, sent, sentText, start, resume, cancel, reset }
+  return { state: readonly(state), progress: readonly(progress), result, merge, themes, itemOf, sent, sentText, demo: readonly(demo), loadDemo, start, resume, cancel, reset }
 }

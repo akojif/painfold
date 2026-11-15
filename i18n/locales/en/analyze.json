@@ -86,6 +86,13 @@
       "pains": "1 pain | {n} pains",
       "gains": "1 gain | {n} gains",
       "showReport": "Show the report"
+    },
+    "demo": {
+      "offer": "No API key? See a demo analysis of this sample: a real run on these made-up tickets, stored in Painfold. Showing it sends nothing.",
+      "show": "Show the demo analysis",
+      "shown": "The demo analysis is shown. Nothing was sent from your browser.",
+      "report": "Show the report",
+      "leave": "Analyze it yourself"
     }
   }
 }

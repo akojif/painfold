@@ -1,5 +1,5 @@
 import type { Page } from '@playwright/test'
-import { expect, test } from './fixtures'
+import { expect, openSample, test } from './fixtures'
 
 // Starting over and leaving the flow: ask first whenever work would be lost
 // (a review, or changed column choices, not downloaded since), never when
@@ -7,7 +7,7 @@ import { expect, test } from './fixtures'
 
 const sample = async (page: Page, path = '/') => {
   await page.goto(path)
-  await page.getByRole('button', { name: path === '/' ? 'Try the sample file' : 'Beispieldatei ausprobieren' }).click()
+  await openSample(page)
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(path === '/' ? 'Choose what to check' : 'Wählen Sie, was geprüft wird')
 }
 const review = async (page: Page) => {

@@ -1,5 +1,5 @@
 import type { Download, Page, Route } from '@playwright/test'
-import { expect, test } from './fixtures'
+import { expect, openSample, test } from './fixtures'
 
 // Stage 3, slices 4 and 5 (#126, #127): sending the payload, checking the
 // answers, and merging the labels found into themes.
@@ -12,7 +12,7 @@ type Label = { id: string, label: string, count: number }
 
 async function reviewSampleAndOpenAnalyze(page: Page) {
   await page.goto('/')
-  await page.getByRole('button', { name: 'Try the sample file' }).click()
+  await openSample(page)
   await page.getByRole('button', { name: /^Find personal data in/ }).click()
   await expect(page).toHaveURL(/\/review\/$/)
   await page.getByRole('link', { name: 'Continue to analyze' }).last().click()

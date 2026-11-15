@@ -46,7 +46,7 @@ const mounted = ref(false)
 const renderPage = computed(() => !(mounted.value && narrow.value && working.value && !table.value))
 // Widened with nothing to review: where the page's own guard would have sent it.
 watch(narrow, (now) => {
-  if (!now && current.value.meta.needsReview && !session.review.value) void navigateTo(localePath('/'))
+  if (!now && current.value.meta.needsReview && !session.review.value && !useTagging().demo.value) void navigateTo(localePath('/'))
 })
 
 /** Back to the start screen with nothing open, after asking if work would be lost. */

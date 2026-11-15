@@ -3,8 +3,6 @@
     "headline": "Find what hurts your customers. Without exposing who they are.",
     "subline": "Start by cleaning your feedback file: names, emails, phone numbers, IBANs and more are removed right here in your browser.",
     "choose": "Choose a CSV or Excel file",
-    "sampleButton": "Try the sample file",
-    "sampleNote": "200 made-up tickets, no real people",
     "reading": "Reading {name}…",
     "journeyLabel": "What Painfold does",
     "journey": {
@@ -20,6 +18,22 @@
         "title": "Decide what to build",
         "when": "v0.4"
       }
+    },
+    "example": {
+      "button": "Try an example",
+      "title": "Try Painfold with made-up data",
+      "body": "200 support tickets in German and English. No real people.",
+      "sample": {
+        "title": "Clean the sample file",
+        "body": "Go through every step yourself: find personal data, review it, then analyze."
+      },
+      "demo": {
+        "title": "See a finished analysis",
+        "body": "The report from a stored run on this file. No API key needed, and nothing is sent."
+      },
+      "cancel": "Cancel",
+      "openSample": "Open the sample",
+      "showDemo": "Show the analysis"
     }
   },
   "example": {

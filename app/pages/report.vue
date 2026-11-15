@@ -2,7 +2,8 @@
 // Stage 3, slice 6 (#128): the first report. Jobs, pains and gains in the
 // canvas order, each ranked, with the numbers counted in code (themes.ts) and
 // verified quotes linked to their rows. It reads the analysis of this visit
-// from memory and sends nothing. Step 4 of the flow (#142).
+// from memory and sends nothing. Step 4 of the flow (#142). It also shows the
+// demo (#130), a stored run on the sample file, with a note saying so.
 import { LOW_CONFIDENCE_BELOW } from '~~/core/ai/themes'
 import { ANTHROPIC_MODELS } from '~~/core/ai/providers'
 import { reportOf } from '~~/core/ai/results'
@@ -12,16 +13,27 @@ definePageMeta({
   // Below 768 px the layout shows SmallScreenNotice instead, also from a direct link (#139).
   working: true,
   needsReview: true,
-  // No report without a checked file; this runs in the browser only.
+  // No report without a checked file, except the demo (#130); this runs in the browser only.
   middleware: () => {
-    if (import.meta.client && !useSession().review.value && !useSmallScreen().narrow.value) return navigateTo(useLocalePath()('/'))
+    if (import.meta.client && !useSession().review.value && !useTagging().demo.value && !useSmallScreen().narrow.value) return navigateTo(useLocalePath()('/'))
   },
 })
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const localePath = useLocalePath()
-const { number } = useFormat()
+const { number, date } = useFormat()
 const tagging = useTagging()
+const session = useSession()
+const demo = computed(() => tagging.demo.value)
+// The demo's theme names follow the interface language, like a live run's.
+watch(locale, (now) => {
+  if (demo.value && demo.value.language !== now) void tagging.loadDemo(now === 'de' ? 'de' : 'en')
+})
+/** Leaves the demo: back to Analyze with the open file, or to the start page. */
+async function leaveDemo() {
+  tagging.reset()
+  await navigateTo(localePath(session.review.value ? '/analyze' : '/'))
+}
 useHead({ title: () => `${t('results.title')}, ${t('app.name')}` })
 
 const themes = computed(() => tagging.themes.value)
@@ -42,6 +54,32 @@ const cleanedFile = useCleanedFile()
       <h1 class="text-2xl font-semibold text-balance">
         {{ $t('results.heading') }}
       </h1>
+      <div
+        v-if="demo"
+        class="mt-4 max-w-measure rounded-md border border-line bg-surface px-4 py-3 text-sm"
+        role="note"
+      >
+        <p>
+          <span class="font-medium">{{ $t('results.demo.label') }}</span>
+          {{ $t('results.demo.note', { date: date(demo.createdAt) }) }}
+          <template v-if="!session.review.value">
+            {{ $t('results.demo.noFile') }}
+          </template>
+        </p>
+        <p
+          v-if="demo.standIn"
+          class="mt-1 text-danger"
+        >
+          {{ $t('results.demo.standIn') }}
+        </p>
+        <button
+          type="button"
+          class="focus-ring press mt-2 rounded-sm text-accent underline-offset-4 hover:underline"
+          @click="leaveDemo"
+        >
+          {{ $t('results.demo.leave') }}
+        </button>
+      </div>
       <p class="mt-3 max-w-measure text-md text-fg-muted">
         {{ $t('results.lead', { n: number(analyzed), model }, analyzed) }}
       </p>
@@ -130,6 +168,7 @@ const cleanedFile = useCleanedFile()
       </section>
 
       <section
+        v-if="session.review.value"
         class="mt-14 border-t border-line pt-6"
         aria-labelledby="cleaned-file"
       >

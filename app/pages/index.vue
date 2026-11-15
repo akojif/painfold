@@ -3,7 +3,7 @@ import { countsByColumn, itemsForColumns, textItems, type ColumnCounts } from '~
 
 definePageMeta({ step: 1 })
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const localePath = useLocalePath()
 const { number } = useFormat()
 const session = useSession()
@@ -74,7 +74,14 @@ function act(action: () => void) {
   else action()
 }
 const onChoose = () => act(() => input.value?.click())
-const onSample = () => act(() => void openSample())
+// "Try an example" (ExampleDialog.vue): clean the sample file step by step, or
+// see the demo report (#130), a stored real run on the sample, without
+// importing or reviewing. Loading the demo sends nothing.
+const exampleDialog = useTemplateRef<{ open: () => void }>('exampleDialog')
+const onExample = () => act(() => exampleDialog.value?.open())
+const tagging = useTagging()
+const onSample = () => void openSample()
+const onDemo = () => void tagging.loadDemo(locale.value === 'de' ? 'de' : 'en').then(() => navigateTo(localePath('/report')))
 
 function onSheet(event: Event) {
   void openSheet((event.target as HTMLSelectElement).value)
@@ -141,7 +148,7 @@ async function findPersonalData() {
           {{ $t('start.subline') }}
         </p>
 
-        <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
+        <div class="mt-8 flex flex-wrap items-center gap-3">
           <button
             type="button"
             class="press focus-ring h-10 rounded-md bg-fg px-4 font-medium text-canvas hover:opacity-90"
@@ -149,16 +156,13 @@ async function findPersonalData() {
           >
             {{ $t('start.choose') }}
           </button>
-          <p class="text-sm">
-            <button
-              type="button"
-              class="focus-ring rounded-sm font-medium text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent"
-              @click="onSample"
-            >
-              {{ $t('start.sampleButton') }}
-            </button>
-            <span class="block text-xs text-fg-muted">{{ $t('start.sampleNote') }}</span>
-          </p>
+          <button
+            type="button"
+            class="press focus-ring h-10 rounded-md border border-line-strong px-4 font-medium hover:border-fg"
+            @click="onExample"
+          >
+            {{ $t('start.example.button') }}
+          </button>
         </div>
 
         <p
@@ -216,6 +220,11 @@ async function findPersonalData() {
       </div>
 
       <SmallScreenSheet ref="smallScreenSheet" />
+      <ExampleDialog
+        ref="exampleDialog"
+        @sample="onSample"
+        @demo="onDemo"
+      />
     </section>
 
     <div

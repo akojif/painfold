@@ -1,5 +1,5 @@
 import type { Page } from '@playwright/test'
-import { expect, test } from './fixtures'
+import { expect, openSample, test } from './fixtures'
 
 // Every page has one address, ending in a slash (/roadmap/, /de/): links, the
 // canonical link and the hreflang links all use it, and the form without the
@@ -49,7 +49,7 @@ test('every link, canonical and hreflang link on every page ends in a slash', as
 test('the review and download steps link with a slash too', async ({ page, baseURL }) => {
   const origin = new URL(baseURL!).origin
   await page.goto('/')
-  await page.getByRole('button', { name: 'Try the sample file' }).click()
+  await openSample(page)
   await page.getByRole('button', { name: /^Find personal data in/ }).click()
   await expect(page).toHaveURL(/\/review\/$/)
   expect(pageAddresses(await addresses(page), origin).filter(address => !address.endsWith('/'))).toEqual([])

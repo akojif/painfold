@@ -5,7 +5,7 @@ import { detectItems } from '../../core/detect/items'
 import { itemsFromTable, textItems } from '../../core/items/table'
 import { importFile } from '../../core/import'
 import { GERMAN_EXCEL_TEXT, windows1252 } from '../fixtures/german-excel'
-import { expect, test } from './fixtures'
+import { expect, openSample, test } from './fixtures'
 
 const sampleCsv = readFileSync(new URL('../../data/sample/support-tickets.csv', import.meta.url))
 const fileInput = (page: import('@playwright/test').Page) => page.getByTestId('file-input')
@@ -24,13 +24,12 @@ function upload(page: import('@playwright/test').Page, name: string, buffer: Buf
 }
 
 test.describe('start screen', () => {
-  test('leads with the headline, one primary action, the sample file and the privacy line', async ({ page }) => {
+  test('leads with the headline, one primary action, the example and the privacy line', async ({ page }) => {
     await page.goto('/')
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Find what hurts your customers. Without exposing who they are.')
     await expect(page.getByText('Start by cleaning your feedback file: names, emails, phone numbers, IBANs and more are removed right here in your browser.')).toBeVisible()
     await expect(page.getByRole('button', { name: 'Choose a CSV or Excel file' })).toBeVisible()
-    await expect(page.getByRole('button', { name: 'Try the sample file' })).toBeVisible()
-    await expect(page.getByText('200 made-up tickets, no real people')).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Try an example' })).toBeVisible()
     await expect(page.getByText('Your file is never uploaded. It stays in this browser.')).toHaveCount(1)
     await expect(page.getByRole('list', { name: 'What Painfold does' }).getByRole('listitem')).toHaveText([/^Now\s*Clean your file$/, /^v0\.3\s*Find jobs, pains and gains$/, /^v0\.4\s*Decide what to build$/])
     // The hero states the privacy notice, so the footer adds only the other facts here.
@@ -45,7 +44,7 @@ test.describe('start screen', () => {
   test('the stepper appears once a file is open, with Import as the current step', async ({ page }) => {
     await page.goto('/')
     await expect(page.getByRole('navigation', { name: 'Steps' })).toHaveCount(0)
-    await page.getByRole('button', { name: 'Try the sample file' }).click()
+    await openSample(page)
     await expect(page.getByRole('navigation', { name: 'Steps' }).locator('[aria-current="step"]')).toHaveText(/Import/)
   })
 
@@ -220,7 +219,7 @@ test.describe('choosing a file', () => {
 
   test('the sample file is labelled as fake data', async ({ page }) => {
     await page.goto('/')
-    await page.getByRole('button', { name: 'Try the sample file' }).click()
+    await openSample(page)
     await expectLoaded(page, 'support-tickets.csv', '200 rows')
     await expect(page.getByText('Sample file with fake data.')).toBeVisible()
   })

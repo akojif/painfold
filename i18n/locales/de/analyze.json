@@ -86,6 +86,13 @@
       "pains": "1 Problem | {n} Probleme",
       "gains": "1 Wunsch | {n} Wünsche",
       "showReport": "Bericht anzeigen"
+    },
+    "demo": {
+      "offer": "Kein API-Schlüssel? Sehen Sie sich eine Demo-Analyse dieser Beispieldatei an: ein echter Lauf mit diesen erfundenen Tickets, in Painfold gespeichert. Beim Anzeigen wird nichts gesendet.",
+      "show": "Demo-Analyse anzeigen",
+      "shown": "Die Demo-Analyse wird angezeigt. Aus Ihrem Browser wurde nichts gesendet.",
+      "report": "Bericht anzeigen",
+      "leave": "Selbst analysieren"
     }
   }
 }

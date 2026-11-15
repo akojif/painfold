@@ -45,10 +45,15 @@ export const MERGE_CHUNK = 300
 /** Labels that differ only in case or spacing are one label. */
 export const labelKey = (label: string) => tidy(label).toLowerCase()
 
-/** The distinct labels of one kind, most frequent first, each counted once per text. */
+/**
+ * The distinct labels of one kind, most frequent first, each counted once per
+ * text. Texts are read in file order, whatever order their answers arrived
+ * in, so the same tags always give the same ids: a stored run (the demo)
+ * replays exactly.
+ */
 export function labelsOf(tagged: Iterable<TaggedText>, kind: Kind): MergeLabel[] {
   const found = new Map<string, { label: string, count: number }>()
-  for (const text of tagged) {
+  for (const text of [...tagged].sort((a, b) => Number(a.id.slice(1)) - Number(b.id.slice(1)))) {
     for (const key of new Set(text[kind].map(tag => labelKey(tag.label)))) {
       const entry = found.get(key)
       if (entry) entry.count++

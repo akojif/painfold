@@ -1,5 +1,5 @@
 import type { Page, Route } from '@playwright/test'
-import { expect, test } from './fixtures'
+import { expect, openSample, test } from './fixtures'
 
 // Stage 3, slice 6 (#128): the first report. Playwright stands in for
 // Anthropic with fixed answers, so every number on the page can be checked
@@ -52,7 +52,7 @@ async function analyzeSample(page: Page) {
     return tag(route)
   })
   await page.goto('/')
-  await page.getByRole('button', { name: 'Try the sample file' }).click()
+  await openSample(page)
   await page.getByRole('button', { name: /^Find personal data in/ }).click()
   await expect(page).toHaveURL(/\/review\/$/)
   await page.getByRole('link', { name: 'Continue to analyze' }).last().click()
@@ -125,7 +125,7 @@ test('every bar uses one scale across jobs, pains and gains', async ({ page }) =
 /** Opens the report after the review, before any analysis: reachable only by going back and forth in history. */
 async function reportBeforeAnalysis(page: Page, start = '/') {
   await page.goto(start)
-  await page.getByRole('button', { name: start === '/' ? 'Try the sample file' : 'Beispieldatei ausprobieren' }).click()
+  await openSample(page)
   await page.getByRole('button', { name: start === '/' ? /^Find personal data in/ : /^Personenbezogene Daten in/ }).click()
   await expect(page).toHaveURL(/\/review\/$/)
   await page.evaluate(path => (document.querySelector('#__nuxt') as unknown as { __vue_app__: { config: { globalProperties: { $router: { push: (to: string) => Promise<void> } } } } }).__vue_app__.config.globalProperties.$router.push(path), `${start}report/`)

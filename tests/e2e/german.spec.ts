@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
 import type { Page } from '@playwright/test'
-import { expect, test } from './fixtures'
+import { expect, openSample, test } from './fixtures'
 
 const sideways = (page: Page) => page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)
 
@@ -14,7 +14,7 @@ test('German pages are prerendered under /de/ with the right language', async ({
 
 test('switching language keeps the open file and every review decision', async ({ page }) => {
   await page.goto('/')
-  await page.getByRole('button', { name: 'Try the sample file' }).click()
+  await openSample(page)
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Choose what to check')
 
   await page.getByRole('group', { name: 'Language' }).getByRole('button', { name: 'German' }).click()
@@ -38,7 +38,7 @@ test('switching language keeps the open file and every review decision', async (
 
 test('the cleaning report follows the interface language', async ({ page }) => {
   await page.goto('/de/')
-  await page.getByRole('button', { name: 'Beispieldatei ausprobieren' }).click()
+  await openSample(page)
   await page.getByRole('button', { name: /Personenbezogene Daten in 200 Zeilen finden/ }).click()
   await page.getByRole('link', { name: 'Bereinigte Datei herunterladen' }).last().click()
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Ihre bereinigte Datei ist fertig.')
@@ -97,7 +97,7 @@ test.describe('German at 320px', () => {
   test('long German words do not make the start page, the sheet, the notice or the roadmap scroll sideways', async ({ page }) => {
     await page.goto('/de/')
     expect(await sideways(page), 'start').toBeLessThanOrEqual(0)
-    await page.getByRole('button', { name: 'Beispieldatei ausprobieren' }).click()
+    await page.getByRole('button', { name: 'Beispiel ausprobieren' }).click()
     expect(await sideways(page), 'sheet').toBeLessThanOrEqual(0)
     await page.goto('/de/review/')
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Painfold mag größere Bildschirme')

@@ -1,6 +1,6 @@
 import type { Download, Page, Request } from '@playwright/test'
 import { utils, write } from 'xlsx'
-import { expect, test } from './fixtures'
+import { expect, openSample, test } from './fixtures'
 
 // One file, every kind of decision: a dropped personal column, a checked
 // message column, a column kept as is with a formula in it, an email that is
@@ -154,7 +154,7 @@ test('the privacy panel lists every request, all to this site', async ({ page })
 
 test('Start over after downloading goes back to the start with nothing kept', async ({ page }) => {
   await page.goto('/')
-  await page.getByRole('button', { name: 'Try the sample file' }).click()
+  await openSample(page)
   await page.getByRole('button', { name: /Find personal data/ }).click()
   await page.getByRole('link', { name: 'Download the cleaned file' }).click()
   await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: /^Download support-tickets_cleaned/ }).click()])

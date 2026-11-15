@@ -1,5 +1,5 @@
 import type { Page, Request, Route } from '@playwright/test'
-import { expect, test } from './fixtures'
+import { expect, openSample, test } from './fixtures'
 
 // Stage 3, slice 2 (#124): choosing where the analysis runs. Anthropic and
 // Ollama are stood in for by Playwright, so no key or service is needed and
@@ -25,7 +25,7 @@ async function anthropic(page: Page, status = 200, body: unknown = { content: [{
 /** Analyze is step 3 (#142): reached from a reviewed file, as people reach it. */
 async function openAnalyze(page: Page, german = false) {
   await page.goto(german ? '/de/' : '/')
-  await page.getByRole('button', { name: german ? 'Beispieldatei ausprobieren' : 'Try the sample file' }).click()
+  await openSample(page)
   await page.getByRole('button', { name: german ? /^Personenbezogene Daten in/ : /^Find personal data in/ }).click()
   await page.getByRole('link', { name: german ? 'Weiter zur Analyse' : 'Continue to analyze' }).last().click()
   await expect(page).toHaveURL(/\/analyze\/$/)
