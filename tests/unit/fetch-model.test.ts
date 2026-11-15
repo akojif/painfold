@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { fetchWithRetry } from '../../scripts/fetch-model'
+import { fetchWithRetry, huggingFaceInit } from '../../scripts/fetch-model'
 
 // The build downloads the name model from Hugging Face, which can answer 429
 // when a shared build machine hits its rate limit. No request is made here.
@@ -38,5 +38,21 @@ describe('downloading the name model', () => {
     const busy = answers(429, 429, 429)
     expect((await fetchWithRetry('https://example.com/a', { fetch: busy.get, wait: async () => {}, attempts: 3 })).status).toBe(429)
     expect(busy.calls).toHaveLength(3)
+  })
+})
+
+describe('the Hugging Face token', () => {
+  it('is sent as a bearer token when the build has one, and nothing is sent without it', async () => {
+    expect(huggingFaceInit(' hf_example\n')).toEqual({ headers: { authorization: 'Bearer hf_example' } })
+    expect(huggingFaceInit('hf_example')).toEqual({ headers: { authorization: 'Bearer hf_example' } })
+    expect(huggingFaceInit(' ')).toBeUndefined()
+    expect(huggingFaceInit(undefined)).toBeUndefined()
+    const seen: Array<RequestInit | undefined> = []
+    const get = (async (_url: string, init?: RequestInit) => {
+      seen.push(init)
+      return new Response(null, { status: 200 })
+    }) as unknown as typeof fetch
+    await fetchWithRetry('https://example.com/a', { fetch: get, init: huggingFaceInit('hf_example') })
+    expect(seen).toEqual([{ headers: { authorization: 'Bearer hf_example' } }])
   })
 })

@@ -36,13 +36,13 @@ const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
  * answers (such as 404) are returned at once. A shared build machine can hit
  * Hugging Face's rate limit, which once failed a production build.
  */
-export async function fetchWithRetry(url: string, options: { fetch?: typeof fetch, wait?: (ms: number) => Promise<unknown>, attempts?: number } = {}): Promise<Response> {
-  const { fetch: get = fetch, wait = sleep, attempts = 6 } = options
+export async function fetchWithRetry(url: string, options: { fetch?: typeof fetch, wait?: (ms: number) => Promise<unknown>, attempts?: number, init?: RequestInit } = {}): Promise<Response> {
+  const { fetch: get = fetch, wait = sleep, attempts = 6, init } = options
   for (let attempt = 1; ; attempt++) {
     const last = attempt >= attempts
     let response: Response
     try {
-      response = await get(url)
+      response = await get(url, init)
     }
     catch (error) {
       if (last) throw error
@@ -57,12 +57,22 @@ export async function fetchWithRetry(url: string, options: { fetch?: typeof fetc
   }
 }
 
+/**
+ * A Hugging Face access token, if the build has one (HF_TOKEN): anonymous
+ * downloads from shared build machines get rate-limited. Read-only is enough;
+ * it is sent only to huggingface.co and never printed.
+ */
+export function huggingFaceInit(token = process.env.HF_TOKEN): RequestInit | undefined {
+  const value = token?.trim()
+  return value ? { headers: { authorization: `Bearer ${value}` } } : undefined
+}
+
 export async function cachedFile(file: string, expected: Expected): Promise<string> {
   const path = join(CACHE, file)
   if (await readIfValid(path, expected)) return path
 
   const url = `https://huggingface.co/${NAME_MODEL.source}/resolve/${NAME_MODEL.revision}/${file}`
-  const response = await fetchWithRetry(url)
+  const response = await fetchWithRetry(url, { init: huggingFaceInit() })
   if (!response.ok) throw new Error(`Downloading ${url} failed: ${response.status}`)
   const bytes = new Uint8Array(await response.arrayBuffer())
   if (!matches(bytes, expected)) throw new Error(`${file} has SHA-256 ${sha256(bytes)} and ${bytes.byteLength} bytes, expected ${expected.sha256} and ${expected.bytes}. Not using it.`)
