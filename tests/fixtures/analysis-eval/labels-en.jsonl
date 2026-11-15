@@ -1,0 +1,6 @@
+{"id":"en-901","lang":"en","split":"dev","jobs":["Send invoices"],"pains":["Bank feed drops"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"en-902","lang":"en","split":"dev","jobs":["Send invoices"],"pains":[],"gains":["Custom reminders"],"sentiment":"mixed","type":"feature request"}
+{"id":"en-903","lang":"en","split":"dev","jobs":[],"pains":["Bank feed drops"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"en-904","lang":"en","split":"dev","jobs":[],"pains":[],"gains":[],"sentiment":"positive","type":"praise"}
+{"id":"en-905","lang":"en","split":"dev","jobs":["Pay staff"],"pains":["Slow payroll"],"gains":[],"sentiment":"negative","type":"complaint","comment":"Could also be a bug."}
+{"id":"en-906","lang":"en","split":"dev","jobs":[],"pains":[],"gains":["Custom reminders"],"sentiment":"neutral","type":"question"}
