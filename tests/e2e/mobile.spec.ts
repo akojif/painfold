@@ -157,7 +157,7 @@ test('widening on a direct link with no file open leads to where a larger screen
   await page.setViewportSize({ width: 390, height: 900 })
   await page.goto('/report/')
   await page.setViewportSize({ width: 1280, height: 900 })
-  await expect(heading(page)).toHaveText('No report yet')
+  await expect(heading(page)).toHaveText(START)
 })
 
 for (const width of [1280, 768]) {

@@ -44,7 +44,7 @@
       "forms": "1 mögliche Form zu prüfen. | {n} mögliche Formen zu prüfen."
     },
     "removeAll": "Alle {n} offenen entfernen",
-    "continue": "Weiter zum Download",
+    "continue": "Weiter zur Analyse",
     "willRemove": "1 nicht geprüfter Treffer wird entfernt. | {n} nicht geprüfte Treffer werden entfernt.",
     "announce": {
       "remove": "{type} entfernt, {left} offen.",
@@ -65,13 +65,14 @@
     "inRows": "In 1 Zeile. Beim Entfernen wird der Wert durch {placeholder} ersetzt. | In {n} Zeilen. Beim Entfernen wird jedes Vorkommen durch {placeholder} ersetzt.",
     "finished": {
       "title": "Alle Treffer sind geprüft.",
-      "body": "{removed} entfernt, {kept} behalten. Als Nächstes: die bereinigte Datei und den Bereinigungsbericht herunterladen.",
-      "action": "Weiter zum Download"
+      "body": "{removed} entfernt, {kept} behalten."
     },
     "removeAllShort": "1 entfernen | Alle {n} entfernen",
     "keptTag": "Behalten",
     "moreRows": "Und 1 weitere Zeile. | Und {n} weitere Zeilen.",
     "noRows": "Keine Zeilen mit Treffern.",
-    "showMoreOfType": "{n} weitere anzeigen"
+    "showMoreOfType": "{n} weitere anzeigen",
+    "downloadFile": "Bereinigte Datei herunterladen",
+    "choice": "Sie brauchen nur eine bereinigte Datei? Laden Sie sie hier herunter. Um herauszufinden, was Ihren Kunden wehtut, geht es weiter zur Analyse."
   }
 }

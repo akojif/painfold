@@ -1,17 +1,24 @@
 <script setup lang="ts">
 // Stage 3, slice 2 (#124): where the analysis runs, the person's API key or
 // Ollama on this computer, with a connection test that sends only "Hello".
-// Not linked from anywhere yet and not indexed: the page becomes part of the
-// flow (Import, Review, Analyze, Report) when the analysis can run (slice 4).
+// Step 3 of the flow (Import, Review, Analyze, Report, #142).
 import { ANTHROPIC, ANTHROPIC_MODELS, anthropicRequest, OLLAMA, ollamaModels, ollamaModelsRequest, ollamaRequest, TEST_TEXT, type AiProblem, type ModelChoice } from '~~/core/ai/providers'
 
-// Part of the working flow: below 768 px the layout shows SmallScreenNotice instead (#139).
-definePageMeta({ working: true })
+definePageMeta({
+  step: 3,
+  // Below 768 px the layout shows SmallScreenNotice instead, also from a direct link (#139).
+  working: true,
+  needsReview: true,
+  // Nothing to analyze without a checked file; this runs in the browser only.
+  middleware: () => {
+    if (import.meta.client && !useSession().review.value && !useSmallScreen().narrow.value) return navigateTo(useLocalePath()('/'))
+  },
+})
 
 const { t } = useI18n()
 // An example model: small enough for most laptops, good enough to test with.
 const PULL = 'ollama pull llama3.2:3b'
-useHead({ title: () => `${t('analyze.title')}, ${t('app.name')}`, meta: [{ name: 'robots', content: 'noindex' }] })
+useHead({ title: () => `${t('analyze.title')}, ${t('app.name')}` })
 
 const { where, model, key, remember, ollamaModel } = useAiSettings()
 const showKey = ref(false)

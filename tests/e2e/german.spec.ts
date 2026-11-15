@@ -40,7 +40,7 @@ test('the cleaning report follows the interface language', async ({ page }) => {
   await page.goto('/de/')
   await page.getByRole('button', { name: 'Beispieldatei ausprobieren' }).click()
   await page.getByRole('button', { name: /Personenbezogene Daten in 200 Zeilen finden/ }).click()
-  await page.getByRole('link', { name: 'Weiter zum Download' }).last().click()
+  await page.getByRole('link', { name: 'Bereinigte Datei herunterladen' }).last().click()
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Ihre bereinigte Datei ist fertig.')
   const [download] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: 'Bereinigungsbericht herunterladen (.txt)' }).click()])
   const report = readFileSync((await download.path())!, 'utf8')

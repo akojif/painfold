@@ -73,15 +73,15 @@ test('rule findings can be reviewed at once; names arrive in the background with
 test('the download waits while names are checked, and the cleaned file has them removed', async ({ page }) => {
   await withModel(page, sample(page))
   await findButton(page).click()
-  const waiting = page.getByText('The download is available when names are checked.')
+  const waiting = page.getByText('Downloading and analyzing are available when names are checked.')
   const done = page.getByText('Names and places checked.', { exact: true })
   // On a fast machine the 200 rows may already be done; either way the button follows the state.
   await expect(waiting.or(done)).toBeVisible()
-  if (await waiting.isVisible()) await expect(page.getByRole('button', { name: 'Continue to download' })).toBeDisabled()
+  if (await waiting.isVisible()) await expect(page.getByRole('button', { name: 'Download the cleaned file' })).toBeDisabled()
   await expect(done).toBeVisible({ timeout: 60_000 })
   await expect(waiting).toBeHidden()
 
-  await page.getByRole('link', { name: 'Continue to download' }).last().click()
+  await page.getByRole('link', { name: 'Download the cleaned file' }).last().click()
   await expect(page.getByText('Names and places were checked with the name model.')).toBeVisible()
   const [csvDownload] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: /^Download support-tickets_cleaned/ }).click()])
   const csv = await text(csvDownload)
@@ -110,7 +110,7 @@ test('Stop asks first; skipping is recorded, and names can still be checked afte
   await expect(page.getByText(/^Names were (checked in [\d,]+ of 600 rows, then skipped|skipped for this file)/)).toBeVisible()
   await expect(page.getByText('The download is available when names are checked.')).toBeHidden()
 
-  await page.getByRole('link', { name: 'Continue to download' }).last().click()
+  await page.getByRole('link', { name: 'Download the cleaned file' }).last().click()
   await expect(page.getByText(/^Names were (checked in [\d,]+ of 600 rows; the check was skipped|not checked: the check was skipped)/)).toBeVisible()
   const [reportDownload] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: 'Download cleaning report (.txt)' }).click()])
   expect(await text(reportDownload)).toMatch(/Names were (checked in [\d,]+ of 600 rows; the check was|not checked: the check was)/)
@@ -126,7 +126,7 @@ freshBrowser('without the name model, the review and the download say names were
   await findButton(page).click()
   await expect(page.getByText('Names aren\'t checked.')).toBeVisible()
   await expect(page.getByText('The download is available when names are checked.')).toBeHidden()
-  await page.getByRole('link', { name: 'Continue to download' }).last().click()
+  await page.getByRole('link', { name: 'Download the cleaned file' }).last().click()
   await expect(page.getByText('Names and places were not checked: the name model was not downloaded.')).toBeVisible()
 })
 

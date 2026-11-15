@@ -23,7 +23,7 @@ test('a 5,000-row file is cleaned within the time budget', async ({ page }) => {
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(/findings in 5,000 rows/, { timeout: 30_000 })
   const reviewed = Date.now()
 
-  await page.getByRole('link', { name: 'Continue to download' }).last().click()
+  await page.getByRole('link', { name: 'Download the cleaned file' }).last().click()
   const [download] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: /^Download large_cleaned/ }).click()])
   const cleaned = readFileSync((await download.path())!, 'utf8')
   const finished = Date.now()

@@ -9,7 +9,8 @@
     "steps": {
       "import": "Import",
       "review": "Review",
-      "download": "Download"
+      "analyze": "Analyze",
+      "report": "Report"
     },
     "startOver": "Start over",
     "newTab": "(opens in a new tab)"

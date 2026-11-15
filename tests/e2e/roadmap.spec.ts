@@ -35,13 +35,13 @@ test('the roadmap page is prerendered and lists every stage with the current one
   await expect(source.locator('svg')).toHaveCount(1)
 })
 
-test('the download step links to the roadmap page and back keeps the cleaned file', async ({ page }) => {
+test('the download page leads on to Analyze, and going back keeps the cleaned file', async ({ page }) => {
   await page.goto('/')
   await page.getByRole('button', { name: 'Try the sample file' }).click()
   await page.getByRole('button', { name: /Find personal data/ }).click()
-  await page.getByRole('link', { name: 'Continue to download' }).last().click()
-  await page.getByRole('link', { name: 'See the roadmap' }).click()
-  await expect(page).toHaveURL(/\/roadmap\/$/)
+  await page.getByRole('link', { name: 'Download the cleaned file' }).last().click()
+  await page.getByRole('link', { name: 'Continue to analyze' }).click()
+  await expect(page).toHaveURL(/\/analyze\/$/)
   await page.goBack()
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Your cleaned file is ready.')
 })

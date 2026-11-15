@@ -83,6 +83,7 @@
     "failed": "Checking for names stopped. The other findings are not affected.",
     "retry": "Try again",
     "downloadWaits": "The download is available when names are checked.",
+    "continueWaits": "Downloading and analyzing are available when names are checked.",
     "confirm": {
       "title": "Skip names for this file?",
       "body": "Names won't be removed from the download.",
