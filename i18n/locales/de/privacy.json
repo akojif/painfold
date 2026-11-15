@@ -1,8 +1,7 @@
 {
   "privacy": {
     "notice": "Ihre Datei wird nie hochgeladen. Sie bleibt in diesem Browser.",
-    "noticeAi": "Nur der bereinigte Text, den Sie freigeben, geht an die KI, die Sie wählen.",
-    "short": "Ihre Datei verlässt diesen Browser nie."
+    "noticeAi": "Nur der bereinigte Text, den Sie freigeben, geht an die KI, die Sie wählen."
   },
   "network": {
     "none": "Keine Daten haben diesen Browser verlassen.",

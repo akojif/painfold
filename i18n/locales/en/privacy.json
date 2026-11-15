@@ -1,8 +1,7 @@
 {
   "privacy": {
     "notice": "Your file is never uploaded. It stays in this browser.",
-    "noticeAi": "Only the cleaned text you approve is sent to the AI you choose.",
-    "short": "Your file never leaves this browser."
+    "noticeAi": "Only the cleaned text you approve is sent to the AI you choose."
   },
   "network": {
     "none": "No data has left this browser.",

@@ -50,7 +50,7 @@ The interface is in English and German. English lives at `/`, German under `/de/
 
 These are where precise wording matters most; a native speaker should review them before each release that changes them. They are all in **`i18n/locales/de/privacy.json`** (and the English in `en/privacy.json`), except the Accuracy page, which stays whole in `accuracy.json`, and the product terms, which are used everywhere. A unit test keeps this list and `privacy.json` in step:
 
-- The privacy notice, shown on the start page, Review and Analyze, its short form in the footer, and the drop note (`privacy.notice`, `privacy.noticeAi`, `privacy.short`, `start.dropOverlay`).
+- The privacy notice, shown on the start page, Review and Analyze, and the drop note (`privacy.notice`, `privacy.noticeAi`, `start.dropOverlay`).
 - The limits notice (`review.limits`), also used in the cleaning report.
 - The "What leaves your browser" panel (`network.none`, `network.explain`, `network.allOwn`, `network.foreign`, `network.stored`).
 - The name model download: what is downloaded and kept, and the failure and offline messages (`nameModel.*`). "Namensmodell" is the chosen term.

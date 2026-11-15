@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // The privacy notice (CLAUDE.md, ROADMAP.md), with its lock: on the start
 // page, and on Review and Analyze, where people decide what leaves the
-// browser (#147). The footer carries only its short form (privacy.short).
+// browser (#147). The footer has links only.
 </script>
 
 <template>
