@@ -608,9 +608,13 @@ onBeforeUnmount(() => {
       </div>
 
       <div class="mt-10 flex flex-wrap items-end justify-between gap-6 border-t border-line pt-6">
-        <p class="max-w-measure text-sm text-fg-muted">
-          {{ $t('review.limits') }}
-        </p>
+        <div class="max-w-measure space-y-3">
+          <!-- The privacy notice where people choose what leaves: the cleaned file or the analysis (#147). -->
+          <PrivacyNotice />
+          <p class="text-sm text-fg-muted">
+            {{ $t('review.limits') }}
+          </p>
+        </div>
         <div class="flex flex-col items-end gap-3">
           <p
             v-if="counts.left > 0"

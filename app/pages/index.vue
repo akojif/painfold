@@ -176,25 +176,7 @@ async function findPersonalData() {
       <ExamplePanel class="lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-center" />
 
       <div class="max-w-xl lg:col-start-1 lg:row-start-2 lg:self-start">
-        <p class="flex items-center gap-2 text-sm text-fg-muted lg:mt-6">
-          <svg
-            aria-hidden="true"
-            viewBox="0 0 24 24"
-            class="size-4 shrink-0 fill-none stroke-current stroke-[1.6]"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          ><rect
-            x="5"
-            y="11"
-            width="14"
-            height="9"
-            rx="2"
-          /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg>
-          {{ $t('start.privacy') }}
-        </p>
-        <p class="mt-1 pl-6 text-sm text-fg-muted">
-          {{ $t('start.privacyAi') }}
-        </p>
+        <PrivacyNotice class="lg:mt-6" />
       </div>
 
       <!-- Not on phones: stacked, the three steps read as a stray list; the roadmap link in the footer covers it. -->

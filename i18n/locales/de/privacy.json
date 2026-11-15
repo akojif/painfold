@@ -1,7 +1,8 @@
 {
   "privacy": {
     "notice": "Ihre Datei wird nie hochgeladen. Sie bleibt in diesem Browser.",
-    "noticeAi": "Nur der bereinigte Text, den Sie freigeben, geht an die KI, die Sie wählen."
+    "noticeAi": "Nur der bereinigte Text, den Sie freigeben, geht an die KI, die Sie wählen.",
+    "short": "Ihre Datei verlässt diesen Browser nie."
   },
   "network": {
     "none": "Keine Daten haben diesen Browser verlassen.",
@@ -153,9 +154,7 @@
     "summary": "Könnte jemanden erkennbar machen: {removed} entfernt, {kept} behalten."
   },
   "start": {
-    "privacy": "Ihre Datei wird nie hochgeladen. Sie bleibt in diesem Browser.",
-    "dropOverlay": "Zum Öffnen loslassen. Nichts wird hochgeladen.",
-    "privacyAi": "Nur der bereinigte Text, den Sie freigeben, geht an die KI, die Sie wählen."
+    "dropOverlay": "Zum Öffnen loslassen. Nichts wird hochgeladen."
   },
   "review": {
     "limits": "Die automatische Erkennung kann personenbezogene Daten übersehen. Prüfen Sie die Ergebnisse, bevor Sie die bereinigte Datei weitergeben. Painfold unterstützt Sie beim Datenschutz, ist aber keine Rechtsberatung und macht Ihre Verarbeitung nicht von sich aus DSGVO-konform."

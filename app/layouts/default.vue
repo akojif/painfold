@@ -22,9 +22,6 @@ const step = computed(() => route.meta.step as number | undefined)
 // is open. Without one, a later step is only reached on a small screen from a
 // direct link (#139), where the steps would claim an import that never happened.
 const showSteps = computed(() => step.value !== undefined && Boolean(table.value))
-// The empty start screen states the privacy notice in its own content; every other page states it here.
-const showNotice = computed(() => step.value !== 1 || Boolean(table.value))
-const facts = computed(() => [...(showNotice.value ? ['privacy.notice', 'privacy.noticeAi'] : []), 'footer.noCookies', 'footer.noAccount'])
 // A file can be dropped anywhere, on every step. Without this a browser would
 // open a dropped file itself and leave the app, losing everything in memory.
 // Below 768 px a dropped file is caught but ignored (#139).
@@ -135,30 +132,35 @@ onBeforeUnmount(() => window.removeEventListener('beforeunload', onBeforeUnload)
       </main>
     </div>
 
+    <!-- One footer on every page (#147), on one line on desktop, in the header's grid. Below 768 px
+         two short centred lines: the links, then the credit. The full privacy notice is on the
+         start page, Review and Analyze; here only its short form. -->
     <footer
       class="border-t border-line"
       data-toast-avoid
     >
-      <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-x-6 gap-y-2 px-4 py-4 text-sm text-fg-muted sm:px-6">
-        <!-- What Painfold promises, each with a teal dot like the header's network indicator. -->
-        <ul
-          :aria-label="$t('footer.factsLabel')"
-          class="flex flex-wrap items-center gap-x-5 gap-y-2"
-        >
-          <li
-            v-for="fact in facts"
-            :key="fact"
-            class="flex items-center gap-2"
+      <div class="mx-auto flex max-w-6xl flex-col items-center gap-1.5 px-4 py-4 text-sm text-fg-muted sm:px-6 md:h-14 md:flex-row md:justify-between md:gap-6 md:py-0">
+        <p class="flex items-center gap-2 max-md:hidden">
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            class="size-4 shrink-0 fill-none stroke-current stroke-[1.6]"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          ><rect
+            x="5"
+            y="11"
+            width="14"
+            height="9"
+            rx="2"
+          /><path d="M8 11V8a4 4 0 0 1 8 0v3" /></svg>
+          {{ $t('privacy.short') }}
+        </p>
+        <div class="flex flex-col items-center gap-1.5 md:flex-row md:gap-6">
+          <nav
+            :aria-label="$t('footer.label')"
+            class="flex items-center gap-5"
           >
-            <span
-              aria-hidden="true"
-              class="size-1.5 shrink-0 rounded-full bg-accent"
-            />
-            {{ $t(fact) }}
-          </li>
-        </ul>
-        <div class="flex flex-wrap items-center gap-x-5 gap-y-2">
-          <nav class="flex gap-5">
             <NuxtLink
               :to="localePath('/roadmap')"
               class="focus-ring rounded-sm hover:text-fg"
@@ -173,15 +175,15 @@ onBeforeUnmount(() => window.removeEventListener('beforeunload', onBeforeUnload)
             </NuxtLink>
             <a
               href="https://github.com/akojif/painfold"
-              class="focus-ring flex items-center gap-1.5 rounded-sm hover:text-fg"
+              class="focus-ring -m-1 grid place-items-center rounded-sm p-1 hover:text-fg"
             >
               <!-- The GitHub mark, from GitHub's Octicons (MIT). -->
               <svg
                 aria-hidden="true"
                 viewBox="0 0 16 16"
-                class="size-3.5 fill-current"
+                class="size-4 fill-current"
               ><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z" /></svg>
-              {{ $t('footer.source') }}
+              <span class="sr-only">{{ $t('footer.source') }}</span>
             </a>
           </nav>
           <i18n-t
