@@ -29,6 +29,7 @@
     "models:upload": "node scripts/upload-model.ts",
     "test:model": "vitest run --config vitest.model.config.ts",
     "eval:names": "node scripts/eval-names.ts",
+    "eval:analysis": "node scripts/eval-analysis.ts",
     "verify": "node scripts/verify.ts"
   },
   "dependencies": {
