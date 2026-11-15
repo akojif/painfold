@@ -6,7 +6,7 @@ import { detectItems } from '../../core/detect/items'
 import { readCsv } from '../../core/import/csv'
 import { itemsFromTable, textItems } from '../../core/items/table'
 import { Review } from '../../core/review/review'
-import { expect, test } from './fixtures'
+import { expect, openSample, test } from './fixtures'
 
 // Stage 3, slice 3 (#125): what will be sent, shown before anything is sent.
 // The page is not linked yet, so these tests reach it through the app's router,
@@ -15,7 +15,7 @@ test.use({ allowedOrigins: ['https://api.anthropic.com', 'http://localhost:11434
 
 async function reviewSample(page: Page) {
   await page.goto('/')
-  await page.getByRole('button', { name: 'Try the sample file' }).click()
+  await openSample(page)
   await page.getByRole('button', { name: /^Find personal data in/ }).click()
   await expect(page).toHaveURL(/\/review\/$/)
 }

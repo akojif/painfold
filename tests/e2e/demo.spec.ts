@@ -2,7 +2,7 @@ import { readFileSync } from 'node:fs'
 import type { Page } from '@playwright/test'
 import { replayDemo, type DemoRun } from '../../core/ai/demo'
 import { countThemes } from '../../core/ai/themes'
-import { expect, test } from './fixtures'
+import { expect, openSample, test } from './fixtures'
 
 // Demo mode (#130): a stored real run on the sample file, shown with the real
 // report. It sends nothing: every test also fails if the page contacts any
@@ -25,6 +25,13 @@ async function noAi(page: Page) {
   return asked
 }
 
+/** "Try an example", then "See a finished analysis" (ExampleDialog.vue). */
+async function openDemo(page: Page, german = false) {
+  await page.getByRole('button', { name: german ? 'Beispiel ausprobieren' : 'Try an example' }).click()
+  await page.getByRole('radio', { name: german ? /^Fertige Analyse ansehen/ : /^See a finished analysis/ }).check()
+  await page.getByRole('button', { name: german ? 'Analyse anzeigen' : 'Show the analysis' }).click()
+}
+
 const outbound = (page: Page) => page.getByRole('button', { name: /What leaves your browser|Was Ihren Browser verlässt/ })
 const note = (page: Page) => page.getByRole('note')
 
@@ -32,7 +39,7 @@ test('from the start page, the demo report opens without importing anything, sen
   const asked = await noAi(page)
   const themes = await expected('en')
   await page.goto('/')
-  await page.getByRole('button', { name: 'Or see a finished demo analysis, no API key needed' }).click()
+  await openDemo(page)
   await expect(page).toHaveURL(/\/report\/$/)
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('What customers said')
   await expect(note(page)).toContainText('Demo with made-up data.')
@@ -53,11 +60,35 @@ test('from the start page, the demo report opens without importing anything, sen
   expect(asked).toEqual([])
 })
 
+test('"Try an example" offers both paths as one choice, works from the keyboard, and names what happens next', async ({ page }) => {
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Try an example' }).click()
+  const dialog = page.getByRole('dialog', { name: 'Try Painfold with made-up data' })
+  await expect(dialog).toContainText('200 support tickets in German and English. No real people.')
+  const sample = dialog.getByRole('radio', { name: /^Clean the sample file/ })
+  const finished = dialog.getByRole('radio', { name: /^See a finished analysis/ })
+  await expect(sample).toBeChecked()
+  await expect(sample).toBeFocused()
+  await expect(dialog.getByRole('button', { name: 'Open the sample' })).toBeVisible()
+  await page.keyboard.press('ArrowDown')
+  await expect(finished).toBeChecked()
+  await expect(dialog.getByRole('button', { name: 'Show the analysis' })).toBeVisible()
+  await page.keyboard.press('Escape')
+  await expect(dialog).toBeHidden()
+  await expect(page.getByRole('button', { name: 'Try an example' })).toBeFocused()
+
+  // Enter proceeds with the choice: the sample opens in the column step.
+  await page.getByRole('button', { name: 'Try an example' }).click()
+  await expect(sample).toBeChecked()
+  await page.keyboard.press('Enter')
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Choose what to check')
+})
+
 test('the German start page opens the German demo report, with German theme names', async ({ page }) => {
   const asked = await noAi(page)
   const themes = await expected('de')
   await page.goto('/de/')
-  await page.getByRole('button', { name: 'Oder eine fertige Demo-Analyse ansehen, ohne API-Schlüssel' }).click()
+  await openDemo(page, true)
   await expect(page).toHaveURL(/\/de\/report\/$/)
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Was Ihre Kunden sagen')
   await expect(note(page)).toContainText('Demo mit erfundenen Daten.')
@@ -71,7 +102,7 @@ test('switching the language on the demo report renames the themes, still withou
   const asked = await noAi(page)
   const german = await expected('de')
   await page.goto('/')
-  await page.getByRole('button', { name: 'Or see a finished demo analysis, no API key needed' }).click()
+  await openDemo(page)
   await expect(note(page)).toBeVisible()
   await page.getByRole('button', { name: 'German' }).click()
   await expect(page).toHaveURL(/\/de\/report\/$/)
@@ -83,7 +114,7 @@ test('switching the language on the demo report renames the themes, still withou
 test('on Analyze, the sample offers the demo; it opens the report, and leaving it returns to a normal analysis', async ({ page }) => {
   const asked = await noAi(page)
   await page.goto('/')
-  await page.getByRole('button', { name: 'Try the sample file' }).click()
+  await openSample(page)
   await page.getByRole('button', { name: /^Find personal data in/ }).click()
   await page.getByRole('link', { name: 'Continue to analyze' }).last().click()
   await expect(page.getByText(/^No API key\? See a demo analysis of this sample/)).toBeVisible()
@@ -112,9 +143,9 @@ test('another file is not offered the demo', async ({ page }) => {
 test.describe('on a phone', () => {
   test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true })
 
-  test('the demo line opens the bigger-screen sheet, like the other start actions', async ({ page }) => {
+  test('"Try an example" opens the bigger-screen sheet, like the other start action', async ({ page }) => {
     await page.goto('/')
-    await page.getByRole('button', { name: 'Or see a finished demo analysis, no API key needed' }).tap()
+    await page.getByRole('button', { name: 'Try an example' }).tap()
     await expect(page.getByRole('dialog', { name: 'Painfold likes a bigger screen' })).toBeVisible()
   })
 })

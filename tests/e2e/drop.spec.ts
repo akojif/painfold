@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import type { Page } from '@playwright/test'
 import { utils, write } from 'xlsx'
-import { expect, test } from './fixtures'
+import { expect, openSample, test } from './fixtures'
 
 // Files dropped anywhere, on every step, and what each kind of file does.
 
@@ -78,7 +78,7 @@ test.describe('on the start screen', () => {
 test.describe('during a review', () => {
   const startReview = async (page: Page) => {
     await page.goto('/')
-    await page.getByRole('button', { name: 'Try the sample file' }).click()
+    await openSample(page)
     await page.getByRole('button', { name: /^Find personal data in/ }).click()
     await expect(heading(page)).toHaveText(/findings in 200 rows$/)
   }
@@ -159,7 +159,7 @@ test.describe('the toast', () => {
 
   test('nothing on the page moves, and it sits above the column step\'s action bar', async ({ page }) => {
     await page.goto('/')
-    await page.getByRole('button', { name: 'Try the sample file' }).click()
+    await openSample(page)
     const find = page.getByRole('button', { name: /^Find personal data in/ })
     const before = await find.boundingBox()
     await drop(page, 'interview.docx', docx())

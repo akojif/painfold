@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
 import type { BrowserContext, Download, Page } from '@playwright/test'
-import { expect, test as freshBrowser, waitForHydrationOnGoto } from './fixtures'
+import { expect, openSample, test as freshBrowser, waitForHydrationOnGoto } from './fixtures'
 
 // Names and places found in the background while the rule findings are
 // reviewed (ROADMAP Stage 2, #65). The tests that use the name model share one
@@ -41,7 +41,7 @@ async function withModel(page: Page, open: () => Promise<void>, path = '/') {
   if (await download.isVisible()) await download.click()
   await expect(stored).toBeVisible({ timeout: 60_000 })
 }
-const sample = (page: Page) => () => page.getByRole('button', { name: 'Try the sample file' }).click()
+const sample = (page: Page) => () => openSample(page)
 const upload = (csv: string) => (page: Page) => () => page.getByTestId('file-input').setInputFiles({ name: 'large.csv', mimeType: 'text/csv', buffer: Buffer.from(csv) })
 const medium = upload(mediumCsv)
 const findButton = (page: Page) => page.getByRole('button', { name: /^Find personal data in/ })
@@ -131,7 +131,7 @@ freshBrowser('without the name model, the review and the download say names were
 })
 
 test('the German review explains the check in German', async ({ page }) => {
-  await withModel(page, () => page.getByRole('button', { name: 'Beispieldatei ausprobieren' }).click(), '/de/')
+  await withModel(page, () => openSample(page), '/de/')
   await page.getByRole('button', { name: /^Personenbezogene Daten in/ }).click()
   await expect(page.getByText('Namen und Orte geprüft.', { exact: true })).toBeVisible({ timeout: 60_000 })
 })

@@ -1,5 +1,5 @@
 import type { Page } from '@playwright/test'
-import { expect, test } from './fixtures'
+import { expect, openSample, test } from './fixtures'
 
 // Painfold needs a screen at least 768 px wide (#139). Below that, phones see
 // what it does: the start page and the other informational pages read fine,
@@ -9,7 +9,7 @@ import { expect, test } from './fixtures'
 
 const sheet = (page: Page) => page.getByRole('dialog', { name: 'Painfold likes a bigger screen' })
 const choose = (page: Page) => page.getByRole('button', { name: 'Choose a CSV or Excel file' })
-const sample = (page: Page) => page.getByRole('button', { name: 'Try the sample file' })
+const sample = (page: Page) => page.getByRole('button', { name: 'Try an example' })
 const heading = (page: Page) => page.getByRole('heading', { level: 1 })
 const sideways = (page: Page) => page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
 const BODY = 'Reviewing hundreds of rows is a job for a laptop. Open Painfold on your computer: your file stays just as private there.'
@@ -113,7 +113,7 @@ test.describe('on a phone', () => {
 
   test('the German sheet and notice read in German', async ({ page }) => {
     await page.goto('/de/')
-    await page.getByRole('button', { name: 'Beispieldatei ausprobieren' }).tap()
+    await page.getByRole('button', { name: 'Beispiel ausprobieren' }).tap()
     const german = page.getByRole('dialog', { name: 'Painfold mag größere Bildschirme' })
     await expect(german).toContainText('Öffnen Sie Painfold auf Ihrem Computer')
     await expect(german.getByRole('button')).toHaveText(['Link kopieren', 'Schließen'])
@@ -126,7 +126,7 @@ test.describe('on a phone', () => {
 test('narrowing the window mid-flow keeps the file and the review; widening brings them back without a reload', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 })
   await page.goto('/')
-  await sample(page).click()
+  await openSample(page)
   await expect(heading(page)).toHaveText('Choose what to check')
   await page.evaluate(() => ((window as unknown as { notReloaded: boolean }).notReloaded = true))
 
@@ -164,7 +164,7 @@ for (const width of [1280, 768]) {
   test(`a larger screen (${width} px) never sees the sheet or the notice`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 })
     await page.goto('/')
-    await sample(page).click()
+    await openSample(page)
     await expect(heading(page)).toHaveText('Choose what to check')
     await expect(sheet(page)).toHaveCount(0)
     await expect(page.getByText('Your file is still open')).toBeHidden()
