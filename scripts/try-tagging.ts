@@ -16,11 +16,10 @@ import { parseArgs } from 'node:util'
 import { estimate, PRICES } from '../core/ai/cost.ts'
 import { buildPayload } from '../core/ai/payload.ts'
 import { KINDS, MERGE_SCHEMA, runMerge } from '../core/ai/merge.ts'
-import type { AiRequest } from '../core/ai/providers.ts'
-import { runTagging, type BatchReply } from '../core/ai/run.ts'
+import { runTagging } from '../core/ai/run.ts'
 import { anthropicJsonRequest, anthropicTaggingRequest, ollamaJsonRequest, ollamaTaggingRequest } from '../core/ai/tagging.ts'
 import { countThemes } from '../core/ai/themes.ts'
-import { classifyFailure } from '../core/ai/providers.ts'
+import { post } from './ai-post.ts'
 import { guessFeedbackColumn, suggestRoles } from '../core/columns/roles.ts'
 import { detectItems } from '../core/detect/items.ts'
 import { readCsv } from '../core/import/csv.ts'
@@ -44,19 +43,6 @@ const { items } = itemsFromTable(table, roles, { feedbackColumn })
 const review = new Review(items, detectItems(textItems(items)))
 const { payload, itemOf } = buildPayload(items.filter(item => item.display !== 'short').map(item => ({ item: item.id, text: review.cleanedItem(item.id) })), provider, model)
 const predicted = estimate(payload)
-
-async function post(request: AiRequest): Promise<BatchReply> {
-  try {
-    const response = await fetch(request.url, { method: request.method, headers: request.headers, body: request.body })
-    const body = await response.text()
-    if (response.ok) return { ok: true, body }
-    const retryAfter = Number(response.headers.get('retry-after'))
-    return { ok: false, problem: classifyFailure(response.status, body), ...(retryAfter > 0 ? { retryAfter } : {}) }
-  }
-  catch {
-    return { ok: false, problem: 'unreachable' }
-  }
-}
 
 console.log(`Sending ${payload.texts.length} cleaned sample texts to ${model} in batches of 25…`)
 const started = Date.now()

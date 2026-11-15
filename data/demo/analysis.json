@@ -1,0 +1,3181 @@
+{
+ "format": "painfold-demo/1",
+ "createdAt": "2026-11-15T10:00:07.849Z",
+ "painfoldVersion": "0.2.0",
+ "commit": "cbaa81d",
+ "provider": "anthropic",
+ "model": "claude-haiku-5-5",
+ "settings": {
+  "batchSize": 25,
+  "effort": "low",
+  "maxTokens": 16000
+ },
+ "standIn": true,
+ "payload": {
+  "format": "painfold-analysis/1",
+  "provider": "anthropic",
+  "model": "claude-haiku-5-5",
+  "instructions": "You analyse customer feedback for a product team, using the Value Proposition Canvas.\n\nFor each text, find:\n- jobs: what the customer is trying to get done, in their words (a goal, not a feature).\n- pains: what frustrates, blocks or risks that job.\n- gains: what the customer wants or would be delighted by.\nEach with a short label from the customer's point of view (2 to 7 words, in the language of the text), an intensity from 1 (mild) to 3 (strong), and a quote: the exact words from the text that show it, copied character for character.\n\nAlso give each text's overall sentiment (positive, negative, mixed or neutral) and its main type (bug, feature request, question, praise, complaint or other).\n\nRules:\n- Only what the text says. A text can have no jobs, pains or gains.\n- Placeholders such as [NAME_1] or [EMAIL_2] replace removed personal data. Never guess what they stand for, and never put them in a label.\n- Answer only with JSON: {\"texts\": [{\"id\": \"...\", \"jobs\": [...], \"pains\": [...], \"gains\": [...], \"sentiment\": \"...\", \"type\": \"...\"}]}, one entry per text, with each job, pain and gain as {\"label\": \"...\", \"intensity\": 1, \"quote\": \"...\"}.",
+  "mergeInstructions": "You group what customers said into themes for a product team, using the Value Proposition Canvas.\n\nYou get one kind at a time: jobs (what customers are trying to get done), pains (what frustrates, blocks or risks a job) or gains (what customers want or would be delighted by). Each label has an id and the number of texts it came from. Labels are in German or English.\n\nPut labels that mean the same thing for the customer into one theme, whatever their language. Keep different things apart: a theme should be specific enough for a team to act on. Give each theme a short name from the customer's point of view, 2 to 7 words, in English.\n\nRules:\n- Every label id in exactly one theme. A label that fits no other is a theme of its own.\n- Placeholders such as [NAME_1] or [EMAIL_2] replace removed personal data. Never put them in a theme name.\n- Answer only with JSON: {\"themes\": [{\"name\": \"...\", \"labels\": [\"l1\", \"l7\"]}]}.",
+  "texts": [
+   {
+    "id": "t1",
+    "text": "Hi, I'm [NAME_1] and I accidentally created two accounts. Can you merge them? My email is [EMAIL_1]."
+   },
+   {
+    "id": "t2",
+    "text": "Billing address changed to [ADDRESS_1], [PLACE_1] [POSTCODE_1] but old invoices still show the previous one."
+   },
+   {
+    "id": "t3",
+    "text": "Versicherungsnummer [SVNR_1], bitte im Personalstamm hinterlegen."
+   },
+   {
+    "id": "t4",
+    "text": "Ticket #20437: Die Synchronisierung mit dem Bankkonto bricht nach 90 Tagen ab und ich muss mich neu anmelden."
+   },
+   {
+    "id": "t5",
+    "text": "Contact: [NAME_2]-Stone, [EMAIL_2], [PHONE_1]. Please get back to us this week or we'll cancel."
+   },
+   {
+    "id": "t6",
+    "text": "Abbuchung bitte künftig von der Karte [CARD_1] statt per Überweisung."
+   },
+   {
+    "id": "t7",
+    "text": "Good value. Reports could use more filters though, like by project and month."
+   },
+   {
+    "id": "t8",
+    "text": "Kontakt: [NAME_3], [EMAIL_3], [PHONE_2]. Bitte bis Ende der Woche melden, sonst kündigen wir."
+   },
+   {
+    "id": "t9",
+    "text": "Clicking \"Send\" does nothing. The console shows an error; my IP at the time was [IP_1]."
+   },
+   {
+    "id": "t10",
+    "text": "I'd love to pull hours straight from my calendar instead of typing everything twice."
+   },
+   {
+    "id": "t11",
+    "text": "Lieferadresse: [ADDRESS_2], [POSTCODE_2] [PLACE_2]. Bitte die Belege dorthin schicken, nicht ins Büro. Danke, [NAME_4]"
+   },
+   {
+    "id": "t12",
+    "text": "Ich würde gern Stunden direkt aus dem Kalender übernehmen, statt alles doppelt einzutragen."
+   },
+   {
+    "id": "t13",
+    "text": "Wir sind ein Team von acht Leuten und die Rechteverwaltung reicht nicht. Jeder sieht alle Kundendaten."
+   },
+   {
+    "id": "t14",
+    "text": "Ich vermisse eine Englisch-Version der Rechnungsvorlage für internationale Kunden.\nDas ist für uns ein Grund zu wechseln."
+   },
+   {
+    "id": "t15",
+    "text": "Für die Steuerberatung brauche ich unsere UID [VAT_1] auf jeder Rechnung, das Feld wird aber nicht gedruckt."
+   },
+   {
+    "id": "t16",
+    "text": "Rechnungsadresse geändert auf [ADDRESS_3], [POSTCODE_3] [PLACE_3], die alte Adresse erscheint aber weiter auf den PDFs."
+   },
+   {
+    "id": "t17",
+    "text": "Please charge [CARD_2] from next month instead of invoicing us."
+   },
+   {
+    "id": "t18",
+    "text": "Versicherungsnummer [SVNR_2], bitte im Personalstamm hinterlegen."
+   },
+   {
+    "id": "t19",
+    "text": "Mein Mann [NAME_5] (geboren am [DATE_OF_BIRTH_1]) soll als Mitarbeiter angelegt werden, die Personalnummer ist seine SV-Nummer [SVNR_3]."
+   },
+   {
+    "id": "t20",
+    "text": "Exportiert man den Monatsbericht als Excel, fehlen die Fahrtkosten. In der Ansicht sind sie da."
+   },
+   {
+    "id": "t21",
+    "text": "Missing an English invoice template for international customers.\nHonestly this is the main reason we are looking at alternatives."
+   },
+   {
+    "id": "t22",
+    "text": "Abbuchung bitte künftig von der Karte [CARD_3] statt per Überweisung."
+   },
+   {
+    "id": "t23",
+    "text": "Since yesterday I can't log in, the two-factor SMS never arrives. My number is [PHONE_3]."
+   },
+   {
+    "id": "t24",
+    "text": "Ich vermisse eine Englisch-Version der Rechnungsvorlage für internationale Kunden.\nDas ist für uns ein Grund zu wechseln."
+   },
+   {
+    "id": "t25",
+    "text": "Für den Kreditantrag: [NAME_6], geb. [DATE_OF_BIRTH_2], [ADDRESS_4], [POSTCODE_4] [PLACE_4]."
+   },
+   {
+    "id": "t26",
+    "text": "Missing an English invoice template for international customers.\nHonestly this is the main reason we are looking at alternatives."
+   },
+   {
+    "id": "t27",
+    "text": "Funktioniert, aber die Ladezeiten im Dashboard sind morgens unerträglich langsam."
+   },
+   {
+    "id": "t28",
+    "text": "Exporting invoices to PDF got really slow after the 8.10.6 update. Forty invoices take almost two minutes."
+   },
+   {
+    "id": "t29",
+    "text": "Exportiert man den Monatsbericht als Excel, fehlen die Fahrtkosten. In der Ansicht sind sie da."
+   },
+   {
+    "id": "t30",
+    "text": "Exportiert man den Monatsbericht als Excel, fehlen die Fahrtkosten. In der Ansicht sind sie da."
+   },
+   {
+    "id": "t31",
+    "text": "Dashboard takes forever to load in the morning, sometimes 20 seconds."
+   },
+   {
+    "id": "t32",
+    "text": "Der PDF-Export der Rechnungen dauert seit dem Update auf 7.0.3 ewig. Bei 40 Rechnungen warte ich fast zwei Minuten."
+   },
+   {
+    "id": "t33",
+    "text": "Mein Mann [NAME_7] (geb. [DATE_OF_BIRTH_3]) soll als Mitarbeiter angelegt werden, die Personalnummer ist seine SV-Nummer [SVNR_4]."
+   },
+   {
+    "id": "t34",
+    "text": "Super Tool, spart mir jeden Monat einen halben Tag Buchhaltung. Danke!"
+   },
+   {
+    "id": "t35",
+    "text": "Für die Steuerberatung brauche ich unsere UID [VAT_2] auf jeder Rechnung, das Feld wird aber nicht gedruckt."
+   },
+   {
+    "id": "t36",
+    "text": "I'm an accountant with twelve clients. Switching between them without logging out would save me so much time."
+   },
+   {
+    "id": "t37",
+    "text": "Mein Account läuft auf [EMAIL_4], die Rechnungen sollen aber an die Buchhaltung gehen."
+   },
+   {
+    "id": "t38",
+    "text": "The card field rejects 5105 1051 0510 5101, is that a bug or did I mistype?"
+   },
+   {
+    "id": "t39",
+    "text": "Super Tool, spart mir jeden Monat einen halben Tag Buchhaltung. Danke!"
+   },
+   {
+    "id": "t40",
+    "text": "Reminder emails end up in my clients' spam folders. Could you check the sender setup?"
+   },
+   {
+    "id": "t41",
+    "text": "Solid product, but invoice numbers should be able to restart each year."
+   },
+   {
+    "id": "t42",
+    "text": "Seit gestern kann ich mich nicht mehr einloggen, die Zwei-Faktor-SMS kommt nicht an. Meine Nummer: [PHONE_4]"
+   },
+   {
+    "id": "t43",
+    "text": "Mahnungen automatisch verschicken wäre ein Traum. Momentan mache ich das jeden Freitag händisch."
+   },
+   {
+    "id": "t44",
+    "text": "Dashboard takes forever to load in the morning, sometimes 20 seconds."
+   },
+   {
+    "id": "t45",
+    "text": "Fehler beim Import der CSV: Umlaute werden zu Fragezeichen. Das betrifft alle Kunden mit ä, ö, ü."
+   },
+   {
+    "id": "t46",
+    "text": "Die App stürzt auf dem iPad ab, sobald ich ein Foto vom Beleg anhängen will. Version 2.10.3.70."
+   },
+   {
+    "id": "t47",
+    "text": "Mahnungen automatisch verschicken wäre ein Traum. Momentan mache ich das jeden Freitag händisch."
+   },
+   {
+    "id": "t48",
+    "text": "Preis-Leistung passt. Einzig die Berichte könnten mehr Filter haben, z. B. nach Projekt und Monat."
+   },
+   {
+    "id": "t49",
+    "text": "We're a team of eight and the permissions are too coarse. Everyone can see every client."
+   },
+   {
+    "id": "t50",
+    "text": "Warum kostet der Team-Tarif plötzlich € 2 298,00 mehr? Darüber wurden wir nicht informiert."
+   },
+   {
+    "id": "t51",
+    "text": "Die Bankverbindung auf der Rechnung ist falsch. Richtig wäre [IBAN_1], bitte korrigieren."
+   },
+   {
+    "id": "t52",
+    "text": "Please send the receipts to [ADDRESS_5], Bristol [POSTCODE_1], not the office. Thanks, [NAME_8]"
+   },
+   {
+    "id": "t53",
+    "text": "Great tool, saves me half a day of bookkeeping every month."
+   },
+   {
+    "id": "t54",
+    "text": "Abbuchung bitte künftig von der Karte [CARD_4] statt per Überweisung."
+   },
+   {
+    "id": "t55",
+    "text": "Mahnungen automatisch verschicken wäre ein Traum. Momentan mache ich das jeden Freitag händisch."
+   },
+   {
+    "id": "t56",
+    "text": "Ich habe meine Kreditkarte [CARD_4] hinterlegt, trotzdem steht im Konto „Zahlung fehlgeschlagen“."
+   },
+   {
+    "id": "t57",
+    "text": "Please send the receipts to [ADDRESS_6], Bristol [POSTCODE_1], not the office. Thanks, [NAME_9]"
+   },
+   {
+    "id": "t58",
+    "text": "Exporting invoices to PDF got really slow after the 3.5.3 update. Forty invoices take almost two minutes."
+   },
+   {
+    "id": "t59",
+    "text": "Kontakt: [NAME_10], [EMAIL_5], [PHONE_5]. Bitte bis Ende der Woche melden, sonst kündigen wir."
+   },
+   {
+    "id": "t60",
+    "text": "Die Bankverbindung auf der Rechnung ist falsch. Richtig wäre [IBAN_2], bitte korrigieren."
+   },
+   {
+    "id": "t61",
+    "text": "Lieferadresse: [ADDRESS_7], [POSTCODE_5] [PLACE_5]. Bitte die Belege dorthin schicken, nicht ins Büro. Danke, [NAME_11]"
+   },
+   {
+    "id": "t62",
+    "text": "Please send the receipts to [ADDRESS_8], Manchester [POSTCODE_6], not the office. Thanks, [NAME_12]"
+   },
+   {
+    "id": "t63",
+    "text": "CSV import breaks accented characters: é and ë turn into question marks. Affects about a third of our clients."
+   },
+   {
+    "id": "t64",
+    "text": "Hallo, ich bin [NAME_13] und habe zwei Konten angelegt. Können Sie die zusammenführen? Meine E-Mail ist [EMAIL_6]."
+   },
+   {
+    "id": "t65",
+    "text": "Good value. Reports could use more filters though, like by project and month."
+   },
+   {
+    "id": "t66",
+    "text": "Order B-06159576 was charged twice (€1,299.00). I'd like a refund please."
+   },
+   {
+    "id": "t67",
+    "text": "For the Austrian branch, use UID [VAT_3] on all invoices please."
+   },
+   {
+    "id": "t68",
+    "text": "Reminder emails end up in my clients' spam folders. Could you check the sender setup?"
+   },
+   {
+    "id": "t69",
+    "text": "Unsere neue UID lautet [VAT_4], die alte bitte löschen."
+   },
+   {
+    "id": "t70",
+    "text": "Please call me back on [PHONE_6], it's about the invoice from 9 June 2026."
+   },
+   {
+    "id": "t71",
+    "text": "We're a team of eight and the permissions are too coarse. Everyone can see every client."
+   },
+   {
+    "id": "t72",
+    "text": "Exportiert man den Monatsbericht als Excel, fehlen die Fahrtkosten. In der Ansicht sind sie da."
+   },
+   {
+    "id": "t73",
+    "text": "Billing address changed to [ADDRESS_9], [PLACE_6] [POSTCODE_7] but old invoices still show the previous one."
+   },
+   {
+    "id": "t74",
+    "text": "Mein Mann [NAME_14] (Geburtsdatum: [DATE_OF_BIRTH_4]) soll als Mitarbeiter angelegt werden, die Personalnummer ist seine SV-Nummer [SVNR_5]."
+   },
+   {
+    "id": "t75",
+    "text": "Missing an English invoice template for international customers.\nHonestly this is the main reason we are looking at alternatives."
+   },
+   {
+    "id": "t76",
+    "text": "Bitte rufen Sie mich unter [PHONE_7] zurück, es geht um die Rechnung vom 27.07.2026."
+   },
+   {
+    "id": "t77",
+    "text": "Die Bankverbindung auf der Rechnung ist falsch. Richtig wäre [IBAN_3], bitte korrigieren."
+   },
+   {
+    "id": "t78",
+    "text": "Der PDF-Export der Rechnungen dauert seit dem Update auf 6.15.7 ewig. Bei 40 Rechnungen warte ich fast zwei Minuten."
+   },
+   {
+    "id": "t79",
+    "text": "The card field rejects 5555 5555 5555 4445, is that a bug or did I mistype?"
+   },
+   {
+    "id": "t80",
+    "text": "Billing address changed to [ADDRESS_10], [PLACE_1] [POSTCODE_1] but old invoices still show the previous one."
+   },
+   {
+    "id": "t81",
+    "text": "Missing an English invoice template for international customers.\nHonestly this is the main reason we are looking at alternatives."
+   },
+   {
+    "id": "t82",
+    "text": "I'm an accountant with twelve clients. Switching between them without logging out would save me so much time."
+   },
+   {
+    "id": "t83",
+    "text": "Since yesterday I can't log in, the two-factor SMS never arrives. My number is [PHONE_8]."
+   },
+   {
+    "id": "t84",
+    "text": "Automatic payment reminders would be amazing. Right now I chase late payers by hand every Friday."
+   },
+   {
+    "id": "t85",
+    "text": "Clicking \"Send\" does nothing. The console shows an error; my IP at the time was [IP_2]."
+   },
+   {
+    "id": "t86",
+    "text": "Fehler beim Import der CSV: Umlaute werden zu Fragezeichen. Das betrifft alle Kunden mit ä, ö, ü."
+   },
+   {
+    "id": "t87",
+    "text": "Preis-Leistung passt. Einzig die Berichte könnten mehr Filter haben, z. B. nach Projekt und Monat."
+   },
+   {
+    "id": "t88",
+    "text": "I added my card [CARD_4] but the account still says \"payment failed\"."
+   },
+   {
+    "id": "t89",
+    "text": "Überweisung von [IBAN_4] ist laut Bank raus, im System steht die Rechnung aber noch offen."
+   },
+   {
+    "id": "t90",
+    "text": "Seit gestern kann ich mich nicht mehr einloggen, die Zwei-Faktor-SMS kommt nicht an. Meine Nummer: [PHONE_9]"
+   },
+   {
+    "id": "t91",
+    "text": "Login-Versuche von [IP_3] und [IP_4] waren nicht von mir!"
+   },
+   {
+    "id": "t92",
+    "text": "Exportiert man den Monatsbericht als Excel, fehlen die Fahrtkosten. In der Ansicht sind sie da."
+   },
+   {
+    "id": "t93",
+    "text": "Order 20 776 0696 was charged twice (€863.00). I'd like a refund please."
+   },
+   {
+    "id": "t94",
+    "text": "Why did the Team plan go up by €952.50? Nobody told us."
+   },
+   {
+    "id": "t95",
+    "text": "Our Austrian employee's social insurance number is [SVNR_6], where do I enter it?"
+   },
+   {
+    "id": "t96",
+    "text": "The time tracker on mobile sometimes resets to zero when the app goes to the background."
+   },
+   {
+    "id": "t97",
+    "text": "The new interface is cleaner but the font in the invoice preview is far too small."
+   },
+   {
+    "id": "t98",
+    "text": "Exportiert man den Monatsbericht als Excel, fehlen die Fahrtkosten. In der Ansicht sind sie da."
+   },
+   {
+    "id": "t99",
+    "text": "Great tool, saves me half a day of bookkeeping every month."
+   },
+   {
+    "id": "t100",
+    "text": "Bestellung B-18244223 wurde doppelt abgebucht (€ 1 058,99). Ich möchte eine Gutschrift."
+   },
+   {
+    "id": "t101",
+    "text": "Mein Mann [NAME_15] (geboren am [DATE_OF_BIRTH_5]) soll als Mitarbeiter angelegt werden, die Personalnummer ist seine SV-Nummer [SVNR_7]."
+   },
+   {
+    "id": "t102",
+    "text": "Für die Anmeldung bei der Krankenkasse brauche ich meine SV-Nummer [SVNR_8] auf dem Lohnzettel."
+   },
+   {
+    "id": "t103",
+    "text": "Rechnungsadresse geändert auf [ADDRESS_11], [POSTCODE_4] [PLACE_4], die alte Adresse erscheint aber weiter auf den PDFs."
+   },
+   {
+    "id": "t104",
+    "text": "Überweisung von [IBAN_5] ist laut Bank raus, im System steht die Rechnung aber noch offen."
+   },
+   {
+    "id": "t105",
+    "text": "Warum kostet der Team-Tarif plötzlich € 1 379,00 mehr? Darüber wurden wir nicht informiert."
+   },
+   {
+    "id": "t106",
+    "text": "Den Link [LINK_1] hat mir der Support geschickt, er führt aber nur auf eine leere Seite."
+   },
+   {
+    "id": "t107",
+    "text": "Die Zeiterfassung auf dem Handy springt manchmal auf 0 zurück, wenn ich die App im Hintergrund habe."
+   },
+   {
+    "id": "t108",
+    "text": "Two logins from [IP_5] were not me, please lock the account."
+   },
+   {
+    "id": "t109",
+    "text": "Contact: [NAME_16], [EMAIL_7], [PHONE_10]. Please get back to us this week or we'll cancel."
+   },
+   {
+    "id": "t110",
+    "text": "Wir sind ein Team von acht Leuten und die Rechteverwaltung reicht nicht. Jeder sieht alle Kundendaten."
+   },
+   {
+    "id": "t111",
+    "text": "Unsere neue UID lautet [VAT_5], die alte bitte löschen."
+   },
+   {
+    "id": "t112",
+    "text": "Ich habe meine Kreditkarte [CARD_4] hinterlegt, trotzdem steht im Konto „Zahlung fehlgeschlagen“."
+   },
+   {
+    "id": "t113",
+    "text": "Ticket #97629: the bank feed disconnects every 90 days and I have to sign in again."
+   },
+   {
+    "id": "t114",
+    "text": "Funktioniert, aber die Ladezeiten im Dashboard sind morgens unerträglich langsam."
+   },
+   {
+    "id": "t115",
+    "text": "Kontakt: [NAME_7], [EMAIL_8], [PHONE_11]. Bitte bis Ende der Woche melden, sonst kündigen wir."
+   },
+   {
+    "id": "t116",
+    "text": "Abbuchung bitte künftig von der Karte [CARD_3] statt per Überweisung."
+   },
+   {
+    "id": "t117",
+    "text": "Mein Account läuft auf [EMAIL_9], die Rechnungen sollen aber an die Buchhaltung gehen."
+   },
+   {
+    "id": "t118",
+    "text": "Missing an English invoice template for international customers.\nHonestly this is the main reason we are looking at alternatives."
+   },
+   {
+    "id": "t119",
+    "text": "Wenn ich auf „Senden“ klicke, passiert nichts. Browser-Log zeigt einen Fehler, meine IP war [IP_6]."
+   },
+   {
+    "id": "t120",
+    "text": "Bestellung B-51219847 wurde doppelt abgebucht (€ 779,50). Ich möchte eine Gutschrift."
+   },
+   {
+    "id": "t121",
+    "text": "Abbuchung bitte künftig von der Karte [CARD_2] statt per Überweisung."
+   },
+   {
+    "id": "t122",
+    "text": "CSV import breaks accented characters: é and ë turn into question marks. Affects about a third of our clients."
+   },
+   {
+    "id": "t123",
+    "text": "Für die Steuerberatung brauche ich unsere UID [VAT_6] auf jeder Rechnung, das Feld wird aber nicht gedruckt."
+   },
+   {
+    "id": "t124",
+    "text": "Für die Anmeldung bei der Krankenkasse brauche ich meine SV-Nummer [SVNR_9] auf dem Lohnzettel."
+   },
+   {
+    "id": "t125",
+    "text": "Refund went to [IBAN_6] according to your email but nothing has arrived yet."
+   },
+   {
+    "id": "t126",
+    "text": "Überweisung von [IBAN_7] ist laut Bank raus, im System steht die Rechnung aber noch offen."
+   },
+   {
+    "id": "t127",
+    "text": "Die App stürzt auf dem iPad ab, sobald ich ein Foto vom Beleg anhängen will. Version 2.4.1."
+   },
+   {
+    "id": "t128",
+    "text": "Two logins from [IP_7] were not me, please lock the account."
+   },
+   {
+    "id": "t129",
+    "text": "Im Exportlink [LINK_2] steht meine Kundennummer drin, ist das sicher?"
+   },
+   {
+    "id": "t130",
+    "text": "Two logins from [IP_8] were not me, please lock the account."
+   },
+   {
+    "id": "t131",
+    "text": "Für die Steuerberatung brauche ich unsere UID [VAT_7] auf jeder Rechnung, das Feld wird aber nicht gedruckt."
+   },
+   {
+    "id": "t132",
+    "text": "The new interface is cleaner but the font in the invoice preview is far too small."
+   },
+   {
+    "id": "t133",
+    "text": "Automatic payment reminders would be amazing. Right now I chase late payers by hand every Friday."
+   },
+   {
+    "id": "t134",
+    "text": "Die neue Oberfläche ist übersichtlicher, aber die Schrift im Rechnungsentwurf ist viel zu klein."
+   },
+   {
+    "id": "t135",
+    "text": "Reminder emails end up in my clients' spam folders. Could you check the sender setup?"
+   },
+   {
+    "id": "t136",
+    "text": "CSV import breaks accented characters: é and ë turn into question marks. Affects about a third of our clients."
+   },
+   {
+    "id": "t137",
+    "text": "Please send the receipts to [ADDRESS_12], Bristol [POSTCODE_1], not the office. Thanks, [NAME_17]"
+   },
+   {
+    "id": "t138",
+    "text": "I'm an accountant with twelve clients. Switching between them without logging out would save me so much time."
+   },
+   {
+    "id": "t139",
+    "text": "I can't find where to change the payment terms. The default is 14 days but we need 30."
+   },
+   {
+    "id": "t140",
+    "text": "Kontakt: [NAME_18], [EMAIL_10], [PHONE_12]. Bitte bis Ende der Woche melden, sonst kündigen wir."
+   },
+   {
+    "id": "t141",
+    "text": "Ich würde gern Stunden direkt aus dem Kalender übernehmen, statt alles doppelt einzutragen."
+   },
+   {
+    "id": "t142",
+    "text": "Sehr freundlicher Support, [NAME_19] hat mir am Telefon super geholfen!"
+   },
+   {
+    "id": "t143",
+    "text": "Kontakt: [NAME_20], [EMAIL_11], [PHONE_13]. Bitte bis Ende der Woche melden, sonst kündigen wir."
+   },
+   {
+    "id": "t144",
+    "text": "Ich habe meine Kreditkarte [CARD_1] hinterlegt, trotzdem steht im Konto „Zahlung fehlgeschlagen“."
+   },
+   {
+    "id": "t145",
+    "text": "Hi, I'm [NAME_21] and I accidentally created two accounts. Can you merge them? My email is [EMAIL_12]."
+   },
+   {
+    "id": "t146",
+    "text": "Contact: [NAME_21], [EMAIL_13], [PHONE_14]. Please get back to us this week or we'll cancel."
+   },
+   {
+    "id": "t147",
+    "text": "Refund went to [IBAN_8] according to your email but nothing has arrived yet."
+   },
+   {
+    "id": "t148",
+    "text": "Solid product, but invoice numbers should be able to restart each year."
+   },
+   {
+    "id": "t149",
+    "text": "Bestellung 35 560 0351 wurde doppelt abgebucht (€ 2 482,00). Ich möchte eine Gutschrift."
+   },
+   {
+    "id": "t150",
+    "text": "Gutes Produkt, aber die Rechnungsnummern sollten fortlaufend pro Jahr beginnen dürfen."
+   },
+   {
+    "id": "t151",
+    "text": "Funktioniert, aber die Ladezeiten im Dashboard sind morgens unerträglich langsam."
+   },
+   {
+    "id": "t152",
+    "text": "Im Exportlink [LINK_3] steht meine Kundennummer drin, ist das sicher?"
+   },
+   {
+    "id": "t153",
+    "text": "Exporting invoices to PDF got really slow after the 8.20.0 update. Forty invoices take almost two minutes."
+   },
+   {
+    "id": "t154",
+    "text": "Preis-Leistung passt. Einzig die Berichte könnten mehr Filter haben, z. B. nach Projekt und Monat."
+   },
+   {
+    "id": "t155",
+    "text": "CSV import breaks accented characters: é and ë turn into question marks. Affects about a third of our clients."
+   },
+   {
+    "id": "t156",
+    "text": "Bitte rufen Sie mich unter [PHONE_15] zurück, es geht um die Rechnung vom 18.09.2023."
+   },
+   {
+    "id": "t157",
+    "text": "Sehr freundlicher Support, [NAME_22] hat mir am Telefon super geholfen!"
+   },
+   {
+    "id": "t158",
+    "text": "Our German VAT number changed to [VAT_8]."
+   },
+   {
+    "id": "t159",
+    "text": "Fehler beim Import der CSV: Umlaute werden zu Fragezeichen. Das betrifft alle Kunden mit ä, ö, ü."
+   },
+   {
+    "id": "t160",
+    "text": "Ich würde gern Stunden direkt aus dem Kalender übernehmen, statt alles doppelt einzutragen."
+   },
+   {
+    "id": "t161",
+    "text": "Support sent me [LINK_4] but it only shows a blank page."
+   },
+   {
+    "id": "t162",
+    "text": "For the Austrian branch, use UID [VAT_9] on all invoices please."
+   },
+   {
+    "id": "t163",
+    "text": "Our payroll needs each employee's born on [DATE_OF_BIRTH_6], there's no field for it."
+   },
+   {
+    "id": "t164",
+    "text": "Wir sind ein Team von acht Leuten und die Rechteverwaltung reicht nicht. Jeder sieht alle Kundendaten."
+   },
+   {
+    "id": "t165",
+    "text": "Für die Steuerberatung brauche ich unsere UID [VAT_10] auf jeder Rechnung, das Feld wird aber nicht gedruckt."
+   },
+   {
+    "id": "t166",
+    "text": "Mein Account läuft auf [EMAIL_14], die Rechnungen sollen aber an die Buchhaltung gehen."
+   },
+   {
+    "id": "t167",
+    "text": "Mahnungen automatisch verschicken wäre ein Traum. Momentan mache ich das jeden Freitag händisch."
+   },
+   {
+    "id": "t168",
+    "text": "Hallo, ich bin [NAME_23] und habe zwei Konten angelegt. Können Sie die zusammenführen? Meine E-Mail ist [EMAIL_15]."
+   },
+   {
+    "id": "t169",
+    "text": "Exporting invoices to PDF got really slow after the 3.19.2 update. Forty invoices take almost two minutes."
+   },
+   {
+    "id": "t170",
+    "text": "Die Zeiterfassung auf dem Handy springt manchmal auf 0 zurück, wenn ich die App im Hintergrund habe."
+   },
+   {
+    "id": "t171",
+    "text": "Versicherungsnummer [SVNR_10], bitte im Personalstamm hinterlegen."
+   },
+   {
+    "id": "t172",
+    "text": "The card field rejects 5555 5555 5555 4445, is that a bug or did I mistype?"
+   },
+   {
+    "id": "t173",
+    "text": "Bitte rufen Sie mich unter [PHONE_16] zurück, es geht um die Rechnung vom 18.12.2024."
+   },
+   {
+    "id": "t174",
+    "text": "Ich vermisse eine Englisch-Version der Rechnungsvorlage für internationale Kunden.\nDas ist für uns ein Grund zu wechseln."
+   },
+   {
+    "id": "t175",
+    "text": "Gutes Produkt, aber die Rechnungsnummern sollten fortlaufend pro Jahr beginnen dürfen."
+   },
+   {
+    "id": "t176",
+    "text": "Lieferadresse: [ADDRESS_13], [POSTCODE_4] [PLACE_4]. Bitte die Belege dorthin schicken, nicht ins Büro. Danke, [NAME_24]"
+   },
+   {
+    "id": "t177",
+    "text": "Im Exportlink [LINK_5] steht meine Kundennummer drin, ist das sicher?"
+   },
+   {
+    "id": "t178",
+    "text": "Ich habe meine Kreditkarte [CARD_4] hinterlegt, trotzdem steht im Konto „Zahlung fehlgeschlagen“."
+   },
+   {
+    "id": "t179",
+    "text": "Ich bin Steuerberaterin und betreue zwölf Mandanten. Ein Mandantenwechsel ohne Ausloggen würde viel Zeit sparen."
+   },
+   {
+    "id": "t180",
+    "text": "Preis-Leistung passt. Einzig die Berichte könnten mehr Filter haben, z. B. nach Projekt und Monat."
+   },
+   {
+    "id": "t181",
+    "text": "Den Link [LINK_6] hat mir der Support geschickt, er führt aber nur auf eine leere Seite."
+   },
+   {
+    "id": "t182",
+    "text": "Seit gestern kann ich mich nicht mehr einloggen, die Zwei-Faktor-SMS kommt nicht an. Meine Nummer: [PHONE_17]"
+   },
+   {
+    "id": "t183",
+    "text": "Missing an English invoice template for international customers.\nHonestly this is the main reason we are looking at alternatives."
+   },
+   {
+    "id": "t184",
+    "text": "Why did the Team plan go up by €1,185.99? Nobody told us."
+   },
+   {
+    "id": "t185",
+    "text": "Im Exportlink [LINK_7] steht meine Kundennummer drin, ist das sicher?"
+   },
+   {
+    "id": "t186",
+    "text": "Order B-54741923 was charged twice (€1,845.99). I'd like a refund please."
+   },
+   {
+    "id": "t187",
+    "text": "Our German VAT number changed to [VAT_11]."
+   },
+   {
+    "id": "t188",
+    "text": "Wenn ich auf „Senden“ klicke, passiert nichts. Browser-Log zeigt einen Fehler, meine IP war [IP_9]."
+   },
+   {
+    "id": "t189",
+    "text": "Missing an English invoice template for international customers.\nHonestly this is the main reason we are looking at alternatives."
+   },
+   {
+    "id": "t190",
+    "text": "Wir sind ein Team von acht Leuten und die Rechteverwaltung reicht nicht. Jeder sieht alle Kundendaten."
+   },
+   {
+    "id": "t191",
+    "text": "Ich bin Steuerberaterin und betreue zwölf Mandanten. Ein Mandantenwechsel ohne Ausloggen würde viel Zeit sparen."
+   },
+   {
+    "id": "t192",
+    "text": "Reminder emails end up in my clients' spam folders. Could you check the sender setup?"
+   },
+   {
+    "id": "t193",
+    "text": "Solid product, but invoice numbers should be able to restart each year."
+   },
+   {
+    "id": "t194",
+    "text": "For the Austrian branch, use UID [VAT_12] on all invoices please."
+   },
+   {
+    "id": "t195",
+    "text": "Für den Kreditantrag: [NAME_25], Geburtsdatum: [DATE_OF_BIRTH_7], [ADDRESS_14], [POSTCODE_8] [PLACE_7]."
+   },
+   {
+    "id": "t196",
+    "text": "Ich habe meine Kreditkarte [CARD_4] hinterlegt, trotzdem steht im Konto „Zahlung fehlgeschlagen“."
+   },
+   {
+    "id": "t197",
+    "text": "Fehler beim Import der CSV: Umlaute werden zu Fragezeichen. Das betrifft alle Kunden mit ä, ö, ü."
+   },
+   {
+    "id": "t198",
+    "text": "Die App stürzt auf dem iPad ab, sobald ich ein Foto vom Beleg anhängen will. Version 1.16.2."
+   },
+   {
+    "id": "t199",
+    "text": "Mahnungen automatisch verschicken wäre ein Traum. Momentan mache ich das jeden Freitag händisch."
+   },
+   {
+    "id": "t200",
+    "text": "The iPad app crashes when I attach a photo of a receipt. Version 8.7.6.90."
+   }
+  ]
+ },
+ "itemOf": [
+  [
+   "t1",
+   "cell:0:0:8"
+  ],
+  [
+   "t2",
+   "cell:0:1:8"
+  ],
+  [
+   "t3",
+   "cell:0:2:8"
+  ],
+  [
+   "t4",
+   "cell:0:3:8"
+  ],
+  [
+   "t5",
+   "cell:0:4:8"
+  ],
+  [
+   "t6",
+   "cell:0:5:8"
+  ],
+  [
+   "t7",
+   "cell:0:6:8"
+  ],
+  [
+   "t8",
+   "cell:0:7:8"
+  ],
+  [
+   "t9",
+   "cell:0:8:8"
+  ],
+  [
+   "t10",
+   "cell:0:9:8"
+  ],
+  [
+   "t11",
+   "cell:0:10:8"
+  ],
+  [
+   "t12",
+   "cell:0:11:8"
+  ],
+  [
+   "t13",
+   "cell:0:12:8"
+  ],
+  [
+   "t14",
+   "cell:0:13:8"
+  ],
+  [
+   "t15",
+   "cell:0:14:8"
+  ],
+  [
+   "t16",
+   "cell:0:15:8"
+  ],
+  [
+   "t17",
+   "cell:0:16:8"
+  ],
+  [
+   "t18",
+   "cell:0:17:8"
+  ],
+  [
+   "t19",
+   "cell:0:18:8"
+  ],
+  [
+   "t20",
+   "cell:0:19:8"
+  ],
+  [
+   "t21",
+   "cell:0:20:8"
+  ],
+  [
+   "t22",
+   "cell:0:21:8"
+  ],
+  [
+   "t23",
+   "cell:0:22:8"
+  ],
+  [
+   "t24",
+   "cell:0:23:8"
+  ],
+  [
+   "t25",
+   "cell:0:24:8"
+  ],
+  [
+   "t26",
+   "cell:0:25:8"
+  ],
+  [
+   "t27",
+   "cell:0:26:8"
+  ],
+  [
+   "t28",
+   "cell:0:27:8"
+  ],
+  [
+   "t29",
+   "cell:0:28:8"
+  ],
+  [
+   "t30",
+   "cell:0:29:8"
+  ],
+  [
+   "t31",
+   "cell:0:30:8"
+  ],
+  [
+   "t32",
+   "cell:0:31:8"
+  ],
+  [
+   "t33",
+   "cell:0:32:8"
+  ],
+  [
+   "t34",
+   "cell:0:33:8"
+  ],
+  [
+   "t35",
+   "cell:0:34:8"
+  ],
+  [
+   "t36",
+   "cell:0:35:8"
+  ],
+  [
+   "t37",
+   "cell:0:36:8"
+  ],
+  [
+   "t38",
+   "cell:0:37:8"
+  ],
+  [
+   "t39",
+   "cell:0:38:8"
+  ],
+  [
+   "t40",
+   "cell:0:39:8"
+  ],
+  [
+   "t41",
+   "cell:0:40:8"
+  ],
+  [
+   "t42",
+   "cell:0:41:8"
+  ],
+  [
+   "t43",
+   "cell:0:42:8"
+  ],
+  [
+   "t44",
+   "cell:0:43:8"
+  ],
+  [
+   "t45",
+   "cell:0:44:8"
+  ],
+  [
+   "t46",
+   "cell:0:45:8"
+  ],
+  [
+   "t47",
+   "cell:0:46:8"
+  ],
+  [
+   "t48",
+   "cell:0:47:8"
+  ],
+  [
+   "t49",
+   "cell:0:48:8"
+  ],
+  [
+   "t50",
+   "cell:0:49:8"
+  ],
+  [
+   "t51",
+   "cell:0:50:8"
+  ],
+  [
+   "t52",
+   "cell:0:51:8"
+  ],
+  [
+   "t53",
+   "cell:0:52:8"
+  ],
+  [
+   "t54",
+   "cell:0:53:8"
+  ],
+  [
+   "t55",
+   "cell:0:54:8"
+  ],
+  [
+   "t56",
+   "cell:0:55:8"
+  ],
+  [
+   "t57",
+   "cell:0:56:8"
+  ],
+  [
+   "t58",
+   "cell:0:57:8"
+  ],
+  [
+   "t59",
+   "cell:0:58:8"
+  ],
+  [
+   "t60",
+   "cell:0:59:8"
+  ],
+  [
+   "t61",
+   "cell:0:60:8"
+  ],
+  [
+   "t62",
+   "cell:0:61:8"
+  ],
+  [
+   "t63",
+   "cell:0:62:8"
+  ],
+  [
+   "t64",
+   "cell:0:63:8"
+  ],
+  [
+   "t65",
+   "cell:0:64:8"
+  ],
+  [
+   "t66",
+   "cell:0:65:8"
+  ],
+  [
+   "t67",
+   "cell:0:66:8"
+  ],
+  [
+   "t68",
+   "cell:0:67:8"
+  ],
+  [
+   "t69",
+   "cell:0:68:8"
+  ],
+  [
+   "t70",
+   "cell:0:69:8"
+  ],
+  [
+   "t71",
+   "cell:0:70:8"
+  ],
+  [
+   "t72",
+   "cell:0:71:8"
+  ],
+  [
+   "t73",
+   "cell:0:72:8"
+  ],
+  [
+   "t74",
+   "cell:0:73:8"
+  ],
+  [
+   "t75",
+   "cell:0:74:8"
+  ],
+  [
+   "t76",
+   "cell:0:75:8"
+  ],
+  [
+   "t77",
+   "cell:0:76:8"
+  ],
+  [
+   "t78",
+   "cell:0:77:8"
+  ],
+  [
+   "t79",
+   "cell:0:78:8"
+  ],
+  [
+   "t80",
+   "cell:0:79:8"
+  ],
+  [
+   "t81",
+   "cell:0:80:8"
+  ],
+  [
+   "t82",
+   "cell:0:81:8"
+  ],
+  [
+   "t83",
+   "cell:0:82:8"
+  ],
+  [
+   "t84",
+   "cell:0:83:8"
+  ],
+  [
+   "t85",
+   "cell:0:84:8"
+  ],
+  [
+   "t86",
+   "cell:0:85:8"
+  ],
+  [
+   "t87",
+   "cell:0:86:8"
+  ],
+  [
+   "t88",
+   "cell:0:87:8"
+  ],
+  [
+   "t89",
+   "cell:0:88:8"
+  ],
+  [
+   "t90",
+   "cell:0:89:8"
+  ],
+  [
+   "t91",
+   "cell:0:90:8"
+  ],
+  [
+   "t92",
+   "cell:0:91:8"
+  ],
+  [
+   "t93",
+   "cell:0:92:8"
+  ],
+  [
+   "t94",
+   "cell:0:93:8"
+  ],
+  [
+   "t95",
+   "cell:0:94:8"
+  ],
+  [
+   "t96",
+   "cell:0:95:8"
+  ],
+  [
+   "t97",
+   "cell:0:96:8"
+  ],
+  [
+   "t98",
+   "cell:0:97:8"
+  ],
+  [
+   "t99",
+   "cell:0:98:8"
+  ],
+  [
+   "t100",
+   "cell:0:99:8"
+  ],
+  [
+   "t101",
+   "cell:0:100:8"
+  ],
+  [
+   "t102",
+   "cell:0:101:8"
+  ],
+  [
+   "t103",
+   "cell:0:102:8"
+  ],
+  [
+   "t104",
+   "cell:0:103:8"
+  ],
+  [
+   "t105",
+   "cell:0:104:8"
+  ],
+  [
+   "t106",
+   "cell:0:105:8"
+  ],
+  [
+   "t107",
+   "cell:0:106:8"
+  ],
+  [
+   "t108",
+   "cell:0:107:8"
+  ],
+  [
+   "t109",
+   "cell:0:108:8"
+  ],
+  [
+   "t110",
+   "cell:0:109:8"
+  ],
+  [
+   "t111",
+   "cell:0:110:8"
+  ],
+  [
+   "t112",
+   "cell:0:111:8"
+  ],
+  [
+   "t113",
+   "cell:0:112:8"
+  ],
+  [
+   "t114",
+   "cell:0:113:8"
+  ],
+  [
+   "t115",
+   "cell:0:114:8"
+  ],
+  [
+   "t116",
+   "cell:0:115:8"
+  ],
+  [
+   "t117",
+   "cell:0:116:8"
+  ],
+  [
+   "t118",
+   "cell:0:117:8"
+  ],
+  [
+   "t119",
+   "cell:0:118:8"
+  ],
+  [
+   "t120",
+   "cell:0:119:8"
+  ],
+  [
+   "t121",
+   "cell:0:120:8"
+  ],
+  [
+   "t122",
+   "cell:0:121:8"
+  ],
+  [
+   "t123",
+   "cell:0:122:8"
+  ],
+  [
+   "t124",
+   "cell:0:123:8"
+  ],
+  [
+   "t125",
+   "cell:0:124:8"
+  ],
+  [
+   "t126",
+   "cell:0:125:8"
+  ],
+  [
+   "t127",
+   "cell:0:126:8"
+  ],
+  [
+   "t128",
+   "cell:0:127:8"
+  ],
+  [
+   "t129",
+   "cell:0:128:8"
+  ],
+  [
+   "t130",
+   "cell:0:129:8"
+  ],
+  [
+   "t131",
+   "cell:0:130:8"
+  ],
+  [
+   "t132",
+   "cell:0:131:8"
+  ],
+  [
+   "t133",
+   "cell:0:132:8"
+  ],
+  [
+   "t134",
+   "cell:0:133:8"
+  ],
+  [
+   "t135",
+   "cell:0:134:8"
+  ],
+  [
+   "t136",
+   "cell:0:135:8"
+  ],
+  [
+   "t137",
+   "cell:0:136:8"
+  ],
+  [
+   "t138",
+   "cell:0:137:8"
+  ],
+  [
+   "t139",
+   "cell:0:138:8"
+  ],
+  [
+   "t140",
+   "cell:0:139:8"
+  ],
+  [
+   "t141",
+   "cell:0:140:8"
+  ],
+  [
+   "t142",
+   "cell:0:141:8"
+  ],
+  [
+   "t143",
+   "cell:0:142:8"
+  ],
+  [
+   "t144",
+   "cell:0:143:8"
+  ],
+  [
+   "t145",
+   "cell:0:144:8"
+  ],
+  [
+   "t146",
+   "cell:0:145:8"
+  ],
+  [
+   "t147",
+   "cell:0:146:8"
+  ],
+  [
+   "t148",
+   "cell:0:147:8"
+  ],
+  [
+   "t149",
+   "cell:0:148:8"
+  ],
+  [
+   "t150",
+   "cell:0:149:8"
+  ],
+  [
+   "t151",
+   "cell:0:150:8"
+  ],
+  [
+   "t152",
+   "cell:0:151:8"
+  ],
+  [
+   "t153",
+   "cell:0:152:8"
+  ],
+  [
+   "t154",
+   "cell:0:153:8"
+  ],
+  [
+   "t155",
+   "cell:0:154:8"
+  ],
+  [
+   "t156",
+   "cell:0:155:8"
+  ],
+  [
+   "t157",
+   "cell:0:156:8"
+  ],
+  [
+   "t158",
+   "cell:0:157:8"
+  ],
+  [
+   "t159",
+   "cell:0:158:8"
+  ],
+  [
+   "t160",
+   "cell:0:159:8"
+  ],
+  [
+   "t161",
+   "cell:0:160:8"
+  ],
+  [
+   "t162",
+   "cell:0:161:8"
+  ],
+  [
+   "t163",
+   "cell:0:162:8"
+  ],
+  [
+   "t164",
+   "cell:0:163:8"
+  ],
+  [
+   "t165",
+   "cell:0:164:8"
+  ],
+  [
+   "t166",
+   "cell:0:165:8"
+  ],
+  [
+   "t167",
+   "cell:0:166:8"
+  ],
+  [
+   "t168",
+   "cell:0:167:8"
+  ],
+  [
+   "t169",
+   "cell:0:168:8"
+  ],
+  [
+   "t170",
+   "cell:0:169:8"
+  ],
+  [
+   "t171",
+   "cell:0:170:8"
+  ],
+  [
+   "t172",
+   "cell:0:171:8"
+  ],
+  [
+   "t173",
+   "cell:0:172:8"
+  ],
+  [
+   "t174",
+   "cell:0:173:8"
+  ],
+  [
+   "t175",
+   "cell:0:174:8"
+  ],
+  [
+   "t176",
+   "cell:0:175:8"
+  ],
+  [
+   "t177",
+   "cell:0:176:8"
+  ],
+  [
+   "t178",
+   "cell:0:177:8"
+  ],
+  [
+   "t179",
+   "cell:0:178:8"
+  ],
+  [
+   "t180",
+   "cell:0:179:8"
+  ],
+  [
+   "t181",
+   "cell:0:180:8"
+  ],
+  [
+   "t182",
+   "cell:0:181:8"
+  ],
+  [
+   "t183",
+   "cell:0:182:8"
+  ],
+  [
+   "t184",
+   "cell:0:183:8"
+  ],
+  [
+   "t185",
+   "cell:0:184:8"
+  ],
+  [
+   "t186",
+   "cell:0:185:8"
+  ],
+  [
+   "t187",
+   "cell:0:186:8"
+  ],
+  [
+   "t188",
+   "cell:0:187:8"
+  ],
+  [
+   "t189",
+   "cell:0:188:8"
+  ],
+  [
+   "t190",
+   "cell:0:189:8"
+  ],
+  [
+   "t191",
+   "cell:0:190:8"
+  ],
+  [
+   "t192",
+   "cell:0:191:8"
+  ],
+  [
+   "t193",
+   "cell:0:192:8"
+  ],
+  [
+   "t194",
+   "cell:0:193:8"
+  ],
+  [
+   "t195",
+   "cell:0:194:8"
+  ],
+  [
+   "t196",
+   "cell:0:195:8"
+  ],
+  [
+   "t197",
+   "cell:0:196:8"
+  ],
+  [
+   "t198",
+   "cell:0:197:8"
+  ],
+  [
+   "t199",
+   "cell:0:198:8"
+  ],
+  [
+   "t200",
+   "cell:0:199:8"
+  ]
+ ],
+ "items": {
+  "cell:0:0:8": {
+   "row": 1,
+   "attributes": {
+    "id": "1",
+    "created_at": "2026-01-04"
+   }
+  },
+  "cell:0:1:8": {
+   "row": 2,
+   "attributes": {
+    "id": "2",
+    "created_at": "2026-01-04",
+    "rating": "5"
+   }
+  },
+  "cell:0:2:8": {
+   "row": 3,
+   "attributes": {
+    "id": "3",
+    "created_at": "2026-01-04"
+   }
+  },
+  "cell:0:3:8": {
+   "row": 4,
+   "attributes": {
+    "id": "4",
+    "created_at": "2026-01-07"
+   }
+  },
+  "cell:0:4:8": {
+   "row": 5,
+   "attributes": {
+    "id": "5",
+    "created_at": "2026-01-07"
+   }
+  },
+  "cell:0:5:8": {
+   "row": 6,
+   "attributes": {
+    "id": "6",
+    "created_at": "2026-01-07",
+    "rating": "4"
+   }
+  },
+  "cell:0:6:8": {
+   "row": 7,
+   "attributes": {
+    "id": "7",
+    "created_at": "2026-01-09",
+    "rating": "7"
+   }
+  },
+  "cell:0:7:8": {
+   "row": 8,
+   "attributes": {
+    "id": "8",
+    "created_at": "2026-01-09"
+   }
+  },
+  "cell:0:8:8": {
+   "row": 9,
+   "attributes": {
+    "id": "9",
+    "created_at": "2026-01-10"
+   }
+  },
+  "cell:0:9:8": {
+   "row": 10,
+   "attributes": {
+    "id": "10",
+    "created_at": "2026-01-12"
+   }
+  },
+  "cell:0:10:8": {
+   "row": 11,
+   "attributes": {
+    "id": "11",
+    "created_at": "2026-01-12"
+   }
+  },
+  "cell:0:11:8": {
+   "row": 12,
+   "attributes": {
+    "id": "12",
+    "created_at": "2026-01-14",
+    "rating": "6"
+   }
+  },
+  "cell:0:12:8": {
+   "row": 13,
+   "attributes": {
+    "id": "13",
+    "created_at": "2026-01-21",
+    "rating": "3"
+   }
+  },
+  "cell:0:13:8": {
+   "row": 14,
+   "attributes": {
+    "id": "14",
+    "created_at": "2026-01-21"
+   }
+  },
+  "cell:0:14:8": {
+   "row": 15,
+   "attributes": {
+    "id": "15",
+    "created_at": "2026-01-22"
+   }
+  },
+  "cell:0:15:8": {
+   "row": 16,
+   "attributes": {
+    "id": "16",
+    "created_at": "2026-01-24",
+    "rating": "0"
+   }
+  },
+  "cell:0:16:8": {
+   "row": 17,
+   "attributes": {
+    "id": "17",
+    "created_at": "2026-01-26",
+    "rating": "3"
+   }
+  },
+  "cell:0:17:8": {
+   "row": 18,
+   "attributes": {
+    "id": "18",
+    "created_at": "2026-01-28"
+   }
+  },
+  "cell:0:18:8": {
+   "row": 19,
+   "attributes": {
+    "id": "19",
+    "created_at": "2026-02-03"
+   }
+  },
+  "cell:0:19:8": {
+   "row": 20,
+   "attributes": {
+    "id": "20",
+    "created_at": "2026-02-06"
+   }
+  },
+  "cell:0:20:8": {
+   "row": 21,
+   "attributes": {
+    "id": "21",
+    "created_at": "2026-02-07",
+    "rating": "6"
+   }
+  },
+  "cell:0:21:8": {
+   "row": 22,
+   "attributes": {
+    "id": "22",
+    "created_at": "2026-02-07"
+   }
+  },
+  "cell:0:22:8": {
+   "row": 23,
+   "attributes": {
+    "id": "23",
+    "created_at": "2026-02-08",
+    "rating": "3"
+   }
+  },
+  "cell:0:23:8": {
+   "row": 24,
+   "attributes": {
+    "id": "24",
+    "created_at": "2026-02-09"
+   }
+  },
+  "cell:0:24:8": {
+   "row": 25,
+   "attributes": {
+    "id": "25",
+    "created_at": "2026-02-11"
+   }
+  },
+  "cell:0:25:8": {
+   "row": 26,
+   "attributes": {
+    "id": "26",
+    "created_at": "2026-02-13"
+   }
+  },
+  "cell:0:26:8": {
+   "row": 27,
+   "attributes": {
+    "id": "27",
+    "created_at": "2026-02-14",
+    "rating": "4"
+   }
+  },
+  "cell:0:27:8": {
+   "row": 28,
+   "attributes": {
+    "id": "28",
+    "created_at": "2026-02-15",
+    "rating": "2"
+   }
+  },
+  "cell:0:28:8": {
+   "row": 29,
+   "attributes": {
+    "id": "29",
+    "created_at": "2026-02-16"
+   }
+  },
+  "cell:0:29:8": {
+   "row": 30,
+   "attributes": {
+    "id": "30",
+    "created_at": "2026-02-18"
+   }
+  },
+  "cell:0:30:8": {
+   "row": 31,
+   "attributes": {
+    "id": "31",
+    "created_at": "2026-02-19",
+    "rating": "5"
+   }
+  },
+  "cell:0:31:8": {
+   "row": 32,
+   "attributes": {
+    "id": "32",
+    "created_at": "2026-02-20"
+   }
+  },
+  "cell:0:32:8": {
+   "row": 33,
+   "attributes": {
+    "id": "33",
+    "created_at": "2026-02-23"
+   }
+  },
+  "cell:0:33:8": {
+   "row": 34,
+   "attributes": {
+    "id": "34",
+    "created_at": "2026-02-24",
+    "rating": "3"
+   }
+  },
+  "cell:0:34:8": {
+   "row": 35,
+   "attributes": {
+    "id": "35",
+    "created_at": "2026-02-25",
+    "rating": "9"
+   }
+  },
+  "cell:0:35:8": {
+   "row": 36,
+   "attributes": {
+    "id": "36",
+    "created_at": "2026-02-26"
+   }
+  },
+  "cell:0:36:8": {
+   "row": 37,
+   "attributes": {
+    "id": "37",
+    "created_at": "2026-03-01"
+   }
+  },
+  "cell:0:37:8": {
+   "row": 38,
+   "attributes": {
+    "id": "38",
+    "created_at": "2026-03-01",
+    "rating": "5"
+   }
+  },
+  "cell:0:38:8": {
+   "row": 39,
+   "attributes": {
+    "id": "39",
+    "created_at": "2026-03-01",
+    "rating": "7"
+   }
+  },
+  "cell:0:39:8": {
+   "row": 40,
+   "attributes": {
+    "id": "40",
+    "created_at": "2026-03-02",
+    "rating": "5"
+   }
+  },
+  "cell:0:40:8": {
+   "row": 41,
+   "attributes": {
+    "id": "41",
+    "created_at": "2026-03-02"
+   }
+  },
+  "cell:0:41:8": {
+   "row": 42,
+   "attributes": {
+    "id": "42",
+    "created_at": "2026-03-03",
+    "rating": "3"
+   }
+  },
+  "cell:0:42:8": {
+   "row": 43,
+   "attributes": {
+    "id": "43",
+    "created_at": "2026-03-06",
+    "rating": "3"
+   }
+  },
+  "cell:0:43:8": {
+   "row": 44,
+   "attributes": {
+    "id": "44",
+    "created_at": "2026-03-09",
+    "rating": "2"
+   }
+  },
+  "cell:0:44:8": {
+   "row": 45,
+   "attributes": {
+    "id": "45",
+    "created_at": "2026-03-11"
+   }
+  },
+  "cell:0:45:8": {
+   "row": 46,
+   "attributes": {
+    "id": "46",
+    "created_at": "2026-03-13"
+   }
+  },
+  "cell:0:46:8": {
+   "row": 47,
+   "attributes": {
+    "id": "47",
+    "created_at": "2026-03-14",
+    "rating": "3"
+   }
+  },
+  "cell:0:47:8": {
+   "row": 48,
+   "attributes": {
+    "id": "48",
+    "created_at": "2026-03-16"
+   }
+  },
+  "cell:0:48:8": {
+   "row": 49,
+   "attributes": {
+    "id": "49",
+    "created_at": "2026-03-16"
+   }
+  },
+  "cell:0:49:8": {
+   "row": 50,
+   "attributes": {
+    "id": "50",
+    "created_at": "2026-03-17",
+    "rating": "1"
+   }
+  },
+  "cell:0:50:8": {
+   "row": 51,
+   "attributes": {
+    "id": "51",
+    "created_at": "2026-03-19",
+    "rating": "8"
+   }
+  },
+  "cell:0:51:8": {
+   "row": 52,
+   "attributes": {
+    "id": "52",
+    "created_at": "2026-03-19",
+    "rating": "4"
+   }
+  },
+  "cell:0:52:8": {
+   "row": 53,
+   "attributes": {
+    "id": "53",
+    "created_at": "2026-03-22",
+    "rating": "5"
+   }
+  },
+  "cell:0:53:8": {
+   "row": 54,
+   "attributes": {
+    "id": "54",
+    "created_at": "2026-03-25"
+   }
+  },
+  "cell:0:54:8": {
+   "row": 55,
+   "attributes": {
+    "id": "55",
+    "created_at": "2026-03-30"
+   }
+  },
+  "cell:0:55:8": {
+   "row": 56,
+   "attributes": {
+    "id": "56",
+    "created_at": "2026-03-30",
+    "rating": "7"
+   }
+  },
+  "cell:0:56:8": {
+   "row": 57,
+   "attributes": {
+    "id": "57",
+    "created_at": "2026-04-01"
+   }
+  },
+  "cell:0:57:8": {
+   "row": 58,
+   "attributes": {
+    "id": "58",
+    "created_at": "2026-04-03",
+    "rating": "10"
+   }
+  },
+  "cell:0:58:8": {
+   "row": 59,
+   "attributes": {
+    "id": "59",
+    "created_at": "2026-04-04"
+   }
+  },
+  "cell:0:59:8": {
+   "row": 60,
+   "attributes": {
+    "id": "60",
+    "created_at": "2026-04-05",
+    "rating": "9"
+   }
+  },
+  "cell:0:60:8": {
+   "row": 61,
+   "attributes": {
+    "id": "61",
+    "created_at": "2026-04-06",
+    "rating": "2"
+   }
+  },
+  "cell:0:61:8": {
+   "row": 62,
+   "attributes": {
+    "id": "62",
+    "created_at": "2026-04-09",
+    "rating": "4"
+   }
+  },
+  "cell:0:62:8": {
+   "row": 63,
+   "attributes": {
+    "id": "63",
+    "created_at": "2026-04-12"
+   }
+  },
+  "cell:0:63:8": {
+   "row": 64,
+   "attributes": {
+    "id": "64",
+    "created_at": "2026-04-13"
+   }
+  },
+  "cell:0:64:8": {
+   "row": 65,
+   "attributes": {
+    "id": "65",
+    "created_at": "2026-04-16"
+   }
+  },
+  "cell:0:65:8": {
+   "row": 66,
+   "attributes": {
+    "id": "66",
+    "created_at": "2026-04-17"
+   }
+  },
+  "cell:0:66:8": {
+   "row": 67,
+   "attributes": {
+    "id": "67",
+    "created_at": "2026-04-17",
+    "rating": "3"
+   }
+  },
+  "cell:0:67:8": {
+   "row": 68,
+   "attributes": {
+    "id": "68",
+    "created_at": "2026-04-17"
+   }
+  },
+  "cell:0:68:8": {
+   "row": 69,
+   "attributes": {
+    "id": "69",
+    "created_at": "2026-04-19",
+    "rating": "2"
+   }
+  },
+  "cell:0:69:8": {
+   "row": 70,
+   "attributes": {
+    "id": "70",
+    "created_at": "2026-04-19"
+   }
+  },
+  "cell:0:70:8": {
+   "row": 71,
+   "attributes": {
+    "id": "71",
+    "created_at": "2026-04-19"
+   }
+  },
+  "cell:0:71:8": {
+   "row": 72,
+   "attributes": {
+    "id": "72",
+    "created_at": "2026-04-21"
+   }
+  },
+  "cell:0:72:8": {
+   "row": 73,
+   "attributes": {
+    "id": "73",
+    "created_at": "2026-04-22",
+    "rating": "2"
+   }
+  },
+  "cell:0:73:8": {
+   "row": 74,
+   "attributes": {
+    "id": "74",
+    "created_at": "2026-04-22",
+    "rating": "1"
+   }
+  },
+  "cell:0:74:8": {
+   "row": 75,
+   "attributes": {
+    "id": "75",
+    "created_at": "2026-04-22"
+   }
+  },
+  "cell:0:75:8": {
+   "row": 76,
+   "attributes": {
+    "id": "76",
+    "created_at": "2026-04-23"
+   }
+  },
+  "cell:0:76:8": {
+   "row": 77,
+   "attributes": {
+    "id": "77",
+    "created_at": "2026-04-27"
+   }
+  },
+  "cell:0:77:8": {
+   "row": 78,
+   "attributes": {
+    "id": "78",
+    "created_at": "2026-04-27",
+    "rating": "1"
+   }
+  },
+  "cell:0:78:8": {
+   "row": 79,
+   "attributes": {
+    "id": "79",
+    "created_at": "2026-04-29"
+   }
+  },
+  "cell:0:79:8": {
+   "row": 80,
+   "attributes": {
+    "id": "80",
+    "created_at": "2026-05-02"
+   }
+  },
+  "cell:0:80:8": {
+   "row": 81,
+   "attributes": {
+    "id": "81",
+    "created_at": "2026-05-02"
+   }
+  },
+  "cell:0:81:8": {
+   "row": 82,
+   "attributes": {
+    "id": "82",
+    "created_at": "2026-05-02"
+   }
+  },
+  "cell:0:82:8": {
+   "row": 83,
+   "attributes": {
+    "id": "83",
+    "created_at": "2026-05-03",
+    "rating": "2"
+   }
+  },
+  "cell:0:83:8": {
+   "row": 84,
+   "attributes": {
+    "id": "84",
+    "created_at": "2026-05-03"
+   }
+  },
+  "cell:0:84:8": {
+   "row": 85,
+   "attributes": {
+    "id": "85",
+    "created_at": "2026-05-05"
+   }
+  },
+  "cell:0:85:8": {
+   "row": 86,
+   "attributes": {
+    "id": "86",
+    "created_at": "2026-05-06",
+    "rating": "5"
+   }
+  },
+  "cell:0:86:8": {
+   "row": 87,
+   "attributes": {
+    "id": "87",
+    "created_at": "2026-05-07",
+    "rating": "2"
+   }
+  },
+  "cell:0:87:8": {
+   "row": 88,
+   "attributes": {
+    "id": "88",
+    "created_at": "2026-05-14"
+   }
+  },
+  "cell:0:88:8": {
+   "row": 89,
+   "attributes": {
+    "id": "89",
+    "created_at": "2026-05-16"
+   }
+  },
+  "cell:0:89:8": {
+   "row": 90,
+   "attributes": {
+    "id": "90",
+    "created_at": "2026-05-19"
+   }
+  },
+  "cell:0:90:8": {
+   "row": 91,
+   "attributes": {
+    "id": "91",
+    "created_at": "2026-05-23",
+    "rating": "2"
+   }
+  },
+  "cell:0:91:8": {
+   "row": 92,
+   "attributes": {
+    "id": "92",
+    "created_at": "2026-05-24",
+    "rating": "2"
+   }
+  },
+  "cell:0:92:8": {
+   "row": 93,
+   "attributes": {
+    "id": "93",
+    "created_at": "2026-05-25",
+    "rating": "2"
+   }
+  },
+  "cell:0:93:8": {
+   "row": 94,
+   "attributes": {
+    "id": "94",
+    "created_at": "2026-05-27",
+    "rating": "4"
+   }
+  },
+  "cell:0:94:8": {
+   "row": 95,
+   "attributes": {
+    "id": "95",
+    "created_at": "2026-05-27"
+   }
+  },
+  "cell:0:95:8": {
+   "row": 96,
+   "attributes": {
+    "id": "96",
+    "created_at": "2026-06-01"
+   }
+  },
+  "cell:0:96:8": {
+   "row": 97,
+   "attributes": {
+    "id": "97",
+    "created_at": "2026-06-01"
+   }
+  },
+  "cell:0:97:8": {
+   "row": 98,
+   "attributes": {
+    "id": "98",
+    "created_at": "2026-06-01",
+    "rating": "2"
+   }
+  },
+  "cell:0:98:8": {
+   "row": 99,
+   "attributes": {
+    "id": "99",
+    "created_at": "2026-06-02",
+    "rating": "4"
+   }
+  },
+  "cell:0:99:8": {
+   "row": 100,
+   "attributes": {
+    "id": "100",
+    "created_at": "2026-06-02",
+    "rating": "10"
+   }
+  },
+  "cell:0:100:8": {
+   "row": 101,
+   "attributes": {
+    "id": "101",
+    "created_at": "2026-06-03"
+   }
+  },
+  "cell:0:101:8": {
+   "row": 102,
+   "attributes": {
+    "id": "102",
+    "created_at": "2026-06-06",
+    "rating": "5"
+   }
+  },
+  "cell:0:102:8": {
+   "row": 103,
+   "attributes": {
+    "id": "103",
+    "created_at": "2026-06-11",
+    "rating": "4"
+   }
+  },
+  "cell:0:103:8": {
+   "row": 104,
+   "attributes": {
+    "id": "104",
+    "created_at": "2026-06-12"
+   }
+  },
+  "cell:0:104:8": {
+   "row": 105,
+   "attributes": {
+    "id": "105",
+    "created_at": "2026-06-13",
+    "rating": "2"
+   }
+  },
+  "cell:0:105:8": {
+   "row": 106,
+   "attributes": {
+    "id": "106",
+    "created_at": "2026-06-13"
+   }
+  },
+  "cell:0:106:8": {
+   "row": 107,
+   "attributes": {
+    "id": "107",
+    "created_at": "2026-06-15",
+    "rating": "2"
+   }
+  },
+  "cell:0:107:8": {
+   "row": 108,
+   "attributes": {
+    "id": "108",
+    "created_at": "2026-06-16",
+    "rating": "3"
+   }
+  },
+  "cell:0:108:8": {
+   "row": 109,
+   "attributes": {
+    "id": "109",
+    "created_at": "2026-06-19"
+   }
+  },
+  "cell:0:109:8": {
+   "row": 110,
+   "attributes": {
+    "id": "110",
+    "created_at": "2026-06-20",
+    "rating": "2"
+   }
+  },
+  "cell:0:110:8": {
+   "row": 111,
+   "attributes": {
+    "id": "111",
+    "created_at": "2026-06-23",
+    "rating": "5"
+   }
+  },
+  "cell:0:111:8": {
+   "row": 112,
+   "attributes": {
+    "id": "112",
+    "created_at": "2026-06-23",
+    "rating": "1"
+   }
+  },
+  "cell:0:112:8": {
+   "row": 113,
+   "attributes": {
+    "id": "113",
+    "created_at": "2026-06-23",
+    "rating": "10"
+   }
+  },
+  "cell:0:113:8": {
+   "row": 114,
+   "attributes": {
+    "id": "114",
+    "created_at": "2026-06-24",
+    "rating": "4"
+   }
+  },
+  "cell:0:114:8": {
+   "row": 115,
+   "attributes": {
+    "id": "115",
+    "created_at": "2026-06-25"
+   }
+  },
+  "cell:0:115:8": {
+   "row": 116,
+   "attributes": {
+    "id": "116",
+    "created_at": "2026-06-25"
+   }
+  },
+  "cell:0:116:8": {
+   "row": 117,
+   "attributes": {
+    "id": "117",
+    "created_at": "2026-06-26"
+   }
+  },
+  "cell:0:117:8": {
+   "row": 118,
+   "attributes": {
+    "id": "118",
+    "created_at": "2026-06-28"
+   }
+  },
+  "cell:0:118:8": {
+   "row": 119,
+   "attributes": {
+    "id": "119",
+    "created_at": "2026-06-29",
+    "rating": "2"
+   }
+  },
+  "cell:0:119:8": {
+   "row": 120,
+   "attributes": {
+    "id": "120",
+    "created_at": "2026-06-29",
+    "rating": "4"
+   }
+  },
+  "cell:0:120:8": {
+   "row": 121,
+   "attributes": {
+    "id": "121",
+    "created_at": "2026-07-03"
+   }
+  },
+  "cell:0:121:8": {
+   "row": 122,
+   "attributes": {
+    "id": "122",
+    "created_at": "2026-07-06"
+   }
+  },
+  "cell:0:122:8": {
+   "row": 123,
+   "attributes": {
+    "id": "123",
+    "created_at": "2026-07-07"
+   }
+  },
+  "cell:0:123:8": {
+   "row": 124,
+   "attributes": {
+    "id": "124",
+    "created_at": "2026-07-09",
+    "rating": "10"
+   }
+  },
+  "cell:0:124:8": {
+   "row": 125,
+   "attributes": {
+    "id": "125",
+    "created_at": "2026-07-10",
+    "rating": "1"
+   }
+  },
+  "cell:0:125:8": {
+   "row": 126,
+   "attributes": {
+    "id": "126",
+    "created_at": "2026-07-12"
+   }
+  },
+  "cell:0:126:8": {
+   "row": 127,
+   "attributes": {
+    "id": "127",
+    "created_at": "2026-07-13"
+   }
+  },
+  "cell:0:127:8": {
+   "row": 128,
+   "attributes": {
+    "id": "128",
+    "created_at": "2026-07-14"
+   }
+  },
+  "cell:0:128:8": {
+   "row": 129,
+   "attributes": {
+    "id": "129",
+    "created_at": "2026-07-18",
+    "rating": "9"
+   }
+  },
+  "cell:0:129:8": {
+   "row": 130,
+   "attributes": {
+    "id": "130",
+    "created_at": "2026-07-19"
+   }
+  },
+  "cell:0:130:8": {
+   "row": 131,
+   "attributes": {
+    "id": "131",
+    "created_at": "2026-07-20",
+    "rating": "2"
+   }
+  },
+  "cell:0:131:8": {
+   "row": 132,
+   "attributes": {
+    "id": "132",
+    "created_at": "2026-07-21"
+   }
+  },
+  "cell:0:132:8": {
+   "row": 133,
+   "attributes": {
+    "id": "133",
+    "created_at": "2026-07-24",
+    "rating": "2"
+   }
+  },
+  "cell:0:133:8": {
+   "row": 134,
+   "attributes": {
+    "id": "134",
+    "created_at": "2026-07-26"
+   }
+  },
+  "cell:0:134:8": {
+   "row": 135,
+   "attributes": {
+    "id": "135",
+    "created_at": "2026-07-26"
+   }
+  },
+  "cell:0:135:8": {
+   "row": 136,
+   "attributes": {
+    "id": "136",
+    "created_at": "2026-07-29",
+    "rating": "6"
+   }
+  },
+  "cell:0:136:8": {
+   "row": 137,
+   "attributes": {
+    "id": "137",
+    "created_at": "2026-08-03",
+    "rating": "4"
+   }
+  },
+  "cell:0:137:8": {
+   "row": 138,
+   "attributes": {
+    "id": "138",
+    "created_at": "2026-08-04"
+   }
+  },
+  "cell:0:138:8": {
+   "row": 139,
+   "attributes": {
+    "id": "139",
+    "created_at": "2026-08-06"
+   }
+  },
+  "cell:0:139:8": {
+   "row": 140,
+   "attributes": {
+    "id": "140",
+    "created_at": "2026-08-06",
+    "rating": "3"
+   }
+  },
+  "cell:0:140:8": {
+   "row": 141,
+   "attributes": {
+    "id": "141",
+    "created_at": "2026-08-07"
+   }
+  },
+  "cell:0:141:8": {
+   "row": 142,
+   "attributes": {
+    "id": "142",
+    "created_at": "2026-08-08"
+   }
+  },
+  "cell:0:142:8": {
+   "row": 143,
+   "attributes": {
+    "id": "143",
+    "created_at": "2026-08-12"
+   }
+  },
+  "cell:0:143:8": {
+   "row": 144,
+   "attributes": {
+    "id": "144",
+    "created_at": "2026-08-14"
+   }
+  },
+  "cell:0:144:8": {
+   "row": 145,
+   "attributes": {
+    "id": "145",
+    "created_at": "2026-08-15",
+    "rating": "5"
+   }
+  },
+  "cell:0:145:8": {
+   "row": 146,
+   "attributes": {
+    "id": "146",
+    "created_at": "2026-08-16"
+   }
+  },
+  "cell:0:146:8": {
+   "row": 147,
+   "attributes": {
+    "id": "147",
+    "created_at": "2026-08-16"
+   }
+  },
+  "cell:0:147:8": {
+   "row": 148,
+   "attributes": {
+    "id": "148",
+    "created_at": "2026-08-17",
+    "rating": "2"
+   }
+  },
+  "cell:0:148:8": {
+   "row": 149,
+   "attributes": {
+    "id": "149",
+    "created_at": "2026-08-18"
+   }
+  },
+  "cell:0:149:8": {
+   "row": 150,
+   "attributes": {
+    "id": "150",
+    "created_at": "2026-08-18",
+    "rating": "1"
+   }
+  },
+  "cell:0:150:8": {
+   "row": 151,
+   "attributes": {
+    "id": "151",
+    "created_at": "2026-08-19"
+   }
+  },
+  "cell:0:151:8": {
+   "row": 152,
+   "attributes": {
+    "id": "152",
+    "created_at": "2026-08-22",
+    "rating": "3"
+   }
+  },
+  "cell:0:152:8": {
+   "row": 153,
+   "attributes": {
+    "id": "153",
+    "created_at": "2026-08-22"
+   }
+  },
+  "cell:0:153:8": {
+   "row": 154,
+   "attributes": {
+    "id": "154",
+    "created_at": "2026-08-22",
+    "rating": "8"
+   }
+  },
+  "cell:0:154:8": {
+   "row": 155,
+   "attributes": {
+    "id": "155",
+    "created_at": "2026-08-23",
+    "rating": "3"
+   }
+  },
+  "cell:0:155:8": {
+   "row": 156,
+   "attributes": {
+    "id": "156",
+    "created_at": "2026-08-23",
+    "rating": "5"
+   }
+  },
+  "cell:0:156:8": {
+   "row": 157,
+   "attributes": {
+    "id": "157",
+    "created_at": "2026-08-24"
+   }
+  },
+  "cell:0:157:8": {
+   "row": 158,
+   "attributes": {
+    "id": "158",
+    "created_at": "2026-08-25",
+    "rating": "5"
+   }
+  },
+  "cell:0:158:8": {
+   "row": 159,
+   "attributes": {
+    "id": "159",
+    "created_at": "2026-08-25",
+    "rating": "4"
+   }
+  },
+  "cell:0:159:8": {
+   "row": 160,
+   "attributes": {
+    "id": "160",
+    "created_at": "2026-08-27",
+    "rating": "10"
+   }
+  },
+  "cell:0:160:8": {
+   "row": 161,
+   "attributes": {
+    "id": "161",
+    "created_at": "2026-08-27",
+    "rating": "1"
+   }
+  },
+  "cell:0:161:8": {
+   "row": 162,
+   "attributes": {
+    "id": "162",
+    "created_at": "2026-08-28",
+    "rating": "1"
+   }
+  },
+  "cell:0:162:8": {
+   "row": 163,
+   "attributes": {
+    "id": "163",
+    "created_at": "2026-08-31"
+   }
+  },
+  "cell:0:163:8": {
+   "row": 164,
+   "attributes": {
+    "id": "164",
+    "created_at": "2026-09-02"
+   }
+  },
+  "cell:0:164:8": {
+   "row": 165,
+   "attributes": {
+    "id": "165",
+    "created_at": "2026-09-05"
+   }
+  },
+  "cell:0:165:8": {
+   "row": 166,
+   "attributes": {
+    "id": "166",
+    "created_at": "2026-09-05",
+    "rating": "5"
+   }
+  },
+  "cell:0:166:8": {
+   "row": 167,
+   "attributes": {
+    "id": "167",
+    "created_at": "2026-09-07",
+    "rating": "5"
+   }
+  },
+  "cell:0:167:8": {
+   "row": 168,
+   "attributes": {
+    "id": "168",
+    "created_at": "2026-09-08",
+    "rating": "5"
+   }
+  },
+  "cell:0:168:8": {
+   "row": 169,
+   "attributes": {
+    "id": "169",
+    "created_at": "2026-09-08"
+   }
+  },
+  "cell:0:169:8": {
+   "row": 170,
+   "attributes": {
+    "id": "170",
+    "created_at": "2026-09-09",
+    "rating": "5"
+   }
+  },
+  "cell:0:170:8": {
+   "row": 171,
+   "attributes": {
+    "id": "171",
+    "created_at": "2026-09-10"
+   }
+  },
+  "cell:0:171:8": {
+   "row": 172,
+   "attributes": {
+    "id": "172",
+    "created_at": "2026-09-11"
+   }
+  },
+  "cell:0:172:8": {
+   "row": 173,
+   "attributes": {
+    "id": "173",
+    "created_at": "2026-09-13",
+    "rating": "8"
+   }
+  },
+  "cell:0:173:8": {
+   "row": 174,
+   "attributes": {
+    "id": "174",
+    "created_at": "2026-09-14"
+   }
+  },
+  "cell:0:174:8": {
+   "row": 175,
+   "attributes": {
+    "id": "175",
+    "created_at": "2026-09-16"
+   }
+  },
+  "cell:0:175:8": {
+   "row": 176,
+   "attributes": {
+    "id": "176",
+    "created_at": "2026-09-16",
+    "rating": "3"
+   }
+  },
+  "cell:0:176:8": {
+   "row": 177,
+   "attributes": {
+    "id": "177",
+    "created_at": "2026-09-17"
+   }
+  },
+  "cell:0:177:8": {
+   "row": 178,
+   "attributes": {
+    "id": "178",
+    "created_at": "2026-09-22"
+   }
+  },
+  "cell:0:178:8": {
+   "row": 179,
+   "attributes": {
+    "id": "179",
+    "created_at": "2026-09-24"
+   }
+  },
+  "cell:0:179:8": {
+   "row": 180,
+   "attributes": {
+    "id": "180",
+    "created_at": "2026-09-26",
+    "rating": "5"
+   }
+  },
+  "cell:0:180:8": {
+   "row": 181,
+   "attributes": {
+    "id": "181",
+    "created_at": "2026-09-27",
+    "rating": "2"
+   }
+  },
+  "cell:0:181:8": {
+   "row": 182,
+   "attributes": {
+    "id": "182",
+    "created_at": "2026-09-28",
+    "rating": "5"
+   }
+  },
+  "cell:0:182:8": {
+   "row": 183,
+   "attributes": {
+    "id": "183",
+    "created_at": "2026-10-01"
+   }
+  },
+  "cell:0:183:8": {
+   "row": 184,
+   "attributes": {
+    "id": "184",
+    "created_at": "2026-10-03"
+   }
+  },
+  "cell:0:184:8": {
+   "row": 185,
+   "attributes": {
+    "id": "185",
+    "created_at": "2026-10-08"
+   }
+  },
+  "cell:0:185:8": {
+   "row": 186,
+   "attributes": {
+    "id": "186",
+    "created_at": "2026-10-09",
+    "rating": "0"
+   }
+  },
+  "cell:0:186:8": {
+   "row": 187,
+   "attributes": {
+    "id": "187",
+    "created_at": "2026-10-11"
+   }
+  },
+  "cell:0:187:8": {
+   "row": 188,
+   "attributes": {
+    "id": "188",
+    "created_at": "2026-10-13"
+   }
+  },
+  "cell:0:188:8": {
+   "row": 189,
+   "attributes": {
+    "id": "189",
+    "created_at": "2026-10-15"
+   }
+  },
+  "cell:0:189:8": {
+   "row": 190,
+   "attributes": {
+    "id": "190",
+    "created_at": "2026-10-15",
+    "rating": "1"
+   }
+  },
+  "cell:0:190:8": {
+   "row": 191,
+   "attributes": {
+    "id": "191",
+    "created_at": "2026-10-17"
+   }
+  },
+  "cell:0:191:8": {
+   "row": 192,
+   "attributes": {
+    "id": "192",
+    "created_at": "2026-10-17"
+   }
+  },
+  "cell:0:192:8": {
+   "row": 193,
+   "attributes": {
+    "id": "193",
+    "created_at": "2026-10-20"
+   }
+  },
+  "cell:0:193:8": {
+   "row": 194,
+   "attributes": {
+    "id": "194",
+    "created_at": "2026-10-23"
+   }
+  },
+  "cell:0:194:8": {
+   "row": 195,
+   "attributes": {
+    "id": "195",
+    "created_at": "2026-10-23"
+   }
+  },
+  "cell:0:195:8": {
+   "row": 196,
+   "attributes": {
+    "id": "196",
+    "created_at": "2026-10-24",
+    "rating": "2"
+   }
+  },
+  "cell:0:196:8": {
+   "row": 197,
+   "attributes": {
+    "id": "197",
+    "created_at": "2026-10-25"
+   }
+  },
+  "cell:0:197:8": {
+   "row": 198,
+   "attributes": {
+    "id": "198",
+    "created_at": "2026-10-25",
+    "rating": "5"
+   }
+  },
+  "cell:0:198:8": {
+   "row": 199,
+   "attributes": {
+    "id": "199",
+    "created_at": "2026-10-30"
+   }
+  },
+  "cell:0:199:8": {
+   "row": 200,
+   "attributes": {
+    "id": "200",
+    "created_at": "2026-10-30"
+   }
+  }
+ },
+ "tagging": [
+  {
+   "asked": "{\"texts\":[{\"id\":\"t1\",\"text\":\"Hi, I'm [NAME_1] and I accidentally created two accounts. Can you merge them? My email is [EMAIL_1].\"},{\"id\":\"t2\",\"text\":\"Billing address changed to [ADDRESS_1], [PLACE_1] [POSTCODE_1] but old invoices still show the previous one.\"},{\"id\":\"t3\",\"text\":\"Versicherungsnummer [SVNR_1], bitte im Personalstamm hinterlegen.\"},{\"id\":\"t4\",\"text\":\"Ticket #20437: Die Synchronisierung mit dem Bankkonto bricht nach 90 Tagen ab und ich muss mich neu anmelden.\"},{\"id\":\"t5\",\"text\":\"Contact: [NAME_2]-Stone, [EMAIL_2], [PHONE_1]. Please get back to us this week or we'll cancel.\"},{\"id\":\"t6\",\"text\":\"Abbuchung bitte künftig von der Karte [CARD_1] statt per Überweisung.\"},{\"id\":\"t7\",\"text\":\"Good value. Reports could use more filters though, like by project and month.\"},{\"id\":\"t8\",\"text\":\"Kontakt: [NAME_3], [EMAIL_3], [PHONE_2]. Bitte bis Ende der Woche melden, sonst kündigen wir.\"},{\"id\":\"t9\",\"text\":\"Clicking \\\"Send\\\" does nothing. The console shows an error; my IP at the time was [IP_1].\"},{\"id\":\"t10\",\"text\":\"I'd love to pull hours straight from my calendar instead of typing everything twice.\"},{\"id\":\"t11\",\"text\":\"Lieferadresse: [ADDRESS_2], [POSTCODE_2] [PLACE_2]. Bitte die Belege dorthin schicken, nicht ins Büro. Danke, [NAME_4]\"},{\"id\":\"t12\",\"text\":\"Ich würde gern Stunden direkt aus dem Kalender übernehmen, statt alles doppelt einzutragen.\"},{\"id\":\"t13\",\"text\":\"Wir sind ein Team von acht Leuten und die Rechteverwaltung reicht nicht. Jeder sieht alle Kundendaten.\"},{\"id\":\"t14\",\"text\":\"Ich vermisse eine Englisch-Version der Rechnungsvorlage für internationale Kunden.\\nDas ist für uns ein Grund zu wechseln.\"},{\"id\":\"t15\",\"text\":\"Für die Steuerberatung brauche ich unsere UID [VAT_1] auf jeder Rechnung, das Feld wird aber nicht gedruckt.\"},{\"id\":\"t16\",\"text\":\"Rechnungsadresse geändert auf [ADDRESS_3], [POSTCODE_3] [PLACE_3], die alte Adresse erscheint aber weiter auf den PDFs.\"},{\"id\":\"t17\",\"text\":\"Please charge [CARD_2] from next month instead of invoicing us.\"},{\"id\":\"t18\",\"text\":\"Versicherungsnummer [SVNR_2], bitte im Personalstamm hinterlegen.\"},{\"id\":\"t19\",\"text\":\"Mein Mann [NAME_5] (geboren am [DATE_OF_BIRTH_1]) soll als Mitarbeiter angelegt werden, die Personalnummer ist seine SV-Nummer [SVNR_3].\"},{\"id\":\"t20\",\"text\":\"Exportiert man den Monatsbericht als Excel, fehlen die Fahrtkosten. In der Ansicht sind sie da.\"},{\"id\":\"t21\",\"text\":\"Missing an English invoice template for international customers.\\nHonestly this is the main reason we are looking at alternatives.\"},{\"id\":\"t22\",\"text\":\"Abbuchung bitte künftig von der Karte [CARD_3] statt per Überweisung.\"},{\"id\":\"t23\",\"text\":\"Since yesterday I can't log in, the two-factor SMS never arrives. My number is [PHONE_3].\"},{\"id\":\"t24\",\"text\":\"Ich vermisse eine Englisch-Version der Rechnungsvorlage für internationale Kunden.\\nDas ist für uns ein Grund zu wechseln.\"},{\"id\":\"t25\",\"text\":\"Für den Kreditantrag: [NAME_6], geb. [DATE_OF_BIRTH_2], [ADDRESS_4], [POSTCODE_4] [PLACE_4].\"}]}",
+   "answer": "{\"stop_reason\":\"end_turn\",\"content\":[{\"type\":\"text\",\"text\":\"{\\\"texts\\\":[{\\\"id\\\":\\\"t1\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get into my account\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Hi, I'm [NAME_1] and I accidentally\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Cannot get into the account\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Hi, I'm [NAME_1] and I accidentally\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t2\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Billing address changed to [ADDRESS_1], [PLACE_1]\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Billing address changed to [ADDRESS_1], [PLACE_1]\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t3\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t4\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get into my account\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Ticket #20437: Die Synchronisierung mit dem\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Cannot get into the account\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Ticket #20437: Die Synchronisierung mit dem\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t5\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t6\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Abbuchung bitte künftig von der Karte\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Abbuchung bitte künftig von der Karte\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t7\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Export data for accounting\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Good value. Reports could use more\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Exports are slow or incomplete\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Good value. Reports could use more\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"A tool that just works\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Good value. Reports could use more\\\"}],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t8\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t9\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t10\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get work done quickly\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I'd love to pull hours straight\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"A tool that just works\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I'd love to pull hours straight\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t11\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get work done quickly\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Lieferadresse: [ADDRESS_2], [POSTCODE_2] [PLACE_2]. Bitte die\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"A tool that just works\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Lieferadresse: [ADDRESS_2], [POSTCODE_2] [PLACE_2]. Bitte die\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t12\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t13\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t14\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Ich vermisse eine Englisch-Version der Rechnungsvorlage\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Ich vermisse eine Englisch-Version der Rechnungsvorlage\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t15\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Für die Steuerberatung brauche ich unsere\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Für die Steuerberatung brauche ich unsere\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t16\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Rechnungsadresse geändert auf [ADDRESS_3], [POSTCODE_3] [PLACE_3],\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Rechnungsadresse geändert auf [ADDRESS_3], [POSTCODE_3] [PLACE_3],\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t17\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t18\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t19\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t20\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Export data for accounting\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Exportiert man den Monatsbericht als Excel,\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Exports are slow or incomplete\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Exportiert man den Monatsbericht als Excel,\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t21\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Missing an English invoice template for\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Missing an English invoice template for\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t22\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Abbuchung bitte künftig von der Karte\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Abbuchung bitte künftig von der Karte\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t23\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get into my account\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Since yesterday I can't log in,\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Cannot get into the account\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Since yesterday I can't log in,\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t24\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Ich vermisse eine Englisch-Version der Rechnungsvorlage\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Ich vermisse eine Englisch-Version der Rechnungsvorlage\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t25\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"}]}\"}],\"usage\":{\"input_tokens\":0,\"output_tokens\":0}}"
+  },
+  {
+   "asked": "{\"texts\":[{\"id\":\"t26\",\"text\":\"Missing an English invoice template for international customers.\\nHonestly this is the main reason we are looking at alternatives.\"},{\"id\":\"t27\",\"text\":\"Funktioniert, aber die Ladezeiten im Dashboard sind morgens unerträglich langsam.\"},{\"id\":\"t28\",\"text\":\"Exporting invoices to PDF got really slow after the 8.10.6 update. Forty invoices take almost two minutes.\"},{\"id\":\"t29\",\"text\":\"Exportiert man den Monatsbericht als Excel, fehlen die Fahrtkosten. In der Ansicht sind sie da.\"},{\"id\":\"t30\",\"text\":\"Exportiert man den Monatsbericht als Excel, fehlen die Fahrtkosten. In der Ansicht sind sie da.\"},{\"id\":\"t31\",\"text\":\"Dashboard takes forever to load in the morning, sometimes 20 seconds.\"},{\"id\":\"t32\",\"text\":\"Der PDF-Export der Rechnungen dauert seit dem Update auf 7.0.3 ewig. Bei 40 Rechnungen warte ich fast zwei Minuten.\"},{\"id\":\"t33\",\"text\":\"Mein Mann [NAME_7] (geb. [DATE_OF_BIRTH_3]) soll als Mitarbeiter angelegt werden, die Personalnummer ist seine SV-Nummer [SVNR_4].\"},{\"id\":\"t34\",\"text\":\"Super Tool, spart mir jeden Monat einen halben Tag Buchhaltung. Danke!\"},{\"id\":\"t35\",\"text\":\"Für die Steuerberatung brauche ich unsere UID [VAT_2] auf jeder Rechnung, das Feld wird aber nicht gedruckt.\"},{\"id\":\"t36\",\"text\":\"I'm an accountant with twelve clients. Switching between them without logging out would save me so much time.\"},{\"id\":\"t37\",\"text\":\"Mein Account läuft auf [EMAIL_4], die Rechnungen sollen aber an die Buchhaltung gehen.\"},{\"id\":\"t38\",\"text\":\"The card field rejects 5105 1051 0510 5101, is that a bug or did I mistype?\"},{\"id\":\"t39\",\"text\":\"Super Tool, spart mir jeden Monat einen halben Tag Buchhaltung. Danke!\"},{\"id\":\"t40\",\"text\":\"Reminder emails end up in my clients' spam folders. Could you check the sender setup?\"},{\"id\":\"t41\",\"text\":\"Solid product, but invoice numbers should be able to restart each year.\"},{\"id\":\"t42\",\"text\":\"Seit gestern kann ich mich nicht mehr einloggen, die Zwei-Faktor-SMS kommt nicht an. Meine Nummer: [PHONE_4]\"},{\"id\":\"t43\",\"text\":\"Mahnungen automatisch verschicken wäre ein Traum. Momentan mache ich das jeden Freitag händisch.\"},{\"id\":\"t44\",\"text\":\"Dashboard takes forever to load in the morning, sometimes 20 seconds.\"},{\"id\":\"t45\",\"text\":\"Fehler beim Import der CSV: Umlaute werden zu Fragezeichen. Das betrifft alle Kunden mit ä, ö, ü.\"},{\"id\":\"t46\",\"text\":\"Die App stürzt auf dem iPad ab, sobald ich ein Foto vom Beleg anhängen will. Version 2.10.3.70.\"},{\"id\":\"t47\",\"text\":\"Mahnungen automatisch verschicken wäre ein Traum. Momentan mache ich das jeden Freitag händisch.\"},{\"id\":\"t48\",\"text\":\"Preis-Leistung passt. Einzig die Berichte könnten mehr Filter haben, z. B. nach Projekt und Monat.\"},{\"id\":\"t49\",\"text\":\"We're a team of eight and the permissions are too coarse. Everyone can see every client.\"},{\"id\":\"t50\",\"text\":\"Warum kostet der Team-Tarif plötzlich € 2 298,00 mehr? Darüber wurden wir nicht informiert.\"}]}",
+   "answer": "{\"stop_reason\":\"end_turn\",\"content\":[{\"type\":\"text\",\"text\":\"{\\\"texts\\\":[{\\\"id\\\":\\\"t26\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Missing an English invoice template for\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Missing an English invoice template for\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t27\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t28\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Exporting invoices to PDF got really\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Exporting invoices to PDF got really\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t29\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Export data for accounting\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Exportiert man den Monatsbericht als Excel,\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Exports are slow or incomplete\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Exportiert man den Monatsbericht als Excel,\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t30\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Export data for accounting\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Exportiert man den Monatsbericht als Excel,\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Exports are slow or incomplete\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Exportiert man den Monatsbericht als Excel,\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t31\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t32\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Der PDF-Export der Rechnungen dauert seit\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Der PDF-Export der Rechnungen dauert seit\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t33\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t34\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get work done quickly\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Super Tool, spart mir jeden Monat\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"A tool that just works\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Super Tool, spart mir jeden Monat\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t35\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Für die Steuerberatung brauche ich unsere\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Für die Steuerberatung brauche ich unsere\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t36\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get into my account\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I'm an accountant with twelve clients.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Cannot get into the account\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"I'm an accountant with twelve clients.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t37\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Mein Account läuft auf [EMAIL_4], die\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Mein Account läuft auf [EMAIL_4], die\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t38\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t39\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get work done quickly\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Super Tool, spart mir jeden Monat\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"A tool that just works\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Super Tool, spart mir jeden Monat\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t40\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t41\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Solid product, but invoice numbers should\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Solid product, but invoice numbers should\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t42\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t43\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t44\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t45\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Export data for accounting\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Fehler beim Import der CSV: Umlaute\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Exports are slow or incomplete\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Fehler beim Import der CSV: Umlaute\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t46\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t47\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t48\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t49\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t50\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"}]}\"}],\"usage\":{\"input_tokens\":0,\"output_tokens\":0}}"
+  },
+  {
+   "asked": "{\"texts\":[{\"id\":\"t51\",\"text\":\"Die Bankverbindung auf der Rechnung ist falsch. Richtig wäre [IBAN_1], bitte korrigieren.\"},{\"id\":\"t52\",\"text\":\"Please send the receipts to [ADDRESS_5], Bristol [POSTCODE_1], not the office. Thanks, [NAME_8]\"},{\"id\":\"t53\",\"text\":\"Great tool, saves me half a day of bookkeeping every month.\"},{\"id\":\"t54\",\"text\":\"Abbuchung bitte künftig von der Karte [CARD_4] statt per Überweisung.\"},{\"id\":\"t55\",\"text\":\"Mahnungen automatisch verschicken wäre ein Traum. Momentan mache ich das jeden Freitag händisch.\"},{\"id\":\"t56\",\"text\":\"Ich habe meine Kreditkarte [CARD_4] hinterlegt, trotzdem steht im Konto „Zahlung fehlgeschlagen“.\"},{\"id\":\"t57\",\"text\":\"Please send the receipts to [ADDRESS_6], Bristol [POSTCODE_1], not the office. Thanks, [NAME_9]\"},{\"id\":\"t58\",\"text\":\"Exporting invoices to PDF got really slow after the 3.5.3 update. Forty invoices take almost two minutes.\"},{\"id\":\"t59\",\"text\":\"Kontakt: [NAME_10], [EMAIL_5], [PHONE_5]. Bitte bis Ende der Woche melden, sonst kündigen wir.\"},{\"id\":\"t60\",\"text\":\"Die Bankverbindung auf der Rechnung ist falsch. Richtig wäre [IBAN_2], bitte korrigieren.\"},{\"id\":\"t61\",\"text\":\"Lieferadresse: [ADDRESS_7], [POSTCODE_5] [PLACE_5]. Bitte die Belege dorthin schicken, nicht ins Büro. Danke, [NAME_11]\"},{\"id\":\"t62\",\"text\":\"Please send the receipts to [ADDRESS_8], Manchester [POSTCODE_6], not the office. Thanks, [NAME_12]\"},{\"id\":\"t63\",\"text\":\"CSV import breaks accented characters: é and ë turn into question marks. Affects about a third of our clients.\"},{\"id\":\"t64\",\"text\":\"Hallo, ich bin [NAME_13] und habe zwei Konten angelegt. Können Sie die zusammenführen? Meine E-Mail ist [EMAIL_6].\"},{\"id\":\"t65\",\"text\":\"Good value. Reports could use more filters though, like by project and month.\"},{\"id\":\"t66\",\"text\":\"Order B-06159576 was charged twice (€1,299.00). I'd like a refund please.\"},{\"id\":\"t67\",\"text\":\"For the Austrian branch, use UID [VAT_3] on all invoices please.\"},{\"id\":\"t68\",\"text\":\"Reminder emails end up in my clients' spam folders. Could you check the sender setup?\"},{\"id\":\"t69\",\"text\":\"Unsere neue UID lautet [VAT_4], die alte bitte löschen.\"},{\"id\":\"t70\",\"text\":\"Please call me back on [PHONE_6], it's about the invoice from 9 June 2026.\"},{\"id\":\"t71\",\"text\":\"We're a team of eight and the permissions are too coarse. Everyone can see every client.\"},{\"id\":\"t72\",\"text\":\"Exportiert man den Monatsbericht als Excel, fehlen die Fahrtkosten. In der Ansicht sind sie da.\"},{\"id\":\"t73\",\"text\":\"Billing address changed to [ADDRESS_9], [PLACE_6] [POSTCODE_7] but old invoices still show the previous one.\"},{\"id\":\"t74\",\"text\":\"Mein Mann [NAME_14] (Geburtsdatum: [DATE_OF_BIRTH_4]) soll als Mitarbeiter angelegt werden, die Personalnummer ist seine SV-Nummer [SVNR_5].\"},{\"id\":\"t75\",\"text\":\"Missing an English invoice template for international customers.\\nHonestly this is the main reason we are looking at alternatives.\"}]}",
+   "answer": "{\"stop_reason\":\"end_turn\",\"content\":[{\"type\":\"text\",\"text\":\"{\\\"texts\\\":[{\\\"id\\\":\\\"t51\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Die Bankverbindung auf der Rechnung ist\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Die Bankverbindung auf der Rechnung ist\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t52\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get work done quickly\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Please send the receipts to [ADDRESS_5],\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"A tool that just works\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Please send the receipts to [ADDRESS_5],\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t53\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get work done quickly\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Great tool, saves me half a\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"A tool that just works\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Great tool, saves me half a\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t54\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Abbuchung bitte künftig von der Karte\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Abbuchung bitte künftig von der Karte\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t55\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t56\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get into my account\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Ich habe meine Kreditkarte [CARD_4] hinterlegt,\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Cannot get into the account\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Ich habe meine Kreditkarte [CARD_4] hinterlegt,\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t57\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get work done quickly\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Please send the receipts to [ADDRESS_6],\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"A tool that just works\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Please send the receipts to [ADDRESS_6],\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t58\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Exporting invoices to PDF got really\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Exporting invoices to PDF got really\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t59\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t60\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Die Bankverbindung auf der Rechnung ist\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Die Bankverbindung auf der Rechnung ist\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t61\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get work done quickly\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Lieferadresse: [ADDRESS_7], [POSTCODE_5] [PLACE_5]. Bitte die\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"A tool that just works\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Lieferadresse: [ADDRESS_7], [POSTCODE_5] [PLACE_5]. Bitte die\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t62\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get work done quickly\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Please send the receipts to [ADDRESS_8],\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"A tool that just works\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Please send the receipts to [ADDRESS_8],\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t63\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Export data for accounting\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"CSV import breaks accented characters: é\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Exports are slow or incomplete\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"CSV import breaks accented characters: é\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t64\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t65\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Export data for accounting\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Good value. Reports could use more\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Exports are slow or incomplete\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Good value. Reports could use more\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"A tool that just works\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Good value. Reports could use more\\\"}],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t66\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t67\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"For the Austrian branch, use UID\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"For the Austrian branch, use UID\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t68\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t69\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t70\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Please call me back on [PHONE_6],\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Please call me back on [PHONE_6],\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t71\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t72\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Export data for accounting\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Exportiert man den Monatsbericht als Excel,\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Exports are slow or incomplete\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Exportiert man den Monatsbericht als Excel,\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t73\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Billing address changed to [ADDRESS_9], [PLACE_6]\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Billing address changed to [ADDRESS_9], [PLACE_6]\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t74\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t75\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Missing an English invoice template for\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Missing an English invoice template for\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"}]}\"}],\"usage\":{\"input_tokens\":0,\"output_tokens\":0}}"
+  },
+  {
+   "asked": "{\"texts\":[{\"id\":\"t76\",\"text\":\"Bitte rufen Sie mich unter [PHONE_7] zurück, es geht um die Rechnung vom 27.07.2026.\"},{\"id\":\"t77\",\"text\":\"Die Bankverbindung auf der Rechnung ist falsch. Richtig wäre [IBAN_3], bitte korrigieren.\"},{\"id\":\"t78\",\"text\":\"Der PDF-Export der Rechnungen dauert seit dem Update auf 6.15.7 ewig. Bei 40 Rechnungen warte ich fast zwei Minuten.\"},{\"id\":\"t79\",\"text\":\"The card field rejects 5555 5555 5555 4445, is that a bug or did I mistype?\"},{\"id\":\"t80\",\"text\":\"Billing address changed to [ADDRESS_10], [PLACE_1] [POSTCODE_1] but old invoices still show the previous one.\"},{\"id\":\"t81\",\"text\":\"Missing an English invoice template for international customers.\\nHonestly this is the main reason we are looking at alternatives.\"},{\"id\":\"t82\",\"text\":\"I'm an accountant with twelve clients. Switching between them without logging out would save me so much time.\"},{\"id\":\"t83\",\"text\":\"Since yesterday I can't log in, the two-factor SMS never arrives. My number is [PHONE_8].\"},{\"id\":\"t84\",\"text\":\"Automatic payment reminders would be amazing. Right now I chase late payers by hand every Friday.\"},{\"id\":\"t85\",\"text\":\"Clicking \\\"Send\\\" does nothing. The console shows an error; my IP at the time was [IP_2].\"},{\"id\":\"t86\",\"text\":\"Fehler beim Import der CSV: Umlaute werden zu Fragezeichen. Das betrifft alle Kunden mit ä, ö, ü.\"},{\"id\":\"t87\",\"text\":\"Preis-Leistung passt. Einzig die Berichte könnten mehr Filter haben, z. B. nach Projekt und Monat.\"},{\"id\":\"t88\",\"text\":\"I added my card [CARD_4] but the account still says \\\"payment failed\\\".\"},{\"id\":\"t89\",\"text\":\"Überweisung von [IBAN_4] ist laut Bank raus, im System steht die Rechnung aber noch offen.\"},{\"id\":\"t90\",\"text\":\"Seit gestern kann ich mich nicht mehr einloggen, die Zwei-Faktor-SMS kommt nicht an. Meine Nummer: [PHONE_9]\"},{\"id\":\"t91\",\"text\":\"Login-Versuche von [IP_3] und [IP_4] waren nicht von mir!\"},{\"id\":\"t92\",\"text\":\"Exportiert man den Monatsbericht als Excel, fehlen die Fahrtkosten. In der Ansicht sind sie da.\"},{\"id\":\"t93\",\"text\":\"Order 20 776 0696 was charged twice (€863.00). I'd like a refund please.\"},{\"id\":\"t94\",\"text\":\"Why did the Team plan go up by €952.50? Nobody told us.\"},{\"id\":\"t95\",\"text\":\"Our Austrian employee's social insurance number is [SVNR_6], where do I enter it?\"},{\"id\":\"t96\",\"text\":\"The time tracker on mobile sometimes resets to zero when the app goes to the background.\"},{\"id\":\"t97\",\"text\":\"The new interface is cleaner but the font in the invoice preview is far too small.\"},{\"id\":\"t98\",\"text\":\"Exportiert man den Monatsbericht als Excel, fehlen die Fahrtkosten. In der Ansicht sind sie da.\"},{\"id\":\"t99\",\"text\":\"Great tool, saves me half a day of bookkeeping every month.\"},{\"id\":\"t100\",\"text\":\"Bestellung B-18244223 wurde doppelt abgebucht (€ 1 058,99). Ich möchte eine Gutschrift.\"}]}",
+   "answer": "{\"stop_reason\":\"end_turn\",\"content\":[{\"type\":\"text\",\"text\":\"{\\\"texts\\\":[{\\\"id\\\":\\\"t76\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Bitte rufen Sie mich unter [PHONE_7]\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Bitte rufen Sie mich unter [PHONE_7]\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t77\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Die Bankverbindung auf der Rechnung ist\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Die Bankverbindung auf der Rechnung ist\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t78\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Der PDF-Export der Rechnungen dauert seit\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Der PDF-Export der Rechnungen dauert seit\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t79\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t80\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Billing address changed to [ADDRESS_10], [PLACE_1]\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Billing address changed to [ADDRESS_10], [PLACE_1]\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t81\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Missing an English invoice template for\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Missing an English invoice template for\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t82\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get into my account\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I'm an accountant with twelve clients.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Cannot get into the account\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"I'm an accountant with twelve clients.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t83\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get into my account\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Since yesterday I can't log in,\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Cannot get into the account\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Since yesterday I can't log in,\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t84\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t85\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t86\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Export data for accounting\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Fehler beim Import der CSV: Umlaute\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Exports are slow or incomplete\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Fehler beim Import der CSV: Umlaute\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t87\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t88\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get into my account\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I added my card [CARD_4] but\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Cannot get into the account\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"I added my card [CARD_4] but\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t89\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Überweisung von [IBAN_4] ist laut Bank\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Überweisung von [IBAN_4] ist laut Bank\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t90\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t91\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get into my account\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Login-Versuche von [IP_3] und [IP_4] waren\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Cannot get into the account\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Login-Versuche von [IP_3] und [IP_4] waren\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t92\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Export data for accounting\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Exportiert man den Monatsbericht als Excel,\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Exports are slow or incomplete\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Exportiert man den Monatsbericht als Excel,\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t93\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t94\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t95\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t96\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t97\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"The new interface is cleaner but\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"The new interface is cleaner but\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t98\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Export data for accounting\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Exportiert man den Monatsbericht als Excel,\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Exports are slow or incomplete\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Exportiert man den Monatsbericht als Excel,\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t99\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get work done quickly\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Great tool, saves me half a\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"A tool that just works\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Great tool, saves me half a\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t100\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"}]}\"}],\"usage\":{\"input_tokens\":0,\"output_tokens\":0}}"
+  },
+  {
+   "asked": "{\"texts\":[{\"id\":\"t101\",\"text\":\"Mein Mann [NAME_15] (geboren am [DATE_OF_BIRTH_5]) soll als Mitarbeiter angelegt werden, die Personalnummer ist seine SV-Nummer [SVNR_7].\"},{\"id\":\"t102\",\"text\":\"Für die Anmeldung bei der Krankenkasse brauche ich meine SV-Nummer [SVNR_8] auf dem Lohnzettel.\"},{\"id\":\"t103\",\"text\":\"Rechnungsadresse geändert auf [ADDRESS_11], [POSTCODE_4] [PLACE_4], die alte Adresse erscheint aber weiter auf den PDFs.\"},{\"id\":\"t104\",\"text\":\"Überweisung von [IBAN_5] ist laut Bank raus, im System steht die Rechnung aber noch offen.\"},{\"id\":\"t105\",\"text\":\"Warum kostet der Team-Tarif plötzlich € 1 379,00 mehr? Darüber wurden wir nicht informiert.\"},{\"id\":\"t106\",\"text\":\"Den Link [LINK_1] hat mir der Support geschickt, er führt aber nur auf eine leere Seite.\"},{\"id\":\"t107\",\"text\":\"Die Zeiterfassung auf dem Handy springt manchmal auf 0 zurück, wenn ich die App im Hintergrund habe.\"},{\"id\":\"t108\",\"text\":\"Two logins from [IP_5] were not me, please lock the account.\"},{\"id\":\"t109\",\"text\":\"Contact: [NAME_16], [EMAIL_7], [PHONE_10]. Please get back to us this week or we'll cancel.\"},{\"id\":\"t110\",\"text\":\"Wir sind ein Team von acht Leuten und die Rechteverwaltung reicht nicht. Jeder sieht alle Kundendaten.\"},{\"id\":\"t111\",\"text\":\"Unsere neue UID lautet [VAT_5], die alte bitte löschen.\"},{\"id\":\"t112\",\"text\":\"Ich habe meine Kreditkarte [CARD_4] hinterlegt, trotzdem steht im Konto „Zahlung fehlgeschlagen“.\"},{\"id\":\"t113\",\"text\":\"Ticket #97629: the bank feed disconnects every 90 days and I have to sign in again.\"},{\"id\":\"t114\",\"text\":\"Funktioniert, aber die Ladezeiten im Dashboard sind morgens unerträglich langsam.\"},{\"id\":\"t115\",\"text\":\"Kontakt: [NAME_7], [EMAIL_8], [PHONE_11]. Bitte bis Ende der Woche melden, sonst kündigen wir.\"},{\"id\":\"t116\",\"text\":\"Abbuchung bitte künftig von der Karte [CARD_3] statt per Überweisung.\"},{\"id\":\"t117\",\"text\":\"Mein Account läuft auf [EMAIL_9], die Rechnungen sollen aber an die Buchhaltung gehen.\"},{\"id\":\"t118\",\"text\":\"Missing an English invoice template for international customers.\\nHonestly this is the main reason we are looking at alternatives.\"},{\"id\":\"t119\",\"text\":\"Wenn ich auf „Senden“ klicke, passiert nichts. Browser-Log zeigt einen Fehler, meine IP war [IP_6].\"},{\"id\":\"t120\",\"text\":\"Bestellung B-51219847 wurde doppelt abgebucht (€ 779,50). Ich möchte eine Gutschrift.\"},{\"id\":\"t121\",\"text\":\"Abbuchung bitte künftig von der Karte [CARD_2] statt per Überweisung.\"},{\"id\":\"t122\",\"text\":\"CSV import breaks accented characters: é and ë turn into question marks. Affects about a third of our clients.\"},{\"id\":\"t123\",\"text\":\"Für die Steuerberatung brauche ich unsere UID [VAT_6] auf jeder Rechnung, das Feld wird aber nicht gedruckt.\"},{\"id\":\"t124\",\"text\":\"Für die Anmeldung bei der Krankenkasse brauche ich meine SV-Nummer [SVNR_9] auf dem Lohnzettel.\"},{\"id\":\"t125\",\"text\":\"Refund went to [IBAN_6] according to your email but nothing has arrived yet.\"}]}",
+   "answer": "{\"stop_reason\":\"end_turn\",\"content\":[{\"type\":\"text\",\"text\":\"{\\\"texts\\\":[{\\\"id\\\":\\\"t101\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t102\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get into my account\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Für die Anmeldung bei der Krankenkasse\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Cannot get into the account\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Für die Anmeldung bei der Krankenkasse\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t103\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Rechnungsadresse geändert auf [ADDRESS_11], [POSTCODE_4] [PLACE_4],\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Rechnungsadresse geändert auf [ADDRESS_11], [POSTCODE_4] [PLACE_4],\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t104\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Überweisung von [IBAN_5] ist laut Bank\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Überweisung von [IBAN_5] ist laut Bank\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t105\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t106\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t107\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t108\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get into my account\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Two logins from [IP_5] were not\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Cannot get into the account\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Two logins from [IP_5] were not\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t109\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t110\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t111\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t112\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get into my account\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Ich habe meine Kreditkarte [CARD_4] hinterlegt,\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Cannot get into the account\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Ich habe meine Kreditkarte [CARD_4] hinterlegt,\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t113\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t114\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t115\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t116\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Abbuchung bitte künftig von der Karte\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Abbuchung bitte künftig von der Karte\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t117\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Mein Account läuft auf [EMAIL_9], die\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Mein Account läuft auf [EMAIL_9], die\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t118\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Missing an English invoice template for\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Missing an English invoice template for\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t119\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t120\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t121\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Abbuchung bitte künftig von der Karte\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Abbuchung bitte künftig von der Karte\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t122\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Export data for accounting\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"CSV import breaks accented characters: é\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Exports are slow or incomplete\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"CSV import breaks accented characters: é\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t123\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Für die Steuerberatung brauche ich unsere\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Für die Steuerberatung brauche ich unsere\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t124\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get into my account\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Für die Anmeldung bei der Krankenkasse\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Cannot get into the account\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Für die Anmeldung bei der Krankenkasse\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t125\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"}]}\"}],\"usage\":{\"input_tokens\":0,\"output_tokens\":0}}"
+  },
+  {
+   "asked": "{\"texts\":[{\"id\":\"t126\",\"text\":\"Überweisung von [IBAN_7] ist laut Bank raus, im System steht die Rechnung aber noch offen.\"},{\"id\":\"t127\",\"text\":\"Die App stürzt auf dem iPad ab, sobald ich ein Foto vom Beleg anhängen will. Version 2.4.1.\"},{\"id\":\"t128\",\"text\":\"Two logins from [IP_7] were not me, please lock the account.\"},{\"id\":\"t129\",\"text\":\"Im Exportlink [LINK_2] steht meine Kundennummer drin, ist das sicher?\"},{\"id\":\"t130\",\"text\":\"Two logins from [IP_8] were not me, please lock the account.\"},{\"id\":\"t131\",\"text\":\"Für die Steuerberatung brauche ich unsere UID [VAT_7] auf jeder Rechnung, das Feld wird aber nicht gedruckt.\"},{\"id\":\"t132\",\"text\":\"The new interface is cleaner but the font in the invoice preview is far too small.\"},{\"id\":\"t133\",\"text\":\"Automatic payment reminders would be amazing. Right now I chase late payers by hand every Friday.\"},{\"id\":\"t134\",\"text\":\"Die neue Oberfläche ist übersichtlicher, aber die Schrift im Rechnungsentwurf ist viel zu klein.\"},{\"id\":\"t135\",\"text\":\"Reminder emails end up in my clients' spam folders. Could you check the sender setup?\"},{\"id\":\"t136\",\"text\":\"CSV import breaks accented characters: é and ë turn into question marks. Affects about a third of our clients.\"},{\"id\":\"t137\",\"text\":\"Please send the receipts to [ADDRESS_12], Bristol [POSTCODE_1], not the office. Thanks, [NAME_17]\"},{\"id\":\"t138\",\"text\":\"I'm an accountant with twelve clients. Switching between them without logging out would save me so much time.\"},{\"id\":\"t139\",\"text\":\"I can't find where to change the payment terms. The default is 14 days but we need 30.\"},{\"id\":\"t140\",\"text\":\"Kontakt: [NAME_18], [EMAIL_10], [PHONE_12]. Bitte bis Ende der Woche melden, sonst kündigen wir.\"},{\"id\":\"t141\",\"text\":\"Ich würde gern Stunden direkt aus dem Kalender übernehmen, statt alles doppelt einzutragen.\"},{\"id\":\"t142\",\"text\":\"Sehr freundlicher Support, [NAME_19] hat mir am Telefon super geholfen!\"},{\"id\":\"t143\",\"text\":\"Kontakt: [NAME_20], [EMAIL_11], [PHONE_13]. Bitte bis Ende der Woche melden, sonst kündigen wir.\"},{\"id\":\"t144\",\"text\":\"Ich habe meine Kreditkarte [CARD_1] hinterlegt, trotzdem steht im Konto „Zahlung fehlgeschlagen“.\"},{\"id\":\"t145\",\"text\":\"Hi, I'm [NAME_21] and I accidentally created two accounts. Can you merge them? My email is [EMAIL_12].\"},{\"id\":\"t146\",\"text\":\"Contact: [NAME_21], [EMAIL_13], [PHONE_14]. Please get back to us this week or we'll cancel.\"},{\"id\":\"t147\",\"text\":\"Refund went to [IBAN_8] according to your email but nothing has arrived yet.\"},{\"id\":\"t148\",\"text\":\"Solid product, but invoice numbers should be able to restart each year.\"},{\"id\":\"t149\",\"text\":\"Bestellung 35 560 0351 wurde doppelt abgebucht (€ 2 482,00). Ich möchte eine Gutschrift.\"},{\"id\":\"t150\",\"text\":\"Gutes Produkt, aber die Rechnungsnummern sollten fortlaufend pro Jahr beginnen dürfen.\"}]}",
+   "answer": "{\"stop_reason\":\"end_turn\",\"content\":[{\"type\":\"text\",\"text\":\"{\\\"texts\\\":[{\\\"id\\\":\\\"t126\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Überweisung von [IBAN_7] ist laut Bank\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Überweisung von [IBAN_7] ist laut Bank\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t127\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t128\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get into my account\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Two logins from [IP_7] were not\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Cannot get into the account\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Two logins from [IP_7] were not\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t129\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Export data for accounting\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Im Exportlink [LINK_2] steht meine Kundennummer\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Exports are slow or incomplete\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Im Exportlink [LINK_2] steht meine Kundennummer\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t130\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get into my account\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Two logins from [IP_8] were not\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Cannot get into the account\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Two logins from [IP_8] were not\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t131\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Für die Steuerberatung brauche ich unsere\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Für die Steuerberatung brauche ich unsere\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t132\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"The new interface is cleaner but\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"The new interface is cleaner but\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t133\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t134\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Die neue Oberfläche ist übersichtlicher, aber\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Die neue Oberfläche ist übersichtlicher, aber\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t135\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t136\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Export data for accounting\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"CSV import breaks accented characters: é\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Exports are slow or incomplete\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"CSV import breaks accented characters: é\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t137\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get work done quickly\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Please send the receipts to [ADDRESS_12],\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"A tool that just works\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Please send the receipts to [ADDRESS_12],\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t138\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get into my account\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I'm an accountant with twelve clients.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Cannot get into the account\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"I'm an accountant with twelve clients.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t139\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t140\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t141\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t142\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get work done quickly\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Sehr freundlicher Support, [NAME_19] hat mir\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"A tool that just works\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Sehr freundlicher Support, [NAME_19] hat mir\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t143\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t144\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get into my account\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Ich habe meine Kreditkarte [CARD_1] hinterlegt,\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Cannot get into the account\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Ich habe meine Kreditkarte [CARD_1] hinterlegt,\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t145\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get into my account\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Hi, I'm [NAME_21] and I accidentally\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Cannot get into the account\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Hi, I'm [NAME_21] and I accidentally\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t146\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t147\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t148\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Solid product, but invoice numbers should\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Solid product, but invoice numbers should\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t149\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t150\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Gutes Produkt, aber die Rechnungsnummern sollten\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Gutes Produkt, aber die Rechnungsnummern sollten\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"}]}\"}],\"usage\":{\"input_tokens\":0,\"output_tokens\":0}}"
+  },
+  {
+   "asked": "{\"texts\":[{\"id\":\"t151\",\"text\":\"Funktioniert, aber die Ladezeiten im Dashboard sind morgens unerträglich langsam.\"},{\"id\":\"t152\",\"text\":\"Im Exportlink [LINK_3] steht meine Kundennummer drin, ist das sicher?\"},{\"id\":\"t153\",\"text\":\"Exporting invoices to PDF got really slow after the 8.20.0 update. Forty invoices take almost two minutes.\"},{\"id\":\"t154\",\"text\":\"Preis-Leistung passt. Einzig die Berichte könnten mehr Filter haben, z. B. nach Projekt und Monat.\"},{\"id\":\"t155\",\"text\":\"CSV import breaks accented characters: é and ë turn into question marks. Affects about a third of our clients.\"},{\"id\":\"t156\",\"text\":\"Bitte rufen Sie mich unter [PHONE_15] zurück, es geht um die Rechnung vom 18.09.2023.\"},{\"id\":\"t157\",\"text\":\"Sehr freundlicher Support, [NAME_22] hat mir am Telefon super geholfen!\"},{\"id\":\"t158\",\"text\":\"Our German VAT number changed to [VAT_8].\"},{\"id\":\"t159\",\"text\":\"Fehler beim Import der CSV: Umlaute werden zu Fragezeichen. Das betrifft alle Kunden mit ä, ö, ü.\"},{\"id\":\"t160\",\"text\":\"Ich würde gern Stunden direkt aus dem Kalender übernehmen, statt alles doppelt einzutragen.\"},{\"id\":\"t161\",\"text\":\"Support sent me [LINK_4] but it only shows a blank page.\"},{\"id\":\"t162\",\"text\":\"For the Austrian branch, use UID [VAT_9] on all invoices please.\"},{\"id\":\"t163\",\"text\":\"Our payroll needs each employee's born on [DATE_OF_BIRTH_6], there's no field for it.\"},{\"id\":\"t164\",\"text\":\"Wir sind ein Team von acht Leuten und die Rechteverwaltung reicht nicht. Jeder sieht alle Kundendaten.\"},{\"id\":\"t165\",\"text\":\"Für die Steuerberatung brauche ich unsere UID [VAT_10] auf jeder Rechnung, das Feld wird aber nicht gedruckt.\"},{\"id\":\"t166\",\"text\":\"Mein Account läuft auf [EMAIL_14], die Rechnungen sollen aber an die Buchhaltung gehen.\"},{\"id\":\"t167\",\"text\":\"Mahnungen automatisch verschicken wäre ein Traum. Momentan mache ich das jeden Freitag händisch.\"},{\"id\":\"t168\",\"text\":\"Hallo, ich bin [NAME_23] und habe zwei Konten angelegt. Können Sie die zusammenführen? Meine E-Mail ist [EMAIL_15].\"},{\"id\":\"t169\",\"text\":\"Exporting invoices to PDF got really slow after the 3.19.2 update. Forty invoices take almost two minutes.\"},{\"id\":\"t170\",\"text\":\"Die Zeiterfassung auf dem Handy springt manchmal auf 0 zurück, wenn ich die App im Hintergrund habe.\"},{\"id\":\"t171\",\"text\":\"Versicherungsnummer [SVNR_10], bitte im Personalstamm hinterlegen.\"},{\"id\":\"t172\",\"text\":\"The card field rejects 5555 5555 5555 4445, is that a bug or did I mistype?\"},{\"id\":\"t173\",\"text\":\"Bitte rufen Sie mich unter [PHONE_16] zurück, es geht um die Rechnung vom 18.12.2024.\"},{\"id\":\"t174\",\"text\":\"Ich vermisse eine Englisch-Version der Rechnungsvorlage für internationale Kunden.\\nDas ist für uns ein Grund zu wechseln.\"},{\"id\":\"t175\",\"text\":\"Gutes Produkt, aber die Rechnungsnummern sollten fortlaufend pro Jahr beginnen dürfen.\"}]}",
+   "answer": "{\"stop_reason\":\"end_turn\",\"content\":[{\"type\":\"text\",\"text\":\"{\\\"texts\\\":[{\\\"id\\\":\\\"t151\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t152\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Export data for accounting\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Im Exportlink [LINK_3] steht meine Kundennummer\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Exports are slow or incomplete\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Im Exportlink [LINK_3] steht meine Kundennummer\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t153\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Exporting invoices to PDF got really\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Exporting invoices to PDF got really\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t154\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t155\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Export data for accounting\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"CSV import breaks accented characters: é\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Exports are slow or incomplete\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"CSV import breaks accented characters: é\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t156\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Bitte rufen Sie mich unter [PHONE_15]\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Bitte rufen Sie mich unter [PHONE_15]\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t157\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get work done quickly\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Sehr freundlicher Support, [NAME_22] hat mir\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"A tool that just works\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Sehr freundlicher Support, [NAME_22] hat mir\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t158\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t159\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Export data for accounting\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Fehler beim Import der CSV: Umlaute\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Exports are slow or incomplete\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Fehler beim Import der CSV: Umlaute\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t160\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t161\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t162\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"For the Austrian branch, use UID\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"For the Austrian branch, use UID\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t163\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t164\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t165\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Für die Steuerberatung brauche ich unsere\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Für die Steuerberatung brauche ich unsere\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t166\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Mein Account läuft auf [EMAIL_14], die\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Mein Account läuft auf [EMAIL_14], die\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t167\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t168\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t169\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Exporting invoices to PDF got really\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Exporting invoices to PDF got really\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t170\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t171\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t172\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t173\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Bitte rufen Sie mich unter [PHONE_16]\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Bitte rufen Sie mich unter [PHONE_16]\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t174\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Ich vermisse eine Englisch-Version der Rechnungsvorlage\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Ich vermisse eine Englisch-Version der Rechnungsvorlage\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t175\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Gutes Produkt, aber die Rechnungsnummern sollten\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Gutes Produkt, aber die Rechnungsnummern sollten\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"}]}\"}],\"usage\":{\"input_tokens\":0,\"output_tokens\":0}}"
+  },
+  {
+   "asked": "{\"texts\":[{\"id\":\"t176\",\"text\":\"Lieferadresse: [ADDRESS_13], [POSTCODE_4] [PLACE_4]. Bitte die Belege dorthin schicken, nicht ins Büro. Danke, [NAME_24]\"},{\"id\":\"t177\",\"text\":\"Im Exportlink [LINK_5] steht meine Kundennummer drin, ist das sicher?\"},{\"id\":\"t178\",\"text\":\"Ich habe meine Kreditkarte [CARD_4] hinterlegt, trotzdem steht im Konto „Zahlung fehlgeschlagen“.\"},{\"id\":\"t179\",\"text\":\"Ich bin Steuerberaterin und betreue zwölf Mandanten. Ein Mandantenwechsel ohne Ausloggen würde viel Zeit sparen.\"},{\"id\":\"t180\",\"text\":\"Preis-Leistung passt. Einzig die Berichte könnten mehr Filter haben, z. B. nach Projekt und Monat.\"},{\"id\":\"t181\",\"text\":\"Den Link [LINK_6] hat mir der Support geschickt, er führt aber nur auf eine leere Seite.\"},{\"id\":\"t182\",\"text\":\"Seit gestern kann ich mich nicht mehr einloggen, die Zwei-Faktor-SMS kommt nicht an. Meine Nummer: [PHONE_17]\"},{\"id\":\"t183\",\"text\":\"Missing an English invoice template for international customers.\\nHonestly this is the main reason we are looking at alternatives.\"},{\"id\":\"t184\",\"text\":\"Why did the Team plan go up by €1,185.99? Nobody told us.\"},{\"id\":\"t185\",\"text\":\"Im Exportlink [LINK_7] steht meine Kundennummer drin, ist das sicher?\"},{\"id\":\"t186\",\"text\":\"Order B-54741923 was charged twice (€1,845.99). I'd like a refund please.\"},{\"id\":\"t187\",\"text\":\"Our German VAT number changed to [VAT_11].\"},{\"id\":\"t188\",\"text\":\"Wenn ich auf „Senden“ klicke, passiert nichts. Browser-Log zeigt einen Fehler, meine IP war [IP_9].\"},{\"id\":\"t189\",\"text\":\"Missing an English invoice template for international customers.\\nHonestly this is the main reason we are looking at alternatives.\"},{\"id\":\"t190\",\"text\":\"Wir sind ein Team von acht Leuten und die Rechteverwaltung reicht nicht. Jeder sieht alle Kundendaten.\"},{\"id\":\"t191\",\"text\":\"Ich bin Steuerberaterin und betreue zwölf Mandanten. Ein Mandantenwechsel ohne Ausloggen würde viel Zeit sparen.\"},{\"id\":\"t192\",\"text\":\"Reminder emails end up in my clients' spam folders. Could you check the sender setup?\"},{\"id\":\"t193\",\"text\":\"Solid product, but invoice numbers should be able to restart each year.\"},{\"id\":\"t194\",\"text\":\"For the Austrian branch, use UID [VAT_12] on all invoices please.\"},{\"id\":\"t195\",\"text\":\"Für den Kreditantrag: [NAME_25], Geburtsdatum: [DATE_OF_BIRTH_7], [ADDRESS_14], [POSTCODE_8] [PLACE_7].\"},{\"id\":\"t196\",\"text\":\"Ich habe meine Kreditkarte [CARD_4] hinterlegt, trotzdem steht im Konto „Zahlung fehlgeschlagen“.\"},{\"id\":\"t197\",\"text\":\"Fehler beim Import der CSV: Umlaute werden zu Fragezeichen. Das betrifft alle Kunden mit ä, ö, ü.\"},{\"id\":\"t198\",\"text\":\"Die App stürzt auf dem iPad ab, sobald ich ein Foto vom Beleg anhängen will. Version 1.16.2.\"},{\"id\":\"t199\",\"text\":\"Mahnungen automatisch verschicken wäre ein Traum. Momentan mache ich das jeden Freitag händisch.\"},{\"id\":\"t200\",\"text\":\"The iPad app crashes when I attach a photo of a receipt. Version 8.7.6.90.\"}]}",
+   "answer": "{\"stop_reason\":\"end_turn\",\"content\":[{\"type\":\"text\",\"text\":\"{\\\"texts\\\":[{\\\"id\\\":\\\"t176\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get work done quickly\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Lieferadresse: [ADDRESS_13], [POSTCODE_4] [PLACE_4]. Bitte die\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"A tool that just works\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Lieferadresse: [ADDRESS_13], [POSTCODE_4] [PLACE_4]. Bitte die\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t177\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Export data for accounting\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Im Exportlink [LINK_5] steht meine Kundennummer\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Exports are slow or incomplete\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Im Exportlink [LINK_5] steht meine Kundennummer\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t178\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get into my account\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Ich habe meine Kreditkarte [CARD_4] hinterlegt,\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Cannot get into the account\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Ich habe meine Kreditkarte [CARD_4] hinterlegt,\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t179\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t180\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t181\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t182\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t183\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Missing an English invoice template for\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Missing an English invoice template for\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t184\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t185\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Export data for accounting\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Im Exportlink [LINK_7] steht meine Kundennummer\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Exports are slow or incomplete\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Im Exportlink [LINK_7] steht meine Kundennummer\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t186\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t187\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t188\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t189\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Missing an English invoice template for\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Missing an English invoice template for\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t190\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t191\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t192\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t193\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Solid product, but invoice numbers should\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Solid product, but invoice numbers should\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t194\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay and file invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"For the Austrian branch, use UID\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices are wrong or hard to get\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"For the Austrian branch, use UID\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t195\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t196\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get into my account\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Ich habe meine Kreditkarte [CARD_4] hinterlegt,\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Cannot get into the account\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Ich habe meine Kreditkarte [CARD_4] hinterlegt,\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t197\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Export data for accounting\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Fehler beim Import der CSV: Umlaute\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Exports are slow or incomplete\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Fehler beim Import der CSV: Umlaute\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t198\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t199\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t200\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"}]}\"}],\"usage\":{\"input_tokens\":0,\"output_tokens\":0}}"
+  }
+ ],
+ "merge": {
+  "en": [
+   {
+    "asked": "{\"kind\":\"jobs\",\"labels\":[{\"id\":\"l1\",\"label\":\"Pay and file invoices\",\"count\":55},{\"id\":\"l2\",\"label\":\"Get into my account\",\"count\":20},{\"id\":\"l3\",\"label\":\"Export data for accounting\",\"count\":20},{\"id\":\"l4\",\"label\":\"Get work done quickly\",\"count\":14}]}",
+    "answer": "{\"stop_reason\":\"end_turn\",\"content\":[{\"type\":\"text\",\"text\":\"{\\\"themes\\\":[{\\\"name\\\":\\\"Pay and file invoices\\\",\\\"labels\\\":[\\\"l1\\\"]},{\\\"name\\\":\\\"Get into my account\\\",\\\"labels\\\":[\\\"l2\\\"]},{\\\"name\\\":\\\"Export data for accounting\\\",\\\"labels\\\":[\\\"l3\\\"]},{\\\"name\\\":\\\"Get work done quickly\\\",\\\"labels\\\":[\\\"l4\\\"]}]}\"}],\"usage\":{\"input_tokens\":0,\"output_tokens\":0}}"
+   },
+   {
+    "asked": "{\"kind\":\"pains\",\"labels\":[{\"id\":\"l1\",\"label\":\"Invoices are wrong or hard to get\",\"count\":55},{\"id\":\"l2\",\"label\":\"Cannot get into the account\",\"count\":20},{\"id\":\"l3\",\"label\":\"Exports are slow or incomplete\",\"count\":20}]}",
+    "answer": "{\"stop_reason\":\"end_turn\",\"content\":[{\"type\":\"text\",\"text\":\"{\\\"themes\\\":[{\\\"name\\\":\\\"Invoices are wrong or hard to get\\\",\\\"labels\\\":[\\\"l1\\\"]},{\\\"name\\\":\\\"Cannot get into the account\\\",\\\"labels\\\":[\\\"l2\\\"]},{\\\"name\\\":\\\"Exports are slow or incomplete\\\",\\\"labels\\\":[\\\"l3\\\"]}]}\"}],\"usage\":{\"input_tokens\":0,\"output_tokens\":0}}"
+   },
+   {
+    "asked": "{\"kind\":\"gains\",\"labels\":[{\"id\":\"l1\",\"label\":\"A tool that just works\",\"count\":16}]}",
+    "answer": "{\"stop_reason\":\"end_turn\",\"content\":[{\"type\":\"text\",\"text\":\"{\\\"themes\\\":[{\\\"name\\\":\\\"A tool that just works\\\",\\\"labels\\\":[\\\"l1\\\"]}]}\"}],\"usage\":{\"input_tokens\":0,\"output_tokens\":0}}"
+   }
+  ],
+  "de": [
+   {
+    "asked": "{\"kind\":\"jobs\",\"labels\":[{\"id\":\"l1\",\"label\":\"Pay and file invoices\",\"count\":55},{\"id\":\"l2\",\"label\":\"Get into my account\",\"count\":20},{\"id\":\"l3\",\"label\":\"Export data for accounting\",\"count\":20},{\"id\":\"l4\",\"label\":\"Get work done quickly\",\"count\":14}]}",
+    "answer": "{\"stop_reason\":\"end_turn\",\"content\":[{\"type\":\"text\",\"text\":\"{\\\"themes\\\":[{\\\"name\\\":\\\"Pay and file invoices (de)\\\",\\\"labels\\\":[\\\"l1\\\"]},{\\\"name\\\":\\\"Get into my account (de)\\\",\\\"labels\\\":[\\\"l2\\\"]},{\\\"name\\\":\\\"Export data for accounting (de)\\\",\\\"labels\\\":[\\\"l3\\\"]},{\\\"name\\\":\\\"Get work done quickly (de)\\\",\\\"labels\\\":[\\\"l4\\\"]}]}\"}],\"usage\":{\"input_tokens\":0,\"output_tokens\":0}}"
+   },
+   {
+    "asked": "{\"kind\":\"pains\",\"labels\":[{\"id\":\"l1\",\"label\":\"Invoices are wrong or hard to get\",\"count\":55},{\"id\":\"l2\",\"label\":\"Cannot get into the account\",\"count\":20},{\"id\":\"l3\",\"label\":\"Exports are slow or incomplete\",\"count\":20}]}",
+    "answer": "{\"stop_reason\":\"end_turn\",\"content\":[{\"type\":\"text\",\"text\":\"{\\\"themes\\\":[{\\\"name\\\":\\\"Invoices are wrong or hard to get (de)\\\",\\\"labels\\\":[\\\"l1\\\"]},{\\\"name\\\":\\\"Cannot get into the account (de)\\\",\\\"labels\\\":[\\\"l2\\\"]},{\\\"name\\\":\\\"Exports are slow or incomplete (de)\\\",\\\"labels\\\":[\\\"l3\\\"]}]}\"}],\"usage\":{\"input_tokens\":0,\"output_tokens\":0}}"
+   },
+   {
+    "asked": "{\"kind\":\"gains\",\"labels\":[{\"id\":\"l1\",\"label\":\"A tool that just works\",\"count\":16}]}",
+    "answer": "{\"stop_reason\":\"end_turn\",\"content\":[{\"type\":\"text\",\"text\":\"{\\\"themes\\\":[{\\\"name\\\":\\\"A tool that just works (de)\\\",\\\"labels\\\":[\\\"l1\\\"]}]}\"}],\"usage\":{\"input_tokens\":0,\"output_tokens\":0}}"
+   }
+  ]
+ }
+}

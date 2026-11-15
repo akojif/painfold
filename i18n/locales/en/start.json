@@ -5,6 +5,7 @@
     "choose": "Choose a CSV or Excel file",
     "sampleButton": "Try the sample file",
     "sampleNote": "200 made-up tickets, no real people",
+    "demo": "Or see a finished demo analysis, no API key needed",
     "reading": "Reading {name}…",
     "journeyLabel": "What Painfold does",
     "journey": {

@@ -48,6 +48,13 @@
     "download": {
       "title": "The cleaned file",
       "body": "The same file as on the Download page: personal data replaced with placeholders, as you reviewed it."
+    },
+    "demo": {
+      "label": "Demo with made-up data.",
+      "note": "The sample file's support tickets were cleaned in the browser, analyzed on {date} and stored in Painfold. Showing it sent nothing from your browser.",
+      "noFile": "No file is open here: rows refer to the sample file.",
+      "standIn": "Stand-in: invented answers, not a real model run.",
+      "leave": "Analyze a file yourself"
     }
   }
 }

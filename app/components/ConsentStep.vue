@@ -265,7 +265,7 @@ function download() {
         </p>
 
         <div
-          v-if="tagging.state.value !== 'idle'"
+          v-if="tagging.state.value !== 'idle' && !tagging.demo.value"
           class="mt-6"
           aria-labelledby="run-heading"
           role="region"

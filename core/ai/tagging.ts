@@ -58,8 +58,8 @@ export const ANSWER_SCHEMA = {
 
 // Tagging and merging are classification: low effort is enough and keeps the cost down.
 // Tuned on the dev split once it is labelled (#129).
-const EFFORT = 'low'
-const MAX_TOKENS = 16000
+export const EFFORT = 'low'
+export const MAX_TOKENS = 16000
 
 /** The batches of texts, in order, each sent as one request. */
 export function batchesOf(texts: readonly PayloadText[], size = BATCH_SIZE): PayloadText[][] {

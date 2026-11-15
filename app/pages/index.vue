@@ -3,7 +3,7 @@ import { countsByColumn, itemsForColumns, textItems, type ColumnCounts } from '~
 
 definePageMeta({ step: 1 })
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const localePath = useLocalePath()
 const { number } = useFormat()
 const session = useSession()
@@ -75,6 +75,10 @@ function act(action: () => void) {
 }
 const onChoose = () => act(() => input.value?.click())
 const onSample = () => act(() => void openSample())
+// The demo report (#130), straight from the start: a stored real run on the
+// sample, without importing or reviewing. Loading it sends nothing.
+const tagging = useTagging()
+const onDemo = () => act(() => void tagging.loadDemo(locale.value === 'de' ? 'de' : 'en').then(() => navigateTo(localePath('/report'))))
 
 function onSheet(event: Event) {
   void openSheet((event.target as HTMLSelectElement).value)
@@ -158,6 +162,13 @@ async function findPersonalData() {
               {{ $t('start.sampleButton') }}
             </button>
             <span class="block text-xs text-fg-muted">{{ $t('start.sampleNote') }}</span>
+            <button
+              type="button"
+              class="focus-ring mt-1 rounded-sm text-xs text-fg-muted underline underline-offset-4 hover:text-fg"
+              @click="onDemo"
+            >
+              {{ $t('start.demo') }}
+            </button>
           </p>
         </div>
 
