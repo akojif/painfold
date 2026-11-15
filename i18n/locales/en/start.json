@@ -8,16 +8,17 @@
     "journey": {
       "clean": {
         "title": "Clean your file",
-        "when": "Now"
+        "body": "Personal data turns into placeholders, right in your browser."
       },
       "find": {
         "title": "Find jobs, pains and gains",
-        "when": "v0.3"
+        "body": "Grouped into themes, counted in code, with real quotes."
       },
       "decide": {
         "title": "Decide what to build",
-        "when": "v0.4"
-      }
+        "body": "The strongest pains, framed as questions for your team."
+      },
+      "coming": "Coming in {version}"
     },
     "example": {
       "button": "Try an example",

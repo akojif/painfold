@@ -5,6 +5,7 @@
     "current": "Aktuelle Phase",
     "status": {
       "available": "Verfügbar",
+      "preview": "Vorschau",
       "inProgress": "In Arbeit",
       "planned": "Geplant",
       "next": "Als Nächstes"
