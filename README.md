@@ -71,4 +71,4 @@ Tests, the build, CI, security headers, hosting and dependency policies, includi
 
 ## License
 
-Code: [MIT](LICENSE). Fonts in `app/assets/fonts/` (Geist and Geist Mono, by Vercel) are self-hosted under the SIL Open Font License 1.1; each folder contains its license.
+Code: [MIT](LICENSE). Fonts in `app/assets/fonts/` (Geist and Geist Mono, by Vercel, and Sora, by the Sora Project Authors) are self-hosted under the SIL Open Font License 1.1; each folder contains its license.
