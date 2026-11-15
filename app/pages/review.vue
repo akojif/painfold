@@ -20,7 +20,6 @@ const BATCH = 100
 const VALUE_BATCH = 100
 const SNIPPETS = 5
 const { t } = useI18n()
-const localePath = useLocalePath()
 const { number } = useFormat()
 const session = useSession()
 const { table, review, items, revision, placeOfUnit, itemsOfUnit } = session
@@ -440,15 +439,11 @@ onBeforeUnmount(() => {
             </p>
             <p class="text-sm text-fg-muted">
               {{ $t('review.finished.body', { removed: number(counts.total - kept), kept: number(kept) }) }}
+              {{ $t('review.choice') }}
             </p>
           </div>
         </div>
-        <NuxtLink
-          :to="localePath('/download')"
-          class="focus-ring press inline-flex h-9 items-center rounded-md bg-fg px-3.5 font-medium text-canvas"
-        >
-          {{ $t('review.finished.action') }}
-        </NuxtLink>
+        <ReviewNextActions :waiting="false" />
       </div>
 
       <div class="mt-6 flex flex-wrap items-end justify-between gap-x-4 gap-y-2 border-b border-line">
@@ -632,29 +627,17 @@ onBeforeUnmount(() => {
             >
               {{ $t('review.removeAll', { n: number(counts.left) }) }}
             </button>
-            <button
-              v-if="checkingNames"
-              type="button"
-              disabled
-              aria-describedby="download-waits"
-              class="h-9 rounded-md bg-fg px-3.5 font-medium text-canvas opacity-50"
-            >
-              {{ $t('review.continue') }}
-            </button>
-            <NuxtLink
-              v-else
-              :to="localePath('/download')"
-              class="focus-ring press inline-flex h-9 items-center rounded-md bg-fg px-3.5 font-medium text-canvas"
-            >
-              {{ $t('review.continue') }}
-            </NuxtLink>
+            <ReviewNextActions :waiting="checkingNames" />
           </div>
+          <p class="max-w-md text-right text-sm text-fg-muted">
+            {{ $t('review.choice') }}
+          </p>
           <p
             v-if="checkingNames"
             id="download-waits"
             class="text-sm text-fg-muted"
           >
-            {{ $t('nameScan.downloadWaits') }}
+            {{ $t('nameScan.continueWaits') }}
           </p>
         </div>
       </div>

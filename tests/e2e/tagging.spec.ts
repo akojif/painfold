@@ -15,7 +15,8 @@ async function reviewSampleAndOpenAnalyze(page: Page) {
   await page.getByRole('button', { name: 'Try the sample file' }).click()
   await page.getByRole('button', { name: /^Find personal data in/ }).click()
   await expect(page).toHaveURL(/\/review\/$/)
-  await page.evaluate(() => (document.querySelector('#__nuxt') as unknown as { __vue_app__: { config: { globalProperties: { $router: { push: (to: string) => Promise<void> } } } } }).__vue_app__.config.globalProperties.$router.push('/analyze/'))
+  await page.getByRole('link', { name: 'Continue to analyze' }).last().click()
+  await expect(page).toHaveURL(/\/analyze\/$/)
   await page.getByLabel('API key', { exact: true }).fill('sk-ant-invented-test-key')
   await page.getByLabel('I have checked these texts for names, or they contain none.').check()
 }

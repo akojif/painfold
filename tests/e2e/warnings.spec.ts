@@ -64,7 +64,7 @@ test('R removes and K keeps a warning, Z undoes, and the cleaned file follows', 
   await page.keyboard.press('r')
   await expect(page.getByText('warnings to check')).toHaveCount(0)
 
-  await page.getByRole('link', { name: 'Continue to download' }).click()
+  await page.getByRole('link', { name: 'Download the cleaned file' }).click()
   await expect(page.getByText('Could identify someone: 1 removed, 1 kept.')).toBeVisible()
   const [download] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: /^Download feedback_cleaned/ }).click()])
   const cleaned = await text(download)
@@ -76,7 +76,7 @@ test('R removes and K keeps a warning, Z undoes, and the cleaned file follows', 
 
 test('warnings never hold up the review: an untouched warning stays in the file', async ({ page }) => {
   await openReview(page)
-  await page.getByRole('link', { name: 'Continue to download' }).click()
+  await page.getByRole('link', { name: 'Download the cleaned file' }).click()
   const [download] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: /^Download feedback_cleaned/ }).click()])
   const cleaned = await text(download)
   expect(cleaned).toContain('Ich bin 42 Jahre alt')

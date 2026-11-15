@@ -83,6 +83,7 @@
     "failed": "Die Namensprüfung wurde abgebrochen. Die übrigen Treffer sind davon nicht betroffen.",
     "retry": "Erneut versuchen",
     "downloadWaits": "Der Download ist verfügbar, sobald die Namen geprüft sind.",
+    "continueWaits": "Herunterladen und Analysieren sind verfügbar, sobald die Namen geprüft sind.",
     "confirm": {
       "title": "Namen für diese Datei überspringen?",
       "body": "Namen werden im Download nicht entfernt.",

@@ -43,8 +43,11 @@
     "empty": {
       "heading": "No report yet",
       "body": "The report is made from an analysis in this visit. Results stay only in this tab's memory, so they are gone after reloading or closing it.",
-      "analyze": "Go to Analyze",
-      "open": "Open a file"
+      "analyze": "Go to Analyze"
+    },
+    "download": {
+      "title": "The cleaned file",
+      "body": "The same file as on the Download page: personal data replaced with placeholders, as you reviewed it."
     }
   }
 }

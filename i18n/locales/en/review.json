@@ -44,7 +44,7 @@
       "forms": "1 possible form to review. | {n} possible forms to review."
     },
     "removeAll": "Remove all {n} left",
-    "continue": "Continue to download",
+    "continue": "Continue to analyze",
     "willRemove": "1 not reviewed will be removed. | {n} not reviewed will be removed.",
     "announce": {
       "remove": "{type} removed, {left} left.",
@@ -65,13 +65,14 @@
     "inRows": "In 1 row. Removing it replaces it with {placeholder}. | In {n} rows. Removing it replaces every copy with {placeholder}.",
     "finished": {
       "title": "All findings are reviewed.",
-      "body": "{removed} removed, {kept} kept. Next: download the cleaned file and the cleaning report.",
-      "action": "Continue to download"
+      "body": "{removed} removed, {kept} kept."
     },
     "removeAllShort": "Remove 1 | Remove all {n}",
     "keptTag": "Kept",
     "moreRows": "And 1 more row. | And {n} more rows.",
     "noRows": "No rows with findings.",
-    "showMoreOfType": "Show {n} more"
+    "showMoreOfType": "Show {n} more",
+    "downloadFile": "Download the cleaned file",
+    "choice": "Only need a clean file? Download it here. To find what hurts your customers, continue to analyze."
   }
 }

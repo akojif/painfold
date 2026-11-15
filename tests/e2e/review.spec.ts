@@ -132,7 +132,7 @@ test.describe('review step', () => {
     // The banner, not the toast region (which is also a status region).
     const banner = page.locator('main').getByRole('status').filter({ hasText: 'All findings are reviewed.' })
     await expect(banner).toContainText('2 removed, 1 kept.')
-    await banner.getByRole('link', { name: 'Continue to download' }).click()
+    await banner.getByRole('link', { name: 'Download the cleaned file' }).click()
     await expect(page).toHaveURL(/\/download\/$/)
   })
 
@@ -215,14 +215,18 @@ test.describe('review step', () => {
     await expect(page.getByRole('alert')).toHaveText('Select the missed text in a row first, then press M.')
   })
 
-  test('"Remove all left" decides the rest, and the download step follows', async ({ page }) => {
+  test('"Remove all left" decides the rest; then the review offers analysis or only the cleaned file, side by side', async ({ page }) => {
     await openReview(page)
     await page.getByRole('button', { name: 'Remove all 3 left' }).click()
     await expect(progress(page)).toHaveText('3 reviewed, 0 left')
     await expect(page.getByText(/not reviewed will be removed/)).toHaveCount(0)
-    await page.getByRole('link', { name: 'Continue to download' }).last().click()
+    const banner = page.locator('main').getByRole('status').filter({ hasText: 'All findings are reviewed.' })
+    await expect(banner).toContainText('Only need a clean file? Download it here. To find what hurts your customers, continue to analyze.')
+    await expect(banner.getByRole('link')).toHaveText(['Download the cleaned file', 'Continue to analyze'])
+    await expect(page.getByRole('navigation', { name: 'Steps' }).getByRole('listitem')).toHaveText([/Import/, /Review/, /Analyze/, /Report/])
+    await page.getByRole('link', { name: 'Download the cleaned file' }).last().click()
     await expect(page).toHaveURL(/\/download\/$/)
-    await expect(page.getByRole('navigation', { name: 'Steps' }).locator('[aria-current="step"]')).toHaveText(/Download/)
+    await expect(page.getByRole('navigation', { name: 'Steps' }).locator('[aria-current="step"]')).toHaveText(/Review/)
   })
 
   test('the sample file reviews without errors and the stepper marks import done', async ({ page }) => {

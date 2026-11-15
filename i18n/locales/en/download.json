@@ -11,8 +11,8 @@
     "reportButton": "Download cleaning report (.txt)",
     "next": {
       "title": "Your file is clean.",
-      "body": "Next in Painfold: turn it into ranked customer pains (coming in v0.3).",
-      "link": "See the roadmap"
+      "body": "Next: find what your customers are trying to get done, what hurts, and what they wish for. You see exactly what is sent before anything leaves your browser.",
+      "link": "Continue to analyze"
     }
   }
 }

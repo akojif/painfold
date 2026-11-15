@@ -53,7 +53,7 @@ test('the review and download steps link with a slash too', async ({ page, baseU
   await page.getByRole('button', { name: /^Find personal data in/ }).click()
   await expect(page).toHaveURL(/\/review\/$/)
   expect(pageAddresses(await addresses(page), origin).filter(address => !address.endsWith('/'))).toEqual([])
-  await page.getByRole('link', { name: 'Continue to download' }).last().click()
+  await page.getByRole('link', { name: 'Download the cleaned file' }).last().click()
   await expect(page).toHaveURL(/\/download\/$/)
   expect(pageAddresses(await addresses(page), origin).filter(address => !address.endsWith('/'))).toEqual([])
 })

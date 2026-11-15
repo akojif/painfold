@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { cleanedFileName, cleanedTable, removedByType, reportFileName, toCsv } from '~~/core/export/csv'
+import { removedByType, reportFileName } from '~~/core/export/csv'
 import { cleaningReport, reportTimestamp } from '~~/core/export/report'
 import { NAME_MODEL } from '~~/deploy/model'
 
 definePageMeta({
-  step: 3,
+  // Downloading the cleaned file is part of the Review step (#142).
+  step: 2,
   // Below 768 px the layout shows SmallScreenNotice instead, also from a direct link (#139).
   working: true,
   needsReview: true,
@@ -19,7 +20,7 @@ const { number } = useFormat()
 const session = useSession()
 const { table, roles, review, revision } = session
 
-const fileName = computed(() => cleanedFileName(table.value?.fileName ?? ''))
+const { fileName, download } = useCleanedFile()
 // Largest first, in the summary and in the cleaning report.
 const removed = computed(() => (revision.value, review.value ? [...removedByType(review.value)].sort((a, b) => b[1] - a[1]) : []))
 const notReviewed = computed(() => (revision.value, review.value?.counts().left ?? 0))
@@ -46,12 +47,6 @@ const namesNote = computed(() => {
   if (status.value === 'failed') return t('download.names.failed')
   return t('download.names.notChecked')
 })
-
-function download() {
-  if (!table.value || !review.value) return
-  session.markDownloaded()
-  saveTextFile(fileName.value, toCsv(cleanedTable(table.value, roles.value, review.value), { delimiter: table.value.delimiter ?? ',' }))
-}
 
 function downloadReport() {
   if (!table.value) return
@@ -220,8 +215,8 @@ function downloadReport() {
           {{ $t('download.next.body') }}
         </p>
         <NuxtLink
-          :to="localePath('/roadmap')"
-          class="focus-ring mt-2 inline-block rounded-sm text-sm text-accent underline-offset-4 hover:underline"
+          :to="localePath('/analyze')"
+          class="focus-ring press mt-3 inline-flex h-9 items-center rounded-md bg-fg px-3.5 font-medium text-canvas"
         >
           {{ $t('download.next.link') }}
         </NuxtLink>

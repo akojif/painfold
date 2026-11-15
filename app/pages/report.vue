@@ -2,21 +2,27 @@
 // Stage 3, slice 6 (#128): the first report. Jobs, pains and gains in the
 // canvas order, each ranked, with the numbers counted in code (themes.ts) and
 // verified quotes linked to their rows. It reads the analysis of this visit
-// from memory and sends nothing. Like Analyze, it is not linked from the
-// stepper yet and not indexed, until the flow is joined up before v0.3.0.
+// from memory and sends nothing. Step 4 of the flow (#142).
 import { LOW_CONFIDENCE_BELOW } from '~~/core/ai/themes'
 import { ANTHROPIC_MODELS } from '~~/core/ai/providers'
 import { reportOf } from '~~/core/ai/results'
 
-// Part of the working flow: below 768 px the layout shows SmallScreenNotice instead (#139).
-definePageMeta({ working: true })
+definePageMeta({
+  step: 4,
+  // Below 768 px the layout shows SmallScreenNotice instead, also from a direct link (#139).
+  working: true,
+  needsReview: true,
+  // No report without a checked file; this runs in the browser only.
+  middleware: () => {
+    if (import.meta.client && !useSession().review.value && !useSmallScreen().narrow.value) return navigateTo(useLocalePath()('/'))
+  },
+})
 
 const { t } = useI18n()
 const localePath = useLocalePath()
 const { number } = useFormat()
-const { table } = useSession()
 const tagging = useTagging()
-useHead({ title: () => `${t('results.title')}, ${t('app.name')}`, meta: [{ name: 'robots', content: 'noindex' }] })
+useHead({ title: () => `${t('results.title')}, ${t('app.name')}` })
 
 const themes = computed(() => tagging.themes.value)
 const report = computed(() => (themes.value ? reportOf(themes.value) : undefined))
@@ -26,6 +32,8 @@ const model = computed(() => {
   return ANTHROPIC_MODELS.find(choice => choice.id === id)?.name ?? id
 })
 const total = (section: { main: unknown[], few: unknown[] }) => section.main.length + section.few.length
+// Many people also want the cleaned file itself; the report offers it too (#142).
+const cleanedFile = useCleanedFile()
 </script>
 
 <template>
@@ -120,6 +128,36 @@ const total = (section: { main: unknown[], few: unknown[] }) => section.main.len
           </ul>
         </div>
       </section>
+
+      <section
+        class="mt-14 border-t border-line pt-6"
+        aria-labelledby="cleaned-file"
+      >
+        <h2
+          id="cleaned-file"
+          class="font-medium"
+        >
+          {{ $t('results.download.title') }}
+        </h2>
+        <p class="mt-1 max-w-measure text-fg-muted">
+          {{ $t('results.download.body') }}
+        </p>
+        <div class="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1">
+          <button
+            type="button"
+            class="focus-ring press inline-flex h-9 items-center rounded-md border border-line-strong bg-canvas px-3.5 font-medium hover:border-fg"
+            aria-describedby="cleaned-file-name"
+            @click="cleanedFile.download()"
+          >
+            {{ $t('review.downloadFile') }}
+          </button>
+          <MiddleTruncate
+            id="cleaned-file-name"
+            class="min-w-0 font-mono text-sm text-fg-muted"
+            :text="cleanedFile.fileName.value"
+          />
+        </div>
+      </section>
     </template>
 
     <template v-else>
@@ -130,10 +168,10 @@ const total = (section: { main: unknown[], few: unknown[] }) => section.main.len
         {{ $t('results.empty.body') }}
       </p>
       <NuxtLink
-        :to="localePath(table ? '/analyze' : '/')"
+        :to="localePath('/analyze')"
         class="focus-ring press mt-6 inline-flex h-9 items-center rounded-md bg-fg px-3.5 font-medium text-canvas"
       >
-        {{ table ? $t('results.empty.analyze') : $t('results.empty.open') }}
+        {{ $t('results.empty.analyze') }}
       </NuxtLink>
     </template>
   </div>

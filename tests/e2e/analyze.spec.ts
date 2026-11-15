@@ -22,23 +22,32 @@ async function anthropic(page: Page, status = 200, body: unknown = { content: [{
   return requests
 }
 
-test('the page is not linked from the app yet, and asks not to be indexed', async ({ page }) => {
-  await page.goto('/')
-  await expect(page.locator('a[href*="analyze"]')).toHaveCount(0)
-  await page.goto('/analyze/')
+/** Analyze is step 3 (#142): reached from a reviewed file, as people reach it. */
+async function openAnalyze(page: Page, german = false) {
+  await page.goto(german ? '/de/' : '/')
+  await page.getByRole('button', { name: german ? 'Beispieldatei ausprobieren' : 'Try the sample file' }).click()
+  await page.getByRole('button', { name: german ? /^Personenbezogene Daten in/ : /^Find personal data in/ }).click()
+  await page.getByRole('link', { name: german ? 'Weiter zur Analyse' : 'Continue to analyze' }).last().click()
+  await expect(page).toHaveURL(/\/analyze\/$/)
+}
+
+test('Analyze is step 3 of the flow and may be indexed; without a reviewed file it leads to the start', async ({ page }) => {
+  await openAnalyze(page)
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Where should the analysis run?')
-  await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex')
+  await expect(page.getByRole('navigation', { name: 'Steps' }).locator('[aria-current="step"]')).toHaveText(/Analyze/)
+  await expect(page.locator('meta[name="robots"]')).toHaveCount(0)
+  await page.goto('/analyze/')
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Find what hurts your customers. Without exposing who they are.')
 })
 
-test('the page may call Anthropic and Ollama on this computer, and nothing else', async ({ page }) => {
-  await page.goto('/analyze/')
-  const policy = await page.locator('meta[http-equiv="Content-Security-Policy"]').getAttribute('content')
-  expect(policy).toContain("connect-src 'self' https://api.anthropic.com http://localhost:11434 http://127.0.0.1:11434;")
+test('the page may call Anthropic and Ollama on this computer, and nothing else', async ({ request }) => {
+  const html = await (await request.get('/analyze/')).text()
+  expect(html).toContain("connect-src 'self' https://api.anthropic.com http://localhost:11434 http://127.0.0.1:11434;")
 })
 
 test('Test connection sends only "Hello" to Anthropic, with the key and the browser header, and says it worked', async ({ page }) => {
   const requests = await anthropic(page)
-  await page.goto('/analyze/')
+  await openAnalyze(page)
   await page.getByLabel('API key', { exact: true }).fill(KEY)
   await page.getByRole('button', { name: 'Test connection' }).click()
   await expect(page.getByText('Connected to Claude Haiku 5.5.')).toBeVisible()
@@ -54,7 +63,7 @@ test('Test connection sends only "Hello" to Anthropic, with the key and the brow
 
 test('the request to the AI is listed in "What leaves your browser", with the bytes sent', async ({ page }) => {
   await anthropic(page)
-  await page.goto('/analyze/')
+  await openAnalyze(page)
   await page.getByLabel('API key', { exact: true }).fill(KEY)
   await page.getByRole('button', { name: 'Test connection' }).click()
   await expect(page.getByText('Connected to Claude Haiku 5.5.')).toBeVisible()
@@ -70,7 +79,7 @@ test('the request to the AI is listed in "What leaves your browser", with the by
 
 test('explains a key Anthropic does not accept, and an organisation that blocks browsers', async ({ page }) => {
   await anthropic(page, 401, { error: { type: 'authentication_error', message: 'invalid x-api-key' } })
-  await page.goto('/analyze/')
+  await openAnalyze(page)
   await page.getByLabel('API key', { exact: true }).fill(KEY)
   await page.getByRole('button', { name: 'Test connection' }).click()
   await expect(page.getByText('Anthropic did not accept this key. Check it and try again.')).toBeVisible()
@@ -83,20 +92,21 @@ test('explains a key Anthropic does not accept, and an organisation that blocks 
 
 test('asks for a key before testing, and sends nothing without one', async ({ page }) => {
   const requests = await anthropic(page)
-  await page.goto('/analyze/')
+  await openAnalyze(page)
   await page.getByRole('button', { name: 'Test connection' }).click()
   await expect(page.getByText('Enter your API key first.')).toBeVisible()
   expect(requests).toHaveLength(0)
 })
 
 test('keeps the key in memory only, unless asked to remember it, and forgets it when unticked', async ({ page }) => {
-  await page.goto('/analyze/')
+  await openAnalyze(page)
   await page.getByLabel('API key', { exact: true }).fill(KEY)
   const stored = () => page.evaluate(() => JSON.stringify({ ...localStorage }))
   expect(await stored()).not.toContain(KEY)
   await page.getByLabel('Remember on this device').check()
   await expect.poll(stored).toContain(KEY)
-  await page.reload()
+  // A new visit: the file is gone, the remembered key is not.
+  await openAnalyze(page)
   await expect(page.getByLabel('API key', { exact: true })).toHaveValue(KEY)
   await page.getByLabel('Remember on this device').uncheck()
   await expect.poll(stored).not.toContain(KEY)
@@ -111,7 +121,7 @@ test('with Ollama, finds the models on this computer and tests one, without call
       ? answer(route, 200, { models: [{ name: 'llama3.2:3b' }, { name: 'mistral:7b' }] })
       : answer(route, 200, { message: { role: 'assistant', content: 'Hi' } })
   })
-  await page.goto('/analyze/')
+  await openAnalyze(page)
   await page.getByText('On this computer (Ollama)').click()
   await expect(page.getByText('Ollama is running and answers this site.')).toBeVisible()
   await expect(page.getByLabel('Model')).toHaveValue('llama3.2:3b')
@@ -124,13 +134,13 @@ test('with Ollama, finds the models on this computer and tests one, without call
 
 test('explains when Ollama cannot be reached', async ({ page }) => {
   await page.route('http://localhost:11434/**', route => route.abort('connectionrefused'))
-  await page.goto('/analyze/')
+  await openAnalyze(page)
   await page.getByText('On this computer (Ollama)').click()
   await expect(page.getByText(/Painfold cannot reach Ollama\. It may not be running/)).toBeVisible()
 })
 
 test('is in German under /de/', async ({ page }) => {
-  await page.goto('/de/analyze/')
+  await openAnalyze(page, true)
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Wo soll die Analyse laufen?')
   await expect(page.getByText('Ihr Schlüssel geht nur an Anthropic, direkt aus diesem Browser.')).toBeVisible()
 })

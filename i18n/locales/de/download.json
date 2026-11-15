@@ -11,8 +11,8 @@
     "reportButton": "Bereinigungsbericht herunterladen (.txt)",
     "next": {
       "title": "Ihre Datei ist bereinigt.",
-      "body": "Als Nächstes in Painfold: daraus eine Rangliste der Kundenprobleme machen (kommt in v0.3).",
-      "link": "Zur Roadmap"
+      "body": "Als Nächstes: herausfinden, was Ihre Kunden erledigen wollen, was sie stört und was sie sich wünschen. Sie sehen genau, was gesendet wird, bevor etwas Ihren Browser verlässt.",
+      "link": "Weiter zur Analyse"
     }
   }
 }

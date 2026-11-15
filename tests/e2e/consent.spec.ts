@@ -21,7 +21,8 @@ async function reviewSample(page: Page) {
 }
 
 async function openAnalyze(page: Page) {
-  await page.evaluate(() => (document.querySelector('#__nuxt') as unknown as { __vue_app__: { config: { globalProperties: { $router: { push: (to: string) => Promise<void> } } } } }).__vue_app__.config.globalProperties.$router.push('/analyze/'))
+  await page.getByRole('link', { name: 'Continue to analyze' }).last().click()
+  await expect(page).toHaveURL(/\/analyze\/$/)
   await expect(page.getByRole('heading', { name: 'What will be sent' })).toBeVisible()
 }
 
@@ -42,9 +43,9 @@ function expectedPayload() {
   return { review, payload: buildPayload(texts.map(item => ({ item: item.id, text: review.cleanedItem(item.id) })), 'anthropic', 'claude-haiku-5-5').payload }
 }
 
-test('without a reviewed file, says to open and review one first', async ({ page }) => {
+test('without a reviewed file, a direct link leads to the start page', async ({ page }) => {
   await page.goto('/analyze/')
-  await expect(page.getByText('Open a file and review it first: only cleaned text can be sent.')).toBeVisible()
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Find what hurts your customers. Without exposing who they are.')
 })
 
 test('shows how many cleaned texts go where, the terms, what is not sent, and the cost, before anything is sent', async ({ page }) => {

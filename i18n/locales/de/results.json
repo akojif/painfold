@@ -43,8 +43,11 @@
     "empty": {
       "heading": "Noch kein Bericht",
       "body": "Der Bericht entsteht aus einer Analyse in diesem Besuch. Die Ergebnisse liegen nur im Speicher dieses Tabs und sind nach dem Neuladen oder Schließen weg.",
-      "analyze": "Zu Analysieren",
-      "open": "Datei öffnen"
+      "analyze": "Zur Analyse"
+    },
+    "download": {
+      "title": "Die bereinigte Datei",
+      "body": "Dieselbe Datei wie auf der Download-Seite: personenbezogene Daten durch Platzhalter ersetzt, so wie Sie sie geprüft haben."
     }
   }
 }

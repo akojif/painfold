@@ -53,7 +53,7 @@ for (const width of [1280, 768]) {
         await page.getByRole('tab', { name: 'By row' }).click()
         expect(await sideways(page), 'review by row').toBeLessThanOrEqual(0)
         await shot('row')
-        await page.getByRole('link', { name: 'Continue to download' }).last().click()
+        await page.getByRole('link', { name: 'Download the cleaned file' }).last().click()
         await expect(page).toHaveURL(/\/download\/$/)
         expect(await sideways(page), 'download').toBeLessThanOrEqual(0)
         expect(await hiddenTruncation(page), 'download').toEqual([])

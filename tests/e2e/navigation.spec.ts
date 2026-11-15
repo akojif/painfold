@@ -38,7 +38,7 @@ test.describe('nothing to lose: no question', () => {
 
   test('after the cleaned file is downloaded, starting over does not ask, and leaving does not warn', async ({ page }) => {
     await review(page)
-    await page.getByRole('link', { name: 'Continue to download' }).last().click()
+    await page.getByRole('link', { name: 'Download the cleaned file' }).last().click()
     await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: /^Download support-tickets_cleaned/ }).click()])
     let warned = false
     page.on('dialog', async (shown) => {
@@ -100,7 +100,7 @@ test.describe('work to lose: ask first', () => {
 
   test('the download step asks before starting over when nothing was downloaded', async ({ page }) => {
     await review(page)
-    await page.getByRole('link', { name: 'Continue to download' }).last().click()
+    await page.getByRole('link', { name: 'Download the cleaned file' }).last().click()
     await page.getByRole('button', { name: 'Start over' }).click()
     await expect(dialog(page)).toBeVisible()
   })

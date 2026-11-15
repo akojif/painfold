@@ -1,6 +1,6 @@
 <script setup lang="ts">
 defineProps<{ current: number }>()
-const steps = ['import', 'review', 'download'] as const
+const steps = ['import', 'review', 'analyze', 'report'] as const
 </script>
 
 <template>

@@ -55,7 +55,8 @@ async function analyzeSample(page: Page) {
   await page.getByRole('button', { name: 'Try the sample file' }).click()
   await page.getByRole('button', { name: /^Find personal data in/ }).click()
   await expect(page).toHaveURL(/\/review\/$/)
-  await page.evaluate(() => (document.querySelector('#__nuxt') as unknown as { __vue_app__: { config: { globalProperties: { $router: { push: (to: string) => Promise<void> } } } } }).__vue_app__.config.globalProperties.$router.push('/analyze/'))
+  await page.getByRole('link', { name: 'Continue to analyze' }).last().click()
+  await expect(page).toHaveURL(/\/analyze\/$/)
   await page.getByLabel('API key', { exact: true }).fill('sk-ant-invented-test-key')
   await page.getByLabel('I have checked these texts for names, or they contain none.').check()
   await page.getByRole('button', { name: /^Send \d+ cleaned texts to Anthropic$/ }).click()
@@ -73,7 +74,7 @@ test('the report ranks jobs, pains and gains with numbers counted from the answe
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('What customers said')
   await expect(page.getByText(`${total} texts analyzed with Claude Haiku 5.5.`)).toBeVisible()
   await expect(page.getByText('A text can appear under several themes.')).toBeVisible()
-  await expect(page.getByRole('heading', { level: 2 })).toHaveText(['Jobs', 'Pains', 'Gains'])
+  await expect(page.getByRole('heading', { level: 2 })).toHaveText(['Jobs', 'Pains', 'Gains', 'The cleaned file'])
   await expect(page.getByRole('navigation', { name: 'Sections' }).getByRole('link')).toHaveText(['Jobs 1', 'Pains 1', 'Gains 1'])
 
   const jobs = page.getByRole('region', { name: 'Jobs' })
@@ -121,15 +122,38 @@ test('every bar uses one scale across jobs, pains and gains', async ({ page }) =
   expect(Number(style!.match(/scaleX\(([\d.]+)\)/)![1])).toBeCloseTo(pains / texts.length, 5)
 })
 
-test('without an analysis in this visit, the report says why and where to start', async ({ page }) => {
-  await page.goto('/report/')
+/** Opens the report after the review, before any analysis: reachable only by going back and forth in history. */
+async function reportBeforeAnalysis(page: Page, start = '/') {
+  await page.goto(start)
+  await page.getByRole('button', { name: start === '/' ? 'Try the sample file' : 'Beispieldatei ausprobieren' }).click()
+  await page.getByRole('button', { name: start === '/' ? /^Find personal data in/ : /^Personenbezogene Daten in/ }).click()
+  await expect(page).toHaveURL(/\/review\/$/)
+  await page.evaluate(path => (document.querySelector('#__nuxt') as unknown as { __vue_app__: { config: { globalProperties: { $router: { push: (to: string) => Promise<void> } } } } }).__vue_app__.config.globalProperties.$router.push(path), `${start}report/`)
+}
+
+test('reviewed but not analyzed yet, the report says why and leads to Analyze', async ({ page }) => {
+  await reportBeforeAnalysis(page)
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('No report yet')
-  await page.getByRole('link', { name: 'Open a file' }).click()
-  await expect(page).toHaveURL(/\/$/)
+  await page.getByRole('link', { name: 'Go to Analyze' }).click()
+  await expect(page).toHaveURL(/\/analyze\/$/)
+})
+
+test('without a reviewed file, a direct link leads to the start page', async ({ page }) => {
+  await page.goto('/report/')
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Find what hurts your customers. Without exposing who they are.')
 })
 
 test('the German report uses the German terms', async ({ page }) => {
-  await page.goto('/de/report/')
+  await reportBeforeAnalysis(page, '/de/')
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Noch kein Bericht')
-  await expect(page.getByRole('link', { name: 'Datei öffnen' })).toBeVisible()
+  await expect(page.getByRole('link', { name: 'Zur Analyse' })).toBeVisible()
+})
+
+test('the report is step 4 and offers the cleaned file too', async ({ page }) => {
+  await analyzeSample(page)
+  const steps = page.getByRole('navigation', { name: 'Steps' })
+  await expect(steps.getByRole('listitem')).toHaveText([/Import/, /Review/, /Analyze/, /Report/])
+  await expect(steps.locator('[aria-current="step"]')).toHaveText(/Report/)
+  const [download] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: 'Download the cleaned file' }).click()])
+  expect(download.suggestedFilename()).toBe('support-tickets_cleaned.csv')
 })
