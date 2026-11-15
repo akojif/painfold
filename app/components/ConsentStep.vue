@@ -243,7 +243,9 @@ function download() {
         </label>
       </div>
 
-      <div class="mt-6">
+      <!-- The privacy notice next to the one button that sends (#147). -->
+      <PrivacyNotice class="mt-6" />
+      <div class="mt-4">
         <button
           v-if="!busy"
           type="button"

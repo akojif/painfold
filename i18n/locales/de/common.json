@@ -19,10 +19,8 @@
     "source": "Open Source",
     "roadmap": "Roadmap",
     "credit": "Entwickelt von {name}",
-    "factsLabel": "Über Painfold",
-    "noCookies": "Keine Cookies",
-    "noAccount": "Kein Konto",
-    "accuracy": "Genauigkeit"
+    "accuracy": "Genauigkeit",
+    "label": "Fußzeile"
   },
   "types": {
     "EMAIL": "E-Mail-Adressen",

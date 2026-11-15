@@ -1,7 +1,8 @@
 {
   "privacy": {
     "notice": "Your file is never uploaded. It stays in this browser.",
-    "noticeAi": "Only the cleaned text you approve is sent to the AI you choose."
+    "noticeAi": "Only the cleaned text you approve is sent to the AI you choose.",
+    "short": "Your file never leaves this browser."
   },
   "network": {
     "none": "No data has left this browser.",
@@ -153,9 +154,7 @@
     "summary": "Could identify someone: {removed} removed, {kept} kept."
   },
   "start": {
-    "privacy": "Your file is never uploaded. It stays in this browser.",
-    "dropOverlay": "Drop to open. Nothing is uploaded.",
-    "privacyAi": "Only the cleaned text you approve is sent to the AI you choose."
+    "dropOverlay": "Drop to open. Nothing is uploaded."
   },
   "review": {
     "limits": "Automatic detection can miss personal data. Review the results before sharing the cleaned file. Painfold helps with data protection but is not legal advice and does not by itself make your processing GDPR compliant."

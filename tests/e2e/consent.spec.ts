@@ -117,9 +117,12 @@ test('when names were not checked, says so and asks for a confirmation', async (
   await expect(section.getByLabel('I have checked these texts for names, or they contain none.')).not.toBeChecked()
 })
 
-test('the privacy notice says that only approved cleaned text goes to the chosen AI', async ({ page }) => {
+test('the privacy notice says that only approved cleaned text goes to the chosen AI, on the start page and next to the send button', async ({ page }) => {
   await page.goto('/')
-  await expect(page.getByText('Only the cleaned text you approve is sent to the AI you choose.').first()).toBeVisible()
-  await page.goto('/roadmap/')
-  await expect(page.locator('footer')).toContainText('Only the cleaned text you approve is sent to the AI you choose.')
+  await expect(page.getByText('Only the cleaned text you approve is sent to the AI you choose.')).toBeVisible()
+  await openSample(page)
+  await page.getByRole('button', { name: /^Find personal data in/ }).click()
+  await expect(page.locator('main').getByText('Only the cleaned text you approve is sent to the AI you choose.')).toBeVisible()
+  await page.getByRole('link', { name: 'Continue to analyze' }).last().click()
+  await expect(page.locator('main').getByText('Only the cleaned text you approve is sent to the AI you choose.')).toBeVisible()
 })

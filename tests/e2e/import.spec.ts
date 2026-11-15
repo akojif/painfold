@@ -37,8 +37,6 @@ test.describe('start screen', () => {
       /^Preview\s*Find jobs, pains and gains\s*Grouped into themes, counted in code, with real quotes\.$/,
       /^Coming in v0\.4\s*Decide what to build\s*The strongest pains, framed as questions for your team\.$/,
     ])
-    // The hero states the privacy notice, so the footer adds only the other facts here.
-    await expect(page.locator('footer').getByRole('list', { name: 'About Painfold' }).getByRole('listitem')).toHaveText(['No cookies', 'No account'])
   })
 
   test('shows that nothing has left the browser', async ({ page }) => {

@@ -28,7 +28,6 @@ for (const width of [390, 320]) {
       await expect(page.getByRole('list', { name: 'What Painfold does' })).toBeHidden()
       const footer = page.locator('footer')
       expect(example).toBeLessThan(await y(footer))
-      await expect(footer.getByRole('listitem').filter({ hasText: 'No cookies' })).toBeVisible()
       await expect(footer.getByRole('link', { name: 'Roadmap' })).toBeVisible()
       await expect(footer.getByRole('link', { name: 'Accuracy' })).toBeVisible()
       expect(await sideways(page)).toBeLessThanOrEqual(0)
