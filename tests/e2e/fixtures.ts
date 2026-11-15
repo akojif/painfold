@@ -53,3 +53,9 @@ export const test = base.extend<{ foreignRequests: string[], allowedOrigins: str
 })
 
 export { expect }
+
+/** Opens the made-up sample file the way people do: "Try an example", then "Open the sample" (ExampleDialog.vue). */
+export async function openSample(page: Page) {
+  await page.getByRole('button', { name: /^(Try an example|Beispiel ausprobieren)$/ }).click()
+  await page.getByRole('button', { name: /^(Open the sample|Beispieldatei öffnen)$/ }).click()
+}

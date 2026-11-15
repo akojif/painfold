@@ -1,4 +1,4 @@
-import { expect, test } from './fixtures'
+import { expect, openSample, test } from './fixtures'
 
 test('pages and app files are served with the security headers', async ({ page, request }) => {
   const response = await page.goto('/')
@@ -44,7 +44,7 @@ test('no cookies are set', async ({ page, context }) => {
 test('the theme choice is the only thing stored in the browser', async ({ page, context }) => {
   await page.goto('/')
   await page.getByRole('button', { name: 'Dark' }).click()
-  await page.getByRole('button', { name: 'Try the sample file' }).click()
+  await openSample(page)
   await page.getByRole('button', { name: /Find personal data/ }).click()
   await expect(page).toHaveURL(/\/review\/$/)
   await page.keyboard.press('r')

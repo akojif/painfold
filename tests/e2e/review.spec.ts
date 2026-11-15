@@ -1,5 +1,5 @@
 import type { Page } from '@playwright/test'
-import { expect, test } from './fixtures'
+import { expect, openSample, test } from './fixtures'
 
 // Three findings: the same email twice, and an IP address. "Anna Huber" is a
 // name, which Stage 1 does not detect, in rows 1 and 3.
@@ -231,7 +231,7 @@ test.describe('review step', () => {
 
   test('the sample file reviews without errors and the stepper marks import done', async ({ page }) => {
     await page.goto('/')
-    await page.getByRole('button', { name: 'Try the sample file' }).click()
+    await openSample(page)
     await page.getByRole('button', { name: /Find personal data/ }).click()
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(/findings in 200 rows/)
     await expect(page.getByRole('navigation', { name: 'Steps' }).getByText('Import, done')).toBeAttached()

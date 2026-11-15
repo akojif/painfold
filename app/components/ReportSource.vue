@@ -7,13 +7,15 @@
 const props = defineProps<{ item: string, openAtStart?: boolean }>()
 
 const { itemById, placeOfUnit, attributesOfUnit } = useSession()
-const { sentText } = useTagging()
+const { sentText, demo } = useTagging()
 const open = ref(props.openAtStart)
 const panel = useId()
 
+// The demo (#130) brings its own rows and kept values: it may be shown with no file open.
+const stored = computed(() => demo.value?.items[props.item])
 const found = computed(() => itemById(props.item))
-const place = computed(() => (found.value ? placeOfUnit(found.value.unit) : undefined))
-const attributes = computed(() => Object.entries(found.value ? attributesOfUnit(found.value.unit) : {}))
+const place = computed(() => (stored.value ? { number: stored.value.row } : found.value ? placeOfUnit(found.value.unit) : undefined))
+const attributes = computed(() => Object.entries(stored.value?.attributes ?? (found.value ? attributesOfUnit(found.value.unit) : {})))
 const text = computed(() => sentText.value.get(props.item) ?? '')
 </script>
 

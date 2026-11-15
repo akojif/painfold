@@ -48,6 +48,13 @@
     "download": {
       "title": "Die bereinigte Datei",
       "body": "Dieselbe Datei wie auf der Download-Seite: personenbezogene Daten durch Platzhalter ersetzt, so wie Sie sie geprüft haben."
+    },
+    "demo": {
+      "label": "Demo mit erfundenen Daten.",
+      "note": "Die Support-Tickets der Beispieldatei wurden im Browser bereinigt, am {date} analysiert und in Painfold gespeichert. Beim Anzeigen wurde nichts aus Ihrem Browser gesendet.",
+      "noFile": "Hier ist keine Datei geöffnet: Die Zeilen beziehen sich auf die Beispieldatei.",
+      "standIn": "Platzhalter: erfundene Antworten, kein echter Modelllauf.",
+      "leave": "Selbst eine Datei analysieren"
     }
   }
 }

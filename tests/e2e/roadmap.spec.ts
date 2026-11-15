@@ -1,4 +1,4 @@
-import { expect, test } from './fixtures'
+import { expect, openSample, test } from './fixtures'
 
 test('the footer credits the author in a new tab, announced as one, without a heart or emoji', async ({ page }) => {
   await page.goto('/')
@@ -39,7 +39,7 @@ test('the roadmap page is prerendered and lists every stage with the current one
 
 test('the download page leads on to Analyze, and going back keeps the cleaned file', async ({ page }) => {
   await page.goto('/')
-  await page.getByRole('button', { name: 'Try the sample file' }).click()
+  await openSample(page)
   await page.getByRole('button', { name: /Find personal data/ }).click()
   await page.getByRole('link', { name: 'Download the cleaned file' }).last().click()
   await page.getByRole('link', { name: 'Continue to analyze' }).click()
