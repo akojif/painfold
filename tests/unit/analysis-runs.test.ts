@@ -1,10 +1,11 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import type { BatchReply } from '../../core/ai/run'
-import { presence } from '../../scripts/analysis-metrics'
+import { presence, tags, type ThemeMapping } from '../../scripts/analysis-metrics'
 import { computeResults, RESULTS_PATH, resultsJson } from '../../scripts/analysis-results'
 import { recordRun, replayEvalRun, runFileName, RUNS_DIR, type EvalRun, type Senders } from '../../scripts/analysis-runs'
 import type { ItemLabels, LabelItem } from '../../scripts/labels'
+import { MAPPINGS_DIR, type StoredMapping } from '../../scripts/theme-mapping'
 
 // Stored runs of the analysis evaluation (#129): recorded with invented
 // answers, replayed through the live code, and scored. The last test checks
@@ -91,6 +92,24 @@ describe('replaying and scoring', () => {
     expect(results.stability).toEqual([expect.objectContaining({ files: ['a.json', 'b.json'], presence: { hits: 17, of: 18 } })])
   })
 
+  it('adds tag-level scores, and who mapped, once a person has mapped the run\'s themes', async () => {
+    const run = await record()
+    // The invented answers use the gold wording, so the person maps each theme onto itself.
+    const mapping: ThemeMapping = {
+      jobs: { 'Send invoices': 'Send invoices', 'Pay staff': 'Pay staff' },
+      pains: { 'Bank feed drops': 'Bank feed drops', 'Slow payroll': 'Slow payroll' },
+      gains: { 'Custom reminders': 'Custom reminders' },
+    }
+    const stored: StoredMapping = { format: 'painfold-theme-mapping/1', run: 'a.json', lang: 'en', mappedBy: 'Francis Akoji', mapping }
+    const results = await computeResults([{ file: 'a.json', run }], gold, [stored])
+    const replayed = await replayEvalRun(run)
+    expect(results.runs[0]!.scores!.mappedBy).toBe('Francis Akoji')
+    expect(results.runs[0]!.scores!.tags).toEqual(tags(gold, replayed.predictions, mapping))
+    expect(results.runs[0]!.scores!.tags!.pains).toEqual({ recall: { hits: 3, of: 3 }, precision: { hits: 3, of: 3 } })
+    // Without a mapping for that run, no tag-level scores.
+    expect((await computeResults([{ file: 'b.json', run }], gold, [stored])).runs[0]!.scores!.tags).toBeUndefined()
+  })
+
   it('leaves the scores out until labels for the language exist', async () => {
     const results = await computeResults([{ file: 'a.json', run: await record() }], [])
     expect(results.runs[0]!.scores).toBeUndefined()
@@ -108,6 +127,7 @@ describe('the committed results', () => {
     const runs = existsSync(RUNS_DIR) ? readdirSync(RUNS_DIR).filter(file => file.endsWith('.json')).sort().map(file => ({ file, run: JSON.parse(readFileSync(`${RUNS_DIR}/${file}`, 'utf8')) as EvalRun })) : []
     const labels = ['en', 'de'].map(lang => `data/eval/analysis/labels-${lang}.jsonl`).filter(path => existsSync(path))
       .flatMap(path => readFileSync(path, 'utf8').trim().split('\n').map(line => JSON.parse(line) as ItemLabels))
-    expect(readFileSync(RESULTS_PATH, 'utf8')).toBe(resultsJson(await computeResults(runs, labels)))
+    const mappings = existsSync(MAPPINGS_DIR) ? readdirSync(MAPPINGS_DIR).filter(file => file.endsWith('.json')).map(file => JSON.parse(readFileSync(`${MAPPINGS_DIR}/${file}`, 'utf8')) as StoredMapping) : []
+    expect(readFileSync(RESULTS_PATH, 'utf8')).toBe(resultsJson(await computeResults(runs, labels, mappings)))
   })
 })

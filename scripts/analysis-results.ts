@@ -4,9 +4,10 @@
 // unit test, and shown on the Accuracy page. No dates of the computation are
 // written, so the same runs and labels always give the same file.
 import type { Kind } from '../core/ai/merge.ts'
-import { accuracy, grouping, presence, stability, type Accuracy, type Rate, type Scores } from './analysis-metrics.ts'
+import { accuracy, grouping, presence, stability, tags, type Accuracy, type Rate, type Scores } from './analysis-metrics.ts'
 import { replayEvalRun, type EvalRun } from './analysis-runs.ts'
 import type { FeedbackType, ItemLabels, Sentiment } from './labels.ts'
+import type { StoredMapping } from './theme-mapping.ts'
 
 export const RESULTS_FORMAT = 'painfold-analysis-results/1'
 export const RESULTS_PATH = 'data/eval/analysis/results.json'
@@ -31,6 +32,9 @@ export type RunResults = {
     grouping: Record<Kind, Scores>
     sentiment: Accuracy<Sentiment>
     type: Accuracy<FeedbackType>
+    /** Tag-level, only once a person has mapped this run's themes (the final test run). */
+    tags?: Record<Kind, Scores>
+    mappedBy?: string
   }
 }
 
@@ -50,7 +54,7 @@ export type AnalysisResults = {
 }
 
 /** Scores every run, in file-name order; stability compares the first two runs of each split, language and model. */
-export async function computeResults(runs: ReadonlyArray<{ file: string, run: EvalRun }>, labels: readonly ItemLabels[]): Promise<AnalysisResults> {
+export async function computeResults(runs: ReadonlyArray<{ file: string, run: EvalRun }>, labels: readonly ItemLabels[], mappings: readonly StoredMapping[] = []): Promise<AnalysisResults> {
   const sorted = [...runs].sort((a, b) => a.file.localeCompare(b.file))
   const results: RunResults[] = []
   const predictions = new Map<string, Awaited<ReturnType<typeof replayEvalRun>>>()
@@ -58,6 +62,7 @@ export async function computeResults(runs: ReadonlyArray<{ file: string, run: Ev
     const replayed = await replayEvalRun(run)
     predictions.set(file, replayed)
     const gold = labels.filter(label => label.lang === run.lang && label.split === run.split)
+    const mapped = mappings.find(mapping => mapping.run === file)
     results.push({
       file,
       split: run.split,
@@ -78,6 +83,7 @@ export async function computeResults(runs: ReadonlyArray<{ file: string, run: Ev
               grouping: grouping(gold, replayed.predictions),
               sentiment: accuracy(gold, replayed.predictions, 'sentiment'),
               type: accuracy(gold, replayed.predictions, 'type'),
+              ...(mapped ? { tags: tags(gold, replayed.predictions, mapped.mapping), mappedBy: mapped.mappedBy } : {}),
             },
           }
         : {}),

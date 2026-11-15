@@ -8,7 +8,7 @@ import { BATCH_SIZE, buildPayload, type AnalysisPayload, type ThemeLanguage } fr
 import { runTagging, type BatchReply } from '../core/ai/run.ts'
 import { recorder, replayRun, type Exchange } from '../core/ai/stored-run.ts'
 import { batchContent, EFFORT, MAX_TOKENS } from '../core/ai/tagging.ts'
-import { countThemes } from '../core/ai/themes.ts'
+import { countThemes, type Theme } from '../core/ai/themes.ts'
 import { predictionsOf, quoteRate, type ItemPrediction, type Rate } from './analysis-metrics.ts'
 import type { LabelItem } from './labels.ts'
 
@@ -115,6 +115,8 @@ export type ReplayedRun = {
   merged: boolean
   quotes: Rate
   themes: Record<(typeof KINDS)[number], number>
+  /** The counted themes themselves, for the theme mapping (scripts/theme-mapping.ts). */
+  counted: Record<(typeof KINDS)[number], Theme[]>
 }
 
 /** Replays a stored run through the live code and turns it into predictions by item id. */
@@ -128,5 +130,6 @@ export async function replayEvalRun(run: EvalRun): Promise<ReplayedRun> {
     merged: !merge.stopped,
     quotes: quoteRate(result.tagged, result.droppedQuotes),
     themes: Object.fromEntries(KINDS.map(kind => [kind, themes[kind].length])) as ReplayedRun['themes'],
+    counted: themes,
   }
 }
