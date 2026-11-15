@@ -23,6 +23,7 @@ import { computeResults, RESULTS_PATH, resultsJson } from './analysis-results.ts
 import { recordRun, runFileName, RUNS_DIR, type EvalRun } from './analysis-runs.ts'
 import { post } from './ai-post.ts'
 import type { ItemLabels, LabelItem } from './labels.ts'
+import { MAPPINGS_DIR, type StoredMapping } from './theme-mapping.ts'
 
 const ITEMS_PATH = 'data/eval/analysis/items.jsonl'
 const LABEL_PATHS = { en: 'data/eval/analysis/labels-en.jsonl', de: 'data/eval/analysis/labels-de.jsonl' }
@@ -81,7 +82,8 @@ if (values.run) {
 }
 
 const labels = (Object.values(LABEL_PATHS) as string[]).filter(path => existsSync(path)).flatMap(path => lines(path) as ItemLabels[])
-const results = await computeResults(storedRuns(), labels)
+const mappings = existsSync(MAPPINGS_DIR) ? readdirSync(MAPPINGS_DIR).filter(file => file.endsWith('.json')).map(file => JSON.parse(readFileSync(`${MAPPINGS_DIR}/${file}`, 'utf8')) as StoredMapping) : []
+const results = await computeResults(storedRuns(), labels, mappings)
 
 const percent = (rate: Rate) => {
   const value = valueOf(rate)
@@ -98,6 +100,7 @@ for (const run of results.runs) {
   }
   for (const kind of KINDS) console.log(`  ${kind.padEnd(5)} presence ${pair(run.scores.presence[kind])}   grouping ${pair(run.scores.grouping[kind])}`)
   console.log(`  sentiment ${percent(run.scores.sentiment.correct)}   type ${percent(run.scores.type.correct)}`)
+  if (run.scores.tags) for (const kind of KINDS) console.log(`  ${kind.padEnd(5)} tags ${pair(run.scores.tags[kind])}   (mapped by ${run.scores.mappedBy})`)
 }
 for (const entry of results.stability) {
   console.log(`\nStability, ${entry.split} ${entry.lang} ${entry.model}: presence agrees ${percent(entry.presence)}; grouping ${KINDS.map(kind => `${kind} ${pair(entry.grouping[kind])}`).join('; ')}`)
