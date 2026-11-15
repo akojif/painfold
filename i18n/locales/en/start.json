@@ -1,14 +1,14 @@
 {
   "start": {
     "headline": "Find what hurts your customers. Without exposing who they are.",
-    "subline": "Start by cleaning your feedback file: names, emails, phone numbers, IBANs and more are removed right here in your browser.",
+    "subline": "Start by cleaning your feedback file: names, emails, phone numbers, IBANs and more are removed before anyone reads them.",
     "choose": "Choose a CSV or Excel file",
     "reading": "Reading {name}…",
     "journeyLabel": "What Painfold does",
     "journey": {
       "clean": {
         "title": "Clean your file",
-        "body": "Personal data turns into placeholders, right in your browser."
+        "body": "Personal data is replaced with placeholders."
       },
       "find": {
         "title": "Find jobs, pains and gains",

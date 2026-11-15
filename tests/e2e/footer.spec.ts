@@ -1,16 +1,17 @@
 import type { Locator, Page } from '@playwright/test'
 import { expect, openSample, test } from './fixtures'
 
-// One footer on every page (#147): on desktop one line in the header's grid,
-// the short privacy line on the left and the links and credit on the right;
-// below 768 px two short centred lines, the links and then the credit.
+// One footer on every page (#147): links only. On desktop one line in the
+// header's grid, the links on the left and the credit on the right; below
+// 768 px two short centred lines, the links and then the credit. The privacy
+// notice is on the start page, Review and Analyze, not here.
 
 const footer = (page: Page) => page.locator('footer')
 const box = async (locator: Locator) => (await locator.boundingBox())!
 const sideways = (page: Page) => page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
 const LINE = 24 // one line of 13 px text, with room for the icon
 
-test('every page has the same footer: the short privacy line, Roadmap, Accuracy, the GitHub mark and the credit', async ({ page }) => {
+test('every page has the same footer, links only: Roadmap, Accuracy, the GitHub mark and the credit', async ({ page }) => {
   const texts: string[] = []
   for (const path of ['/', '/roadmap/', '/accuracy/', '/no-such-page/']) {
     await page.goto(path)
@@ -25,7 +26,7 @@ test('every page has the same footer: the short privacy line, Roadmap, Accuracy,
   texts.push(await footer(page).innerText())
 
   expect(new Set(texts).size).toBe(1)
-  expect(texts[0]).toContain('Your file never leaves this browser.')
+  expect(texts[0]).not.toMatch(/browser|uploaded/)
   await expect(footer(page).getByRole('navigation', { name: 'Footer' }).getByRole('link')).toHaveText(['Roadmap', 'Accuracy', 'Open source'])
   const source = footer(page).getByRole('link', { name: 'Open source' })
   await expect(source).toHaveAttribute('href', 'https://github.com/akojif/painfold')
@@ -45,7 +46,10 @@ for (const width of [1280, 768]) {
     expect((await box(row)).height).toBe((await box(header)).height)
     expect((await box(row)).x).toBe((await box(header)).x)
     expect((await box(row)).width).toBe((await box(header)).width)
-    const parts = [footer(page).getByText('Your file never leaves this browser.'), footer(page).getByRole('navigation'), footer(page).getByText(/^Built by/)]
+    const parts = [footer(page).getByRole('navigation'), footer(page).getByText(/^Built by/)]
+    // The links start at the grid's left edge; the credit ends at its right edge.
+    expect(Math.round((await box(parts[0]!)).x)).toBe(Math.round((await box(row)).x + 24))
+    expect(Math.round((await box(parts[1]!)).x + (await box(parts[1]!)).width)).toBe(Math.round((await box(row)).x + (await box(row)).width - 24))
     const centres = await Promise.all(parts.map(async part => (await box(part)).y + (await box(part)).height / 2))
     for (const centre of centres) expect(Math.abs(centre - centres[0]!)).toBeLessThan(2)
     for (const part of parts) expect((await box(part)).height).toBeLessThan(LINE)
@@ -60,7 +64,6 @@ for (const width of [390, 320]) {
       const nav = footer(page).getByRole('navigation')
       const built = footer(page).getByText(credit)
       await expect(nav.getByRole('link')).toHaveText([...links])
-      await expect(footer(page).locator('p').first()).toBeHidden()
       const navBox = await box(nav)
       const builtBox = await box(built)
       expect(navBox.height).toBeLessThan(LINE)

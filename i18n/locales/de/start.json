@@ -1,14 +1,14 @@
 {
   "start": {
     "headline": "Finden Sie, was Ihren Kunden wehtut. Ohne preiszugeben, wer sie sind.",
-    "subline": "Bereinigen Sie zuerst Ihre Feedback-Datei: Namen, E-Mail-Adressen, Telefonnummern, IBANs und mehr werden direkt hier in Ihrem Browser entfernt.",
+    "subline": "Bereinigen Sie zuerst Ihre Feedback-Datei: Namen, E-Mail-Adressen, Telefonnummern, IBANs und mehr werden entfernt, bevor jemand sie liest.",
     "choose": "CSV- oder Excel-Datei auswählen",
     "reading": "{name} wird gelesen…",
     "journeyLabel": "Was Painfold macht",
     "journey": {
       "clean": {
         "title": "Datei bereinigen",
-        "body": "Personenbezogene Daten werden zu Platzhaltern, direkt in Ihrem Browser."
+        "body": "Personenbezogene Daten werden durch Platzhalter ersetzt."
       },
       "find": {
         "title": "Aufgaben, Probleme und Wünsche finden",
