@@ -69,8 +69,7 @@
       "cancelled": "Download canceled.",
       "removed": "Name model removed from this browser.",
       "offline": "You're offline."
-    },
-    "smallScreen": "Names are checked on a larger screen. Everything else works here."
+    }
   },
   "nameScan": {
     "running": "Checking for names: {done} of {total} rows",
@@ -101,11 +100,14 @@
   },
   "smallScreen": {
     "title": "Painfold likes a bigger screen",
-    "body": "This phone shows it off nicely, but reviewing hundreds of rows is a job for a laptop. Your thumbs will thank you. Open it on your computer: your file stays just as private there.",
+    "body": "Reviewing hundreds of rows is a job for a laptop. Open Painfold on your computer: your file stays just as private there.",
     "copy": "Copy link",
     "copied": "Link copied",
     "copyManually": "Copy this address by hand:",
-    "continue": "Continue anyway"
+    "close": "Close",
+    "start": "Go to the start page",
+    "pausedTitle": "Your file is still open",
+    "paused": "Make this window at least 768 pixels wide to carry on. Nothing has been lost."
   },
   "warning": {
     "heading": "Could identify someone",
@@ -178,8 +180,7 @@
       "partly": "Names were checked in {done} of {total} rows; the check was skipped for the rest, so names there were not removed.",
       "skipped": "Names were not checked: the check was skipped for this file.",
       "failed": "Names were not checked: the name model could not run.",
-      "notChecked": "Names and places were not checked: the name model was not downloaded.",
-      "smallScreen": "Names were not checked: that happens on a larger screen."
+      "notChecked": "Names and places were not checked: the name model was not downloaded."
     },
     "mapStays": "The list of original values behind each placeholder stays in this browser and is gone when you close the tab.",
     "reportExplain": "The cleaned file holds only your data. The cleaning report lists what was replaced, with the date, the Painfold version and the limits of automatic detection.",

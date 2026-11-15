@@ -276,17 +276,3 @@ test.describe('finding personal data', () => {
     await expect(page.getByRole('button', { name: 'Choose a CSV or Excel file' })).toBeVisible()
   })
 })
-
-test.describe('small screens', () => {
-  test.use({ viewport: { width: 390, height: 844 } })
-
-  test('never scroll sideways, before or after a file is chosen', async ({ page }) => {
-    const overflow = () => page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)
-    await page.goto('/')
-    await expect(page.locator('figure[data-cleaned]')).toHaveCount(1, { timeout: 5000 })
-    expect(await overflow()).toBeLessThanOrEqual(0)
-    await upload(page, 'support-tickets.csv', sampleCsv)
-    await expectLoaded(page, 'support-tickets.csv', '200 rows')
-    expect(await overflow()).toBeLessThanOrEqual(0)
-  })
-})

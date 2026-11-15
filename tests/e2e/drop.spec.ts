@@ -180,17 +180,6 @@ test.describe('the toast', () => {
     const colours = await toast(page).evaluate(element => [getComputedStyle(element).backgroundColor, getComputedStyle(element).boxShadow])
     expect(colours[1]).not.toBe('none')
   })
-
-  test.describe('on a phone', () => {
-    test.use({ viewport: { width: 390, height: 844 } })
-    test('spans the width, with a margin', async ({ page }) => {
-      await page.goto('/')
-      await drop(page, 'photo.png', Buffer.from([0x89, 0x50, 0x4E, 0x47]))
-      const shown = (await toast(page).boundingBox())!
-      expect(shown.x).toBe(16)
-      expect(shown.width).toBe(390 - 32)
-    })
-  })
 })
 
 test.describe('the drop state', () => {

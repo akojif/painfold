@@ -93,22 +93,15 @@ test.describe('choosing the language at the root', () => {
 test.describe('German at 320px', () => {
   test.use({ viewport: { width: 320, height: 800 } })
 
-  test('long German words do not make any screen scroll sideways', async ({ page }) => {
+  // Phones see the informational pages only (#139); the flow needs 768 px or more.
+  test('long German words do not make the start page, the sheet, the notice or the roadmap scroll sideways', async ({ page }) => {
     await page.goto('/de/')
     expect(await sideways(page), 'start').toBeLessThanOrEqual(0)
     await page.getByRole('button', { name: 'Beispieldatei ausprobieren' }).click()
-    // On a phone the flow runs after "Trotzdem weiter" (tests/e2e/mobile.spec.ts).
     expect(await sideways(page), 'sheet').toBeLessThanOrEqual(0)
-    await page.getByRole('button', { name: 'Trotzdem weiter' }).click()
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Wählen Sie, was geprüft wird')
-    expect(await sideways(page), 'columns').toBeLessThanOrEqual(0)
-    await page.getByRole('button', { name: /Personenbezogene Daten in 200 Zeilen finden/ }).click()
-    await expect(page).toHaveURL(/\/de\/review\/$/)
-    expect(await sideways(page), 'review by value').toBeLessThanOrEqual(0)
-    await page.getByRole('tab', { name: 'Nach Zeile' }).click()
-    expect(await sideways(page), 'review by row').toBeLessThanOrEqual(0)
-    await page.getByRole('link', { name: 'Weiter zum Download' }).last().click()
-    expect(await sideways(page), 'download').toBeLessThanOrEqual(0)
+    await page.goto('/de/review/')
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Painfold mag größere Bildschirme')
+    expect(await sideways(page), 'notice').toBeLessThanOrEqual(0)
     await page.goto('/de/roadmap/')
     expect(await sideways(page), 'roadmap').toBeLessThanOrEqual(0)
   })
