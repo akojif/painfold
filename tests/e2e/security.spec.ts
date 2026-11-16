@@ -41,16 +41,35 @@ test('no cookies are set', async ({ page, context }) => {
   expect(await context.cookies()).toEqual([])
 })
 
-test('the theme choice is the only thing stored in the browser', async ({ page, context }) => {
+// vue-router keeps each page's scroll position for the current tab in
+// sessionStorage, under one key: "<history position><path>" → { left, top }.
+// That is the only other thing allowed: app page paths (no query string or
+// fragment, so nothing from the file can get in) and numbers.
+const SCROLL_KEY = 'vue-router:scroll'
+const scrollEntry = /^-?\d+\/(?:[a-z0-9-]+\/)*$/
+
+test('the theme choice is the only thing stored in the browser, apart from scroll positions', async ({ page, context }) => {
   await page.goto('/')
   await page.getByRole('button', { name: 'Dark' }).click()
   await openSample(page)
   await page.getByRole('button', { name: /Find personal data/ }).click()
   await expect(page).toHaveURL(/\/review\/$/)
   await page.keyboard.press('r')
-  const stored = await page.evaluate(() => ({ local: { ...localStorage }, session: sessionStorage.length }))
-  expect(stored).toEqual({ local: { 'painfold-theme': 'dark' }, session: 0 })
+  const stored = await page.evaluate(() => ({ local: { ...localStorage }, session: { ...sessionStorage } }))
+  expect(stored.local).toEqual({ 'painfold-theme': 'dark' })
+  expect(Object.keys(stored.session).filter(key => key !== SCROLL_KEY)).toEqual([])
+  const positions = JSON.parse(stored.session[SCROLL_KEY] ?? '{}') as Record<string, unknown>
+  for (const [key, value] of Object.entries(positions)) {
+    expect(key).toMatch(scrollEntry)
+    expect(value).toEqual({ left: expect.any(Number), top: expect.any(Number) })
+    expect(Object.keys(value as object).sort()).toEqual(['left', 'top'])
+  }
   expect(await context.cookies()).toEqual([])
+})
+
+test('the scroll-position check fails on anything but page paths and numbers', () => {
+  for (const key of ['1/', '2/review/', '3/de/accuracy/', '-1/']) expect(key).toMatch(scrollEntry)
+  for (const key of ['1/review/?q=anna', '1/review/#row-3', '1/review', '1https://example.com/', '1/[NAME_1]/', '1/Anna/']) expect(key).not.toMatch(scrollEntry)
 })
 
 for (const path of ['/', '/roadmap/', '/404.html']) {
