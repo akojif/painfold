@@ -1,5 +1,6 @@
+import { createHash } from 'node:crypto'
 import { describe, expect, it } from 'vitest'
-import { fetchWithRetry, huggingFaceInit } from '../../scripts/fetch-model'
+import { download, fetchWithRetry, huggingFaceInit } from '../../scripts/fetch-model'
 
 // The build downloads the name model from Hugging Face, which can answer 429
 // when a shared build machine hits its rate limit. No request is made here.
@@ -54,5 +55,38 @@ describe('the Hugging Face token', () => {
     }) as unknown as typeof fetch
     await fetchWithRetry('https://example.com/a', { fetch: get, init: huggingFaceInit('hf_example') })
     expect(seen).toEqual([{ headers: { authorization: 'Bearer hf_example' } }])
+  })
+})
+
+describe('where the model comes from', () => {
+  const bytes = new TextEncoder().encode('{"model":"invented"}')
+  const expected = { sha256: createHash('sha256').update(bytes).digest('hex'), bytes: bytes.byteLength }
+  const fake = (answer: (url: string) => Response) => {
+    const calls: Array<{ url: string, init?: RequestInit }> = []
+    const get = (async (url: string, init?: RequestInit) => {
+      calls.push({ url, init })
+      return answer(url)
+    }) as unknown as typeof fetch
+    return { calls, get }
+  }
+  const noWait = async () => {}
+
+  it('tries the GitHub release copy first, with a flat file name and never the token', async () => {
+    const { calls, get } = fake(() => new Response(bytes))
+    expect(await download('onnx/model_int8.onnx', expected, { fetch: get, wait: noWait, token: 'hf_example' })).toEqual(bytes)
+    expect(calls).toEqual([{ url: 'https://github.com/akojif/painfold/releases/download/name-model-c2a4dbf/model_int8.onnx', init: undefined }])
+  })
+
+  it('falls back to Hugging Face, with the token, when the copy fails or differs', async () => {
+    for (const copy of [new Response(null, { status: 404 }), new Response('changed')]) {
+      const { calls, get } = fake(url => (url.includes('github.com') ? copy.clone() : new Response(bytes)))
+      expect(await download('config.json', expected, { fetch: get, wait: noWait, token: 'hf_example' })).toEqual(bytes)
+      expect(calls.at(-1)).toEqual({ url: 'https://huggingface.co/Xenova/distilbert-base-multilingual-cased-ner-hrl/resolve/c2a4dbf593c57f47004c5bc2d3770d311aee9c43/config.json', init: { headers: { authorization: 'Bearer hf_example' } } })
+    }
+  })
+
+  it('fails with every reason when no source gives the right file', async () => {
+    const { get } = fake(url => (url.includes('github.com') ? new Response('changed') : new Response(null, { status: 429 })))
+    await expect(download('config.json', expected, { fetch: get, wait: noWait, token: undefined })).rejects.toThrow(/the GitHub release copy: SHA-256 .*; Hugging Face \(without a token\): 429/)
   })
 })
