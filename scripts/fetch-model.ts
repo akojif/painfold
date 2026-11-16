@@ -1,7 +1,7 @@
 // Runs before `nuxt generate` (and can run on its own: `npm run models`).
 //
-// 1. Downloads the name model from the exact Hugging Face revision in
-//    deploy/model.ts into node_modules/.cache (kept between builds by CI), and checks every file against its SHA-256. A mismatch fails the
+// 1. Downloads the name model (the exact Hugging Face revision in
+//    deploy/model.ts, from its copy in a GitHub release or from Hugging Face) into node_modules/.cache (kept between builds by CI), and checks every file against its SHA-256. A mismatch fails the
 //    build, so a changed or tampered file never reaches users.
 // 2. Copies the model to public/models/<id>/<revision>/ and the ONNX Runtime
 //    WebAssembly files to public/ort/<version>/, so the app serves both from its
@@ -67,16 +67,49 @@ export function huggingFaceInit(token = process.env.HF_TOKEN): RequestInit | und
   return value ? { headers: { authorization: `Bearer ${value}` } } : undefined
 }
 
+/** Where a model file can be downloaded, in order: the copy in a GitHub release, then Hugging Face (with HF_TOKEN, if set). */
+export function sourcesFor(file: string, token = process.env.HF_TOKEN): Array<{ name: string, url: string, attempts: number, init?: RequestInit }> {
+  const huggingFace = huggingFaceInit(token)
+  return [
+    { name: 'the GitHub release copy', url: `${NAME_MODEL.mirror}${file.split('/').at(-1)}`, attempts: 3 },
+    { name: `Hugging Face (${huggingFace ? 'with a token' : 'without a token'})`, url: `https://huggingface.co/${NAME_MODEL.source}/resolve/${NAME_MODEL.revision}/${file}`, attempts: 6, init: huggingFace },
+  ]
+}
+
+/**
+ * Downloads a model file from the first source that gives exactly the
+ * expected bytes. A failed download or a wrong file moves on to the next
+ * source; if none works, the build fails with every reason.
+ */
+export async function download(file: string, expected: Expected, options: { fetch?: typeof fetch, wait?: (ms: number) => Promise<unknown>, token?: string } = {}): Promise<Uint8Array> {
+  const problems: string[] = []
+  for (const source of sourcesFor(file, 'token' in options ? options.token : process.env.HF_TOKEN)) {
+    try {
+      const response = await fetchWithRetry(source.url, { fetch: options.fetch, wait: options.wait, init: source.init, attempts: source.attempts })
+      if (!response.ok) {
+        problems.push(`${source.name}: ${response.status}`)
+        continue
+      }
+      const bytes = new Uint8Array(await response.arrayBuffer())
+      if (!matches(bytes, expected)) {
+        problems.push(`${source.name}: SHA-256 ${sha256(bytes)} and ${bytes.byteLength} bytes, expected ${expected.sha256} and ${expected.bytes}`)
+        continue
+      }
+      console.log(`${file}: downloaded from ${source.name}.`)
+      return bytes
+    }
+    catch (error) {
+      problems.push(`${source.name}: ${error instanceof Error ? error.message : String(error)}`)
+    }
+  }
+  throw new Error(`Downloading ${file} failed. ${problems.join('; ')}. Not using it.`)
+}
+
 export async function cachedFile(file: string, expected: Expected): Promise<string> {
   const path = join(CACHE, file)
   if (await readIfValid(path, expected)) return path
 
-  const url = `https://huggingface.co/${NAME_MODEL.source}/resolve/${NAME_MODEL.revision}/${file}`
-  const response = await fetchWithRetry(url, { init: huggingFaceInit() })
-  if (!response.ok) throw new Error(`Downloading ${url} failed: ${response.status}`)
-  const bytes = new Uint8Array(await response.arrayBuffer())
-  if (!matches(bytes, expected)) throw new Error(`${file} has SHA-256 ${sha256(bytes)} and ${bytes.byteLength} bytes, expected ${expected.sha256} and ${expected.bytes}. Not using it.`)
-
+  const bytes = await download(file, expected)
   await mkdir(dirname(path), { recursive: true })
   await writeFile(`${path}.part`, bytes)
   await rename(`${path}.part`, path)

@@ -11,6 +11,13 @@ export const NAME_MODEL = {
   revision: 'c2a4dbf593c57f47004c5bc2d3770d311aee9c43',
   /** The original model and its license, shown with the accuracy numbers. */
   original: 'Davlan/distilbert-base-multilingual-cased-ner-hrl',
+  /**
+   * A copy of the same files in a GitHub release of this repository, tried
+   * first by the build: Hugging Face rate-limits Cloudflare's build machines
+   * (#159). Flat file names (onnx/model_int8.onnx is model_int8.onnx). Every
+   * file is checked against its SHA-256 whichever source it comes from.
+   */
+  mirror: 'https://github.com/akojif/painfold/releases/download/name-model-c2a4dbf/',
   license: 'AFL-3.0',
   dtype: 'int8',
   // Each file's SHA-256 and size. The size is shown to users before they agree
