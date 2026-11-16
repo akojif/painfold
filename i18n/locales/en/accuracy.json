@@ -103,6 +103,36 @@
     "warnings": {
       "heading": "Could identify someone",
       "text": "Painfold warns about text that can point to one person together with other details: exact ages, “the only …”, job titles with a small place, and roles one person holds. Warnings are never removed on their own. Measured on {n} hand-written warnings, with the places given; the set is small and was written by the same author as the rules, so expect real feedback to score lower."
+    },
+    "analysis": {
+      "heading": "Jobs, pains and gains",
+      "notMeasured": "Not measured yet. The numbers appear here before version 0.3.0 is released.",
+      "notMeasuredLanguage": "Not measured in {language} yet.",
+      "lead": "Out of 100 pains customers mention, Painfold finds about {n}.",
+      "measured": "Measured on {texts} hand-labeled texts from the test split, analyzed by {model} on {date}. Each theme Painfold found was matched to the labels by hand, by {people}.",
+      "sample": "That is a small sample: {n} texts per language, so a single text moves a percentage by {points} points or more.",
+      "tags": "Under the right theme",
+      "presence": "In the right texts",
+      "kind": "Kind",
+      "mentions": "Mentions",
+      "texts": "Texts",
+      "kinds": {
+        "jobs": "Jobs",
+        "pains": "Pains",
+        "gains": "Gains"
+      },
+      "explain": "Found: the share of labeled jobs, pains or gains that Painfold found. Correct: the share of what Painfold found that matches the labels.",
+      "single": {
+        "sentiment": "Sentiment correct",
+        "type": "Type correct",
+        "quotes": "Quotes found word for word",
+        "stability": "Same answer when run twice"
+      },
+      "weaknesses": {
+        "heading": "Known weaknesses",
+        "items": [],
+        "next": "The targets for version 0.4 are set from these results."
+      }
     }
   }
 }

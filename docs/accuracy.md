@@ -1,6 +1,6 @@
 # Accuracy and performance
 
-How well Painfold finds personal data, and how fast it is. The tables are written by `npm run eval -- --write`, which also writes `data/eval/accuracy.json` for the [Accuracy page](https://painfold.com/accuracy/) in the app; a unit test fails when either is out of date.
+How well Painfold finds personal data, how fast it is, and how well it finds customer jobs, pains and gains. The personal-data tables are written by `npm run eval -- --write`, which also writes `data/eval/accuracy.json` for the [Accuracy page](https://painfold.com/accuracy/) in the app; the jobs, pains and gains tables are written by `npm run eval:analysis -- --write`. A unit test fails when any of them is out of date.
 
 ## In short
 
@@ -175,3 +175,28 @@ A 5,000-row file is cleaned in about 1.5 seconds: import, column step, detection
 | **Total** | **1.2–1.6 s** |
 
 Measured with `npm run bench` (three runs) on an Apple M3 Pro with 18 GB of memory, macOS 26.7, headless Chromium from Playwright 1.65, using a generated 5,000-row file. The same test runs in CI on every pull request with a 20-second limit, since shared runners are slower.
+
+## Jobs, pains and gains
+
+The analysis (Stage 3) is measured on 240 invented feedback messages about an invoicing and accounting app ([data/eval/analysis/](../data/README.md)), 120 in English and 120 in German, each language split into 60 dev and 60 test messages. The messages and the instructions to the model were written by the same person; the labels were not. The English half is labelled by Francis, the German half by a German-speaking classmate: for each message, its jobs, pains and gains (as short theme names the labeller keeps consistent), its sentiment and its type.
+
+The instructions were tuned on the dev split only. The test split was run once per language, after tuning, and that run is what is published. Each run stores the model's answers, so the numbers below are recomputed from them, through the same code as the app, without a request.
+
+How it is counted:
+
+- **Tag recall and precision** (shown as Found and Correct on the Accuracy page): after the test run, the labeller of each language matched every theme the model found to one of their own themes, by meaning, or to none. A labelled job, pain or gain counts as found when the model put that message under a theme matched to it; a model tag counts as correct when it was matched to a theme the labeller gave that message.
+- **Presence recall and precision:** whether a message has any job, pain or gain at all, regardless of which. This needs no matching.
+- **Grouping recall and precision:** for every pair of messages the labeller put under the same theme, whether the model did too, and the other way round. It measures the merging without any matching, but it is hard to read, so it is shown only here.
+- **Sentiment and type:** the share of messages with the labelled value, with confusion tables.
+- **Quotes found word for word:** quotes the model gave that were found word for word in the message; the others are dropped before the report.
+- **Same answer when run twice:** two dev runs of the same model, compared on whether each message has a job, a pain and a gain.
+
+The sample is small: 60 test messages per language, and fewer labelled jobs, pains or gains of each kind, so a single message moves a number by two points or more. There are no targets for version 0.3: these results are published with their weaknesses, and the targets for version 0.4 are set from them.
+
+<!-- analysis:start -->
+Not measured yet. The numbers appear here before version 0.3.0 is released.
+
+All stored runs, dev runs for tuning included:
+
+No runs stored yet.
+<!-- analysis:end -->

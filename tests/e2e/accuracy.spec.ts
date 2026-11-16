@@ -1,4 +1,6 @@
 import { readFileSync } from 'node:fs'
+import { addRates, publishedAnalysis } from '../../app/utils/analysis-accuracy'
+import type { AnalysisResults } from '../../scripts/analysis-results'
 import type { AccuracyData } from '../../scripts/eval'
 import { expect, test } from './fixtures'
 
@@ -87,6 +89,27 @@ test('the footer links to it, and the German page reads in German', async ({ pag
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Wie gut Painfold personenbezogene Daten findet')
   await expect(page.getByText(`Von 100 Namen in Ihrem Feedback entfernt Painfold etwa ${Math.round(overall * 100)}.`)).toBeVisible()
   await expect(page.getByRole('region', { name: 'Nach Herkunftsgruppe der Namen' })).toContainText('Deutschsprachig')
+})
+
+// The analysis evaluation (#129): published once a test run is scored and mapped.
+const analysis = publishedAnalysis(JSON.parse(readFileSync(new URL('../../data/eval/analysis/results.json', import.meta.url), 'utf8')) as AnalysisResults)
+const analysisRuns = Object.values(analysis.runs)
+
+test('shows how well jobs, pains and gains are found, or that they are not measured yet', async ({ page }) => {
+  for (const [path, name, empty] of [
+    ['/accuracy/', 'Jobs, pains and gains', 'Not measured yet. The numbers appear here before version 0.3.0 is released.'],
+    ['/de/accuracy/', 'Aufgaben, Probleme und Wünsche', 'Noch nicht gemessen. Die Zahlen stehen hier, bevor Version 0.3.0 erscheint.'],
+  ] as const) {
+    await page.goto(path)
+    const section = page.getByRole('region', { name, exact: true })
+    if (analysisRuns.length === 0) {
+      await expect(section).toContainText(empty)
+      continue
+    }
+    const pains = addRates(analysisRuns.map(run => run.scores.tags.pains.recall))
+    if (path === '/accuracy/') await expect(section).toContainText(`Out of 100 pains customers mention, Painfold finds about ${Math.round(pains.hits / pains.of * 100)}.`)
+    await expect(section.getByRole('table')).toHaveCount(2)
+  }
 })
 
 for (const width of [320, 390]) {

@@ -4,6 +4,8 @@
 // --write` and checked by a unit test). Findings first, then the evidence,
 // with plain numbers and simple bars. Prerendered: nothing is loaded.
 import accuracy from '~~/data/eval/accuracy.json'
+import analysisResults from '~~/data/eval/analysis/results.json'
+import type { AnalysisResults } from '~~/scripts/analysis-results'
 import type { AccuracyData } from '~~/scripts/eval'
 
 const data = accuracy as AccuracyData
@@ -61,6 +63,9 @@ function typeRows(set: 'hard-cases' | 'generated') {
 const warningRows = computed(() => Object.entries(data.indirect).map(([type, byLang]) => ({ type, score: pick(byLang) })))
 const warningCount = computed(() => warningRows.value.reduce((total, row) => total + row.score.labelled, 0))
 const precision = (score: Score) => (score.detected === 0 ? undefined : score.correct / score.detected)
+
+// The analysis evaluation (#129): only fully scored test runs are published.
+const analysis = publishedAnalysis(analysisResults as AnalysisResults)
 
 const GITHUB = 'https://github.com/akojif/painfold/blob/main'
 </script>
@@ -358,6 +363,12 @@ const GITHUB = 'https://github.com/akojif/painfold/blob/main'
         {{ $t('accuracy.model.text', { model: data.model.original, license: data.model.license }) }}
       </p>
     </section>
+
+    <AccuracyAnalysis
+      class="mt-10"
+      :published="analysis"
+      :language="language"
+    />
 
     <section
       class="mt-10 border-t border-line pt-6"

@@ -103,6 +103,36 @@
     "warnings": {
       "heading": "Könnte jemanden erkennbar machen",
       "text": "Painfold weist auf Text hin, der zusammen mit anderen Angaben auf eine Person zeigen kann: genaue Altersangaben, „die einzige …“, Berufe mit kleinem Ort und Rollen, die eine Person innehat. Hinweise werden nie von selbst entfernt. Gemessen an {n} selbst geschriebenen Hinweisen, mit vorgegebenen Orten; die Menge ist klein und von derselben Person geschrieben wie die Regeln, echtes Feedback schneidet daher wohl schlechter ab."
+    },
+    "analysis": {
+      "heading": "Aufgaben, Probleme und Wünsche",
+      "notMeasured": "Noch nicht gemessen. Die Zahlen stehen hier, bevor Version 0.3.0 erscheint.",
+      "notMeasuredLanguage": "Auf {language} noch nicht gemessen.",
+      "lead": "Von 100 Problemen, die Kundinnen und Kunden nennen, findet Painfold etwa {n}.",
+      "measured": "Gemessen an {texts} von Hand gelabelten Texten aus dem Test-Teil, analysiert von {model} am {date}. Jedes gefundene Thema wurde von Hand den Labels zugeordnet, von {people}.",
+      "sample": "Das ist eine kleine Stichprobe: {n} Texte pro Sprache, also verschiebt ein einzelner Text einen Prozentwert um {points} Punkte oder mehr.",
+      "tags": "Unter dem richtigen Thema",
+      "presence": "In den richtigen Texten",
+      "kind": "Art",
+      "mentions": "Nennungen",
+      "texts": "Texte",
+      "kinds": {
+        "jobs": "Aufgaben",
+        "pains": "Probleme",
+        "gains": "Wünsche"
+      },
+      "explain": "Gefunden: der Anteil der gelabelten Aufgaben, Probleme oder Wünsche, die Painfold gefunden hat. Richtig: der Anteil dessen, was Painfold gefunden hat, der zu den Labels passt.",
+      "single": {
+        "sentiment": "Stimmung richtig",
+        "type": "Art der Rückmeldung richtig",
+        "quotes": "Zitate wortgleich gefunden",
+        "stability": "Gleiche Antwort bei zwei Läufen"
+      },
+      "weaknesses": {
+        "heading": "Bekannte Schwächen",
+        "items": [],
+        "next": "Die Ziele für Version 0.4 werden aus diesen Ergebnissen festgelegt."
+      }
     }
   }
 }

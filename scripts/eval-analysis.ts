@@ -3,7 +3,7 @@
 // analysis-metrics.ts.
 //
 //   npm run eval:analysis                       replay every stored run and print the numbers
-//   npm run eval:analysis -- --write            also write data/eval/analysis/results.json
+//   npm run eval:analysis -- --write            also write data/eval/analysis/results.json and the section in docs/accuracy.md
 //   ANTHROPIC_API_KEY=... npm run eval:analysis -- --run --split dev [--lang en|de] [--model claude-haiku-5-5]
 //                                               record a new run (both languages unless --lang), then write
 //
@@ -19,6 +19,7 @@ import { PRICES } from '../core/ai/cost.ts'
 import { KINDS } from '../core/ai/merge.ts'
 import { anthropicJsonRequest, anthropicTaggingRequest } from '../core/ai/tagging.ts'
 import { valueOf, type Rate, type Scores } from './analysis-metrics.ts'
+import { ANALYSIS_DOCS_PATH, analysisMarkdown, withAnalysis } from './analysis-docs.ts'
 import { computeResults, RESULTS_PATH, resultsJson } from './analysis-results.ts'
 import { recordRun, runFileName, RUNS_DIR, type EvalRun } from './analysis-runs.ts'
 import { post } from './ai-post.ts'
@@ -108,5 +109,6 @@ for (const entry of results.stability) {
 
 if (values.write || values.run) {
   writeFileSync(RESULTS_PATH, resultsJson(results))
-  console.log(`\nWrote ${RESULTS_PATH}`)
+  writeFileSync(ANALYSIS_DOCS_PATH, withAnalysis(readFileSync(ANALYSIS_DOCS_PATH, 'utf8'), analysisMarkdown(results)))
+  console.log(`\nWrote ${RESULTS_PATH} and the analysis section of ${ANALYSIS_DOCS_PATH}`)
 }

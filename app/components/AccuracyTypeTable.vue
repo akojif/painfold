@@ -1,13 +1,16 @@
 <script setup lang="ts">
 // Found and correct per kind of personal data, for one set of the Accuracy page.
-// labels: where each row's name comes from (typeMany.EMAIL, or warning.kind.age for the warnings).
+// labels: where each row's name comes from (typeMany.EMAIL, or warning.kind.age for the warnings);
+// head and count: the headings of the first and last columns.
 type Score = { labelled: number, found: number, detected: number, correct: number }
 withDefaults(defineProps<{
   rows: Array<{ type: string, score: Score }>
   precision: (score: Score) => number | undefined
   share: (counts: { labelled: number, found: number }) => number
   labels?: string
-}>(), { labels: 'typeMany' })
+  head?: string
+  count?: string
+}>(), { labels: 'typeMany', head: 'accuracy.rules.type', count: 'accuracy.rules.values' })
 const { number, percent } = useFormat()
 </script>
 
@@ -19,7 +22,7 @@ const { number, percent } = useFormat()
           scope="col"
           class="py-2 pr-2 font-medium sm:pr-3"
         >
-          {{ $t('accuracy.rules.type') }}
+          {{ $t(head) }}
         </th>
         <th
           scope="col"
@@ -37,7 +40,7 @@ const { number, percent } = useFormat()
           scope="col"
           class="py-2 text-right font-medium"
         >
-          {{ $t('accuracy.rules.values') }}
+          {{ $t(count) }}
         </th>
       </tr>
     </thead>
