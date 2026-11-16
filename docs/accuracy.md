@@ -2,6 +2,12 @@
 
 How well Painfold finds personal data, and how fast it is. The tables are written by `npm run eval -- --write`, which also writes `data/eval/accuracy.json` for the [Accuracy page](https://painfold.com/accuracy/) in the app; a unit test fails when either is out of date.
 
+## In short
+
+Detection is measured per data type and language, on generated messages, on hand-written hard cases and on hand-written names from 13 communities living in Austria, and checked in CI. On the name test split, 97 % of names are removed (0.98 in German, 0.96 in English), and at least 92 % in every name-origin group; the model is measured in the browser, as users run it. On the hard cases nothing that only looks like personal data is removed, apart from one known case, and the known misses are listed. A 5,000-row file is cleaned in about 1.5 seconds; with the name model in the browser, names in it are checked in 70 to 115 seconds, in the background. Text that could identify someone together with other details (exact ages, "the only …", a job title with a small place) gets a warning, never removed on its own; on a small hand-written set every warning is found. The same numbers are on the [Accuracy page](https://painfold.com/accuracy/).
+
+Automatic detection can miss personal data, including names. Review the results before sharing the cleaned file.
+
 ## How it is measured
 
 Detection is measured on the evaluation set in [data/eval/](../data/README.md), with `npm run eval`, by the rules and the name model together, as in the app. The rules run in Node. The name model is measured only in the browser: `npm run eval:names` runs the built names worker in headless Chromium, on the same WebAssembly runtime users get, and stores what it finds in [data/eval/name-detections.json](../data/eval/name-detections.json). An end-to-end test reruns it on every pull request and fails if anything differs, so these numbers cannot go stale. (Native ONNX Runtime in Node gives different results on different processors, so it is never used for the numbers.) Four sets are reported separately:
