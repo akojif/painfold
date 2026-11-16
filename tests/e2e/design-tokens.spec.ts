@@ -12,20 +12,20 @@ test('the interface font is self-hosted and loads', async ({ page }) => {
     return [...document.fonts].filter(face => face.status === 'loaded').map(face => face.family.replaceAll('"', ''))
   })
 
-  expect(loaded).toContain('Geist')
-  expect(loaded).toContain('Sora')
+  expect(loaded).toContain('Instrument Sans')
+  expect(loaded).toContain('Bricolage Grotesque')
   expect(loaded).toContain('Geist Mono')
-  // Headings in Sora, text in Geist.
-  expect(await page.locator('h1').evaluate(element => getComputedStyle(element).fontFamily)).toMatch(/^"?Sora/)
-  expect(await page.locator('body').evaluate(element => getComputedStyle(element).fontFamily)).toMatch(/^"?Geist"?,/)
+  // Headings in Bricolage Grotesque, text in Instrument Sans.
+  expect(await page.locator('h1').evaluate(element => getComputedStyle(element).fontFamily)).toMatch(/^"?Bricolage Grotesque/)
+  expect(await page.locator('body').evaluate(element => getComputedStyle(element).fontFamily)).toMatch(/^"?Instrument Sans"?,/)
   expect(fontRequests.length).toBeGreaterThan(0)
   // The foreign-request fixture already fails on other origins; this states the intent.
   for (const url of fontRequests) expect(url).toMatch(/\.woff2$/)
 })
 
 for (const [scheme, canvas, fg] of [
-  ['light', 'rgb(255, 255, 255)', 'rgb(17, 24, 39)'],
-  ['dark', 'rgb(17, 22, 31)', 'rgb(230, 234, 240)'],
+  ['light', 'rgb(250, 246, 240)', 'rgb(43, 33, 27)'],
+  ['dark', 'rgb(17, 22, 31)', 'rgb(243, 238, 232)'],
 ] as const) {
   test(`the ${scheme} system theme applies its page and text colours`, async ({ page }) => {
     await page.emulateMedia({ colorScheme: scheme })
@@ -46,6 +46,6 @@ test('the theme toggle overrides the system and is remembered', async ({ page })
   await expect(body).toHaveCSS('background-color', 'rgb(17, 22, 31)')
   await expect(page.getByRole('button', { name: 'Dark' })).toHaveAttribute('aria-pressed', 'true')
   await page.getByRole('button', { name: 'System' }).click()
-  await expect(body).toHaveCSS('background-color', 'rgb(255, 255, 255)')
+  await expect(body).toHaveCSS('background-color', 'rgb(250, 246, 240)')
   expect(await page.evaluate(() => localStorage.length)).toBe(0)
 })

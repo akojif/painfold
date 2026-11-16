@@ -6,40 +6,41 @@
  */
 @import "tailwindcss";
 
-/* Fonts: Geist for text, Sora for page and section headings, Geist Mono for tokens; self-hosted, SIL Open Font License (see OFL.txt next to each file). */
+/* Fonts: Instrument Sans for text, Bricolage Grotesque for page and section headings, Geist Mono for tokens; self-hosted, SIL Open Font License (see OFL.txt next to each file). */
 
 @font-face {
-  font-family: "Geist";
+  font-family: "Instrument Sans";
   font-style: normal;
   font-display: swap;
-  font-weight: 100 900;
-  src: url("../fonts/geist/geist-latin-wght-normal.woff2") format("woff2-variations");
+  font-weight: 400 700;
+  src: url("../fonts/instrument-sans/instrument-sans-latin-wght-normal.woff2") format("woff2-variations");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 @font-face {
-  font-family: "Geist";
+  font-family: "Instrument Sans";
   font-style: normal;
   font-display: swap;
-  font-weight: 100 900;
-  src: url("../fonts/geist/geist-latin-ext-wght-normal.woff2") format("woff2-variations");
+  font-weight: 400 700;
+  src: url("../fonts/instrument-sans/instrument-sans-latin-ext-wght-normal.woff2") format("woff2-variations");
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
+
 @font-face {
-  font-family: "Sora";
+  font-family: "Bricolage Grotesque";
   font-style: normal;
   font-display: swap;
-  font-weight: 100 800;
-  src: url("../fonts/sora/sora-latin-wght-normal.woff2") format("woff2-variations");
+  font-weight: 200 800;
+  src: url("../fonts/bricolage-grotesque/bricolage-grotesque-latin-wght-normal.woff2") format("woff2-variations");
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 @font-face {
-  font-family: "Sora";
+  font-family: "Bricolage Grotesque";
   font-style: normal;
   font-display: swap;
-  font-weight: 100 800;
-  src: url("../fonts/sora/sora-latin-ext-wght-normal.woff2") format("woff2-variations");
+  font-weight: 200 800;
+  src: url("../fonts/bricolage-grotesque/bricolage-grotesque-latin-ext-wght-normal.woff2") format("woff2-variations");
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
@@ -67,40 +68,44 @@
  * one `--pf-light-*` / `--pf-dark-*: #rrggbb;` per line.
  */
 :root {
-  --pf-light-canvas: #FFFFFF;        /* page */
-  --pf-light-surface: #F7F8FA;       /* panels, lists, the side of a split view */
-  --pf-light-raised: #FFFFFF;        /* things that float above the page: toasts (the page is already white) */
-  --pf-light-raised-line: #CDD3DC;   /* their border, stronger than a hairline */
-  --pf-light-line: #E4E7EC;          /* hairline borders and dividers */
-  --pf-light-line-strong: #7D8796;   /* borders of inputs and controls (3:1) */
-  --pf-light-fg: #111827;            /* text */
-  --pf-light-fg-muted: #5B6472;      /* secondary text */
-  --pf-light-accent: #0F766E;        /* the one accent: links, focus, progress, the current stage */
+  --pf-light-canvas: #FAF6F0;       /* page */
+  --pf-light-surface: #FFFFFF;      /* panels and lists: white on the warm page */
+  --pf-light-tint: #F3EBE0;         /* a warm fill that groups things: selected rows, tracks, the start strip */
+  --pf-light-raised: #FFFFFF;       /* things that float above the page: toasts */
+  --pf-light-raised-line: #D6C6B3;  /* their border, stronger than a hairline */
+  --pf-light-line: #E8DDCF;         /* dividers inside a surface */
+  --pf-light-line-strong: #8F7D6C;  /* borders of inputs and controls (3:1) */
+  --pf-light-fg: #2B211B;           /* text */
+  --pf-light-fg-muted: #6E6158;     /* secondary text */
+  --pf-light-accent: #A3245F;       /* the one accent (berry): actions, links, focus, the current step */
   --pf-light-on-accent: #FFFFFF;
-  --pf-light-danger: #B91C1C;        /* errors and risks only */
+  --pf-light-accent-soft: #F6E1EA;  /* soft accent fill: the current tab, done steps, badges */
+  --pf-light-danger: #B8400E;       /* errors and risks only */
   --pf-light-on-danger: #FFFFFF;
-  --pf-light-pending: #FEF3C7;       /* personal data waiting for review (soft amber) */
-  --pf-light-pending-line: #B45309;  /* its underline, so colour is not the only cue */
-  --pf-light-on-pending: #111827;
-  --pf-light-token: #111827;         /* placeholder tokens such as [EMAIL_1] */
-  --pf-light-on-token: #F7F8FA;
+  --pf-light-pending: #FFE6A1;      /* personal data waiting for review (yellow) */
+  --pf-light-pending-line: #B07414; /* its underline, so colour is not the only cue */
+  --pf-light-on-pending: #2B211B;
+  --pf-light-token: #2B211B;        /* placeholder tokens such as [EMAIL_1] */
+  --pf-light-on-token: #FAF6F0;
 
   --pf-dark-canvas: #11161F;
-  --pf-dark-surface: #161C27;
-  --pf-dark-raised: #222A37;
-  --pf-dark-raised-line: #3A4556;
-  --pf-dark-line: #232B38;
-  --pf-dark-line-strong: #6B7789;
-  --pf-dark-fg: #E6EAF0;
-  --pf-dark-fg-muted: #94A0B0;
-  --pf-dark-accent: #2DD4BF;
-  --pf-dark-on-accent: #11161F;
-  --pf-dark-danger: #F87171;
+  --pf-dark-surface: #1A2029;
+  --pf-dark-tint: #232A35;
+  --pf-dark-raised: #232A35;
+  --pf-dark-raised-line: #3A4352;
+  --pf-dark-line: #2A3240;
+  --pf-dark-line-strong: #6F7888;
+  --pf-dark-fg: #F3EEE8;
+  --pf-dark-fg-muted: #A9AEB8;
+  --pf-dark-accent: #F28AB9;
+  --pf-dark-on-accent: #2A0D1B;
+  --pf-dark-accent-soft: #3E1E31;
+  --pf-dark-danger: #FF8F5E;
   --pf-dark-on-danger: #11161F;
-  --pf-dark-pending: #3B2F12;
-  --pf-dark-pending-line: #F59E0B;
-  --pf-dark-on-pending: #E6EAF0;
-  --pf-dark-token: #E6EAF0;
+  --pf-dark-pending: #4D3B12;
+  --pf-dark-pending-line: #E7B24A;
+  --pf-dark-on-pending: #F3EEE8;
+  --pf-dark-token: #F3EEE8;
   --pf-dark-on-token: #11161F;
 }
 
@@ -110,6 +115,7 @@
   color-scheme: light;
   --pf-canvas: var(--pf-light-canvas);
   --pf-surface: var(--pf-light-surface);
+  --pf-tint: var(--pf-light-tint);
   --pf-raised: var(--pf-light-raised);
   --pf-raised-line: var(--pf-light-raised-line);
   --pf-line: var(--pf-light-line);
@@ -118,6 +124,7 @@
   --pf-fg-muted: var(--pf-light-fg-muted);
   --pf-accent: var(--pf-light-accent);
   --pf-on-accent: var(--pf-light-on-accent);
+  --pf-accent-soft: var(--pf-light-accent-soft);
   --pf-danger: var(--pf-light-danger);
   --pf-on-danger: var(--pf-light-on-danger);
   --pf-pending: var(--pf-light-pending);
@@ -125,7 +132,7 @@
   --pf-on-pending: var(--pf-light-on-pending);
   --pf-token: var(--pf-light-token);
   --pf-on-token: var(--pf-light-on-token);
-  --pf-shadow-color: 17 24 39;
+  --pf-shadow-color: 70 45 25;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -133,6 +140,7 @@
     color-scheme: dark;
     --pf-canvas: var(--pf-dark-canvas);
     --pf-surface: var(--pf-dark-surface);
+    --pf-tint: var(--pf-dark-tint);
     --pf-raised: var(--pf-dark-raised);
     --pf-raised-line: var(--pf-dark-raised-line);
     --pf-line: var(--pf-dark-line);
@@ -141,6 +149,7 @@
     --pf-fg-muted: var(--pf-dark-fg-muted);
     --pf-accent: var(--pf-dark-accent);
     --pf-on-accent: var(--pf-dark-on-accent);
+    --pf-accent-soft: var(--pf-dark-accent-soft);
     --pf-danger: var(--pf-dark-danger);
     --pf-on-danger: var(--pf-dark-on-danger);
     --pf-pending: var(--pf-dark-pending);
@@ -156,6 +165,7 @@
   color-scheme: dark;
   --pf-canvas: var(--pf-dark-canvas);
   --pf-surface: var(--pf-dark-surface);
+  --pf-tint: var(--pf-dark-tint);
   --pf-raised: var(--pf-dark-raised);
   --pf-raised-line: var(--pf-dark-raised-line);
   --pf-line: var(--pf-dark-line);
@@ -164,6 +174,7 @@
   --pf-fg-muted: var(--pf-dark-fg-muted);
   --pf-accent: var(--pf-dark-accent);
   --pf-on-accent: var(--pf-dark-on-accent);
+  --pf-accent-soft: var(--pf-dark-accent-soft);
   --pf-danger: var(--pf-dark-danger);
   --pf-on-danger: var(--pf-dark-on-danger);
   --pf-pending: var(--pf-dark-pending);
@@ -189,6 +200,7 @@
 
   --color-canvas: var(--pf-canvas);
   --color-surface: var(--pf-surface);
+  --color-tint: var(--pf-tint);
   --color-raised: var(--pf-raised);
   --color-raised-line: var(--pf-raised-line);
   --color-line: var(--pf-line);
@@ -197,6 +209,7 @@
   --color-fg-muted: var(--pf-fg-muted);
   --color-accent: var(--pf-accent);
   --color-on-accent: var(--pf-on-accent);
+  --color-accent-soft: var(--pf-accent-soft);
   --color-danger: var(--pf-danger);
   --color-on-danger: var(--pf-on-danger);
   --color-pending: var(--pf-pending);
@@ -207,45 +220,56 @@
   --color-transparent: transparent;
   --color-current: currentcolor;
 
-  --font-sans: "Geist", system-ui, sans-serif;
-  --font-display: "Sora", "Geist", system-ui, sans-serif;
+  --font-sans: "Instrument Sans", system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque", "Instrument Sans", system-ui, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, monospace;
 
-  /* Type scale: 12, 13, 14, 16, 20, 24, 32, 48. Large sizes tighten their tracking. */
+  /* Type scale: 12, 13, 15 (body), 17, 20, 26, 34, 48, 58 (the start headline). Large sizes tighten their tracking. */
   --text-xs: 0.75rem;
   --text-xs--line-height: 1rem;
   --text-sm: 0.8125rem;
   --text-sm--line-height: 1.25rem;
-  --text-base: 0.875rem;
-  --text-base--line-height: 1.375rem;
-  --text-md: 1rem;
-  --text-md--line-height: 1.625rem;
+  --text-base: 0.9375rem;
+  --text-base--line-height: 1.5rem;
+  --text-md: 1.0625rem;
+  --text-md--line-height: 1.75rem;
   --text-lg: 1.25rem;
   --text-lg--line-height: 1.75rem;
   --text-lg--letter-spacing: -0.01em;
-  --text-xl: 1.5rem;
+  --text-xl: 1.625rem;
   --text-xl--line-height: 2rem;
   --text-xl--letter-spacing: -0.015em;
-  --text-2xl: 2rem;
-  --text-2xl--line-height: 2.375rem;
-  --text-2xl--letter-spacing: -0.025em;
+  --text-2xl: 2.125rem;
+  --text-2xl--line-height: 2.5rem;
+  --text-2xl--letter-spacing: -0.02em;
   --text-3xl: 3rem;
   --text-3xl--line-height: 3.25rem;
-  --text-3xl--letter-spacing: -0.035em;
+  --text-3xl--letter-spacing: -0.03em;
+  --text-4xl: 3.625rem;
+  --text-4xl--line-height: 3.75rem;
+  --text-4xl--letter-spacing: -0.03em;
 
-  --radius-sm: 4px;      /* tokens, key caps */
-  --radius-md: 6px;      /* controls and panels */
-  --radius-full: 9999px; /* status dots and step markers */
+  --radius-sm: 4px;      /* redaction tokens, key caps */
+  --radius-md: 8px;      /* small elements: list items, badges, inline marks */
+  --radius-lg: 14px;     /* controls: inputs, selects, the detail actions */
+  --radius-xl: 24px;     /* surfaces: panels, dialogs, the example panel */
+  --radius-full: 9999px; /* buttons, tabs, pills, status dots and step markers */
 
-  /* Depth only where something is raised: a selected item, a dialog, the drop overlay. */
-  --shadow-raised: 0 0 0 1px rgb(var(--pf-shadow-color) / 0.06), 0 1px 2px rgb(var(--pf-shadow-color) / 0.06);
-  --shadow-overlay: 0 0 0 1px rgb(var(--pf-shadow-color) / 0.08), 0 8px 16px rgb(var(--pf-shadow-color) / 0.08), 0 24px 48px rgb(var(--pf-shadow-color) / 0.12);
+  /* Surfaces get one soft, warm shadow; overlays a stronger one. Nothing else casts a shadow. */
+  --shadow-surface: 0 1px 2px rgb(var(--pf-shadow-color) / 0.06), 0 10px 28px -12px rgb(var(--pf-shadow-color) / 0.18);
+  --shadow-raised: 0 0 0 1px rgb(var(--pf-shadow-color) / 0.06), 0 1px 2px rgb(var(--pf-shadow-color) / 0.08);
+  --shadow-overlay: 0 0 0 1px rgb(var(--pf-shadow-color) / 0.08), 0 8px 16px rgb(var(--pf-shadow-color) / 0.08), 0 24px 48px -12px rgb(var(--pf-shadow-color) / 0.24);
   /* A toast floating above the page: soft, but visible on the dark theme too. */
-  --shadow-float: 0 2px 6px rgb(var(--pf-shadow-color) / 0.10), 0 12px 32px rgb(var(--pf-shadow-color) / 0.18);
+  --shadow-float: 0 2px 6px rgb(var(--pf-shadow-color) / 0.10), 0 12px 32px -8px rgb(var(--pf-shadow-color) / 0.24);
 
-  /* Only these two curves exist, so ease-in cannot be used. */
+  /*
+   * Only these three curves exist, so ease-in cannot be used. The spring is
+   * for small scale feedback only (the token pop, a press, a badge); never
+   * for layout, movement across the screen, exits or keyboard actions.
+   */
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
 
   --container-measure: 68ch;
 
@@ -275,7 +299,7 @@
 }
 
 /* Every control: the same focus ring, and a small press on :active. */
-/* Page and section headings in Sora; everything else, smaller headings in lists included, in Geist. */
+/* Page and section headings in Bricolage Grotesque; everything else, smaller headings in lists included, in Instrument Sans. */
 @layer base {
   h1,
   h2 {

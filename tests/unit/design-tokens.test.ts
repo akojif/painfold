@@ -31,6 +31,14 @@ const pairs: Array<[foreground: string, background: string, minimum: number]> = 
   ['fg', 'raised', TEXT],
   ['fg-muted', 'raised', TEXT],
   ['accent', 'raised', TEXT],
+  ['fg', 'tint', TEXT],
+  ['fg-muted', 'tint', TEXT],
+  ['accent', 'tint', TEXT],
+  ['danger', 'tint', TEXT],
+  ['accent', 'accent-soft', TEXT],
+  ['fg', 'accent-soft', TEXT],
+  ['line-strong', 'tint', NON_TEXT],
+  ['accent', 'canvas', NON_TEXT],
   ['raised-line', 'canvas', 1.4],
   ['on-pending', 'pending', TEXT],
   ['on-token', 'token', TEXT],
@@ -47,8 +55,10 @@ describe('design tokens', () => {
     expect(Object.keys(themes.dark).sort()).toEqual(Object.keys(themes.light).sort())
   })
 
-  it('use the dark page colours agreed for the design pass', () => {
-    expect(themes.dark).toMatchObject({ 'canvas': '#11161F', 'surface': '#161C27', 'line': '#232B38', 'fg': '#E6EAF0', 'fg-muted': '#94A0B0' })
+  it('use the page colours agreed for the redesign (#141)', () => {
+    expect(themes.light).toMatchObject({ canvas: '#FAF6F0', surface: '#FFFFFF', fg: '#2B211B', accent: '#A3245F', pending: '#FFE6A1' })
+    // The dark page stays #11161F; the rest of the dark palette is built around it.
+    expect(themes.dark).toMatchObject({ canvas: '#11161F', surface: '#1A2029', fg: '#F3EEE8', accent: '#F28AB9' })
   })
 
   it('map every Tailwind colour to a defined role', () => {

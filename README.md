@@ -40,4 +40,4 @@ npm run dev
 - [Roadmap](ROADMAP.md) and [changelog](CHANGELOG.md)
 - Docs: [development](docs/development.md) (tests, build, CI, hosting, security headers, dependency policies), [accuracy](docs/accuracy.md), [privacy](docs/privacy.md), [AI providers](docs/ai-providers.md)
 - [Contributing](CONTRIBUTING.md)
-- License: [MIT](LICENSE). The self-hosted fonts in `app/assets/fonts/` (Geist and Geist Mono by Vercel, Sora by the Sora Project Authors) are under the SIL Open Font License 1.1; each folder contains its license.
+- License: [MIT](LICENSE). The self-hosted fonts in `app/assets/fonts/` (Instrument Sans by the Instrument Sans Project Authors, Bricolage Grotesque by the Bricolage Grotesque Project Authors, Geist Mono by Vercel) are under the SIL Open Font License 1.1; each folder contains its license.
