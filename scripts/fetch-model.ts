@@ -27,12 +27,52 @@ async function readIfValid(path: string, expected: Expected): Promise<Uint8Array
   return bytes && matches(bytes, expected) ? bytes : undefined
 }
 
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+
+/**
+ * Fetches a URL, retrying when Hugging Face is busy or briefly unreachable:
+ * on 429 (too many requests), 5xx and network errors, after the server's
+ * Retry-After (capped at a minute) or 2, 4, 8, 16 and 32 seconds. Other
+ * answers (such as 404) are returned at once. A shared build machine can hit
+ * Hugging Face's rate limit, which once failed a production build.
+ */
+export async function fetchWithRetry(url: string, options: { fetch?: typeof fetch, wait?: (ms: number) => Promise<unknown>, attempts?: number, init?: RequestInit } = {}): Promise<Response> {
+  const { fetch: get = fetch, wait = sleep, attempts = 6, init } = options
+  for (let attempt = 1; ; attempt++) {
+    const last = attempt >= attempts
+    let response: Response
+    try {
+      response = await get(url, init)
+    }
+    catch (error) {
+      if (last) throw error
+      await wait(2000 * 2 ** (attempt - 1))
+      continue
+    }
+    if (last || (response.status !== 429 && response.status < 500)) return response
+    const after = Number(response.headers.get('retry-after'))
+    const delay = Number.isFinite(after) && after > 0 ? Math.min(after, 60) * 1000 : 2000 * 2 ** (attempt - 1)
+    console.log(`${url} answered ${response.status}; trying again in ${delay / 1000} s (attempt ${attempt + 1} of ${attempts}).`)
+    await wait(delay)
+  }
+}
+
+/**
+ * A Hugging Face access token, if the build has one (HF_TOKEN): anonymous
+ * downloads from shared build machines get rate-limited. Read-only is enough;
+ * it is sent only to huggingface.co and never printed.
+ */
+export function huggingFaceInit(token = process.env.HF_TOKEN): RequestInit | undefined {
+  const value = token?.trim()
+  return value ? { headers: { authorization: `Bearer ${value}` } } : undefined
+}
+
 export async function cachedFile(file: string, expected: Expected): Promise<string> {
   const path = join(CACHE, file)
   if (await readIfValid(path, expected)) return path
 
   const url = `https://huggingface.co/${NAME_MODEL.source}/resolve/${NAME_MODEL.revision}/${file}`
-  const response = await fetch(url)
+  const response = await fetchWithRetry(url, { init: huggingFaceInit() })
   if (!response.ok) throw new Error(`Downloading ${url} failed: ${response.status}`)
   const bytes = new Uint8Array(await response.arrayBuffer())
   if (!matches(bytes, expected)) throw new Error(`${file} has SHA-256 ${sha256(bytes)} and ${bytes.byteLength} bytes, expected ${expected.sha256} and ${expected.bytes}. Not using it.`)
