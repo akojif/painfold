@@ -64,6 +64,24 @@ The round 1 gain definition, unchanged, plus one rule: a gain that only restates
 
 Verdict: not kept, reverted in `4eb89e9`; the prompt stays at version 1. Gain recall beat both baseline runs in all four runs. Gain precision did not: English and German dev 5 are below the best baseline run, and German dev 6 only equals it. Pains fell below the baseline range in English dev 6 (recall) and German dev 6 (precision). In German, pains restated as gains mostly went away; in English, some did, but general praise came back as gains ("simple and essential for daily work", "confidence that figures are right"), and en-009 still got no pain.
 
+### Test run plan (pre-registered before any test run)
+
+Written and pushed before the test split is run, so the plan can be checked against the results. Nothing below changes after the test runs.
+
+- Commit: the test runs are made on the commit that adds this plan. Its code is identical to `fe59a3c` (main at #166, with the evaluation tooling and run log since, and no prompt change: both tuning rounds were reverted).
+- Model: `claude-haiku-5-5`, Anthropic, called from `npm run eval:analysis -- --run --split test`. Temperature is not set (the model takes only its fixed default). Effort `low`, at most 16,000 tokens out, batches of 25: the same settings as the dev baseline.
+- Prompt: version 1, unchanged since before tuning. Prompt hashes (tagging and merging instructions): English `37771f5d4668`, German `0287715bfa91`, the same as the dev baseline.
+- Runs: two test runs per language, English and German, with identical settings. Test 2 is recorded with `--again`, which the script requires for a second test run. Test 1 is the headline run; test 2 is reported only to show how much results vary between runs.
+- Metrics reported, per language:
+  - presence recall and precision for jobs, pains and gains (against the human labels), for test 1 and test 2;
+  - tag-level recall and precision for jobs, pains and gains, from a theme mapping made by a person, on test 1 only (English mapped by Francis, German by the classmate who labelled German);
+  - grouping (pairwise), marked as indicative;
+  - sentiment and type accuracy, with confusion tables;
+  - the share of quotes found word for word;
+  - variance between test 1 and test 2: presence agreement and the share of theme pairs repeated.
+- The theme mapping is done on test 1 only.
+- Nothing is tuned or rerun after the test results are seen. Results are published as they come out, with the known weaknesses noted on #131.
+
 ## Possible label gaps (dev split)
 
 Items where Painfold found something the human labels do not have, and the text looks like it does say it. Listed for the labellers to judge; they are not counted as correct, and no label was changed. The list is kept by hand in `label-gaps.json`; the runs it was seen in are computed.
