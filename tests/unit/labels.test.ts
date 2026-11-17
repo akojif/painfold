@@ -3,8 +3,9 @@ import { describe, expect, it } from 'vitest'
 import { read, utils } from 'xlsx'
 import { checkLabels, splitNames, type LabelItem } from '../../scripts/labels'
 
-// The analysis evaluation's labelling (#129): the handed-out spreadsheets and
-// the checks that turn filled ones into labels. All texts are invented.
+// The analysis evaluation's labelling (#129): the filled spreadsheets, the gold
+// labels converted from them, and the checks that turn filled sheets into
+// labels. All texts are invented.
 const items = readFileSync(new URL('../../data/eval/analysis/items.jsonl', import.meta.url), 'utf8')
   .trim().split('\n').map(line => JSON.parse(line) as LabelItem)
 
@@ -29,13 +30,19 @@ describe('the items', () => {
 
 describe('the labelling spreadsheets', () => {
   for (const [lang, itemsTab, themesTab, guideTab] of [['en', 'Items', 'Themes', 'Guidelines'], ['de', 'Einträge', 'Themen', 'Anleitung']] as const) {
-    it(`labelling-${lang}.xlsx opens on the guidelines, holds every ${lang} item as handed out, and is not labelled`, () => {
+    it(`labelling-${lang}.xlsx opens on the guidelines, holds every ${lang} item as handed out, and converts to labels-${lang}.jsonl`, () => {
       const book = read(readFileSync(new URL(`../../data/eval/analysis/labelling-${lang}.xlsx`, import.meta.url)))
       expect(book.SheetNames).toEqual([guideTab, itemsTab, themesTab])
-      const rows = utils.sheet_to_json<string[]>(book.Sheets[itemsTab]!, { header: 1, raw: false, defval: '' }).slice(1)
+      const sheetRows = (name: string) => utils.sheet_to_json<string[]>(book.Sheets[name]!, { header: 1, raw: false, defval: '' }).slice(1)
+      const rows = sheetRows(itemsTab)
       const expected = items.filter(item => item.lang === lang)
       expect(rows.map(cells => [cells[0], cells[1]])).toEqual(expected.map(item => [item.id, item.text]))
-      expect(rows.every(cells => cells.slice(2).every(cell => cell === ''))).toBe(true)
+      // The committed gold labels are exactly what the filled spreadsheet converts to.
+      const { labels, findings } = checkLabels(expected, rows, sheetRows(themesTab))
+      expect(findings.filter(finding => finding.level === 'problem')).toEqual([])
+      const committed = readFileSync(new URL(`../../data/eval/analysis/labels-${lang}.jsonl`, import.meta.url), 'utf8')
+        .trim().split('\n').map(line => JSON.parse(line) as unknown)
+      expect(labels).toEqual(committed)
       // The split is not handed out.
       expect(JSON.stringify(utils.sheet_to_json(book.Sheets[itemsTab]!))).not.toMatch(/\b(?:dev|test)\b/)
     })
