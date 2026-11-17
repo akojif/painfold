@@ -57,10 +57,12 @@ describe('what is published', () => {
 })
 
 describe('the section in docs/accuracy.md', () => {
-  it('says it is not measured yet, and lists stored runs, dev runs included', () => {
-    const text = analysisMarkdown(results([run('dev-en.json', { split: 'dev' }, false)]))
+  it('says it is not measured yet, and lists stored test runs only: dev runs stay off the public page', () => {
+    const text = analysisMarkdown(results([run('dev-en.json', { split: 'dev' }, false), run('test-de.json', { split: 'test', lang: 'de' }, false)]))
     expect(text).toContain('Not measured yet.')
-    expect(text).toContain('| `dev-en.json` | 60 | 0 | yes | 0.98 (98/100) |')
+    expect(text).toContain('| `test-de.json` | 60 | 0 | yes | 0.98 (98/100) |')
+    expect(text).not.toContain('dev-en.json')
+    expect(analysisMarkdown(results([run('dev-en.json', { split: 'dev' }, false)]))).toContain('Stored test runs:\n\nNo runs stored yet.')
   })
 
   it('shows every score of a published run, with its confusion tables', () => {

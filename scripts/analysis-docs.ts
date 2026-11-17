@@ -1,8 +1,9 @@
 // The analysis evaluation's section of docs/accuracy.md (#129), written by
 // `npm run eval:analysis -- --write` between its markers, from the same
 // results as the Accuracy page: the published test runs in full (grouping and
-// the confusion tables included), and every stored run, so dev runs used for
-// tuning are visible too. A unit test fails when the section is out of date.
+// the confusion tables included), and the stored test runs. Dev runs used for
+// tuning stay out of the public page; they are in data/eval/analysis/runs-log.md
+// and results.json. A unit test fails when the section is out of date.
 import { publishedAnalysis, type PublishedRun } from '../app/utils/analysis-accuracy.ts'
 import { ANTHROPIC_MODELS } from '../core/ai/providers.ts'
 import { KINDS } from '../core/ai/merge.ts'
@@ -53,10 +54,11 @@ export function analysisMarkdown(results: AnalysisResults): string {
   const sections = runs.length === 0
     ? ['Not measured yet. The numbers appear here before version 0.3.0 is released.']
     : runs.map(run => runSection(run, published.stability[run.lang]))
-  const stored = results.runs.length === 0
+  const testRuns = results.runs.filter(run => run.split === 'test')
+  const stored = testRuns.length === 0
     ? 'No runs stored yet.'
-    : table(['Run', 'Texts', 'Not analyzed', 'Merged', 'Quotes kept'], results.runs.map(run => [`\`${run.file}\``, String(run.texts), String(run.notAnalyzed), run.merged ? 'yes' : 'no', rate(run.quotes)]))
-  return [...sections, `All stored runs, dev runs for tuning included:\n\n${stored}`].join('\n\n')
+    : table(['Run', 'Texts', 'Not analyzed', 'Merged', 'Quotes kept'], testRuns.map(run => [`\`${run.file}\``, String(run.texts), String(run.notAnalyzed), run.merged ? 'yes' : 'no', rate(run.quotes)]))
+  return [...sections, `Stored test runs:\n\n${stored}`].join('\n\n')
 }
 
 /** The document with the text between the markers replaced. */

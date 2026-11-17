@@ -196,7 +196,7 @@ The sample is small: 60 test messages per language, and fewer labelled jobs, pai
 <!-- analysis:start -->
 Not measured yet. The numbers appear here before version 0.3.0 is released.
 
-All stored runs, dev runs for tuning included:
+Stored test runs:
 
 No runs stored yet.
 <!-- analysis:end -->
