@@ -1,0 +1,539 @@
+{
+ "format": "painfold-eval-run/1",
+ "painfoldVersion": "0.2.0",
+ "commit": "68492d2",
+ "createdAt": "2026-11-17T22:23:10.614Z",
+ "provider": "anthropic",
+ "model": "claude-haiku-5-5",
+ "settings": {
+  "batchSize": 25,
+  "effort": "low",
+  "maxTokens": 16000
+ },
+ "split": "test",
+ "lang": "de",
+ "payload": {
+  "format": "painfold-analysis/1",
+  "provider": "anthropic",
+  "model": "claude-haiku-5-5",
+  "instructions": "You analyse customer feedback for a product team, using the Value Proposition Canvas.\n\nFor each text, find:\n- jobs: what the customer is trying to get done, in their words (a goal, not a feature).\n- pains: what frustrates, blocks or risks that job.\n- gains: what the customer wants or would be delighted by.\nEach with a short label from the customer's point of view (2 to 7 words, in the language of the text), an intensity from 1 (mild) to 3 (strong), and a quote: the exact words from the text that show it, copied character for character.\n\nAlso give each text's overall sentiment (positive, negative, mixed or neutral) and its main type (bug, feature request, question, praise, complaint or other).\n\nRules:\n- Only what the text says. A text can have no jobs, pains or gains.\n- Placeholders such as [NAME_1] or [EMAIL_2] replace removed personal data. Never guess what they stand for, and never put them in a label.\n- Answer only with JSON: {\"texts\": [{\"id\": \"...\", \"jobs\": [...], \"pains\": [...], \"gains\": [...], \"sentiment\": \"...\", \"type\": \"...\"}]}, one entry per text, with each job, pain and gain as {\"label\": \"...\", \"intensity\": 1, \"quote\": \"...\"}.",
+  "mergeInstructions": "You group what customers said into themes for a product team, using the Value Proposition Canvas.\n\nYou get one kind at a time: jobs (what customers are trying to get done), pains (what frustrates, blocks or risks a job) or gains (what customers want or would be delighted by). Each label has an id and the number of texts it came from. Labels are in German or English.\n\nPut labels that mean the same thing for the customer into one theme, whatever their language. Keep different things apart: a theme should be specific enough for a team to act on. Give each theme a short name from the customer's point of view, 2 to 7 words, in German.\n\nRules:\n- Every label id in exactly one theme. A label that fits no other is a theme of its own.\n- Placeholders such as [NAME_1] or [EMAIL_2] replace removed personal data. Never put them in a theme name.\n- Answer only with JSON: {\"themes\": [{\"name\": \"...\", \"labels\": [\"l1\", \"l7\"]}]}.",
+  "texts": [
+   {
+    "id": "t1",
+    "text": "Kann meine Steuerberaterin einen eigenen Zugang bekommen, ohne dass ich mein Passwort weitergebe?"
+   },
+   {
+    "id": "t2",
+    "text": "Die Lohnverrechnung hat diesen Monat super funktioniert, in zehn Minuten erledigt. Danke!"
+   },
+   {
+    "id": "t3",
+    "text": "Wo finde ich die UVA? Ich habe jedes Menü zweimal durchgeklickt."
+   },
+   {
+    "id": "t4",
+    "text": "Die App stürzt jedes Mal ab, wenn ich einen Beleg fotografieren will. iPhone, aktuelle Version."
+   },
+   {
+    "id": "t5",
+    "text": "Uns wurde das Jahresabo doppelt abgebucht. Bitte eine Zahlung zurückbuchen."
+   },
+   {
+    "id": "t6",
+    "text": "Gutes Produkt, fairer Preis. Bei den Auswertungen fehlt mir aber ein Filter nach Projekt."
+   },
+   {
+    "id": "t7",
+    "text": "Das neue Dashboard ist toll!"
+   },
+   {
+    "id": "t8",
+    "text": "Sechs Tage auf eine Antwort vom Support gewartet. Bis dahin hatte ich es selbst gelöst."
+   },
+   {
+    "id": "t9",
+    "text": "Nach dem Handywechsel komme ich nicht mehr rein. Der Code geht an die alte Nummer und am Telefon hebt niemand ab."
+   },
+   {
+    "id": "t10",
+    "text": "Wie verbuche ich eine Zahlung, die drei Rechnungen auf einmal begleicht?"
+   },
+   {
+    "id": "t11",
+    "text": "Gibt es eine Schnittstelle? Wir möchten die Bestellungen aus dem Webshop direkt als Rechnungen übernehmen."
+   },
+   {
+    "id": "t12",
+    "text": "Die neue Navigation ist verwirrend, nichts ist mehr dort, wo es war."
+   },
+   {
+    "id": "t13",
+    "text": "Die Lohnverrechnung ist einfach, aber auf dem Lohnzettel steht das falsche Jahr."
+   },
+   {
+    "id": "t14",
+    "text": "Bitte einen dunklen Modus, nach einem Tag Buchhaltung brennen mir die Augen."
+   },
+   {
+    "id": "t15",
+    "text": "Seit dem Update ist alles langsam. Eine Rechnung öffnen dauert zehn Sekunden."
+   },
+   {
+    "id": "t16",
+    "text": "Meine Steuerberaterin will alles in ihr eigenes Programm übernehmen. Gibt es einen BMD-Export?"
+   },
+   {
+    "id": "t17",
+    "text": "Ich habe eine kleine Reinigungsfirma und will am Freitagnachmittag einfach meine Rechnungen rausschicken, ohne Theater. Das klappt."
+   },
+   {
+    "id": "t18",
+    "text": "Seit sechs Jahren Kunde und immer noch zufrieden."
+   },
+   {
+    "id": "t19",
+    "text": "passt"
+   },
+   {
+    "id": "t20",
+    "text": "Die Bankverbindung will alle 90 Tage neu freigegeben werden. Liegt das an euch oder an der Bank?"
+   },
+   {
+    "id": "t21",
+    "text": "Der Support-Chat schließt sich, bevor jemand antwortet. Heute schon dreimal probiert."
+   },
+   {
+    "id": "t22",
+    "text": "Gut, aber für ein Ein-Personen-Unternehmen zu teuer."
+   },
+   {
+    "id": "t23",
+    "text": "Für Rechnungen genial, für alles andere schwach. Die Belegverwaltung wirkt wie nachträglich drangeklebt."
+   },
+   {
+    "id": "t24",
+    "text": "Was ist der Unterschied zwischen Standard und Plus? Auf der Preisseite steht nicht, ob die Lohnverrechnung dabei ist."
+   },
+   {
+    "id": "t25",
+    "text": "Die Bankbuchungen kommen manchmal doppelt und ich muss sie vor dem Abgleich händisch löschen."
+   },
+   {
+    "id": "t26",
+    "text": "Wir würden mehr zahlen für Telefon-Support. Nur per Mail geht nicht, wenn morgen die Löhne raus müssen."
+   },
+   {
+    "id": "t27",
+    "text": "Ich mache die Buchhaltung für meine Praxis und die meines Mannes. Zwischen den Firmen wechseln braucht viel zu viele Klicks."
+   },
+   {
+    "id": "t28",
+    "text": "Die Lohnzettel sollten direkt per Mail an die Mitarbeiter gehen, nicht dass ich jeden einzeln herunterlade und anhänge."
+   },
+   {
+    "id": "t29",
+    "text": "Die App stürzt am Android-Handy ab, sobald ich die Kamera zum Belegscannen öffne."
+   },
+   {
+    "id": "t30",
+    "text": "Wie lange speichert ihr unsere Daten, nachdem wir gekündigt haben?"
+   },
+   {
+    "id": "t31",
+    "text": "Unsere Kunden beschweren sich, dass der Zahlungslink in der Rechnungsmail zu schnell abläuft."
+   },
+   {
+    "id": "t32",
+    "text": "Ich möchte eine Ausgabe auf zwei Projekte aufteilen können."
+   },
+   {
+    "id": "t33",
+    "text": "Der CSV-Export trennt mit Kommas, mein Excel erwartet Strichpunkte."
+   },
+   {
+    "id": "t34",
+    "text": "Der Preis passt, aber auf eurer Jahresrechnung fehlt unsere UID-Nummer, damit kann die Steuerberaterin die Vorsteuer nicht abziehen."
+   },
+   {
+    "id": "t35",
+    "text": "Seit meine Bank den Login geändert hat, geht die Synchronisation nicht mehr. Der Support sagt, ich soll warten. Das ist jetzt zwei Wochen her."
+   },
+   {
+    "id": "t36",
+    "text": "Langsam, stürzt ab, und der Support braucht Tage. Wir wechseln nächsten Monat."
+   },
+   {
+    "id": "t37",
+    "text": "Danke, dass ihr die doppelten Buchungen so schnell behoben habt."
+   },
+   {
+    "id": "t38",
+    "text": "Mit eurer App schreibe ich die Rechnung in unter einer Minute direkt beim Kunden an der Tür."
+   },
+   {
+    "id": "t39",
+    "text": "Grüß Gott, ich bin [NAME_2] aus [PLACE_1]. Wir sind eine Familienbäckerei und ich mache die Buchhaltung am Abend. Es muss einfach sein, und meistens ist es das, aber der Bankabgleich macht mir Angst."
+   },
+   {
+    "id": "t40",
+    "text": "Meine Steuerberaterin sagt, im Export fehlt die Kostenstelle."
+   },
+   {
+    "id": "t41",
+    "text": "Ohne das Programm könnte ich meine Arbeit nicht machen."
+   },
+   {
+    "id": "t42",
+    "text": "Kommt eine Shopify-Anbindung? Wir verkaufen online und tippen jede Bestellung ab."
+   },
+   {
+    "id": "t43",
+    "text": "Die Einführungsvideos sind ausgezeichnet. An einem Nachmittag war alles eingerichtet."
+   },
+   {
+    "id": "t44",
+    "text": "Wenn ich das Zahlungsziel bei einer Rechnung ändere, ändert es sich bei allen künftigen Rechnungen des Kunden. Das will ich nicht."
+   },
+   {
+    "id": "t45",
+    "text": "Wir sind ein Verein. Gibt es einen Rabatt?"
+   },
+   {
+    "id": "t46",
+    "text": "Der Support hat innerhalb einer Stunde geantwortet und das Problem behoben. Danke, [NAME_3]."
+   },
+   {
+    "id": "t47",
+    "text": "Ich muss Spesen von zwölf Leuten freigeben und kann sie nicht gesammelt freigeben."
+   },
+   {
+    "id": "t48",
+    "text": "Unsere Rechnungen landen bei manchen Kunden im Spam-Ordner."
+   },
+   {
+    "id": "t49",
+    "text": "Kann ich sehen, wer eine Rechnung geändert hat? Jemand hat einen Betrag geändert und ich weiß nicht, wer."
+   },
+   {
+    "id": "t50",
+    "text": "Unser Vertrieb soll Angebote erstellen können, aber keine Gehälter sehen."
+   },
+   {
+    "id": "t51",
+    "text": "Nach jedem App-Update muss ich mich am Handy wieder mit Code anmelden."
+   },
+   {
+    "id": "t52",
+    "text": "Ich möchte Rechnungen von meiner eigenen Mailadresse verschicken, das wirkt professioneller."
+   },
+   {
+    "id": "t53",
+    "text": "Ich brauche am Quartalsende nur die Zahlen für meinen Steuerberater, sonst nichts."
+   },
+   {
+    "id": "t54",
+    "text": "Wenn ich nach einem Betrag mit Komma suche, findet die Suche nichts."
+   },
+   {
+    "id": "t55",
+    "text": "Euer Team war so geduldig mit mir. Ich kenne mich mit Computern nicht gut aus und sie haben mir alles erklärt."
+   },
+   {
+    "id": "t56",
+    "text": "Ich nutze das Programm, um zu sehen, welche Projekte wirklich Geld bringen, und der Projektbericht zeigt mir das endlich. Großartig."
+   },
+   {
+    "id": "t57",
+    "text": "Wir sind letztes Jahr von einem Desktop-Programm umgestiegen und haben es nicht bereut."
+   },
+   {
+    "id": "t58",
+    "text": "Ich kann den Lieferschein nicht an die Rechnung anhängen, meine Kunden brauchen beides in einer Mail."
+   },
+   {
+    "id": "t59",
+    "text": "Seit dem Redesign finde ich den Knopf zum Duplizieren einer Rechnung nicht mehr. Das war die Funktion, die ich am meisten gebraucht habe."
+   },
+   {
+    "id": "t60",
+    "text": "Ich bin unsicher, ob ich das Programm nächstes Jahr noch brauche, wir sind gerade im Umbruch."
+   }
+  ]
+ },
+ "itemOf": [
+  [
+   "t1",
+   "de-003"
+  ],
+  [
+   "t2",
+   "de-004"
+  ],
+  [
+   "t3",
+   "de-006"
+  ],
+  [
+   "t4",
+   "de-007"
+  ],
+  [
+   "t5",
+   "de-008"
+  ],
+  [
+   "t6",
+   "de-009"
+  ],
+  [
+   "t7",
+   "de-011"
+  ],
+  [
+   "t8",
+   "de-012"
+  ],
+  [
+   "t9",
+   "de-015"
+  ],
+  [
+   "t10",
+   "de-016"
+  ],
+  [
+   "t11",
+   "de-018"
+  ],
+  [
+   "t12",
+   "de-020"
+  ],
+  [
+   "t13",
+   "de-021"
+  ],
+  [
+   "t14",
+   "de-024"
+  ],
+  [
+   "t15",
+   "de-027"
+  ],
+  [
+   "t16",
+   "de-028"
+  ],
+  [
+   "t17",
+   "de-030"
+  ],
+  [
+   "t18",
+   "de-032"
+  ],
+  [
+   "t19",
+   "de-035"
+  ],
+  [
+   "t20",
+   "de-037"
+  ],
+  [
+   "t21",
+   "de-038"
+  ],
+  [
+   "t22",
+   "de-039"
+  ],
+  [
+   "t23",
+   "de-045"
+  ],
+  [
+   "t24",
+   "de-046"
+  ],
+  [
+   "t25",
+   "de-048"
+  ],
+  [
+   "t26",
+   "de-049"
+  ],
+  [
+   "t27",
+   "de-053"
+  ],
+  [
+   "t28",
+   "de-055"
+  ],
+  [
+   "t29",
+   "de-056"
+  ],
+  [
+   "t30",
+   "de-057"
+  ],
+  [
+   "t31",
+   "de-058"
+  ],
+  [
+   "t32",
+   "de-059"
+  ],
+  [
+   "t33",
+   "de-062"
+  ],
+  [
+   "t34",
+   "de-067"
+  ],
+  [
+   "t35",
+   "de-073"
+  ],
+  [
+   "t36",
+   "de-075"
+  ],
+  [
+   "t37",
+   "de-077"
+  ],
+  [
+   "t38",
+   "de-079"
+  ],
+  [
+   "t39",
+   "de-080"
+  ],
+  [
+   "t40",
+   "de-083"
+  ],
+  [
+   "t41",
+   "de-084"
+  ],
+  [
+   "t42",
+   "de-086"
+  ],
+  [
+   "t43",
+   "de-088"
+  ],
+  [
+   "t44",
+   "de-089"
+  ],
+  [
+   "t45",
+   "de-090"
+  ],
+  [
+   "t46",
+   "de-093"
+  ],
+  [
+   "t47",
+   "de-094"
+  ],
+  [
+   "t48",
+   "de-095"
+  ],
+  [
+   "t49",
+   "de-097"
+  ],
+  [
+   "t50",
+   "de-098"
+  ],
+  [
+   "t51",
+   "de-100"
+  ],
+  [
+   "t52",
+   "de-101"
+  ],
+  [
+   "t53",
+   "de-102"
+  ],
+  [
+   "t54",
+   "de-103"
+  ],
+  [
+   "t55",
+   "de-104"
+  ],
+  [
+   "t56",
+   "de-108"
+  ],
+  [
+   "t57",
+   "de-111"
+  ],
+  [
+   "t58",
+   "de-115"
+  ],
+  [
+   "t59",
+   "de-116"
+  ],
+  [
+   "t60",
+   "de-120"
+  ]
+ ],
+ "tagging": [
+  {
+   "asked": "{\"texts\":[{\"id\":\"t1\",\"text\":\"Kann meine Steuerberaterin einen eigenen Zugang bekommen, ohne dass ich mein Passwort weitergebe?\"},{\"id\":\"t2\",\"text\":\"Die Lohnverrechnung hat diesen Monat super funktioniert, in zehn Minuten erledigt. Danke!\"},{\"id\":\"t3\",\"text\":\"Wo finde ich die UVA? Ich habe jedes Menü zweimal durchgeklickt.\"},{\"id\":\"t4\",\"text\":\"Die App stürzt jedes Mal ab, wenn ich einen Beleg fotografieren will. iPhone, aktuelle Version.\"},{\"id\":\"t5\",\"text\":\"Uns wurde das Jahresabo doppelt abgebucht. Bitte eine Zahlung zurückbuchen.\"},{\"id\":\"t6\",\"text\":\"Gutes Produkt, fairer Preis. Bei den Auswertungen fehlt mir aber ein Filter nach Projekt.\"},{\"id\":\"t7\",\"text\":\"Das neue Dashboard ist toll!\"},{\"id\":\"t8\",\"text\":\"Sechs Tage auf eine Antwort vom Support gewartet. Bis dahin hatte ich es selbst gelöst.\"},{\"id\":\"t9\",\"text\":\"Nach dem Handywechsel komme ich nicht mehr rein. Der Code geht an die alte Nummer und am Telefon hebt niemand ab.\"},{\"id\":\"t10\",\"text\":\"Wie verbuche ich eine Zahlung, die drei Rechnungen auf einmal begleicht?\"},{\"id\":\"t11\",\"text\":\"Gibt es eine Schnittstelle? Wir möchten die Bestellungen aus dem Webshop direkt als Rechnungen übernehmen.\"},{\"id\":\"t12\",\"text\":\"Die neue Navigation ist verwirrend, nichts ist mehr dort, wo es war.\"},{\"id\":\"t13\",\"text\":\"Die Lohnverrechnung ist einfach, aber auf dem Lohnzettel steht das falsche Jahr.\"},{\"id\":\"t14\",\"text\":\"Bitte einen dunklen Modus, nach einem Tag Buchhaltung brennen mir die Augen.\"},{\"id\":\"t15\",\"text\":\"Seit dem Update ist alles langsam. Eine Rechnung öffnen dauert zehn Sekunden.\"},{\"id\":\"t16\",\"text\":\"Meine Steuerberaterin will alles in ihr eigenes Programm übernehmen. Gibt es einen BMD-Export?\"},{\"id\":\"t17\",\"text\":\"Ich habe eine kleine Reinigungsfirma und will am Freitagnachmittag einfach meine Rechnungen rausschicken, ohne Theater. Das klappt.\"},{\"id\":\"t18\",\"text\":\"Seit sechs Jahren Kunde und immer noch zufrieden.\"},{\"id\":\"t19\",\"text\":\"passt\"},{\"id\":\"t20\",\"text\":\"Die Bankverbindung will alle 90 Tage neu freigegeben werden. Liegt das an euch oder an der Bank?\"},{\"id\":\"t21\",\"text\":\"Der Support-Chat schließt sich, bevor jemand antwortet. Heute schon dreimal probiert.\"},{\"id\":\"t22\",\"text\":\"Gut, aber für ein Ein-Personen-Unternehmen zu teuer.\"},{\"id\":\"t23\",\"text\":\"Für Rechnungen genial, für alles andere schwach. Die Belegverwaltung wirkt wie nachträglich drangeklebt.\"},{\"id\":\"t24\",\"text\":\"Was ist der Unterschied zwischen Standard und Plus? Auf der Preisseite steht nicht, ob die Lohnverrechnung dabei ist.\"},{\"id\":\"t25\",\"text\":\"Die Bankbuchungen kommen manchmal doppelt und ich muss sie vor dem Abgleich händisch löschen.\"}]}",
+   "answer": "{\"stop_reason\":\"end_turn\",\"content\":[{\"type\":\"text\",\"text\":\"{\\\"texts\\\":[{\\\"id\\\":\\\"t1\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Steuerberaterin Zugang geben\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Kann meine Steuerberaterin einen eigenen Zugang bekommen\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Passwort weitergeben vermeiden\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"ohne dass ich mein Passwort weitergebe?\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Eigener Zugang für Steuerberaterin\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"einen eigenen Zugang bekommen\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"question\\\"},{\\\"id\\\":\\\"t2\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Lohnverrechnung erledigen\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Die Lohnverrechnung hat diesen Monat super funktioniert\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Schnelle Lohnverrechnung\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"in zehn Minuten erledigt\\\"}],\\\"sentiment\\\":\\\"positive\\\",\\\"type\\\":\\\"praise\\\"},{\\\"id\\\":\\\"t3\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"UVA finden\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Wo finde ich die UVA?\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Menüs unübersichtlich\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Ich habe jedes Menü zweimal durchgeklickt.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"question\\\"},{\\\"id\\\":\\\"t4\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Beleg fotografieren\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"wenn ich einen Beleg fotografieren will\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"App stürzt ab\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Die App stürzt jedes Mal ab\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t5\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Abo bezahlen\\\",\\\"intensity\\\":1,\\\"quote\\\":\\\"Uns wurde das Jahresabo doppelt abgebucht.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Doppelte Abbuchung\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Uns wurde das Jahresabo doppelt abgebucht.\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Zahlung zurückbuchen\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Bitte eine Zahlung zurückbuchen.\\\"}],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t6\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Auswertungen nach Projekt\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Bei den Auswertungen fehlt mir aber ein Filter nach Projekt.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Filter nach Projekt fehlt\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"fehlt mir aber ein Filter nach Projekt\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Filter nach Projekt\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"ein Filter nach Projekt\\\"},{\\\"label\\\":\\\"Fairer Preis\\\",\\\"intensity\\\":1,\\\"quote\\\":\\\"Gutes Produkt, fairer Preis.\\\"}],\\\"sentiment\\\":\\\"mixed\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t7\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Neues Dashboard gefällt\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Das neue Dashboard ist toll!\\\"}],\\\"sentiment\\\":\\\"positive\\\",\\\"type\\\":\\\"praise\\\"},{\\\"id\\\":\\\"t8\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Hilfe vom Support bekommen\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Sechs Tage auf eine Antwort vom Support gewartet.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Support antwortet zu spät\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Sechs Tage auf eine Antwort vom Support gewartet.\\\"},{\\\"label\\\":\\\"Selbst lösen müssen\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Bis dahin hatte ich es selbst gelöst.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t9\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Nach Handywechsel einloggen\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Nach dem Handywechsel komme ich nicht mehr rein.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Code an alte Nummer\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Der Code geht an die alte Nummer\\\"},{\\\"label\\\":\\\"Telefon wird nicht abgehoben\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"am Telefon hebt niemand ab.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t10\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Sammelzahlung verbuchen\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Wie verbuche ich eine Zahlung, die drei Rechnungen auf einmal begleicht?\\\"}],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"question\\\"},{\\\"id\\\":\\\"t11\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Webshop-Bestellungen als Rechnungen\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"die Bestellungen aus dem Webshop direkt als Rechnungen übernehmen\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Direkte Übernahme per Schnittstelle\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Gibt es eine Schnittstelle?\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t12\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Navigation finden\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Die neue Navigation ist verwirrend\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Navigation verwirrend\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Die neue Navigation ist verwirrend\\\"},{\\\"label\\\":\\\"Gewohnte Orte verschwunden\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"nichts ist mehr dort, wo es war.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t13\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Lohnverrechnung erledigen\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Die Lohnverrechnung ist einfach\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Falsches Jahr auf Lohnzettel\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"auf dem Lohnzettel steht das falsche Jahr.\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Einfache Lohnverrechnung\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Die Lohnverrechnung ist einfach\\\"}],\\\"sentiment\\\":\\\"mixed\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t14\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Tagelang Buchhaltung machen\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"nach einem Tag Buchhaltung brennen mir die Augen.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Augen brennen\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"brennen mir die Augen\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Dunkler Modus\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Bitte einen dunklen Modus\\\"}],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t15\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Rechnung öffnen\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Eine Rechnung öffnen dauert zehn Sekunden.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Seit Update langsam\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Seit dem Update ist alles langsam.\\\"},{\\\"label\\\":\\\"Öffnen dauert zu lange\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Eine Rechnung öffnen dauert zehn Sekunden.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t16\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Daten an Steuerberaterin übergeben\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Meine Steuerberaterin will alles in ihr eigenes Programm übernehmen.\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"BMD-Export\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Gibt es einen BMD-Export?\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"question\\\"},{\\\"id\\\":\\\"t17\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Rechnungen am Freitag verschicken\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"will am Freitagnachmittag einfach meine Rechnungen rausschicken\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Theater beim Rechnungsversand\\\",\\\"intensity\\\":1,\\\"quote\\\":\\\"ohne Theater\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Einfacher Rechnungsversand\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"einfach meine Rechnungen rausschicken\\\"}],\\\"sentiment\\\":\\\"positive\\\",\\\"type\\\":\\\"praise\\\"},{\\\"id\\\":\\\"t18\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Langjährige Zufriedenheit\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Seit sechs Jahren Kunde und immer noch zufrieden.\\\"}],\\\"sentiment\\\":\\\"positive\\\",\\\"type\\\":\\\"praise\\\"},{\\\"id\\\":\\\"t19\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t20\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Bankverbindung dauerhaft nutzen\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Die Bankverbindung will alle 90 Tage neu freigegeben werden.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Bankfreigabe alle 90 Tage\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"will alle 90 Tage neu freigegeben werden\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"question\\\"},{\\\"id\\\":\\\"t21\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Support-Chat nutzen\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Der Support-Chat schließt sich, bevor jemand antwortet.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Chat schließt sich\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Der Support-Chat schließt sich\\\"},{\\\"label\\\":\\\"Keine Antwort vom Support\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"bevor jemand antwortet\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t22\\\",\\\"jobs\\\":[],\\\"pains\\\":[{\\\"label\\\":\\\"Zu teuer für Ein-Personen-Unternehmen\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"für ein Ein-Personen-Unternehmen zu teuer.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"mixed\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t23\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Rechnungen schreiben\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Für Rechnungen genial\\\"},{\\\"label\\\":\\\"Belege verwalten\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Die Belegverwaltung wirkt wie nachträglich drangeklebt.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Belegverwaltung wirkt angeklebt\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Die Belegverwaltung wirkt wie nachträglich drangeklebt.\\\"},{\\\"label\\\":\\\"Schwach außerhalb Rechnungen\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"für alles andere schwach.\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Rechnungen gut gelöst\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Für Rechnungen genial\\\"}],\\\"sentiment\\\":\\\"mixed\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t24\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Tarife vergleichen\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Was ist der Unterschied zwischen Standard und Plus?\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Preisseite unklar\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Auf der Preisseite steht nicht, ob die Lohnverrechnung dabei ist.\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Klarheit über Lohnverrechnung\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"ob die Lohnverrechnung dabei ist\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"question\\\"},{\\\"id\\\":\\\"t25\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Bankabgleich durchführen\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"vor dem Abgleich händisch löschen\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Bankbuchungen doppelt\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Die Bankbuchungen kommen manchmal doppelt\\\"},{\\\"label\\\":\\\"Manuelles Löschen vor Abgleich\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"ich muss sie vor dem Abgleich händisch löschen.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"bug\\\"}]}\"}],\"usage\":{\"input_tokens\":2654,\"output_tokens\":4135}}"
+  },
+  {
+   "asked": "{\"texts\":[{\"id\":\"t26\",\"text\":\"Wir würden mehr zahlen für Telefon-Support. Nur per Mail geht nicht, wenn morgen die Löhne raus müssen.\"},{\"id\":\"t27\",\"text\":\"Ich mache die Buchhaltung für meine Praxis und die meines Mannes. Zwischen den Firmen wechseln braucht viel zu viele Klicks.\"},{\"id\":\"t28\",\"text\":\"Die Lohnzettel sollten direkt per Mail an die Mitarbeiter gehen, nicht dass ich jeden einzeln herunterlade und anhänge.\"},{\"id\":\"t29\",\"text\":\"Die App stürzt am Android-Handy ab, sobald ich die Kamera zum Belegscannen öffne.\"},{\"id\":\"t30\",\"text\":\"Wie lange speichert ihr unsere Daten, nachdem wir gekündigt haben?\"},{\"id\":\"t31\",\"text\":\"Unsere Kunden beschweren sich, dass der Zahlungslink in der Rechnungsmail zu schnell abläuft.\"},{\"id\":\"t32\",\"text\":\"Ich möchte eine Ausgabe auf zwei Projekte aufteilen können.\"},{\"id\":\"t33\",\"text\":\"Der CSV-Export trennt mit Kommas, mein Excel erwartet Strichpunkte.\"},{\"id\":\"t34\",\"text\":\"Der Preis passt, aber auf eurer Jahresrechnung fehlt unsere UID-Nummer, damit kann die Steuerberaterin die Vorsteuer nicht abziehen.\"},{\"id\":\"t35\",\"text\":\"Seit meine Bank den Login geändert hat, geht die Synchronisation nicht mehr. Der Support sagt, ich soll warten. Das ist jetzt zwei Wochen her.\"},{\"id\":\"t36\",\"text\":\"Langsam, stürzt ab, und der Support braucht Tage. Wir wechseln nächsten Monat.\"},{\"id\":\"t37\",\"text\":\"Danke, dass ihr die doppelten Buchungen so schnell behoben habt.\"},{\"id\":\"t38\",\"text\":\"Mit eurer App schreibe ich die Rechnung in unter einer Minute direkt beim Kunden an der Tür.\"},{\"id\":\"t39\",\"text\":\"Grüß Gott, ich bin [NAME_2] aus [PLACE_1]. Wir sind eine Familienbäckerei und ich mache die Buchhaltung am Abend. Es muss einfach sein, und meistens ist es das, aber der Bankabgleich macht mir Angst.\"},{\"id\":\"t40\",\"text\":\"Meine Steuerberaterin sagt, im Export fehlt die Kostenstelle.\"},{\"id\":\"t41\",\"text\":\"Ohne das Programm könnte ich meine Arbeit nicht machen.\"},{\"id\":\"t42\",\"text\":\"Kommt eine Shopify-Anbindung? Wir verkaufen online und tippen jede Bestellung ab.\"},{\"id\":\"t43\",\"text\":\"Die Einführungsvideos sind ausgezeichnet. An einem Nachmittag war alles eingerichtet.\"},{\"id\":\"t44\",\"text\":\"Wenn ich das Zahlungsziel bei einer Rechnung ändere, ändert es sich bei allen künftigen Rechnungen des Kunden. Das will ich nicht.\"},{\"id\":\"t45\",\"text\":\"Wir sind ein Verein. Gibt es einen Rabatt?\"},{\"id\":\"t46\",\"text\":\"Der Support hat innerhalb einer Stunde geantwortet und das Problem behoben. Danke, [NAME_3].\"},{\"id\":\"t47\",\"text\":\"Ich muss Spesen von zwölf Leuten freigeben und kann sie nicht gesammelt freigeben.\"},{\"id\":\"t48\",\"text\":\"Unsere Rechnungen landen bei manchen Kunden im Spam-Ordner.\"},{\"id\":\"t49\",\"text\":\"Kann ich sehen, wer eine Rechnung geändert hat? Jemand hat einen Betrag geändert und ich weiß nicht, wer.\"},{\"id\":\"t50\",\"text\":\"Unser Vertrieb soll Angebote erstellen können, aber keine Gehälter sehen.\"}]}",
+   "answer": "{\"stop_reason\":\"end_turn\",\"content\":[{\"type\":\"text\",\"text\":\"{\\\"texts\\\":[{\\\"id\\\":\\\"t26\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Lohnzahlungen rechtzeitig abwickeln\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"wenn morgen die Löhne raus müssen\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Support nur per Mail\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Nur per Mail geht nicht\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Telefon-Support verfügbar\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Wir würden mehr zahlen für Telefon-Support\\\"}],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t27\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Buchhaltung für mehrere Firmen\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Ich mache die Buchhaltung für meine Praxis und die meines Mannes\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Viele Klicks zwischen Firmen\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Zwischen den Firmen wechseln braucht viel zu viele Klicks.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t28\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Lohnzettel an Mitarbeiter verschicken\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Die Lohnzettel sollten direkt per Mail an die Mitarbeiter gehen\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Jeden Lohnzettel einzeln anhängen\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"nicht dass ich jeden einzeln herunterlade und anhänge\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Automatischer Versand per Mail\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Die Lohnzettel sollten direkt per Mail an die Mitarbeiter gehen\\\"}],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t29\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Belege mit Handy scannen\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"die Kamera zum Belegscannen öffne\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"App stürzt auf Android ab\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Die App stürzt am Android-Handy ab\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t30\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"question\\\"},{\\\"id\\\":\\\"t31\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Kunden rechtzeitig bezahlen lassen\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Unsere Kunden beschweren sich, dass der Zahlungslink in der Rechnungsmail zu schnell abläuft.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Zahlungslink läuft zu schnell ab\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"der Zahlungslink in der Rechnungsmail zu schnell abläuft\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t32\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Ausgaben auf Projekte verteilen\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Ich möchte eine Ausgabe auf zwei Projekte aufteilen können.\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Ausgabe auf Projekte aufteilen\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Ich möchte eine Ausgabe auf zwei Projekte aufteilen können.\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t33\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Daten in Excel weiterverarbeiten\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"mein Excel erwartet Strichpunkte\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"CSV-Export mit falschem Trennzeichen\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Der CSV-Export trennt mit Kommas, mein Excel erwartet Strichpunkte.\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Export mit Strichpunkten\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"mein Excel erwartet Strichpunkte\\\"}],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t34\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Vorsteuer abziehen lassen\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"damit kann die Steuerberaterin die Vorsteuer nicht abziehen\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"UID-Nummer auf Rechnung fehlt\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"auf eurer Jahresrechnung fehlt unsere UID-Nummer\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Preis passt\\\",\\\"intensity\\\":1,\\\"quote\\\":\\\"Der Preis passt\\\"}],\\\"sentiment\\\":\\\"mixed\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t35\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Bank per Synchronisation verbinden\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"geht die Synchronisation nicht mehr\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Sync seit Bank-Login-Änderung defekt\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Seit meine Bank den Login geändert hat, geht die Synchronisation nicht mehr\\\"},{\\\"label\\\":\\\"Support sagt warten\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Der Support sagt, ich soll warten.\\\"},{\\\"label\\\":\\\"Seit zwei Wochen ungelöst\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Das ist jetzt zwei Wochen her.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t36\\\",\\\"jobs\\\":[],\\\"pains\\\":[{\\\"label\\\":\\\"App ist langsam\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Langsam\\\"},{\\\"label\\\":\\\"App stürzt ab\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"stürzt ab\\\"},{\\\"label\\\":\\\"Support braucht Tage\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"der Support braucht Tage\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t37\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Doppelte Buchungen vermeiden\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"die doppelten Buchungen so schnell behoben habt\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Schnelle Fehlerbehebung\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"so schnell behoben habt\\\"}],\\\"sentiment\\\":\\\"positive\\\",\\\"type\\\":\\\"praise\\\"},{\\\"id\\\":\\\"t38\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Rechnung direkt beim Kunden schreiben\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"schreibe ich die Rechnung in unter einer Minute direkt beim Kunden an der Tür\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Rechnung in unter einer Minute\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"in unter einer Minute\\\"}],\\\"sentiment\\\":\\\"positive\\\",\\\"type\\\":\\\"praise\\\"},{\\\"id\\\":\\\"t39\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Buchhaltung am Abend erledigen\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"ich mache die Buchhaltung am Abend\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Bankabgleich macht Angst\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"der Bankabgleich macht mir Angst\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Einfache Buchhaltung\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Es muss einfach sein, und meistens ist es das\\\"}],\\\"sentiment\\\":\\\"mixed\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t40\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Export für Steuerberaterin nutzen\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Meine Steuerberaterin sagt, im Export fehlt die Kostenstelle.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Kostenstelle fehlt im Export\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"im Export fehlt die Kostenstelle\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t41\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Arbeit erledigen können\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Ohne das Programm könnte ich meine Arbeit nicht machen.\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Programm ist unverzichtbar\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Ohne das Programm könnte ich meine Arbeit nicht machen.\\\"}],\\\"sentiment\\\":\\\"positive\\\",\\\"type\\\":\\\"praise\\\"},{\\\"id\\\":\\\"t42\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Online-Bestellungen verwalten\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Wir verkaufen online und tippen jede Bestellung ab.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Bestellungen manuell abtippen\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"tippen jede Bestellung ab\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Shopify-Anbindung\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Kommt eine Shopify-Anbindung?\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"question\\\"},{\\\"id\\\":\\\"t43\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Programm einrichten\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"An einem Nachmittag war alles eingerichtet.\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Hilfreiche Einführungsvideos\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Die Einführungsvideos sind ausgezeichnet.\\\"},{\\\"label\\\":\\\"Schnelle Einrichtung\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"An einem Nachmittag war alles eingerichtet.\\\"}],\\\"sentiment\\\":\\\"positive\\\",\\\"type\\\":\\\"praise\\\"},{\\\"id\\\":\\\"t44\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Zahlungsziel pro Rechnung ändern\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Wenn ich das Zahlungsziel bei einer Rechnung ändere\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Änderung wirkt auf alle Rechnungen\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"ändert es sich bei allen künftigen Rechnungen des Kunden. Das will ich nicht.\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Änderung nur für eine Rechnung\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Wenn ich das Zahlungsziel bei einer Rechnung ändere\\\"}],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t45\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Vereinsrabatt erhalten\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Gibt es einen Rabatt?\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"question\\\"},{\\\"id\\\":\\\"t46\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Probleme schnell lösen lassen\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Der Support hat innerhalb einer Stunde geantwortet und das Problem behoben.\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Schnelle Support-Antwort\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"innerhalb einer Stunde geantwortet\\\"}],\\\"sentiment\\\":\\\"positive\\\",\\\"type\\\":\\\"praise\\\"},{\\\"id\\\":\\\"t47\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Spesen freigeben\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Ich muss Spesen von zwölf Leuten freigeben\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Keine Sammelfreigabe möglich\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"kann sie nicht gesammelt freigeben\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Sammelfreigabe von Spesen\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"kann sie nicht gesammelt freigeben\\\"}],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t48\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Rechnungen zuverlässig zustellen\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Unsere Rechnungen landen bei manchen Kunden im Spam-Ordner.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Rechnungen landen im Spam\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"landen bei manchen Kunden im Spam-Ordner\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t49\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Änderungen an Rechnungen nachvollziehen\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Kann ich sehen, wer eine Rechnung geändert hat?\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Unbekannt wer Betrag änderte\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Jemand hat einen Betrag geändert und ich weiß nicht, wer.\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Änderungshistorie einsehen\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Kann ich sehen, wer eine Rechnung geändert hat?\\\"}],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t50\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Angebote für Vertrieb erstellen\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Unser Vertrieb soll Angebote erstellen können\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Gehälter für Vertrieb verborgen\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"aber keine Gehälter sehen\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"feature request\\\"}]}\"}],\"usage\":{\"input_tokens\":2761,\"output_tokens\":4313}}"
+  },
+  {
+   "asked": "{\"texts\":[{\"id\":\"t51\",\"text\":\"Nach jedem App-Update muss ich mich am Handy wieder mit Code anmelden.\"},{\"id\":\"t52\",\"text\":\"Ich möchte Rechnungen von meiner eigenen Mailadresse verschicken, das wirkt professioneller.\"},{\"id\":\"t53\",\"text\":\"Ich brauche am Quartalsende nur die Zahlen für meinen Steuerberater, sonst nichts.\"},{\"id\":\"t54\",\"text\":\"Wenn ich nach einem Betrag mit Komma suche, findet die Suche nichts.\"},{\"id\":\"t55\",\"text\":\"Euer Team war so geduldig mit mir. Ich kenne mich mit Computern nicht gut aus und sie haben mir alles erklärt.\"},{\"id\":\"t56\",\"text\":\"Ich nutze das Programm, um zu sehen, welche Projekte wirklich Geld bringen, und der Projektbericht zeigt mir das endlich. Großartig.\"},{\"id\":\"t57\",\"text\":\"Wir sind letztes Jahr von einem Desktop-Programm umgestiegen und haben es nicht bereut.\"},{\"id\":\"t58\",\"text\":\"Ich kann den Lieferschein nicht an die Rechnung anhängen, meine Kunden brauchen beides in einer Mail.\"},{\"id\":\"t59\",\"text\":\"Seit dem Redesign finde ich den Knopf zum Duplizieren einer Rechnung nicht mehr. Das war die Funktion, die ich am meisten gebraucht habe.\"},{\"id\":\"t60\",\"text\":\"Ich bin unsicher, ob ich das Programm nächstes Jahr noch brauche, wir sind gerade im Umbruch.\"}]}",
+   "answer": "{\"stop_reason\":\"end_turn\",\"content\":[{\"type\":\"text\",\"text\":\"{\\\"texts\\\":[{\\\"id\\\":\\\"t51\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Am Handy angemeldet bleiben\\\",\\\"intensity\\\":1,\\\"quote\\\":\\\"muss ich mich am Handy wieder mit Code anmelden\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Ständige Code-Anmeldung nach Updates\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Nach jedem App-Update muss ich mich am Handy wieder mit Code anmelden.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t52\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Rechnungen professionell verschicken\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Ich möchte Rechnungen von meiner eigenen Mailadresse verschicken, das wirkt professioneller.\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Rechnungen von eigener Mailadresse\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Ich möchte Rechnungen von meiner eigenen Mailadresse verschicken\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t53\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Zahlen für Steuerberater liefern\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Ich brauche am Quartalsende nur die Zahlen für meinen Steuerberater, sonst nichts.\\\"}],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t54\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Beträge mit Komma suchen\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Wenn ich nach einem Betrag mit Komma suche\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Suche findet Beträge mit Komma nicht\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"findet die Suche nichts.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t55\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Mit Computern zurechtkommen\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Ich kenne mich mit Computern nicht gut aus\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Geduldige Erklärung vom Team\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Euer Team war so geduldig mit mir.\\\"}],\\\"sentiment\\\":\\\"positive\\\",\\\"type\\\":\\\"praise\\\"},{\\\"id\\\":\\\"t56\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Sehen, welche Projekte Geld bringen\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"welche Projekte wirklich Geld bringen\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Projektbericht zeigt Gewinn endlich\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"der Projektbericht zeigt mir das endlich. Großartig.\\\"}],\\\"sentiment\\\":\\\"positive\\\",\\\"type\\\":\\\"praise\\\"},{\\\"id\\\":\\\"t57\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Von Desktop-Programm umsteigen\\\",\\\"intensity\\\":1,\\\"quote\\\":\\\"Wir sind letztes Jahr von einem Desktop-Programm umgestiegen\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Umstieg hat sich gelohnt\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"haben es nicht bereut.\\\"}],\\\"sentiment\\\":\\\"positive\\\",\\\"type\\\":\\\"praise\\\"},{\\\"id\\\":\\\"t58\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Lieferschein mit Rechnung senden\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"meine Kunden brauchen beides in einer Mail.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Lieferschein nicht an Rechnung anhängen\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Ich kann den Lieferschein nicht an die Rechnung anhängen\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t59\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Rechnung duplizieren\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"den Knopf zum Duplizieren einer Rechnung nicht mehr\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Duplizier-Knopf nach Redesign verschwunden\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Seit dem Redesign finde ich den Knopf zum Duplizieren einer Rechnung nicht mehr.\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Duplizieren-Funktion wieder verfügbar\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Das war die Funktion, die ich am meisten gebraucht habe.\\\"}],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t60\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Programm im Umbruch weiter nutzen\\\",\\\"intensity\\\":1,\\\"quote\\\":\\\"ob ich das Programm nächstes Jahr noch brauche\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Unsicher über Nutzung nächstes Jahr\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Ich bin unsicher, ob ich das Programm nächstes Jahr noch brauche\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"mixed\\\",\\\"type\\\":\\\"other\\\"}]}\"}],\"usage\":{\"input_tokens\":1916,\"output_tokens\":1625}}"
+  }
+ ],
+ "merge": [
+  {
+   "asked": "{\"kind\":\"jobs\",\"labels\":[{\"id\":\"l1\",\"label\":\"Lohnverrechnung erledigen\",\"count\":2},{\"id\":\"l2\",\"label\":\"Steuerberaterin Zugang geben\",\"count\":1},{\"id\":\"l3\",\"label\":\"UVA finden\",\"count\":1},{\"id\":\"l4\",\"label\":\"Beleg fotografieren\",\"count\":1},{\"id\":\"l5\",\"label\":\"Abo bezahlen\",\"count\":1},{\"id\":\"l6\",\"label\":\"Auswertungen nach Projekt\",\"count\":1},{\"id\":\"l7\",\"label\":\"Hilfe vom Support bekommen\",\"count\":1},{\"id\":\"l8\",\"label\":\"Nach Handywechsel einloggen\",\"count\":1},{\"id\":\"l9\",\"label\":\"Sammelzahlung verbuchen\",\"count\":1},{\"id\":\"l10\",\"label\":\"Webshop-Bestellungen als Rechnungen\",\"count\":1},{\"id\":\"l11\",\"label\":\"Navigation finden\",\"count\":1},{\"id\":\"l12\",\"label\":\"Tagelang Buchhaltung machen\",\"count\":1},{\"id\":\"l13\",\"label\":\"Rechnung öffnen\",\"count\":1},{\"id\":\"l14\",\"label\":\"Daten an Steuerberaterin übergeben\",\"count\":1},{\"id\":\"l15\",\"label\":\"Rechnungen am Freitag verschicken\",\"count\":1},{\"id\":\"l16\",\"label\":\"Bankverbindung dauerhaft nutzen\",\"count\":1},{\"id\":\"l17\",\"label\":\"Support-Chat nutzen\",\"count\":1},{\"id\":\"l18\",\"label\":\"Rechnungen schreiben\",\"count\":1},{\"id\":\"l19\",\"label\":\"Belege verwalten\",\"count\":1},{\"id\":\"l20\",\"label\":\"Tarife vergleichen\",\"count\":1},{\"id\":\"l21\",\"label\":\"Bankabgleich durchführen\",\"count\":1},{\"id\":\"l22\",\"label\":\"Lohnzahlungen rechtzeitig abwickeln\",\"count\":1},{\"id\":\"l23\",\"label\":\"Buchhaltung für mehrere Firmen\",\"count\":1},{\"id\":\"l24\",\"label\":\"Lohnzettel an Mitarbeiter verschicken\",\"count\":1},{\"id\":\"l25\",\"label\":\"Belege mit Handy scannen\",\"count\":1},{\"id\":\"l26\",\"label\":\"Kunden rechtzeitig bezahlen lassen\",\"count\":1},{\"id\":\"l27\",\"label\":\"Ausgaben auf Projekte verteilen\",\"count\":1},{\"id\":\"l28\",\"label\":\"Daten in Excel weiterverarbeiten\",\"count\":1},{\"id\":\"l29\",\"label\":\"Vorsteuer abziehen lassen\",\"count\":1},{\"id\":\"l30\",\"label\":\"Bank per Synchronisation verbinden\",\"count\":1},{\"id\":\"l31\",\"label\":\"Doppelte Buchungen vermeiden\",\"count\":1},{\"id\":\"l32\",\"label\":\"Rechnung direkt beim Kunden schreiben\",\"count\":1},{\"id\":\"l33\",\"label\":\"Buchhaltung am Abend erledigen\",\"count\":1},{\"id\":\"l34\",\"label\":\"Export für Steuerberaterin nutzen\",\"count\":1},{\"id\":\"l35\",\"label\":\"Arbeit erledigen können\",\"count\":1},{\"id\":\"l36\",\"label\":\"Online-Bestellungen verwalten\",\"count\":1},{\"id\":\"l37\",\"label\":\"Programm einrichten\",\"count\":1},{\"id\":\"l38\",\"label\":\"Zahlungsziel pro Rechnung ändern\",\"count\":1},{\"id\":\"l39\",\"label\":\"Probleme schnell lösen lassen\",\"count\":1},{\"id\":\"l40\",\"label\":\"Spesen freigeben\",\"count\":1},{\"id\":\"l41\",\"label\":\"Rechnungen zuverlässig zustellen\",\"count\":1},{\"id\":\"l42\",\"label\":\"Änderungen an Rechnungen nachvollziehen\",\"count\":1},{\"id\":\"l43\",\"label\":\"Angebote für Vertrieb erstellen\",\"count\":1},{\"id\":\"l44\",\"label\":\"Am Handy angemeldet bleiben\",\"count\":1},{\"id\":\"l45\",\"label\":\"Rechnungen professionell verschicken\",\"count\":1},{\"id\":\"l46\",\"label\":\"Zahlen für Steuerberater liefern\",\"count\":1},{\"id\":\"l47\",\"label\":\"Beträge mit Komma suchen\",\"count\":1},{\"id\":\"l48\",\"label\":\"Mit Computern zurechtkommen\",\"count\":1},{\"id\":\"l49\",\"label\":\"Sehen, welche Projekte Geld bringen\",\"count\":1},{\"id\":\"l50\",\"label\":\"Von Desktop-Programm umsteigen\",\"count\":1},{\"id\":\"l51\",\"label\":\"Lieferschein mit Rechnung senden\",\"count\":1},{\"id\":\"l52\",\"label\":\"Rechnung duplizieren\",\"count\":1},{\"id\":\"l53\",\"label\":\"Programm im Umbruch weiter nutzen\",\"count\":1}]}",
+   "answer": "{\"stop_reason\":\"end_turn\",\"content\":[{\"type\":\"text\",\"text\":\"{\\\"themes\\\":[{\\\"name\\\":\\\"Lohnabrechnung rechtzeitig abwickeln\\\",\\\"labels\\\":[\\\"l1\\\",\\\"l22\\\",\\\"l24\\\"]},{\\\"name\\\":\\\"Daten für Steuerberaterin bereitstellen\\\",\\\"labels\\\":[\\\"l2\\\",\\\"l14\\\",\\\"l34\\\",\\\"l46\\\"]},{\\\"name\\\":\\\"Umsatzsteuer und Vorsteuer im Blick behalten\\\",\\\"labels\\\":[\\\"l3\\\",\\\"l29\\\"]},{\\\"name\\\":\\\"Belege erfassen und verwalten\\\",\\\"labels\\\":[\\\"l4\\\",\\\"l19\\\",\\\"l25\\\"]},{\\\"name\\\":\\\"Abo bezahlen\\\",\\\"labels\\\":[\\\"l5\\\"]},{\\\"name\\\":\\\"Ausgaben nach Projekten auswerten\\\",\\\"labels\\\":[\\\"l6\\\",\\\"l27\\\",\\\"l49\\\"]},{\\\"name\\\":\\\"Schnelle Hilfe vom Support\\\",\\\"labels\\\":[\\\"l7\\\",\\\"l17\\\",\\\"l39\\\"]},{\\\"name\\\":\\\"Auch nach Handywechsel angemeldet bleiben\\\",\\\"labels\\\":[\\\"l8\\\",\\\"l44\\\"]},{\\\"name\\\":\\\"Bankkonto anbinden und Zahlungen abgleichen\\\",\\\"labels\\\":[\\\"l9\\\",\\\"l16\\\",\\\"l21\\\",\\\"l30\\\"]},{\\\"name\\\":\\\"Webshop-Bestellungen verwalten\\\",\\\"labels\\\":[\\\"l10\\\",\\\"l36\\\"]},{\\\"name\\\":\\\"Programm ohne Einarbeitung zurechtfinden\\\",\\\"labels\\\":[\\\"l11\\\",\\\"l37\\\",\\\"l48\\\"]},{\\\"name\\\":\\\"Buchhaltung schnell erledigen\\\",\\\"labels\\\":[\\\"l12\\\",\\\"l33\\\",\\\"l35\\\"]},{\\\"name\\\":\\\"Rechnungen nachvollziehen\\\",\\\"labels\\\":[\\\"l13\\\",\\\"l42\\\"]},{\\\"name\\\":\\\"Rechnungen professionell versenden\\\",\\\"labels\\\":[\\\"l15\\\",\\\"l41\\\",\\\"l45\\\",\\\"l51\\\"]},{\\\"name\\\":\\\"Rechnungen schnell erstellen\\\",\\\"labels\\\":[\\\"l18\\\",\\\"l32\\\",\\\"l52\\\"]},{\\\"name\\\":\\\"Tarife vergleichen\\\",\\\"labels\\\":[\\\"l20\\\"]},{\\\"name\\\":\\\"Mehrere Firmen verwalten\\\",\\\"labels\\\":[\\\"l23\\\"]},{\\\"name\\\":\\\"Zahlungsziele flexibel anpassen\\\",\\\"labels\\\":[\\\"l26\\\",\\\"l38\\\"]},{\\\"name\\\":\\\"Daten in Excel weiterverarbeiten\\\",\\\"labels\\\":[\\\"l28\\\"]},{\\\"name\\\":\\\"Doppelte Buchungen vermeiden\\\",\\\"labels\\\":[\\\"l31\\\"]},{\\\"name\\\":\\\"Spesen freigeben\\\",\\\"labels\\\":[\\\"l40\\\"]},{\\\"name\\\":\\\"Angebote für Vertrieb erstellen\\\",\\\"labels\\\":[\\\"l43\\\"]},{\\\"name\\\":\\\"Beträge mit Komma finden\\\",\\\"labels\\\":[\\\"l47\\\"]},{\\\"name\\\":\\\"Vom Desktop-Programm umsteigen\\\",\\\"labels\\\":[\\\"l50\\\",\\\"l53\\\"]}]}\"}],\"usage\":{\"input_tokens\":2191,\"output_tokens\":2620}}"
+  },
+  {
+   "asked": "{\"kind\":\"pains\",\"labels\":[{\"id\":\"l1\",\"label\":\"App stürzt ab\",\"count\":2},{\"id\":\"l2\",\"label\":\"Passwort weitergeben vermeiden\",\"count\":1},{\"id\":\"l3\",\"label\":\"Menüs unübersichtlich\",\"count\":1},{\"id\":\"l4\",\"label\":\"Doppelte Abbuchung\",\"count\":1},{\"id\":\"l5\",\"label\":\"Filter nach Projekt fehlt\",\"count\":1},{\"id\":\"l6\",\"label\":\"Support antwortet zu spät\",\"count\":1},{\"id\":\"l7\",\"label\":\"Selbst lösen müssen\",\"count\":1},{\"id\":\"l8\",\"label\":\"Code an alte Nummer\",\"count\":1},{\"id\":\"l9\",\"label\":\"Telefon wird nicht abgehoben\",\"count\":1},{\"id\":\"l10\",\"label\":\"Navigation verwirrend\",\"count\":1},{\"id\":\"l11\",\"label\":\"Gewohnte Orte verschwunden\",\"count\":1},{\"id\":\"l12\",\"label\":\"Falsches Jahr auf Lohnzettel\",\"count\":1},{\"id\":\"l13\",\"label\":\"Augen brennen\",\"count\":1},{\"id\":\"l14\",\"label\":\"Seit Update langsam\",\"count\":1},{\"id\":\"l15\",\"label\":\"Öffnen dauert zu lange\",\"count\":1},{\"id\":\"l16\",\"label\":\"Theater beim Rechnungsversand\",\"count\":1},{\"id\":\"l17\",\"label\":\"Bankfreigabe alle 90 Tage\",\"count\":1},{\"id\":\"l18\",\"label\":\"Chat schließt sich\",\"count\":1},{\"id\":\"l19\",\"label\":\"Keine Antwort vom Support\",\"count\":1},{\"id\":\"l20\",\"label\":\"Zu teuer für Ein-Personen-Unternehmen\",\"count\":1},{\"id\":\"l21\",\"label\":\"Belegverwaltung wirkt angeklebt\",\"count\":1},{\"id\":\"l22\",\"label\":\"Schwach außerhalb Rechnungen\",\"count\":1},{\"id\":\"l23\",\"label\":\"Preisseite unklar\",\"count\":1},{\"id\":\"l24\",\"label\":\"Bankbuchungen doppelt\",\"count\":1},{\"id\":\"l25\",\"label\":\"Manuelles Löschen vor Abgleich\",\"count\":1},{\"id\":\"l26\",\"label\":\"Support nur per Mail\",\"count\":1},{\"id\":\"l27\",\"label\":\"Viele Klicks zwischen Firmen\",\"count\":1},{\"id\":\"l28\",\"label\":\"Jeden Lohnzettel einzeln anhängen\",\"count\":1},{\"id\":\"l29\",\"label\":\"App stürzt auf Android ab\",\"count\":1},{\"id\":\"l30\",\"label\":\"Zahlungslink läuft zu schnell ab\",\"count\":1},{\"id\":\"l31\",\"label\":\"CSV-Export mit falschem Trennzeichen\",\"count\":1},{\"id\":\"l32\",\"label\":\"UID-Nummer auf Rechnung fehlt\",\"count\":1},{\"id\":\"l33\",\"label\":\"Sync seit Bank-Login-Änderung defekt\",\"count\":1},{\"id\":\"l34\",\"label\":\"Support sagt warten\",\"count\":1},{\"id\":\"l35\",\"label\":\"Seit zwei Wochen ungelöst\",\"count\":1},{\"id\":\"l36\",\"label\":\"App ist langsam\",\"count\":1},{\"id\":\"l37\",\"label\":\"Support braucht Tage\",\"count\":1},{\"id\":\"l38\",\"label\":\"Bankabgleich macht Angst\",\"count\":1},{\"id\":\"l39\",\"label\":\"Kostenstelle fehlt im Export\",\"count\":1},{\"id\":\"l40\",\"label\":\"Bestellungen manuell abtippen\",\"count\":1},{\"id\":\"l41\",\"label\":\"Änderung wirkt auf alle Rechnungen\",\"count\":1},{\"id\":\"l42\",\"label\":\"Keine Sammelfreigabe möglich\",\"count\":1},{\"id\":\"l43\",\"label\":\"Rechnungen landen im Spam\",\"count\":1},{\"id\":\"l44\",\"label\":\"Unbekannt wer Betrag änderte\",\"count\":1},{\"id\":\"l45\",\"label\":\"Ständige Code-Anmeldung nach Updates\",\"count\":1},{\"id\":\"l46\",\"label\":\"Suche findet Beträge mit Komma nicht\",\"count\":1},{\"id\":\"l47\",\"label\":\"Lieferschein nicht an Rechnung anhängen\",\"count\":1},{\"id\":\"l48\",\"label\":\"Duplizier-Knopf nach Redesign verschwunden\",\"count\":1},{\"id\":\"l49\",\"label\":\"Unsicher über Nutzung nächstes Jahr\",\"count\":1}]}",
+   "answer": "{\"stop_reason\":\"end_turn\",\"content\":[{\"type\":\"text\",\"text\":\"{\\\"themes\\\":[{\\\"name\\\":\\\"App stürzt ab\\\",\\\"labels\\\":[\\\"l1\\\",\\\"l29\\\"]},{\\\"name\\\":\\\"App ist langsam\\\",\\\"labels\\\":[\\\"l14\\\",\\\"l15\\\",\\\"l36\\\"]},{\\\"name\\\":\\\"Menüs und Navigation unübersichtlich\\\",\\\"labels\\\":[\\\"l3\\\",\\\"l10\\\"]},{\\\"name\\\":\\\"Gewohnte Funktionen nach Redesign verschwunden\\\",\\\"labels\\\":[\\\"l11\\\",\\\"l48\\\"]},{\\\"name\\\":\\\"Filter nach Projekt fehlt\\\",\\\"labels\\\":[\\\"l5\\\"]},{\\\"name\\\":\\\"Suche findet Beträge mit Komma nicht\\\",\\\"labels\\\":[\\\"l46\\\"]},{\\\"name\\\":\\\"Support antwortet zu spät\\\",\\\"labels\\\":[\\\"l6\\\",\\\"l19\\\",\\\"l34\\\",\\\"l35\\\",\\\"l37\\\"]},{\\\"name\\\":\\\"Support schwer erreichbar\\\",\\\"labels\\\":[\\\"l9\\\",\\\"l18\\\",\\\"l26\\\"]},{\\\"name\\\":\\\"Probleme selbst lösen müssen\\\",\\\"labels\\\":[\\\"l7\\\"]},{\\\"name\\\":\\\"Anmeldecode kommt nicht an\\\",\\\"labels\\\":[\\\"l8\\\",\\\"l45\\\"]},{\\\"name\\\":\\\"Passwort weitergeben vermeiden\\\",\\\"labels\\\":[\\\"l2\\\"]},{\\\"name\\\":\\\"Doppelte Buchungen\\\",\\\"labels\\\":[\\\"l4\\\",\\\"l24\\\"]},{\\\"name\\\":\\\"Bankanbindung unzuverlässig\\\",\\\"labels\\\":[\\\"l17\\\",\\\"l33\\\",\\\"l42\\\"]},{\\\"name\\\":\\\"Bankabgleich verunsichert\\\",\\\"labels\\\":[\\\"l25\\\",\\\"l38\\\"]},{\\\"name\\\":\\\"Zu teuer für Ein-Personen-Unternehmen\\\",\\\"labels\\\":[\\\"l20\\\"]},{\\\"name\\\":\\\"Preise nicht verständlich\\\",\\\"labels\\\":[\\\"l23\\\"]},{\\\"name\\\":\\\"Belege nicht sauber verwaltbar\\\",\\\"labels\\\":[\\\"l21\\\",\\\"l22\\\",\\\"l28\\\",\\\"l47\\\"]},{\\\"name\\\":\\\"Falsches Jahr auf Lohnzettel\\\",\\\"labels\\\":[\\\"l12\\\"]},{\\\"name\\\":\\\"Rechnungsversand umständlich\\\",\\\"labels\\\":[\\\"l16\\\",\\\"l43\\\"]},{\\\"name\\\":\\\"Zahlungslink läuft zu schnell ab\\\",\\\"labels\\\":[\\\"l30\\\"]},{\\\"name\\\":\\\"UID fehlt auf Rechnung\\\",\\\"labels\\\":[\\\"l32\\\"]},{\\\"name\\\":\\\"Änderungen wirken auf alle Rechnungen\\\",\\\"labels\\\":[\\\"l41\\\"]},{\\\"name\\\":\\\"Betragsänderungen nicht nachvollziehbar\\\",\\\"labels\\\":[\\\"l44\\\"]},{\\\"name\\\":\\\"Export fehlerhaft\\\",\\\"labels\\\":[\\\"l31\\\",\\\"l39\\\"]},{\\\"name\\\":\\\"Viele Klicks zwischen Firmen\\\",\\\"labels\\\":[\\\"l27\\\"]},{\\\"name\\\":\\\"Bestellungen manuell abtippen\\\",\\\"labels\\\":[\\\"l40\\\"]},{\\\"name\\\":\\\"Augen brennen\\\",\\\"labels\\\":[\\\"l13\\\"]},{\\\"name\\\":\\\"Unsicherheit über Nutzung nächstes Jahr\\\",\\\"labels\\\":[\\\"l49\\\"]}]}\"}],\"usage\":{\"input_tokens\":2071,\"output_tokens\":2510}}"
+  },
+  {
+   "asked": "{\"kind\":\"gains\",\"labels\":[{\"id\":\"l1\",\"label\":\"Eigener Zugang für Steuerberaterin\",\"count\":1},{\"id\":\"l2\",\"label\":\"Schnelle Lohnverrechnung\",\"count\":1},{\"id\":\"l3\",\"label\":\"Zahlung zurückbuchen\",\"count\":1},{\"id\":\"l4\",\"label\":\"Filter nach Projekt\",\"count\":1},{\"id\":\"l5\",\"label\":\"Fairer Preis\",\"count\":1},{\"id\":\"l6\",\"label\":\"Neues Dashboard gefällt\",\"count\":1},{\"id\":\"l7\",\"label\":\"Direkte Übernahme per Schnittstelle\",\"count\":1},{\"id\":\"l8\",\"label\":\"Einfache Lohnverrechnung\",\"count\":1},{\"id\":\"l9\",\"label\":\"Dunkler Modus\",\"count\":1},{\"id\":\"l10\",\"label\":\"BMD-Export\",\"count\":1},{\"id\":\"l11\",\"label\":\"Einfacher Rechnungsversand\",\"count\":1},{\"id\":\"l12\",\"label\":\"Langjährige Zufriedenheit\",\"count\":1},{\"id\":\"l13\",\"label\":\"Rechnungen gut gelöst\",\"count\":1},{\"id\":\"l14\",\"label\":\"Klarheit über Lohnverrechnung\",\"count\":1},{\"id\":\"l15\",\"label\":\"Telefon-Support verfügbar\",\"count\":1},{\"id\":\"l16\",\"label\":\"Automatischer Versand per Mail\",\"count\":1},{\"id\":\"l17\",\"label\":\"Ausgabe auf Projekte aufteilen\",\"count\":1},{\"id\":\"l18\",\"label\":\"Export mit Strichpunkten\",\"count\":1},{\"id\":\"l19\",\"label\":\"Preis passt\",\"count\":1},{\"id\":\"l20\",\"label\":\"Schnelle Fehlerbehebung\",\"count\":1},{\"id\":\"l21\",\"label\":\"Rechnung in unter einer Minute\",\"count\":1},{\"id\":\"l22\",\"label\":\"Einfache Buchhaltung\",\"count\":1},{\"id\":\"l23\",\"label\":\"Programm ist unverzichtbar\",\"count\":1},{\"id\":\"l24\",\"label\":\"Shopify-Anbindung\",\"count\":1},{\"id\":\"l25\",\"label\":\"Hilfreiche Einführungsvideos\",\"count\":1},{\"id\":\"l26\",\"label\":\"Schnelle Einrichtung\",\"count\":1},{\"id\":\"l27\",\"label\":\"Änderung nur für eine Rechnung\",\"count\":1},{\"id\":\"l28\",\"label\":\"Vereinsrabatt erhalten\",\"count\":1},{\"id\":\"l29\",\"label\":\"Schnelle Support-Antwort\",\"count\":1},{\"id\":\"l30\",\"label\":\"Sammelfreigabe von Spesen\",\"count\":1},{\"id\":\"l31\",\"label\":\"Änderungshistorie einsehen\",\"count\":1},{\"id\":\"l32\",\"label\":\"Gehälter für Vertrieb verborgen\",\"count\":1},{\"id\":\"l33\",\"label\":\"Rechnungen von eigener Mailadresse\",\"count\":1},{\"id\":\"l34\",\"label\":\"Geduldige Erklärung vom Team\",\"count\":1},{\"id\":\"l35\",\"label\":\"Projektbericht zeigt Gewinn endlich\",\"count\":1},{\"id\":\"l36\",\"label\":\"Umstieg hat sich gelohnt\",\"count\":1},{\"id\":\"l37\",\"label\":\"Duplizieren-Funktion wieder verfügbar\",\"count\":1}]}",
+   "answer": "{\"stop_reason\":\"end_turn\",\"content\":[{\"type\":\"text\",\"text\":\"{\\\"themes\\\":[{\\\"name\\\":\\\"Zugang für Steuerberatung\\\",\\\"labels\\\":[\\\"l1\\\",\\\"l10\\\",\\\"l18\\\"]},{\\\"name\\\":\\\"Schnelle und einfache Lohnverrechnung\\\",\\\"labels\\\":[\\\"l2\\\",\\\"l8\\\",\\\"l14\\\"]},{\\\"name\\\":\\\"Zahlungen einfach korrigieren\\\",\\\"labels\\\":[\\\"l3\\\",\\\"l27\\\",\\\"l31\\\"]},{\\\"name\\\":\\\"Ausgaben nach Projekt filtern\\\",\\\"labels\\\":[\\\"l4\\\",\\\"l17\\\",\\\"l35\\\"]},{\\\"name\\\":\\\"Fairer und passender Preis\\\",\\\"labels\\\":[\\\"l5\\\",\\\"l19\\\",\\\"l28\\\"]},{\\\"name\\\":\\\"Neues Dashboard überzeugt\\\",\\\"labels\\\":[\\\"l6\\\"]},{\\\"name\\\":\\\"Direkte Anbindung per Schnittstelle\\\",\\\"labels\\\":[\\\"l7\\\",\\\"l24\\\"]},{\\\"name\\\":\\\"Dunkler Darstellungsmodus\\\",\\\"labels\\\":[\\\"l9\\\"]},{\\\"name\\\":\\\"Rechnungsversand per Mail\\\",\\\"labels\\\":[\\\"l11\\\",\\\"l16\\\",\\\"l33\\\"]},{\\\"name\\\":\\\"Langjährige Zufriedenheit mit Software\\\",\\\"labels\\\":[\\\"l12\\\",\\\"l36\\\"]},{\\\"name\\\":\\\"Rechnungen schnell und sauber erstellt\\\",\\\"labels\\\":[\\\"l13\\\",\\\"l21\\\"]},{\\\"name\\\":\\\"Hilfreicher Support bei Fragen\\\",\\\"labels\\\":[\\\"l15\\\",\\\"l20\\\",\\\"l29\\\",\\\"l34\\\"]},{\\\"name\\\":\\\"Einfache Buchhaltung im Alltag\\\",\\\"labels\\\":[\\\"l22\\\",\\\"l23\\\"]},{\\\"name\\\":\\\"Schnelle Einrichtung mit Videos\\\",\\\"labels\\\":[\\\"l25\\\",\\\"l26\\\"]},{\\\"name\\\":\\\"Spesen gesammelt freigeben\\\",\\\"labels\\\":[\\\"l30\\\"]},{\\\"name\\\":\\\"Gehälter vor Vertrieb verbergen\\\",\\\"labels\\\":[\\\"l32\\\"]},{\\\"name\\\":\\\"Duplizieren wieder verfügbar\\\",\\\"labels\\\":[\\\"l37\\\"]}]}\"}],\"usage\":{\"input_tokens\":1696,\"output_tokens\":575}}"
+  }
+ ],
+ "usage": {
+  "input": 13289,
+  "output": 15778
+ },
+ "durationMs": 43669
+}
