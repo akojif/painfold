@@ -10,16 +10,17 @@ import type { ProviderId } from './providers.ts'
 export const PAYLOAD_FORMAT = 'painfold-analysis/1'
 
 /**
- * The instructions sent with every batch of texts. Version 1, written before
- * any tuning; slice 4 (#126) tunes them on the dev split of the evaluation set
- * only (#129). Shown in full in the consent step.
+ * The instructions sent with every batch of texts. Version 2: the gain
+ * definition was tuned on the dev split of the evaluation set only (#129),
+ * where feature wishes were missed and praise was counted as a gain; see
+ * data/eval/analysis/runs-log.md. Shown in full in the consent step.
  */
 export const INSTRUCTIONS = `You analyse customer feedback for a product team, using the Value Proposition Canvas.
 
 For each text, find:
 - jobs: what the customer is trying to get done, in their words (a goal, not a feature).
 - pains: what frustrates, blocks or risks that job.
-- gains: what the customer wants or would be delighted by.
+- gains: what the customer wants to get or keep: a capability, an outcome or a benefit. A wish for a capability is a gain however it is phrased: as a request, as a question ("can I …?"), as a suggestion ("it would help if …") or as the absence of something ("there's no way to …"). General satisfaction or praise is not a gain unless it names a specific benefit the customer wants to keep or get.
 Each with a short label from the customer's point of view (2 to 7 words, in the language of the text), an intensity from 1 (mild) to 3 (strong), and a quote: the exact words from the text that show it, copied character for character.
 
 Also give each text's overall sentiment (positive, negative, mixed or neutral) and its main type (bug, feature request, question, praise, complaint or other).
