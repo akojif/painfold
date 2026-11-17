@@ -198,10 +198,5 @@ Not measured yet. The numbers appear here before version 0.3.0 is released.
 
 All stored runs, dev runs for tuning included:
 
-| Run | Texts | Not analyzed | Merged | Quotes kept |
-| --- | ---: | ---: | ---: | ---: |
-| `dev-de-claude-haiku-5-5-2026-11-17T21-22-38Z.json` | 60 | 0 | yes | 0.99 (136/137) |
-| `dev-de-claude-haiku-5-5-2026-11-17T21-24-41Z.json` | 60 | 0 | yes | 1.00 (129/129) |
-| `dev-en-claude-haiku-5-5-2026-11-17T21-21-43Z.json` | 60 | 0 | yes | 1.00 (126/126) |
-| `dev-en-claude-haiku-5-5-2026-11-17T21-23-44Z.json` | 60 | 0 | yes | 1.00 (117/117) |
+No runs stored yet.
 <!-- analysis:end -->
