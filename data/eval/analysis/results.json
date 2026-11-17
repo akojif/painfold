@@ -294,6 +294,299 @@
       }
     },
     {
+      "file": "dev-de-claude-haiku-5-5-2026-11-17T21-44-08Z.json",
+      "split": "dev",
+      "lang": "de",
+      "model": "claude-haiku-5-5",
+      "createdAt": "2026-11-17T21:44:08.223Z",
+      "commit": "653a082",
+      "texts": 60,
+      "notAnalyzed": 0,
+      "merged": true,
+      "themes": {
+        "jobs": 20,
+        "pains": 23,
+        "gains": 26
+      },
+      "quotes": {
+        "hits": 147,
+        "of": 147
+      },
+      "scores": {
+        "items": 60,
+        "presence": {
+          "jobs": {
+            "recall": {
+              "hits": 34,
+              "of": 34
+            },
+            "precision": {
+              "hits": 34,
+              "of": 53
+            }
+          },
+          "pains": {
+            "recall": {
+              "hits": 36,
+              "of": 37
+            },
+            "precision": {
+              "hits": 36,
+              "of": 38
+            }
+          },
+          "gains": {
+            "recall": {
+              "hits": 34,
+              "of": 34
+            },
+            "precision": {
+              "hits": 34,
+              "of": 40
+            }
+          }
+        },
+        "grouping": {
+          "jobs": {
+            "recall": {
+              "hits": 17,
+              "of": 33
+            },
+            "precision": {
+              "hits": 17,
+              "of": 76
+            }
+          },
+          "pains": {
+            "recall": {
+              "hits": 4,
+              "of": 4
+            },
+            "precision": {
+              "hits": 4,
+              "of": 27
+            }
+          },
+          "gains": {
+            "recall": {
+              "hits": 0,
+              "of": 0
+            },
+            "precision": {
+              "hits": 0,
+              "of": 20
+            }
+          }
+        },
+        "sentiment": {
+          "correct": {
+            "hits": 51,
+            "of": 60
+          },
+          "confusion": {
+            "negative": {
+              "negative": 27,
+              "mixed": 1
+            },
+            "positive": {
+              "mixed": 1,
+              "positive": 10
+            },
+            "neutral": {
+              "neutral": 11,
+              "negative": 5,
+              "positive": 1
+            },
+            "mixed": {
+              "mixed": 3,
+              "positive": 1
+            }
+          }
+        },
+        "type": {
+          "correct": {
+            "hits": 52,
+            "of": 60
+          },
+          "confusion": {
+            "bug": {
+              "bug": 13,
+              "complaint": 1
+            },
+            "feature request": {
+              "feature request": 17,
+              "complaint": 1
+            },
+            "complaint": {
+              "complaint": 5,
+              "question": 2,
+              "feature request": 2
+            },
+            "praise": {
+              "praise": 10,
+              "feature request": 1
+            },
+            "question": {
+              "bug": 1,
+              "question": 5
+            },
+            "other": {
+              "other": 2
+            }
+          }
+        }
+      }
+    },
+    {
+      "file": "dev-de-claude-haiku-5-5-2026-11-17T21-46-02Z.json",
+      "split": "dev",
+      "lang": "de",
+      "model": "claude-haiku-5-5",
+      "createdAt": "2026-11-17T21:46:02.808Z",
+      "commit": "653a082",
+      "texts": 60,
+      "notAnalyzed": 0,
+      "merged": true,
+      "themes": {
+        "jobs": 20,
+        "pains": 21,
+        "gains": 16
+      },
+      "quotes": {
+        "hits": 150,
+        "of": 152
+      },
+      "scores": {
+        "items": 60,
+        "presence": {
+          "jobs": {
+            "recall": {
+              "hits": 33,
+              "of": 34
+            },
+            "precision": {
+              "hits": 33,
+              "of": 50
+            }
+          },
+          "pains": {
+            "recall": {
+              "hits": 37,
+              "of": 37
+            },
+            "precision": {
+              "hits": 37,
+              "of": 39
+            }
+          },
+          "gains": {
+            "recall": {
+              "hits": 34,
+              "of": 34
+            },
+            "precision": {
+              "hits": 34,
+              "of": 43
+            }
+          }
+        },
+        "grouping": {
+          "jobs": {
+            "recall": {
+              "hits": 19,
+              "of": 33
+            },
+            "precision": {
+              "hits": 19,
+              "of": 57
+            }
+          },
+          "pains": {
+            "recall": {
+              "hits": 4,
+              "of": 4
+            },
+            "precision": {
+              "hits": 4,
+              "of": 37
+            }
+          },
+          "gains": {
+            "recall": {
+              "hits": 0,
+              "of": 0
+            },
+            "precision": {
+              "hits": 0,
+              "of": 84
+            }
+          }
+        },
+        "sentiment": {
+          "correct": {
+            "hits": 50,
+            "of": 60
+          },
+          "confusion": {
+            "negative": {
+              "negative": 26,
+              "mixed": 1,
+              "neutral": 1
+            },
+            "positive": {
+              "mixed": 1,
+              "positive": 10
+            },
+            "neutral": {
+              "neutral": 11,
+              "negative": 4,
+              "positive": 1,
+              "mixed": 1
+            },
+            "mixed": {
+              "mixed": 3,
+              "positive": 1
+            }
+          }
+        },
+        "type": {
+          "correct": {
+            "hits": 50,
+            "of": 60
+          },
+          "confusion": {
+            "bug": {
+              "bug": 13,
+              "complaint": 1
+            },
+            "feature request": {
+              "feature request": 16,
+              "complaint": 1,
+              "other": 1
+            },
+            "complaint": {
+              "complaint": 5,
+              "question": 2,
+              "feature request": 1,
+              "bug": 1
+            },
+            "praise": {
+              "praise": 10,
+              "feature request": 1
+            },
+            "question": {
+              "complaint": 1,
+              "question": 5
+            },
+            "other": {
+              "complaint": 1,
+              "other": 1
+            }
+          }
+        }
+      }
+    },
+    {
       "file": "dev-en-claude-haiku-5-5-2026-11-17T21-21-43Z.json",
       "split": "dev",
       "lang": "en",
@@ -541,6 +834,292 @@
             "neutral": {
               "neutral": 14,
               "negative": 2,
+              "positive": 1
+            }
+          }
+        },
+        "type": {
+          "correct": {
+            "hits": 55,
+            "of": 60
+          },
+          "confusion": {
+            "bug": {
+              "bug": 10,
+              "complaint": 2
+            },
+            "feature request": {
+              "feature request": 13
+            },
+            "praise": {
+              "praise": 13
+            },
+            "complaint": {
+              "complaint": 11,
+              "other": 1,
+              "feature request": 1
+            },
+            "question": {
+              "question": 6
+            },
+            "other": {
+              "other": 2,
+              "complaint": 1
+            }
+          }
+        }
+      }
+    },
+    {
+      "file": "dev-en-claude-haiku-5-5-2026-11-17T21-43-18Z.json",
+      "split": "dev",
+      "lang": "en",
+      "model": "claude-haiku-5-5",
+      "createdAt": "2026-11-17T21:43:18.172Z",
+      "commit": "653a082",
+      "texts": 60,
+      "notAnalyzed": 0,
+      "merged": true,
+      "themes": {
+        "jobs": 25,
+        "pains": 31,
+        "gains": 28
+      },
+      "quotes": {
+        "hits": 125,
+        "of": 125
+      },
+      "scores": {
+        "items": 60,
+        "presence": {
+          "jobs": {
+            "recall": {
+              "hits": 23,
+              "of": 26
+            },
+            "precision": {
+              "hits": 23,
+              "of": 40
+            }
+          },
+          "pains": {
+            "recall": {
+              "hits": 32,
+              "of": 33
+            },
+            "precision": {
+              "hits": 32,
+              "of": 32
+            }
+          },
+          "gains": {
+            "recall": {
+              "hits": 26,
+              "of": 28
+            },
+            "precision": {
+              "hits": 26,
+              "of": 38
+            }
+          }
+        },
+        "grouping": {
+          "jobs": {
+            "recall": {
+              "hits": 7,
+              "of": 18
+            },
+            "precision": {
+              "hits": 7,
+              "of": 24
+            }
+          },
+          "pains": {
+            "recall": {
+              "hits": 8,
+              "of": 9
+            },
+            "precision": {
+              "hits": 8,
+              "of": 13
+            }
+          },
+          "gains": {
+            "recall": {
+              "hits": 0,
+              "of": 0
+            },
+            "precision": {
+              "hits": 0,
+              "of": 12
+            }
+          }
+        },
+        "sentiment": {
+          "correct": {
+            "hits": 53,
+            "of": 60
+          },
+          "confusion": {
+            "negative": {
+              "negative": 25,
+              "mixed": 1,
+              "neutral": 1
+            },
+            "positive": {
+              "mixed": 1,
+              "positive": 12
+            },
+            "mixed": {
+              "positive": 1,
+              "mixed": 2
+            },
+            "neutral": {
+              "neutral": 14,
+              "negative": 2,
+              "positive": 1
+            }
+          }
+        },
+        "type": {
+          "correct": {
+            "hits": 54,
+            "of": 60
+          },
+          "confusion": {
+            "bug": {
+              "complaint": 2,
+              "bug": 10
+            },
+            "feature request": {
+              "feature request": 13
+            },
+            "praise": {
+              "praise": 12,
+              "feature request": 1
+            },
+            "complaint": {
+              "complaint": 10,
+              "question": 1,
+              "feature request": 1,
+              "other": 1
+            },
+            "question": {
+              "question": 6
+            },
+            "other": {
+              "other": 3
+            }
+          }
+        }
+      }
+    },
+    {
+      "file": "dev-en-claude-haiku-5-5-2026-11-17T21-45-14Z.json",
+      "split": "dev",
+      "lang": "en",
+      "model": "claude-haiku-5-5",
+      "createdAt": "2026-11-17T21:45:14.871Z",
+      "commit": "653a082",
+      "texts": 60,
+      "notAnalyzed": 0,
+      "merged": true,
+      "themes": {
+        "jobs": 18,
+        "pains": 25,
+        "gains": 36
+      },
+      "quotes": {
+        "hits": 126,
+        "of": 126
+      },
+      "scores": {
+        "items": 60,
+        "presence": {
+          "jobs": {
+            "recall": {
+              "hits": 24,
+              "of": 26
+            },
+            "precision": {
+              "hits": 24,
+              "of": 46
+            }
+          },
+          "pains": {
+            "recall": {
+              "hits": 32,
+              "of": 33
+            },
+            "precision": {
+              "hits": 32,
+              "of": 34
+            }
+          },
+          "gains": {
+            "recall": {
+              "hits": 27,
+              "of": 28
+            },
+            "precision": {
+              "hits": 27,
+              "of": 33
+            }
+          }
+        },
+        "grouping": {
+          "jobs": {
+            "recall": {
+              "hits": 8,
+              "of": 18
+            },
+            "precision": {
+              "hits": 8,
+              "of": 50
+            }
+          },
+          "pains": {
+            "recall": {
+              "hits": 6,
+              "of": 9
+            },
+            "precision": {
+              "hits": 6,
+              "of": 13
+            }
+          },
+          "gains": {
+            "recall": {
+              "hits": 0,
+              "of": 0
+            },
+            "precision": {
+              "hits": 0,
+              "of": 0
+            }
+          }
+        },
+        "sentiment": {
+          "correct": {
+            "hits": 53,
+            "of": 60
+          },
+          "confusion": {
+            "negative": {
+              "negative": 26,
+              "mixed": 1
+            },
+            "positive": {
+              "mixed": 1,
+              "positive": 12
+            },
+            "mixed": {
+              "positive": 1,
+              "mixed": 2
+            },
+            "neutral": {
+              "neutral": 13,
+              "negative": 3,
               "positive": 1
             }
           }
