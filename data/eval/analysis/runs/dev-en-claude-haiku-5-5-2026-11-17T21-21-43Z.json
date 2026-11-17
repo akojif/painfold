@@ -1,0 +1,538 @@
+{
+ "format": "painfold-eval-run/1",
+ "painfoldVersion": "0.2.0",
+ "commit": "c27950c",
+ "createdAt": "2026-11-17T21:21:43.371Z",
+ "provider": "anthropic",
+ "model": "claude-haiku-5-5",
+ "settings": {
+  "batchSize": 25,
+  "effort": "low",
+  "maxTokens": 16000
+ },
+ "split": "dev",
+ "lang": "en",
+ "payload": {
+  "format": "painfold-analysis/1",
+  "provider": "anthropic",
+  "model": "claude-haiku-5-5",
+  "instructions": "You analyse customer feedback for a product team, using the Value Proposition Canvas.\n\nFor each text, find:\n- jobs: what the customer is trying to get done, in their words (a goal, not a feature).\n- pains: what frustrates, blocks or risks that job.\n- gains: what the customer wants or would be delighted by.\nEach with a short label from the customer's point of view (2 to 7 words, in the language of the text), an intensity from 1 (mild) to 3 (strong), and a quote: the exact words from the text that show it, copied character for character.\n\nAlso give each text's overall sentiment (positive, negative, mixed or neutral) and its main type (bug, feature request, question, praise, complaint or other).\n\nRules:\n- Only what the text says. A text can have no jobs, pains or gains.\n- Placeholders such as [NAME_1] or [EMAIL_2] replace removed personal data. Never guess what they stand for, and never put them in a label.\n- Answer only with JSON: {\"texts\": [{\"id\": \"...\", \"jobs\": [...], \"pains\": [...], \"gains\": [...], \"sentiment\": \"...\", \"type\": \"...\"}]}, one entry per text, with each job, pain and gain as {\"label\": \"...\", \"intensity\": 1, \"quote\": \"...\"}.",
+  "mergeInstructions": "You group what customers said into themes for a product team, using the Value Proposition Canvas.\n\nYou get one kind at a time: jobs (what customers are trying to get done), pains (what frustrates, blocks or risks a job) or gains (what customers want or would be delighted by). Each label has an id and the number of texts it came from. Labels are in German or English.\n\nPut labels that mean the same thing for the customer into one theme, whatever their language. Keep different things apart: a theme should be specific enough for a team to act on. Give each theme a short name from the customer's point of view, 2 to 7 words, in English.\n\nRules:\n- Every label id in exactly one theme. A label that fits no other is a theme of its own.\n- Placeholders such as [NAME_1] or [EMAIL_2] replace removed personal data. Never put them in a theme name.\n- Answer only with JSON: {\"themes\": [{\"name\": \"...\", \"labels\": [\"l1\", \"l7\"]}]}.",
+  "texts": [
+   {
+    "id": "t1",
+    "text": "The bank feed disconnected again this morning, third time this month. I have to log in to my bank every few days just to keep the transactions coming in."
+   },
+   {
+    "id": "t2",
+    "text": "I mainly use this to send invoices to my clients and chase late payers. The reminder emails work well, but I'd love to set the reminder schedule myself."
+   },
+   {
+    "id": "t3",
+    "text": "Payroll ran perfectly this month. Took me ten minutes instead of a whole afternoon. Thank you!"
+   },
+   {
+    "id": "t4",
+    "text": "Exporting the profit and loss report for the year took over four minutes and then the file was empty."
+   },
+   {
+    "id": "t5",
+    "text": "Your app crashed every time I tried to photograph a receipt on my phone. Android, latest version."
+   },
+   {
+    "id": "t6",
+    "text": "We were charged twice for the annual plan. Please refund one of the payments."
+   },
+   {
+    "id": "t7",
+    "text": "Great product, fair price. Reports could use a filter by project, though."
+   },
+   {
+    "id": "t8",
+    "text": "The PDF invoices cut off the last line of the item description when it's long. Clients have asked what they're paying for."
+   },
+   {
+    "id": "t9",
+    "text": "I'm locked out after changing my phone. The two-factor code goes to the old number and nobody answers the support line."
+   },
+   {
+    "id": "t10",
+    "text": "How do I reconcile a payment that covers three invoices at once?"
+   },
+   {
+    "id": "t11",
+    "text": "Please add multi-currency. Half our clients pay in USD and I'm converting everything in a spreadsheet."
+   },
+   {
+    "id": "t12",
+    "text": "Dark mode please, my eyes hurt after a day of bookkeeping."
+   },
+   {
+    "id": "t13",
+    "text": "Our accountant wants to export everything to her own software. Is there a standard format?"
+   },
+   {
+    "id": "t14",
+    "text": "Why do I have to re-enter the client's address every time I create a quote?"
+   },
+   {
+    "id": "t15",
+    "text": "I run a small cleaning company and I just want my invoices out the door on Friday afternoon without fuss. That works."
+   },
+   {
+    "id": "t16",
+    "text": "ok"
+   },
+   {
+    "id": "t17",
+    "text": "Support chat closes before anyone answers. I tried three times today."
+   },
+   {
+    "id": "t18",
+    "text": "We pay contractors in three countries. Payroll only works for local employees, so we use a second tool."
+   },
+   {
+    "id": "t19",
+    "text": "Please integrate with Stripe so payments mark invoices as paid automatically."
+   },
+   {
+    "id": "t20",
+    "text": "I just want to know at a glance whether we'll have enough cash at the end of the month."
+   },
+   {
+    "id": "t21",
+    "text": "My accountant loves that she can log in herself now. Saves us both a lot of emails."
+   },
+   {
+    "id": "t22",
+    "text": "Searching for an old invoice by client name doesn't find anything if the name has an accent, like José."
+   },
+   {
+    "id": "t23",
+    "text": "Yet another update that moved the reports menu. Fantastic. Really helpful."
+   },
+   {
+    "id": "t24",
+    "text": "How long do you keep our data after we cancel?"
+   },
+   {
+    "id": "t25",
+    "text": "Our clients complain that the payment link in the invoice email expires too quickly."
+   },
+   {
+    "id": "t26",
+    "text": "I'd like to split one expense across two projects."
+   },
+   {
+    "id": "t27",
+    "text": "Support solved it, but I had to explain the problem three times to three different people."
+   },
+   {
+    "id": "t28",
+    "text": "I use this to keep my freelance finances separate from my personal ones, and to know how much to set aside for tax. The tax estimate is spot on."
+   },
+   {
+    "id": "t29",
+    "text": "Exports to CSV use semicolons and my spreadsheet expects commas."
+   },
+   {
+    "id": "t30",
+    "text": "Perfect."
+   },
+   {
+    "id": "t31",
+    "text": "The dashboard numbers don't match the profit and loss report. Which one is right?"
+   },
+   {
+    "id": "t32",
+    "text": "Reconciliation is so much faster with the new suggestions, it matches about 9 out of 10 payments correctly."
+   },
+   {
+    "id": "t33",
+    "text": "Price is fine but the annual invoice from you doesn't show our VAT number, so our accountant can't deduct it."
+   },
+   {
+    "id": "t34",
+    "text": "We have 40 employees and payroll takes the app over an hour to calculate. Is that normal?"
+   },
+   {
+    "id": "t35",
+    "text": "It would be great to see which clients always pay late."
+   },
+   {
+    "id": "t36",
+    "text": "The new invoice design looks really professional, clients noticed."
+   },
+   {
+    "id": "t37",
+    "text": "Can I import invoices from my old system? I have five years of history in Excel."
+   },
+   {
+    "id": "t38",
+    "text": "The bank sync stopped working after my bank changed its login. Support said to wait. It's been two weeks."
+   },
+   {
+    "id": "t39",
+    "text": "I need a report of all expenses per employee for reimbursement, and there isn't one."
+   },
+   {
+    "id": "t40",
+    "text": "Slow, crashes, and support takes days. We're moving to another provider next month."
+   },
+   {
+    "id": "t41",
+    "text": "Thank you for fixing the duplicate transactions so quickly."
+   },
+   {
+    "id": "t42",
+    "text": "Your mobile app is the only one I've found where I can create an invoice in under a minute at the client's door."
+   },
+   {
+    "id": "t43",
+    "text": "Hi, I'm [NAME_2] from [PLACE_1]. We're a family bakery and I do the accounts at night. I need it to be simple and it mostly is, but the reconciliation screen scares me."
+   },
+   {
+    "id": "t44",
+    "text": "Please make the tables wider, long client names are cut off everywhere."
+   },
+   {
+    "id": "t45",
+    "text": "Two-factor via authenticator app instead of text message, please. Our mountain office has no mobile signal."
+   },
+   {
+    "id": "t46",
+    "text": "Couldn't do my job without it."
+   },
+   {
+    "id": "t47",
+    "text": "The reminders went out to a client who had already paid. Embarrassing."
+   },
+   {
+    "id": "t48",
+    "text": "Changing the payment terms on one invoice changes them for all future invoices of that client, which is not what I want."
+   },
+   {
+    "id": "t49",
+    "text": "We're a non-profit. Is there a discount?"
+   },
+   {
+    "id": "t50",
+    "text": "I'd love an overview of the whole year on one page: income, expenses and tax owed."
+   },
+   {
+    "id": "t51",
+    "text": "I have to approve expenses for 12 people and there's no way to approve them in bulk."
+   },
+   {
+    "id": "t52",
+    "text": "The yearly price went up again and I only use invoicing. Can I get an invoicing-only plan?"
+   },
+   {
+    "id": "t53",
+    "text": "When I search for a transaction amount with a comma it finds nothing."
+   },
+   {
+    "id": "t54",
+    "text": "Your team was so patient with me. I'm not good with computers and they walked me through everything."
+   },
+   {
+    "id": "t55",
+    "text": "Payroll for part-time staff with changing hours is a nightmare. I calculate the hours in a spreadsheet first."
+   },
+   {
+    "id": "t56",
+    "text": "Notifications on my phone for every paid invoice would be lovely."
+   },
+   {
+    "id": "t57",
+    "text": "We switched from a desktop program last year and haven't looked back."
+   },
+   {
+    "id": "t58",
+    "text": "Hello? Is anyone reading these?"
+   },
+   {
+    "id": "t59",
+    "text": "Hard to say, it does what it says."
+   },
+   {
+    "id": "t60",
+    "text": "Since the redesign I can't find the button to duplicate an invoice. It was the feature I used most."
+   }
+  ]
+ },
+ "itemOf": [
+  [
+   "t1",
+   "en-001"
+  ],
+  [
+   "t2",
+   "en-002"
+  ],
+  [
+   "t3",
+   "en-004"
+  ],
+  [
+   "t4",
+   "en-005"
+  ],
+  [
+   "t5",
+   "en-007"
+  ],
+  [
+   "t6",
+   "en-008"
+  ],
+  [
+   "t7",
+   "en-009"
+  ],
+  [
+   "t8",
+   "en-010"
+  ],
+  [
+   "t9",
+   "en-015"
+  ],
+  [
+   "t10",
+   "en-016"
+  ],
+  [
+   "t11",
+   "en-022"
+  ],
+  [
+   "t12",
+   "en-024"
+  ],
+  [
+   "t13",
+   "en-028"
+  ],
+  [
+   "t14",
+   "en-029"
+  ],
+  [
+   "t15",
+   "en-030"
+  ],
+  [
+   "t16",
+   "en-035"
+  ],
+  [
+   "t17",
+   "en-038"
+  ],
+  [
+   "t18",
+   "en-040"
+  ],
+  [
+   "t19",
+   "en-041"
+  ],
+  [
+   "t20",
+   "en-043"
+  ],
+  [
+   "t21",
+   "en-047"
+  ],
+  [
+   "t22",
+   "en-050"
+  ],
+  [
+   "t23",
+   "en-052"
+  ],
+  [
+   "t24",
+   "en-057"
+  ],
+  [
+   "t25",
+   "en-058"
+  ],
+  [
+   "t26",
+   "en-059"
+  ],
+  [
+   "t27",
+   "en-060"
+  ],
+  [
+   "t28",
+   "en-061"
+  ],
+  [
+   "t29",
+   "en-062"
+  ],
+  [
+   "t30",
+   "en-063"
+  ],
+  [
+   "t31",
+   "en-064"
+  ],
+  [
+   "t32",
+   "en-066"
+  ],
+  [
+   "t33",
+   "en-067"
+  ],
+  [
+   "t34",
+   "en-068"
+  ],
+  [
+   "t35",
+   "en-069"
+  ],
+  [
+   "t36",
+   "en-071"
+  ],
+  [
+   "t37",
+   "en-072"
+  ],
+  [
+   "t38",
+   "en-073"
+  ],
+  [
+   "t39",
+   "en-074"
+  ],
+  [
+   "t40",
+   "en-075"
+  ],
+  [
+   "t41",
+   "en-077"
+  ],
+  [
+   "t42",
+   "en-079"
+  ],
+  [
+   "t43",
+   "en-080"
+  ],
+  [
+   "t44",
+   "en-081"
+  ],
+  [
+   "t45",
+   "en-082"
+  ],
+  [
+   "t46",
+   "en-084"
+  ],
+  [
+   "t47",
+   "en-085"
+  ],
+  [
+   "t48",
+   "en-089"
+  ],
+  [
+   "t49",
+   "en-090"
+  ],
+  [
+   "t50",
+   "en-091"
+  ],
+  [
+   "t51",
+   "en-094"
+  ],
+  [
+   "t52",
+   "en-099"
+  ],
+  [
+   "t53",
+   "en-103"
+  ],
+  [
+   "t54",
+   "en-104"
+  ],
+  [
+   "t55",
+   "en-107"
+  ],
+  [
+   "t56",
+   "en-109"
+  ],
+  [
+   "t57",
+   "en-111"
+  ],
+  [
+   "t58",
+   "en-113"
+  ],
+  [
+   "t59",
+   "en-114"
+  ],
+  [
+   "t60",
+   "en-116"
+  ]
+ ],
+ "tagging": [
+  {
+   "asked": "{\"texts\":[{\"id\":\"t26\",\"text\":\"I'd like to split one expense across two projects.\"},{\"id\":\"t27\",\"text\":\"Support solved it, but I had to explain the problem three times to three different people.\"},{\"id\":\"t28\",\"text\":\"I use this to keep my freelance finances separate from my personal ones, and to know how much to set aside for tax. The tax estimate is spot on.\"},{\"id\":\"t29\",\"text\":\"Exports to CSV use semicolons and my spreadsheet expects commas.\"},{\"id\":\"t30\",\"text\":\"Perfect.\"},{\"id\":\"t31\",\"text\":\"The dashboard numbers don't match the profit and loss report. Which one is right?\"},{\"id\":\"t32\",\"text\":\"Reconciliation is so much faster with the new suggestions, it matches about 9 out of 10 payments correctly.\"},{\"id\":\"t33\",\"text\":\"Price is fine but the annual invoice from you doesn't show our VAT number, so our accountant can't deduct it.\"},{\"id\":\"t34\",\"text\":\"We have 40 employees and payroll takes the app over an hour to calculate. Is that normal?\"},{\"id\":\"t35\",\"text\":\"It would be great to see which clients always pay late.\"},{\"id\":\"t36\",\"text\":\"The new invoice design looks really professional, clients noticed.\"},{\"id\":\"t37\",\"text\":\"Can I import invoices from my old system? I have five years of history in Excel.\"},{\"id\":\"t38\",\"text\":\"The bank sync stopped working after my bank changed its login. Support said to wait. It's been two weeks.\"},{\"id\":\"t39\",\"text\":\"I need a report of all expenses per employee for reimbursement, and there isn't one.\"},{\"id\":\"t40\",\"text\":\"Slow, crashes, and support takes days. We're moving to another provider next month.\"},{\"id\":\"t41\",\"text\":\"Thank you for fixing the duplicate transactions so quickly.\"},{\"id\":\"t42\",\"text\":\"Your mobile app is the only one I've found where I can create an invoice in under a minute at the client's door.\"},{\"id\":\"t43\",\"text\":\"Hi, I'm [NAME_2] from [PLACE_1]. We're a family bakery and I do the accounts at night. I need it to be simple and it mostly is, but the reconciliation screen scares me.\"},{\"id\":\"t44\",\"text\":\"Please make the tables wider, long client names are cut off everywhere.\"},{\"id\":\"t45\",\"text\":\"Two-factor via authenticator app instead of text message, please. Our mountain office has no mobile signal.\"},{\"id\":\"t46\",\"text\":\"Couldn't do my job without it.\"},{\"id\":\"t47\",\"text\":\"The reminders went out to a client who had already paid. Embarrassing.\"},{\"id\":\"t48\",\"text\":\"Changing the payment terms on one invoice changes them for all future invoices of that client, which is not what I want.\"},{\"id\":\"t49\",\"text\":\"We're a non-profit. Is there a discount?\"},{\"id\":\"t50\",\"text\":\"I'd love an overview of the whole year on one page: income, expenses and tax owed.\"}]}",
+   "answer": "{\"stop_reason\":\"end_turn\",\"content\":[{\"type\":\"text\",\"text\":\"{\\\"texts\\\":[{\\\"id\\\":\\\"t26\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"split expense across projects\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I'd like to split one expense across two projects.\\\"}],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t27\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"get support to resolve issue\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Support solved it\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"explaining problem repeatedly\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I had to explain the problem three times to three different people.\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"issue solved by support\\\",\\\"intensity\\\":1,\\\"quote\\\":\\\"Support solved it\\\"}],\\\"sentiment\\\":\\\"mixed\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t28\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"keep freelance finances separate\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"keep my freelance finances separate from my personal ones\\\"},{\\\"label\\\":\\\"know how much to set aside for tax\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"know how much to set aside for tax\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"accurate tax estimate\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"The tax estimate is spot on.\\\"}],\\\"sentiment\\\":\\\"positive\\\",\\\"type\\\":\\\"praise\\\"},{\\\"id\\\":\\\"t29\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"export data to spreadsheet\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"my spreadsheet expects commas\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"CSV uses semicolons\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Exports to CSV use semicolons\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t30\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"positive\\\",\\\"type\\\":\\\"praise\\\"},{\\\"id\\\":\\\"t31\\\",\\\"jobs\\\":[],\\\"pains\\\":[{\\\"label\\\":\\\"dashboard and report don't match\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"The dashboard numbers don't match the profit and loss report.\\\"},{\\\"label\\\":\\\"unsure which figures are right\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Which one is right?\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t32\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"reconcile payments\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Reconciliation is so much faster\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"faster reconciliation\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Reconciliation is so much faster with the new suggestions\\\"},{\\\"label\\\":\\\"accurate payment matching\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"it matches about 9 out of 10 payments correctly\\\"}],\\\"sentiment\\\":\\\"positive\\\",\\\"type\\\":\\\"praise\\\"},{\\\"id\\\":\\\"t33\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"get VAT deductible by accountant\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"our accountant can't deduct it\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"invoice lacks VAT number\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"the annual invoice from you doesn't show our VAT number\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"fair price\\\",\\\"intensity\\\":1,\\\"quote\\\":\\\"Price is fine\\\"}],\\\"sentiment\\\":\\\"mixed\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t34\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"run payroll for 40 employees\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"We have 40 employees and payroll takes the app over an hour to calculate.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"payroll takes over an hour\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"payroll takes the app over an hour to calculate\\\"},{\\\"label\\\":\\\"unsure if slowness is normal\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Is that normal?\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"question\\\"},{\\\"id\\\":\\\"t35\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"see clients who pay late\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"It would be great to see which clients always pay late.\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t36\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"professional-looking invoices\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"The new invoice design looks really professional, clients noticed.\\\"}],\\\"sentiment\\\":\\\"positive\\\",\\\"type\\\":\\\"praise\\\"},{\\\"id\\\":\\\"t37\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"import old invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Can I import invoices from my old system?\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"five years of history in Excel\\\",\\\"intensity\\\":1,\\\"quote\\\":\\\"I have five years of history in Excel.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"question\\\"},{\\\"id\\\":\\\"t38\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"keep bank transactions synced\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"The bank sync stopped working after my bank changed its login.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"bank sync broken for weeks\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"It's been two weeks.\\\"},{\\\"label\\\":\\\"support advises waiting\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Support said to wait.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t39\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"reimburse employee expenses\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I need a report of all expenses per employee for reimbursement\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"no per-employee expense report\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"there isn't one\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"expense report per employee\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I need a report of all expenses per employee for reimbursement\\\"}],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t40\\\",\\\"jobs\\\":[],\\\"pains\\\":[{\\\"label\\\":\\\"app is slow\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Slow\\\"},{\\\"label\\\":\\\"app crashes\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"crashes\\\"},{\\\"label\\\":\\\"support takes days\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"support takes days\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t41\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"quick bug fixes\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Thank you for fixing the duplicate transactions so quickly.\\\"}],\\\"sentiment\\\":\\\"positive\\\",\\\"type\\\":\\\"praise\\\"},{\\\"id\\\":\\\"t42\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"create invoice at client's door\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"create an invoice in under a minute at the client's door\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"fast mobile invoicing\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Your mobile app is the only one I've found where I can create an invoice in under a minute\\\"}],\\\"sentiment\\\":\\\"positive\\\",\\\"type\\\":\\\"praise\\\"},{\\\"id\\\":\\\"t43\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"run family bakery accounts\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I do the accounts at night.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"reconciliation screen is scary\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"the reconciliation screen scares me\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"simple to use\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I need it to be simple and it mostly is\\\"}],\\\"sentiment\\\":\\\"mixed\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t44\\\",\\\"jobs\\\":[],\\\"pains\\\":[{\\\"label\\\":\\\"long client names cut off\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"long client names are cut off everywhere\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"wider tables\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Please make the tables wider\\\"}],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t45\\\",\\\"jobs\\\":[],\\\"pains\\\":[{\\\"label\\\":\\\"no mobile signal at office\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Our mountain office has no mobile signal.\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"authenticator app two-factor\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Two-factor via authenticator app instead of text message, please.\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t46\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"do my job\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Couldn't do my job without it.\\\"}],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"positive\\\",\\\"type\\\":\\\"praise\\\"},{\\\"id\\\":\\\"t47\\\",\\\"jobs\\\":[],\\\"pains\\\":[{\\\"label\\\":\\\"reminders sent to paid client\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"The reminders went out to a client who had already paid.\\\"},{\\\"label\\\":\\\"embarrassing for me\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Embarrassing.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t48\\\",\\\"jobs\\\":[],\\\"pains\\\":[{\\\"label\\\":\\\"terms change on all invoices\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Changing the payment terms on one invoice changes them for all future invoices of that client\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"change terms for one invoice\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Changing the payment terms on one invoice\\\"}],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t49\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"get non-profit pricing\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"We're a non-profit. Is there a discount?\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"discount for non-profit\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Is there a discount?\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"question\\\"},{\\\"id\\\":\\\"t50\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"see whole year overview\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I'd love an overview of the whole year on one page\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"one-page yearly summary\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"income, expenses and tax owed\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"feature request\\\"}]}\"}],\"usage\":{\"input_tokens\":2312,\"output_tokens\":5562}}"
+  },
+  {
+   "asked": "{\"texts\":[{\"id\":\"t1\",\"text\":\"The bank feed disconnected again this morning, third time this month. I have to log in to my bank every few days just to keep the transactions coming in.\"},{\"id\":\"t2\",\"text\":\"I mainly use this to send invoices to my clients and chase late payers. The reminder emails work well, but I'd love to set the reminder schedule myself.\"},{\"id\":\"t3\",\"text\":\"Payroll ran perfectly this month. Took me ten minutes instead of a whole afternoon. Thank you!\"},{\"id\":\"t4\",\"text\":\"Exporting the profit and loss report for the year took over four minutes and then the file was empty.\"},{\"id\":\"t5\",\"text\":\"Your app crashed every time I tried to photograph a receipt on my phone. Android, latest version.\"},{\"id\":\"t6\",\"text\":\"We were charged twice for the annual plan. Please refund one of the payments.\"},{\"id\":\"t7\",\"text\":\"Great product, fair price. Reports could use a filter by project, though.\"},{\"id\":\"t8\",\"text\":\"The PDF invoices cut off the last line of the item description when it's long. Clients have asked what they're paying for.\"},{\"id\":\"t9\",\"text\":\"I'm locked out after changing my phone. The two-factor code goes to the old number and nobody answers the support line.\"},{\"id\":\"t10\",\"text\":\"How do I reconcile a payment that covers three invoices at once?\"},{\"id\":\"t11\",\"text\":\"Please add multi-currency. Half our clients pay in USD and I'm converting everything in a spreadsheet.\"},{\"id\":\"t12\",\"text\":\"Dark mode please, my eyes hurt after a day of bookkeeping.\"},{\"id\":\"t13\",\"text\":\"Our accountant wants to export everything to her own software. Is there a standard format?\"},{\"id\":\"t14\",\"text\":\"Why do I have to re-enter the client's address every time I create a quote?\"},{\"id\":\"t15\",\"text\":\"I run a small cleaning company and I just want my invoices out the door on Friday afternoon without fuss. That works.\"},{\"id\":\"t16\",\"text\":\"ok\"},{\"id\":\"t17\",\"text\":\"Support chat closes before anyone answers. I tried three times today.\"},{\"id\":\"t18\",\"text\":\"We pay contractors in three countries. Payroll only works for local employees, so we use a second tool.\"},{\"id\":\"t19\",\"text\":\"Please integrate with Stripe so payments mark invoices as paid automatically.\"},{\"id\":\"t20\",\"text\":\"I just want to know at a glance whether we'll have enough cash at the end of the month.\"},{\"id\":\"t21\",\"text\":\"My accountant loves that she can log in herself now. Saves us both a lot of emails.\"},{\"id\":\"t22\",\"text\":\"Searching for an old invoice by client name doesn't find anything if the name has an accent, like José.\"},{\"id\":\"t23\",\"text\":\"Yet another update that moved the reports menu. Fantastic. Really helpful.\"},{\"id\":\"t24\",\"text\":\"How long do you keep our data after we cancel?\"},{\"id\":\"t25\",\"text\":\"Our clients complain that the payment link in the invoice email expires too quickly.\"}]}",
+   "answer": "{\"stop_reason\":\"end_turn\",\"content\":[{\"type\":\"text\",\"text\":\"{\\\"texts\\\":[{\\\"id\\\":\\\"t1\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Keep bank transactions flowing in\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"just to keep the transactions coming in\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Bank feed keeps disconnecting\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"The bank feed disconnected again this morning\\\"},{\\\"label\\\":\\\"Re-logging into bank often\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I have to log in to my bank every few days\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t2\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Send invoices to clients\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I mainly use this to send invoices to my clients\\\"},{\\\"label\\\":\\\"Chase late payers\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"chase late payers\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Set own reminder schedule\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I'd love to set the reminder schedule myself\\\"}],\\\"sentiment\\\":\\\"mixed\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t3\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Run payroll\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Payroll ran perfectly this month\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Payroll done in minutes\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Took me ten minutes instead of a whole afternoon\\\"}],\\\"sentiment\\\":\\\"positive\\\",\\\"type\\\":\\\"praise\\\"},{\\\"id\\\":\\\"t4\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Export profit and loss report\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Exporting the profit and loss report for the year\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Export takes over four minutes\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"took over four minutes\\\"},{\\\"label\\\":\\\"Exported file comes out empty\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"the file was empty\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t5\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Photograph receipts on phone\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"photograph a receipt on my phone\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"App crashes on receipt photos\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Your app crashed every time I tried to photograph a receipt\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t6\\\",\\\"jobs\\\":[],\\\"pains\\\":[{\\\"label\\\":\\\"Charged twice for annual plan\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"We were charged twice for the annual plan\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Get a refund\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Please refund one of the payments\\\"}],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t7\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Good product at fair price\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Great product, fair price.\\\"},{\\\"label\\\":\\\"Filter reports by project\\\",\\\"intensity\\\":1,\\\"quote\\\":\\\"Reports could use a filter by project\\\"}],\\\"sentiment\\\":\\\"positive\\\",\\\"type\\\":\\\"praise\\\"},{\\\"id\\\":\\\"t8\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Show clients what they pay for\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Clients have asked what they're paying for\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"PDF cuts off item descriptions\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"The PDF invoices cut off the last line of the item description when it's long\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t9\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Log in after changing phone\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I'm locked out after changing my phone\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Two-factor code sent to old number\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"The two-factor code goes to the old number\\\"},{\\\"label\\\":\\\"Support line unanswered\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"nobody answers the support line\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t10\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Reconcile payment across invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"How do I reconcile a payment that covers three invoices at once?\\\"}],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"question\\\"},{\\\"id\\\":\\\"t11\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Invoice clients paying in USD\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Half our clients pay in USD\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Converting currencies in spreadsheet\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I'm converting everything in a spreadsheet\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Support multiple currencies\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Please add multi-currency\\\"}],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t12\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Do bookkeeping\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"after a day of bookkeeping\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Eyes hurt after bookkeeping\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"my eyes hurt after a day of bookkeeping\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Dark mode\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Dark mode please\\\"}],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t13\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Share data with accountant's software\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Our accountant wants to export everything to her own software\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Standard export format\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Is there a standard format?\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"question\\\"},{\\\"id\\\":\\\"t14\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Create quotes\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"every time I create a quote\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Re-entering client address on quotes\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Why do I have to re-enter the client's address every time I create a quote?\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t15\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get invoices out on Friday\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I just want my invoices out the door on Friday afternoon without fuss\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Invoicing without fuss\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"without fuss\\\"}],\\\"sentiment\\\":\\\"positive\\\",\\\"type\\\":\\\"praise\\\"},{\\\"id\\\":\\\"t16\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t17\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get support answers\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Support chat closes before anyone answers\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Support chat closes unanswered\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Support chat closes before anyone answers\\\"},{\\\"label\\\":\\\"Repeated failed support attempts\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I tried three times today\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t18\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Pay contractors in several countries\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"We pay contractors in three countries\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Payroll only works for local staff\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Payroll only works for local employees\\\"},{\\\"label\\\":\\\"Needs a second tool\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"so we use a second tool\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t19\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Integrate Stripe payments\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Please integrate with Stripe\\\"},{\\\"label\\\":\\\"Invoices marked paid automatically\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"so payments mark invoices as paid automatically\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t20\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Check cash at month end\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"whether we'll have enough cash at the end of the month\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"See cash position at a glance\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I just want to know at a glance\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t21\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Accountant logs in herself\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"My accountant loves that she can log in herself now\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Fewer emails with accountant\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Saves us both a lot of emails\\\"}],\\\"sentiment\\\":\\\"positive\\\",\\\"type\\\":\\\"praise\\\"},{\\\"id\\\":\\\"t22\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Find old invoice by client\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Searching for an old invoice by client name\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Search fails with accented names\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"doesn't find anything if the name has an accent, like José\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t23\\\",\\\"jobs\\\":[],\\\"pains\\\":[{\\\"label\\\":\\\"Menus moved by updates\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Yet another update that moved the reports menu\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t24\\\",\\\"jobs\\\":[],\\\"pains\\\":[{\\\"label\\\":\\\"Unclear data retention after cancel\\\",\\\"intensity\\\":1,\\\"quote\\\":\\\"How long do you keep our data after we cancel?\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"question\\\"},{\\\"id\\\":\\\"t25\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Share payment links with clients\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Our clients complain that the payment link in the invoice email\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Payment links expire too quickly\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"the payment link in the invoice email expires too quickly\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"}]}\"}],\"usage\":{\"input_tokens\":2341,\"output_tokens\":5998}}"
+  },
+  {
+   "asked": "{\"texts\":[{\"id\":\"t51\",\"text\":\"I have to approve expenses for 12 people and there's no way to approve them in bulk.\"},{\"id\":\"t52\",\"text\":\"The yearly price went up again and I only use invoicing. Can I get an invoicing-only plan?\"},{\"id\":\"t53\",\"text\":\"When I search for a transaction amount with a comma it finds nothing.\"},{\"id\":\"t54\",\"text\":\"Your team was so patient with me. I'm not good with computers and they walked me through everything.\"},{\"id\":\"t55\",\"text\":\"Payroll for part-time staff with changing hours is a nightmare. I calculate the hours in a spreadsheet first.\"},{\"id\":\"t56\",\"text\":\"Notifications on my phone for every paid invoice would be lovely.\"},{\"id\":\"t57\",\"text\":\"We switched from a desktop program last year and haven't looked back.\"},{\"id\":\"t58\",\"text\":\"Hello? Is anyone reading these?\"},{\"id\":\"t59\",\"text\":\"Hard to say, it does what it says.\"},{\"id\":\"t60\",\"text\":\"Since the redesign I can't find the button to duplicate an invoice. It was the feature I used most.\"}]}",
+   "answer": "{\"stop_reason\":\"end_turn\",\"content\":[{\"type\":\"text\",\"text\":\"{\\\"texts\\\":[{\\\"id\\\":\\\"t51\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Approve expenses for team\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I have to approve expenses for 12 people\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"No bulk approval option\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"there's no way to approve them in bulk\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t52\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Use invoicing only\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I only use invoicing\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Yearly price keeps rising\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"The yearly price went up again\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Invoicing-only plan\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Can I get an invoicing-only plan?\\\"}],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t53\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Search for transaction amounts\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"When I search for a transaction amount with a comma it finds nothing.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Search fails with comma\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"it finds nothing\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t54\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Learn software without computer skills\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I'm not good with computers and they walked me through everything.\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Patient, step-by-step support\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Your team was so patient with me.\\\"}],\\\"sentiment\\\":\\\"positive\\\",\\\"type\\\":\\\"praise\\\"},{\\\"id\\\":\\\"t55\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Run payroll for part-time staff\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Payroll for part-time staff with changing hours\\\"},{\\\"label\\\":\\\"Calculate hours accurately\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I calculate the hours in a spreadsheet first.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Payroll with changing hours is a nightmare\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Payroll for part-time staff with changing hours is a nightmare.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t56\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Track paid invoices on phone\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Notifications on my phone for every paid invoice\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Phone notifications for paid invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Notifications on my phone for every paid invoice would be lovely.\\\"}],\\\"sentiment\\\":\\\"positive\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t57\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Manage finances with new software\\\",\\\"intensity\\\":1,\\\"quote\\\":\\\"We switched from a desktop program last year\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Happy with switch to new software\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"haven't looked back\\\"}],\\\"sentiment\\\":\\\"positive\\\",\\\"type\\\":\\\"praise\\\"},{\\\"id\\\":\\\"t58\\\",\\\"jobs\\\":[],\\\"pains\\\":[{\\\"label\\\":\\\"Feels unheard by the company\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Hello? Is anyone reading these?\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t59\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"},{\\\"id\\\":\\\"t60\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Duplicate an invoice\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"the button to duplicate an invoice\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Duplicate button gone after redesign\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Since the redesign I can't find the button to duplicate an invoice.\\\"},{\\\"label\\\":\\\"Lost my most-used feature\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"It was the feature I used most.\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Restore duplicate invoice button\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I can't find the button to duplicate an invoice.\\\"}],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"}]}\"}],\"usage\":{\"input_tokens\":1710,\"output_tokens\":1322}}"
+  }
+ ],
+ "merge": [
+  {
+   "asked": "{\"kind\":\"jobs\",\"labels\":[{\"id\":\"l1\",\"label\":\"Keep bank transactions flowing in\",\"count\":1},{\"id\":\"l2\",\"label\":\"Send invoices to clients\",\"count\":1},{\"id\":\"l3\",\"label\":\"Chase late payers\",\"count\":1},{\"id\":\"l4\",\"label\":\"Run payroll\",\"count\":1},{\"id\":\"l5\",\"label\":\"Export profit and loss report\",\"count\":1},{\"id\":\"l6\",\"label\":\"Photograph receipts on phone\",\"count\":1},{\"id\":\"l7\",\"label\":\"Show clients what they pay for\",\"count\":1},{\"id\":\"l8\",\"label\":\"Log in after changing phone\",\"count\":1},{\"id\":\"l9\",\"label\":\"Reconcile payment across invoices\",\"count\":1},{\"id\":\"l10\",\"label\":\"Invoice clients paying in USD\",\"count\":1},{\"id\":\"l11\",\"label\":\"Do bookkeeping\",\"count\":1},{\"id\":\"l12\",\"label\":\"Share data with accountant's software\",\"count\":1},{\"id\":\"l13\",\"label\":\"Create quotes\",\"count\":1},{\"id\":\"l14\",\"label\":\"Get invoices out on Friday\",\"count\":1},{\"id\":\"l15\",\"label\":\"Get support answers\",\"count\":1},{\"id\":\"l16\",\"label\":\"Pay contractors in several countries\",\"count\":1},{\"id\":\"l17\",\"label\":\"Check cash at month end\",\"count\":1},{\"id\":\"l18\",\"label\":\"Accountant logs in herself\",\"count\":1},{\"id\":\"l19\",\"label\":\"Find old invoice by client\",\"count\":1},{\"id\":\"l20\",\"label\":\"Share payment links with clients\",\"count\":1},{\"id\":\"l21\",\"label\":\"split expense across projects\",\"count\":1},{\"id\":\"l22\",\"label\":\"get support to resolve issue\",\"count\":1},{\"id\":\"l23\",\"label\":\"keep freelance finances separate\",\"count\":1},{\"id\":\"l24\",\"label\":\"know how much to set aside for tax\",\"count\":1},{\"id\":\"l25\",\"label\":\"export data to spreadsheet\",\"count\":1},{\"id\":\"l26\",\"label\":\"reconcile payments\",\"count\":1},{\"id\":\"l27\",\"label\":\"get VAT deductible by accountant\",\"count\":1},{\"id\":\"l28\",\"label\":\"run payroll for 40 employees\",\"count\":1},{\"id\":\"l29\",\"label\":\"import old invoices\",\"count\":1},{\"id\":\"l30\",\"label\":\"keep bank transactions synced\",\"count\":1},{\"id\":\"l31\",\"label\":\"reimburse employee expenses\",\"count\":1},{\"id\":\"l32\",\"label\":\"create invoice at client's door\",\"count\":1},{\"id\":\"l33\",\"label\":\"run family bakery accounts\",\"count\":1},{\"id\":\"l34\",\"label\":\"do my job\",\"count\":1},{\"id\":\"l35\",\"label\":\"get non-profit pricing\",\"count\":1},{\"id\":\"l36\",\"label\":\"see whole year overview\",\"count\":1},{\"id\":\"l37\",\"label\":\"Approve expenses for team\",\"count\":1},{\"id\":\"l38\",\"label\":\"Use invoicing only\",\"count\":1},{\"id\":\"l39\",\"label\":\"Search for transaction amounts\",\"count\":1},{\"id\":\"l40\",\"label\":\"Learn software without computer skills\",\"count\":1},{\"id\":\"l41\",\"label\":\"Run payroll for part-time staff\",\"count\":1},{\"id\":\"l42\",\"label\":\"Calculate hours accurately\",\"count\":1},{\"id\":\"l43\",\"label\":\"Track paid invoices on phone\",\"count\":1},{\"id\":\"l44\",\"label\":\"Manage finances with new software\",\"count\":1},{\"id\":\"l45\",\"label\":\"Duplicate an invoice\",\"count\":1}]}",
+   "answer": "{\"stop_reason\":\"end_turn\",\"content\":[{\"type\":\"text\",\"text\":\"{\\\"themes\\\":[{\\\"name\\\":\\\"Keep bank transactions in sync\\\",\\\"labels\\\":[\\\"l1\\\",\\\"l30\\\",\\\"l39\\\"]},{\\\"name\\\":\\\"Create and send invoices\\\",\\\"labels\\\":[\\\"l2\\\",\\\"l14\\\",\\\"l32\\\",\\\"l38\\\"]},{\\\"name\\\":\\\"Reuse past invoices\\\",\\\"labels\\\":[\\\"l19\\\",\\\"l29\\\",\\\"l45\\\"]},{\\\"name\\\":\\\"Chase late payers\\\",\\\"labels\\\":[\\\"l3\\\"]},{\\\"name\\\":\\\"Run payroll\\\",\\\"labels\\\":[\\\"l4\\\",\\\"l28\\\",\\\"l41\\\"]},{\\\"name\\\":\\\"Export data for reports\\\",\\\"labels\\\":[\\\"l5\\\",\\\"l25\\\"]},{\\\"name\\\":\\\"Give accountant access\\\",\\\"labels\\\":[\\\"l12\\\",\\\"l18\\\"]},{\\\"name\\\":\\\"Prepare VAT for accountant\\\",\\\"labels\\\":[\\\"l27\\\"]},{\\\"name\\\":\\\"Do finance tasks on phone\\\",\\\"labels\\\":[\\\"l6\\\",\\\"l43\\\"]},{\\\"name\\\":\\\"Show clients what they pay\\\",\\\"labels\\\":[\\\"l7\\\",\\\"l20\\\"]},{\\\"name\\\":\\\"Log in after phone change\\\",\\\"labels\\\":[\\\"l8\\\"]},{\\\"name\\\":\\\"Reconcile payments\\\",\\\"labels\\\":[\\\"l9\\\",\\\"l26\\\"]},{\\\"name\\\":\\\"Handle multiple currencies\\\",\\\"labels\\\":[\\\"l10\\\",\\\"l16\\\"]},{\\\"name\\\":\\\"Do bookkeeping\\\",\\\"labels\\\":[\\\"l11\\\"]},{\\\"name\\\":\\\"Create quotes\\\",\\\"labels\\\":[\\\"l13\\\"]},{\\\"name\\\":\\\"Get support answers\\\",\\\"labels\\\":[\\\"l15\\\",\\\"l22\\\"]},{\\\"name\\\":\\\"Learn new software easily\\\",\\\"labels\\\":[\\\"l40\\\",\\\"l44\\\"]},{\\\"name\\\":\\\"Check cash and yearly overview\\\",\\\"labels\\\":[\\\"l17\\\",\\\"l36\\\"]},{\\\"name\\\":\\\"Know tax to set aside\\\",\\\"labels\\\":[\\\"l24\\\"]},{\\\"name\\\":\\\"Keep freelance finances separate\\\",\\\"labels\\\":[\\\"l23\\\"]},{\\\"name\\\":\\\"Manage team expenses\\\",\\\"labels\\\":[\\\"l21\\\",\\\"l31\\\",\\\"l37\\\"]},{\\\"name\\\":\\\"Get non-profit pricing\\\",\\\"labels\\\":[\\\"l35\\\"]},{\\\"name\\\":\\\"Calculate hours accurately\\\",\\\"labels\\\":[\\\"l42\\\"]},{\\\"name\\\":\\\"Run family bakery accounts\\\",\\\"labels\\\":[\\\"l33\\\"]},{\\\"name\\\":\\\"Do my job\\\",\\\"labels\\\":[\\\"l34\\\"]}]}\"}],\"usage\":{\"input_tokens\":1724,\"output_tokens\":2310}}"
+  },
+  {
+   "asked": "{\"kind\":\"pains\",\"labels\":[{\"id\":\"l1\",\"label\":\"Bank feed keeps disconnecting\",\"count\":1},{\"id\":\"l2\",\"label\":\"Re-logging into bank often\",\"count\":1},{\"id\":\"l3\",\"label\":\"Export takes over four minutes\",\"count\":1},{\"id\":\"l4\",\"label\":\"Exported file comes out empty\",\"count\":1},{\"id\":\"l5\",\"label\":\"App crashes on receipt photos\",\"count\":1},{\"id\":\"l6\",\"label\":\"Charged twice for annual plan\",\"count\":1},{\"id\":\"l7\",\"label\":\"PDF cuts off item descriptions\",\"count\":1},{\"id\":\"l8\",\"label\":\"Two-factor code sent to old number\",\"count\":1},{\"id\":\"l9\",\"label\":\"Support line unanswered\",\"count\":1},{\"id\":\"l10\",\"label\":\"Converting currencies in spreadsheet\",\"count\":1},{\"id\":\"l11\",\"label\":\"Eyes hurt after bookkeeping\",\"count\":1},{\"id\":\"l12\",\"label\":\"Re-entering client address on quotes\",\"count\":1},{\"id\":\"l13\",\"label\":\"Support chat closes unanswered\",\"count\":1},{\"id\":\"l14\",\"label\":\"Repeated failed support attempts\",\"count\":1},{\"id\":\"l15\",\"label\":\"Payroll only works for local staff\",\"count\":1},{\"id\":\"l16\",\"label\":\"Needs a second tool\",\"count\":1},{\"id\":\"l17\",\"label\":\"Search fails with accented names\",\"count\":1},{\"id\":\"l18\",\"label\":\"Menus moved by updates\",\"count\":1},{\"id\":\"l19\",\"label\":\"Unclear data retention after cancel\",\"count\":1},{\"id\":\"l20\",\"label\":\"Payment links expire too quickly\",\"count\":1},{\"id\":\"l21\",\"label\":\"explaining problem repeatedly\",\"count\":1},{\"id\":\"l22\",\"label\":\"CSV uses semicolons\",\"count\":1},{\"id\":\"l23\",\"label\":\"dashboard and report don't match\",\"count\":1},{\"id\":\"l24\",\"label\":\"unsure which figures are right\",\"count\":1},{\"id\":\"l25\",\"label\":\"invoice lacks VAT number\",\"count\":1},{\"id\":\"l26\",\"label\":\"payroll takes over an hour\",\"count\":1},{\"id\":\"l27\",\"label\":\"unsure if slowness is normal\",\"count\":1},{\"id\":\"l28\",\"label\":\"five years of history in Excel\",\"count\":1},{\"id\":\"l29\",\"label\":\"bank sync broken for weeks\",\"count\":1},{\"id\":\"l30\",\"label\":\"support advises waiting\",\"count\":1},{\"id\":\"l31\",\"label\":\"no per-employee expense report\",\"count\":1},{\"id\":\"l32\",\"label\":\"app is slow\",\"count\":1},{\"id\":\"l33\",\"label\":\"app crashes\",\"count\":1},{\"id\":\"l34\",\"label\":\"support takes days\",\"count\":1},{\"id\":\"l35\",\"label\":\"reconciliation screen is scary\",\"count\":1},{\"id\":\"l36\",\"label\":\"long client names cut off\",\"count\":1},{\"id\":\"l37\",\"label\":\"no mobile signal at office\",\"count\":1},{\"id\":\"l38\",\"label\":\"reminders sent to paid client\",\"count\":1},{\"id\":\"l39\",\"label\":\"embarrassing for me\",\"count\":1},{\"id\":\"l40\",\"label\":\"terms change on all invoices\",\"count\":1},{\"id\":\"l41\",\"label\":\"No bulk approval option\",\"count\":1},{\"id\":\"l42\",\"label\":\"Yearly price keeps rising\",\"count\":1},{\"id\":\"l43\",\"label\":\"Search fails with comma\",\"count\":1},{\"id\":\"l44\",\"label\":\"Payroll with changing hours is a nightmare\",\"count\":1},{\"id\":\"l45\",\"label\":\"Feels unheard by the company\",\"count\":1},{\"id\":\"l46\",\"label\":\"Duplicate button gone after redesign\",\"count\":1},{\"id\":\"l47\",\"label\":\"Lost my most-used feature\",\"count\":1}]}",
+   "answer": "{\"stop_reason\":\"end_turn\",\"content\":[{\"type\":\"text\",\"text\":\"{\\\"themes\\\":[{\\\"name\\\":\\\"Bank connection keeps dropping\\\",\\\"labels\\\":[\\\"l1\\\",\\\"l2\\\",\\\"l29\\\"]},{\\\"name\\\":\\\"App and exports run too slowly\\\",\\\"labels\\\":[\\\"l3\\\",\\\"l27\\\",\\\"l32\\\"]},{\\\"name\\\":\\\"Exported files come out empty or broken\\\",\\\"labels\\\":[\\\"l4\\\",\\\"l22\\\"]},{\\\"name\\\":\\\"App crashes on certain actions\\\",\\\"labels\\\":[\\\"l5\\\",\\\"l33\\\"]},{\\\"name\\\":\\\"Charged twice or price keeps rising\\\",\\\"labels\\\":[\\\"l6\\\",\\\"l42\\\"]},{\\\"name\\\":\\\"Text cut off in documents\\\",\\\"labels\\\":[\\\"l7\\\",\\\"l36\\\"]},{\\\"name\\\":\\\"Two-factor codes go to old number\\\",\\\"labels\\\":[\\\"l8\\\"]},{\\\"name\\\":\\\"Support is slow and unresponsive\\\",\\\"labels\\\":[\\\"l9\\\",\\\"l13\\\",\\\"l14\\\",\\\"l21\\\",\\\"l30\\\",\\\"l34\\\",\\\"l45\\\"]},{\\\"name\\\":\\\"Converting currencies by hand\\\",\\\"labels\\\":[\\\"l10\\\"]},{\\\"name\\\":\\\"Screens cause eye strain\\\",\\\"labels\\\":[\\\"l11\\\"]},{\\\"name\\\":\\\"Re-entering client details on quotes\\\",\\\"labels\\\":[\\\"l12\\\"]},{\\\"name\\\":\\\"Payroll only works for local staff\\\",\\\"labels\\\":[\\\"l15\\\"]},{\\\"name\\\":\\\"Needs a second tool\\\",\\\"labels\\\":[\\\"l16\\\"]},{\\\"name\\\":\\\"Search misses names with special characters\\\",\\\"labels\\\":[\\\"l17\\\",\\\"l43\\\"]},{\\\"name\\\":\\\"Updates remove familiar features\\\",\\\"labels\\\":[\\\"l18\\\",\\\"l46\\\",\\\"l47\\\"]},{\\\"name\\\":\\\"Unclear data retention after cancelling\\\",\\\"labels\\\":[\\\"l19\\\"]},{\\\"name\\\":\\\"Payment links expire too quickly\\\",\\\"labels\\\":[\\\"l20\\\"]},{\\\"name\\\":\\\"Figures don't match or can't be trusted\\\",\\\"labels\\\":[\\\"l23\\\",\\\"l24\\\",\\\"l35\\\"]},{\\\"name\\\":\\\"Invoices missing VAT or sent wrongly\\\",\\\"labels\\\":[\\\"l25\\\",\\\"l38\\\",\\\"l40\\\"]},{\\\"name\\\":\\\"Payroll slow and hard with changing hours\\\",\\\"labels\\\":[\\\"l26\\\",\\\"l44\\\"]},{\\\"name\\\":\\\"Years of history stuck in Excel\\\",\\\"labels\\\":[\\\"l28\\\"]},{\\\"name\\\":\\\"No per-employee expense report\\\",\\\"labels\\\":[\\\"l31\\\"]},{\\\"name\\\":\\\"No bulk approval option\\\",\\\"labels\\\":[\\\"l41\\\"]},{\\\"name\\\":\\\"No mobile signal at the office\\\",\\\"labels\\\":[\\\"l37\\\"]},{\\\"name\\\":\\\"Feels embarrassed in front of clients\\\",\\\"labels\\\":[\\\"l39\\\"]}]}\"}],\"usage\":{\"input_tokens\":1811,\"output_tokens\":2594}}"
+  },
+  {
+   "asked": "{\"kind\":\"gains\",\"labels\":[{\"id\":\"l1\",\"label\":\"Set own reminder schedule\",\"count\":1},{\"id\":\"l2\",\"label\":\"Payroll done in minutes\",\"count\":1},{\"id\":\"l3\",\"label\":\"Get a refund\",\"count\":1},{\"id\":\"l4\",\"label\":\"Good product at fair price\",\"count\":1},{\"id\":\"l5\",\"label\":\"Filter reports by project\",\"count\":1},{\"id\":\"l6\",\"label\":\"Support multiple currencies\",\"count\":1},{\"id\":\"l7\",\"label\":\"Dark mode\",\"count\":1},{\"id\":\"l8\",\"label\":\"Standard export format\",\"count\":1},{\"id\":\"l9\",\"label\":\"Invoicing without fuss\",\"count\":1},{\"id\":\"l10\",\"label\":\"Integrate Stripe payments\",\"count\":1},{\"id\":\"l11\",\"label\":\"Invoices marked paid automatically\",\"count\":1},{\"id\":\"l12\",\"label\":\"See cash position at a glance\",\"count\":1},{\"id\":\"l13\",\"label\":\"Fewer emails with accountant\",\"count\":1},{\"id\":\"l14\",\"label\":\"issue solved by support\",\"count\":1},{\"id\":\"l15\",\"label\":\"accurate tax estimate\",\"count\":1},{\"id\":\"l16\",\"label\":\"faster reconciliation\",\"count\":1},{\"id\":\"l17\",\"label\":\"accurate payment matching\",\"count\":1},{\"id\":\"l18\",\"label\":\"fair price\",\"count\":1},{\"id\":\"l19\",\"label\":\"see clients who pay late\",\"count\":1},{\"id\":\"l20\",\"label\":\"professional-looking invoices\",\"count\":1},{\"id\":\"l21\",\"label\":\"expense report per employee\",\"count\":1},{\"id\":\"l22\",\"label\":\"quick bug fixes\",\"count\":1},{\"id\":\"l23\",\"label\":\"fast mobile invoicing\",\"count\":1},{\"id\":\"l24\",\"label\":\"simple to use\",\"count\":1},{\"id\":\"l25\",\"label\":\"wider tables\",\"count\":1},{\"id\":\"l26\",\"label\":\"authenticator app two-factor\",\"count\":1},{\"id\":\"l27\",\"label\":\"change terms for one invoice\",\"count\":1},{\"id\":\"l28\",\"label\":\"discount for non-profit\",\"count\":1},{\"id\":\"l29\",\"label\":\"one-page yearly summary\",\"count\":1},{\"id\":\"l30\",\"label\":\"Invoicing-only plan\",\"count\":1},{\"id\":\"l31\",\"label\":\"Patient, step-by-step support\",\"count\":1},{\"id\":\"l32\",\"label\":\"Phone notifications for paid invoices\",\"count\":1},{\"id\":\"l33\",\"label\":\"Happy with switch to new software\",\"count\":1},{\"id\":\"l34\",\"label\":\"Restore duplicate invoice button\",\"count\":1}]}",
+   "answer": "{\"stop_reason\":\"end_turn\",\"content\":[{\"type\":\"text\",\"text\":\"{\\\"themes\\\":[{\\\"name\\\":\\\"Set own reminder schedule\\\",\\\"labels\\\":[\\\"l1\\\"]},{\\\"name\\\":\\\"Payroll completed in minutes\\\",\\\"labels\\\":[\\\"l2\\\"]},{\\\"name\\\":\\\"Get a refund\\\",\\\"labels\\\":[\\\"l3\\\"]},{\\\"name\\\":\\\"Affordable pricing and plan options\\\",\\\"labels\\\":[\\\"l4\\\",\\\"l18\\\",\\\"l28\\\",\\\"l30\\\"]},{\\\"name\\\":\\\"Flexible reporting views\\\",\\\"labels\\\":[\\\"l5\\\",\\\"l21\\\",\\\"l25\\\",\\\"l29\\\"]},{\\\"name\\\":\\\"Multiple currency support\\\",\\\"labels\\\":[\\\"l6\\\"]},{\\\"name\\\":\\\"Dark mode\\\",\\\"labels\\\":[\\\"l7\\\"]},{\\\"name\\\":\\\"Standard export format\\\",\\\"labels\\\":[\\\"l8\\\"]},{\\\"name\\\":\\\"Effortless invoicing\\\",\\\"labels\\\":[\\\"l9\\\",\\\"l23\\\",\\\"l24\\\"]},{\\\"name\\\":\\\"Stripe payment integration\\\",\\\"labels\\\":[\\\"l10\\\"]},{\\\"name\\\":\\\"Clear view of incoming payments\\\",\\\"labels\\\":[\\\"l11\\\",\\\"l12\\\",\\\"l19\\\",\\\"l32\\\"]},{\\\"name\\\":\\\"Less back-and-forth with accountant\\\",\\\"labels\\\":[\\\"l13\\\"]},{\\\"name\\\":\\\"Support that solves issues\\\",\\\"labels\\\":[\\\"l14\\\",\\\"l31\\\"]},{\\\"name\\\":\\\"Accurate tax estimates\\\",\\\"labels\\\":[\\\"l15\\\"]},{\\\"name\\\":\\\"Quick and accurate reconciliation\\\",\\\"labels\\\":[\\\"l16\\\",\\\"l17\\\"]},{\\\"name\\\":\\\"Professional-looking invoices\\\",\\\"labels\\\":[\\\"l20\\\"]},{\\\"name\\\":\\\"Quick bug fixes\\\",\\\"labels\\\":[\\\"l22\\\"]},{\\\"name\\\":\\\"Two-factor login with authenticator app\\\",\\\"labels\\\":[\\\"l26\\\"]},{\\\"name\\\":\\\"Change terms for a single invoice\\\",\\\"labels\\\":[\\\"l27\\\"]},{\\\"name\\\":\\\"Happy with new software switch\\\",\\\"labels\\\":[\\\"l33\\\"]},{\\\"name\\\":\\\"Restore duplicate invoice button\\\",\\\"labels\\\":[\\\"l34\\\"]}]}\"}],\"usage\":{\"input_tokens\":1437,\"output_tokens\":1547}}"
+  }
+ ],
+ "usage": {
+  "input": 11335,
+  "output": 19333
+ }
+}
