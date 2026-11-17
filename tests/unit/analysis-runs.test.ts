@@ -2,8 +2,10 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import type { BatchReply } from '../../core/ai/run'
 import { presence, tags, type ThemeMapping } from '../../scripts/analysis-metrics'
-import { computeResults, RESULTS_PATH, resultsJson } from '../../scripts/analysis-results'
+import { computeResults, RESULTS_PATH, resultsJson, type AnalysisResults } from '../../scripts/analysis-results'
 import { recordRun, replayEvalRun, runFileName, RUNS_DIR, type EvalRun, type Senders } from '../../scripts/analysis-runs'
+import { runsLog } from '../../scripts/runs-log-file'
+import { numberedRuns, promptHash, RUNS_LOG_PATH, runsLogBlocks, withRunsLogBlocks } from '../../scripts/runs-log'
 import type { ItemLabels, LabelItem } from '../../scripts/labels'
 import { MAPPINGS_DIR, type StoredMapping } from '../../scripts/theme-mapping'
 
@@ -129,5 +131,33 @@ describe('the committed results', () => {
       .flatMap(path => readFileSync(path, 'utf8').trim().split('\n').map(line => JSON.parse(line) as ItemLabels))
     const mappings = existsSync(MAPPINGS_DIR) ? readdirSync(MAPPINGS_DIR).filter(file => file.endsWith('.json')).map(file => JSON.parse(readFileSync(`${MAPPINGS_DIR}/${file}`, 'utf8')) as StoredMapping) : []
     expect(readFileSync(RESULTS_PATH, 'utf8')).toBe(resultsJson(await computeResults(runs, labels, mappings)))
+  })
+
+  it('match the run log\'s generated tables: run npm run eval:analysis -- --write after any change', async () => {
+    const runs = existsSync(RUNS_DIR) ? readdirSync(RUNS_DIR).filter(file => file.endsWith('.json')).sort().map(file => ({ file, run: JSON.parse(readFileSync(`${RUNS_DIR}/${file}`, 'utf8')) as EvalRun })) : []
+    const committed = readFileSync(RUNS_LOG_PATH, 'utf8')
+    const results = JSON.parse(readFileSync(RESULTS_PATH, 'utf8')) as AnalysisResults
+    expect(committed).toBe(await runsLog(committed, runs, results))
+  })
+})
+
+describe('the run log', () => {
+  it('numbers runs per split and language in the order they were made, and says where each label gap was seen', async () => {
+    const run = await record()
+    const at = (createdAt: string, lang: 'en' | 'de' = 'en') => ({ ...run, createdAt, lang })
+    const runs = [
+      { file: 'b.json', run: at('2026-11-17T10:05:00Z') },
+      { file: 'a.json', run: at('2026-11-17T10:00:00Z') },
+      { file: 'c.json', run: { ...at('2026-11-17T10:02:00Z', 'de'), durationMs: 61_400 } },
+    ]
+    expect(numberedRuns(runs).map(({ file, label }) => `${file} ${label}`)).toEqual(['a.json dev 1', 'c.json dev 1', 'b.json dev 2'])
+    const predictions = new Map([['a.json', [{ id: 'en-001', jobs: [], pains: ['Bank feed drops'], gains: [], sentiment: 'negative' as const, type: 'bug' as const }]], ['b.json', []]])
+    const blocks = runsLogBlocks(runs, await computeResults(runs, gold), predictions, [{ id: 'en-001', kind: 'pains', found: 'bank feed', why: 'Invented.' }, { id: 'en-002', kind: 'gains', found: 'x', why: 'Invented.' }])
+    expect(blocks.gaps).toContain('| en-001 | pain: bank feed | run 1 | Invented. |')
+    expect(blocks.gaps).toContain('| en-002 | gain: x | none | Invented. |')
+    expect(blocks.runs).toContain('| 61 s |')
+    expect(blocks.runs).toContain('not recorded')
+    expect(blocks.runs).toContain(`\`${promptHash(run.payload)}\``)
+    expect(() => withRunsLogBlocks('no markers', blocks)).toThrow(/needs <!-- generated:runs:start -->/)
   })
 })

@@ -1,63 +1,67 @@
 # Analysis evaluation runs
 
-Every run of the analysis evaluation (#129), in the order it was made. The raw provider answers are in `runs/`, and `npm run eval:analysis` replays them without a key or a request.
+Every run of the analysis evaluation (#129). The raw provider answers are in `runs/`, and `npm run eval:analysis` replays them without a key or a request. The tables between the generated markers are written by `npm run eval:analysis -- --write` from those files (scripts/runs-log.ts), and a unit test fails when they are out of date; no number in them is typed by hand. The notes around them are hand-written.
 
-## Dev baseline: runs 1 and 2 (2026-11-17)
+All runs so far are on the dev split. The test split has not been run.
 
-Two runs with identical settings, on the dev split only, before any tuning. Together they are the baseline and show how much results vary between runs.
+## Runs
 
-- Commit: `c27950c` (main after #166), the same for all four files
-- Provider: Anthropic, called straight from the script
-- Model: `claude-haiku-5-5`
-- Temperature: not set, so the provider default applies; adaptive thinking with effort `low`, at most 16,000 output tokens, batches of 25 texts
-- Prompt version: the prompts have no version number yet, so each is identified by a SHA-256 of the tagging and merging instructions sent. English `37771f5d4668`, German `0287715bfa91`; the same in both runs of each language
-- Rows: 60 dev items per language and run (the test split was not run)
-- Cost: from the tokens Anthropic reported, at $0.10 per million tokens in and $0.50 per million out (prices checked 2026-11-13)
+Runs are numbered per split and language in the order they were made. The prompt is a short SHA-256 of the tagging and merging instructions sent. Cost comes from the tokens Anthropic reported, at the prices in `core/ai/cost.ts`. Duration is recorded from round 2 on; the first runs did not store it.
 
-| Run | Language | File | Started (UTC) | Tokens in | Tokens out | Cost | Duration |
-|---|---|---|---|---|---|---|---|
-| 1 | English | `dev-en-claude-haiku-5-5-2026-11-17T21-21-43Z.json` | 21:21:41 | 11,335 | 19,333 | $0.0108 | 57 s |
-| 1 | German | `dev-de-claude-haiku-5-5-2026-11-17T21-22-38Z.json` | 21:22:38 | 13,460 | 24,517 | $0.0136 | 66 s |
-| 2 | English | `dev-en-claude-haiku-5-5-2026-11-17T21-23-44Z.json` | 21:23:44 | 11,178 | 19,931 | $0.0111 | 56 s |
-| 2 | German | `dev-de-claude-haiku-5-5-2026-11-17T21-24-41Z.json` | 21:24:40 | 13,196 | 22,577 | $0.0126 | 59 s |
+<!-- generated:runs:start -->
+| Run | Language | File | Commit | Model | Prompt | Settings | Rows | Requests | Tokens in | Tokens out | Cost | Duration |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| dev 1 | English | `dev-en-claude-haiku-5-5-2026-11-17T21-21-43Z.json` | `c27950c` | `claude-haiku-5-5` | `37771f5d4668` | effort low, at most 16,000 tokens out, batches of 25 | 60 | 6 | 11,335 | 19,333 | $0.0108 | not recorded |
+| dev 1 | German | `dev-de-claude-haiku-5-5-2026-11-17T21-22-38Z.json` | `c27950c` | `claude-haiku-5-5` | `0287715bfa91` | effort low, at most 16,000 tokens out, batches of 25 | 60 | 6 | 13,460 | 24,517 | $0.0136 | not recorded |
+| dev 2 | English | `dev-en-claude-haiku-5-5-2026-11-17T21-23-44Z.json` | `c27950c` | `claude-haiku-5-5` | `37771f5d4668` | effort low, at most 16,000 tokens out, batches of 25 | 60 | 6 | 11,178 | 19,931 | $0.0111 | not recorded |
+| dev 2 | German | `dev-de-claude-haiku-5-5-2026-11-17T21-24-41Z.json` | `c27950c` | `claude-haiku-5-5` | `0287715bfa91` | effort low, at most 16,000 tokens out, batches of 25 | 60 | 6 | 13,196 | 22,577 | $0.0126 | not recorded |
+| dev 3 | English | `dev-en-claude-haiku-5-5-2026-11-17T21-43-18Z.json` | `653a082` | `claude-haiku-5-5` | `af1e7e98b6a9` | effort low, at most 16,000 tokens out, batches of 25 | 60 | 6 | 11,650 | 18,097 | $0.0102 | not recorded |
+| dev 3 | German | `dev-de-claude-haiku-5-5-2026-11-17T21-44-08Z.json` | `653a082` | `claude-haiku-5-5` | `d71e3ce51cf0` | effort low, at most 16,000 tokens out, batches of 25 | 60 | 6 | 14,054 | 25,549 | $0.0142 | not recorded |
+| dev 4 | English | `dev-en-claude-haiku-5-5-2026-11-17T21-45-14Z.json` | `653a082` | `claude-haiku-5-5` | `af1e7e98b6a9` | effort low, at most 16,000 tokens out, batches of 25 | 60 | 6 | 11,740 | 17,280 | $0.0098 | not recorded |
+| dev 4 | German | `dev-de-claude-haiku-5-5-2026-11-17T21-46-02Z.json` | `653a082` | `claude-haiku-5-5` | `d71e3ce51cf0` | effort low, at most 16,000 tokens out, batches of 25 | 60 | 6 | 14,211 | 20,914 | $0.0119 | not recorded |
+<!-- generated:runs:end -->
 
-Total: 24 requests (per language and run, 3 tagging batches and 3 merge requests), $0.048, about 4 minutes.
+## Scores
 
-## Round 1: gain definition (runs 3 and 4, 2026-11-17), reverted
+Presence against the human labels: whether an item has a gain, or a pain, at all. Whether it is the right one is only checked with the theme mapping on the test run.
 
-One change from the baseline: the gain definition in the tagging instructions (commit `653a082`). It addressed two baseline findings: feature wishes were missed as gains, and general satisfaction or praise was counted as a gain. Everything else matched the baseline: same model, settings and merge instructions, dev split only.
+<!-- generated:scores:start -->
+| Run | Language | Commit | Gains recall | Gains precision | Pains recall | Pains precision |
+| --- | --- | --- | --- | --- | --- | --- |
+| dev 1 | English | `c27950c` | 86% (24/28) | 77% (24/31) | 97% (32/33) | 91% (32/35) |
+| dev 1 | German | `c27950c` | 85% (29/34) | 97% (29/30) | 100% (37/37) | 97% (37/38) |
+| dev 2 | English | `c27950c` | 75% (21/28) | 81% (21/26) | 97% (32/33) | 91% (32/35) |
+| dev 2 | German | `c27950c` | 88% (30/34) | 94% (30/32) | 100% (37/37) | 97% (37/38) |
+| dev 3 | English | `653a082` | 93% (26/28) | 68% (26/38) | 97% (32/33) | 100% (32/32) |
+| dev 3 | German | `653a082` | 100% (34/34) | 85% (34/40) | 97% (36/37) | 95% (36/38) |
+| dev 4 | English | `653a082` | 96% (27/28) | 82% (27/33) | 97% (32/33) | 94% (32/34) |
+| dev 4 | German | `653a082` | 100% (34/34) | 79% (34/43) | 100% (37/37) | 95% (37/39) |
+<!-- generated:scores:end -->
 
-- Commit: `653a082`, the same for all four files
-- Provider, model, temperature, rows: as in the baseline. Temperature 0 is not possible on this model: Anthropic answers a request that sets it with HTTP 400 ("`temperature` is deprecated for this model"), so every run uses the fixed default
-- Prompt version: tagging and merging instructions hash to English `af1e7e98b6a9`, German `d71e3ce51cf0`
+## Notes
 
-| Run | Language | File | Started (UTC) | Tokens in | Tokens out | Cost | Duration |
-|---|---|---|---|---|---|---|---|
-| 3 | English | `dev-en-claude-haiku-5-5-2026-11-17T21-43-18Z.json` | 21:43:17 | 11,650 | 18,097 | $0.0102 | 50 s |
-| 3 | German | `dev-de-claude-haiku-5-5-2026-11-17T21-44-08Z.json` | 21:44:07 | 14,054 | 25,549 | $0.0142 | 67 s |
-| 4 | English | `dev-en-claude-haiku-5-5-2026-11-17T21-45-14Z.json` | 21:45:14 | 11,740 | 17,280 | $0.0098 | 48 s |
-| 4 | German | `dev-de-claude-haiku-5-5-2026-11-17T21-46-02Z.json` | 21:46:02 | 14,211 | 20,914 | $0.0119 | 62 s |
+### Baseline: dev 1 and dev 2
 
-Gains and pains, presence against the human labels (baseline runs 1 and 2, then runs 3 and 4):
+Two runs with identical settings, before any tuning, on commit `c27950c` (main after #166). Together they are the baseline and show how much results vary between runs. Temperature is not set: this model only takes its fixed default (a request that sets temperature 0 is refused with HTTP 400, "`temperature` is deprecated for this model"), so it applies to every run.
 
-| | Gains recall | Gains precision | Pains recall | Pains precision |
-|---|---|---|---|---|
-| English, baseline | 86%, 75% | 77%, 81% | 97%, 97% | 91%, 91% |
-| English, round 1 | 93%, 96% | 68%, 82% | 97%, 97% | 100%, 94% |
-| German, baseline | 85%, 88% | 97%, 94% | 100%, 100% | 97%, 97% |
-| German, round 1 | 100%, 100% | 85%, 79% | 97%, 100% | 95%, 95% |
+### Round 1: gain definition (dev 3 and dev 4), reverted
 
-Verdict: not kept, reverted in `218980a`. Gain recall beat both baseline runs in both languages, and praise without a named benefit was no longer counted as a gain. But gain precision did not: English run 3 is below both baseline runs, and both German runs are. Most new false finds mirror a pain as a gain (a complaint that search fails becomes "search finds umlauts"). German pains also slipped just below the baseline range in run 3 (recall 36/37, precision 95%).
+One change from the baseline: the gain definition in the tagging instructions (commit `653a082`), for two baseline findings: feature wishes were missed as gains, and general satisfaction or praise was counted as a gain.
+
+Verdict: not kept, reverted in `218980a`. Gain recall beat both baseline runs in both languages, and praise without a named benefit was no longer counted as a gain. Gain precision did not: English dev 3 and both German runs are below both baseline runs. Most new false finds restate a pain from the same text as a gain (a complaint that search fails becomes "search finds umlauts"). German pains also fell just below the baseline range in dev 3.
 
 ## Possible label gaps (dev split)
 
-Items where Painfold found something the human labels do not have, and the text looks like it does say it. Listed for the labellers to judge. They are not counted as correct, and no label was changed.
+Items where Painfold found something the human labels do not have, and the text looks like it does say it. Listed for the labellers to judge; they are not counted as correct, and no label was changed. The list is kept by hand in `label-gaps.json`; the runs it was seen in are computed.
 
-| Item | Found | Seen in | Why it may be a gap |
-|---|---|---|---|
+<!-- generated:gaps:start -->
+| Item | Found | Seen in (dev runs) | Why it may be a gap |
+| --- | --- | --- | --- |
 | en-113 | pain: support does not respond | runs 1, 2 and 4 | The text asks whether anyone reads the messages |
-| de-113 | pain: support does not respond | runs 1 to 4 | Same as en-113, in German |
-| en-008 | gain: a refund of the double payment | runs 1 to 4 | The text asks for the refund outright |
-| en-116 | gain: keep or restore invoice duplication | runs 1 to 4 | The text calls it the feature they used most |
+| de-113 | pain: support does not respond | runs 1, 2, 3 and 4 | Same as en-113, in German |
+| en-008 | gain: a refund of the double payment | runs 1, 2, 3 and 4 | The text asks for the refund outright |
+| en-116 | gain: keep or restore invoice duplication | runs 1, 2, 3 and 4 | The text calls it the feature they used most |
 | en-089 | gain: payment terms per invoice | runs 1, 3 and 4 | "which is not what I want" names the wanted outcome |
-| en-040, de-040 | gain: payroll for more than one country | runs 3 and 4 | The customer uses a second tool to get it |
+| en-040 | gain: payroll for more than one country | runs 3 and 4 | The customer uses a second tool to get it |
+| de-040 | gain: payroll for more than one country | runs 3 and 4 | Same as en-040, in German |
+<!-- generated:gaps:end -->

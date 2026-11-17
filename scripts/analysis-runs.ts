@@ -34,6 +34,8 @@ export type EvalRun = {
   merge: Exchange[]
   /** Tokens the provider reported, tagging and merging together. */
   usage: { input: number, output: number }
+  /** How long the requests took, tagging and merging; not recorded for the first runs. */
+  durationMs?: number
 }
 
 /** A file name that sorts by split, language, model and time: dev-en-claude-haiku-5-5-2026-11-15T10-00-00Z.json. */
