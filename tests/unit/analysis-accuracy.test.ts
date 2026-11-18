@@ -32,7 +32,7 @@ const run = (file: string, changes: Partial<RunResults> = {}, tags = true): RunR
   ...changes,
 })
 const results = (runs: RunResults[], stability: AnalysisResults['stability'] = []): AnalysisResults => ({ format: 'painfold-analysis-results/1', runs, stability })
-const dev = { split: 'dev' as const, lang: 'en' as const, model: 'claude-haiku-5-5', files: ['dev-a.json', 'dev-b.json'] as [string, string], presence: { hits: 170, of: 180 }, grouping: perKind(s(1, 1)) }
+const testPair = { split: 'test' as const, lang: 'en' as const, model: 'claude-haiku-5-5', files: ['test-a.json', 'test-b.json'] as [string, string], presence: { hits: 170, of: 180 }, grouping: perKind(s(1, 1)) }
 
 describe('what is published', () => {
   it('nothing, until a test run is scored and its themes are mapped', () => {
@@ -44,8 +44,8 @@ describe('what is published', () => {
     expect(publishedAnalysis(results([run('a.json', { notAnalyzed: 2 }), run('b.json', { merged: false })])).runs).toEqual({})
   })
 
-  it('the last fully scored test run per language, with two dev runs of its model for stability', () => {
-    const published = publishedAnalysis(results([run('test-en-1.json'), run('test-en-2.json'), run('test-de.json', { lang: 'de' })], [dev, { ...dev, model: 'other' }]))
+  it('the last fully scored test run per language, with two test runs of its model for stability', () => {
+    const published = publishedAnalysis(results([run('test-en-1.json'), run('test-en-2.json'), run('test-de.json', { lang: 'de' })], [testPair, { ...testPair, model: 'other' }, { ...testPair, split: 'dev', presence: { hits: 1, of: 2 } }]))
     expect(published.runs.en?.file).toBe('test-en-2.json')
     expect(published.runs.de?.file).toBe('test-de.json')
     expect(published.stability).toEqual({ en: { hits: 170, of: 180 } })
@@ -66,10 +66,11 @@ describe('the section in docs/accuracy.md', () => {
   })
 
   it('shows every score of a published run, with its confusion tables', () => {
-    const text = analysisMarkdown(results([run('test-en.json')], [dev]))
+    const text = analysisMarkdown(results([run('test-en.json')], [testPair]))
     expect(text).toContain('**English**: `test-en.json`, 60 texts, Claude Haiku 5.5, 2026-11-20, themes mapped by Francis Akoji.')
     expect(text).toContain('| Pains | 0.78 (39/50) | 0.85 (39/46) | 0.80 (40/50) | 0.89 (40/45) | 0.50 (10/20) | 0.50 (10/20) |')
-    expect(text).toContain('| Same answer when run twice (two dev runs) | 0.94 (170/180) |')
+    expect(text).toContain('| Same answer when run twice (test 1 and test 2) | 0.94 (170/180) |')
+    expect(text).toContain('on its own it overstates how well Painfold names pains and gains')
     // Only values that occur get a row and a column.
     expect(text).toContain('| Sentiment | positive | negative | neutral |')
     expect(text).toContain('| positive | 10 | 0 | 2 |')

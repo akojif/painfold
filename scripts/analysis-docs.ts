@@ -16,6 +16,7 @@ const START = '<!-- analysis:start -->'
 const END = '<!-- analysis:end -->'
 
 const LANGUAGE = { en: 'English', de: 'German' } as const
+const TAGS_FIRST = 'Tag recall and precision count a job, pain or gain only when Painfold put it under the theme a person matched to the label. Presence only checks that a text has a job, pain or gain of that kind at all, so it is higher, and on its own it overstates how well Painfold names pains and gains.'
 const KIND = { jobs: 'Jobs', pains: 'Pains', gains: 'Gains' } as const
 
 /** A rate as "0.78 (39/50)", or "n/a" when nothing was counted. */
@@ -40,7 +41,7 @@ function runSection(run: PublishedRun, stability: Rate | undefined): string {
       ['Sentiment correct', rate(scores.sentiment.correct)],
       ['Type correct', rate(scores.type.correct)],
       ['Quotes found word for word', rate(run.quotes)],
-      ['Same answer when run twice (two dev runs)', stability ? rate(stability) : 'n/a'],
+      ['Same answer when run twice (test 1 and test 2)', stability ? rate(stability) : 'n/a'],
     ]),
     confusion('Sentiment', SENTIMENTS, scores.sentiment),
     confusion('Type', TYPES, scores.type),
@@ -53,7 +54,7 @@ export function analysisMarkdown(results: AnalysisResults): string {
   const runs = (['en', 'de'] as const).flatMap(lang => published.runs[lang] ?? [])
   const sections = runs.length === 0
     ? ['Not measured yet. The numbers appear here before version 0.3.0 is released.']
-    : runs.map(run => runSection(run, published.stability[run.lang]))
+    : [TAGS_FIRST, ...runs.map(run => runSection(run, published.stability[run.lang]))]
   const testRuns = results.runs.filter(run => run.split === 'test')
   const stored = testRuns.length === 0
     ? 'No runs stored yet.'

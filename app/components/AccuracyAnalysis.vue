@@ -21,7 +21,7 @@ const texts = computed(() => runs.value.reduce((total, run) => total + run.texts
 const perLanguage = computed(() => Math.min(...runs.value.map(run => run.texts)))
 const models = computed(() => list([...new Set(runs.value.map(run => ANTHROPIC_MODELS.find(model => model.id === run.model)?.name ?? run.model))]))
 const latest = computed(() => runs.value.map(run => run.createdAt).sort().at(-1) ?? '')
-const people = computed(() => list([...new Set(runs.value.map(run => run.scores.mappedBy))]))
+const people = computed(() => list([...new Set(runs.value.map(run => run.scores.mappedBy))].map(name => (name === GERMAN_CLASSMATE ? t('accuracy.analysis.classmate') : name))))
 
 /** Rows for the table: found (recall) and correct (precision) per kind, as counts. */
 const tableRows = (pick: (run: PublishedRun) => Record<Kind, Scores>) => KINDS.map((kind) => {
@@ -85,6 +85,9 @@ const missing = computed(() => (props.language === 'both' ? '' : t(`accuracy.lan
       <h3 class="mt-6 text-sm font-medium">
         {{ $t('accuracy.analysis.presence') }}
       </h3>
+      <p class="mt-1 max-w-measure text-sm text-fg-muted">
+        {{ $t('accuracy.analysis.difference') }}
+      </p>
       <AccuracyTypeTable
         class="mt-2 table-fixed"
         labels="accuracy.analysis.kinds"

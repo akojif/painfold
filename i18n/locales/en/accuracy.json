@@ -110,6 +110,7 @@
       "notMeasuredLanguage": "Not measured in {language} yet.",
       "lead": "Out of 100 pains customers mention, Painfold finds about {n}.",
       "measured": "Measured on {texts} hand-labeled texts from the test split, analyzed by {model} on {date}. Each theme Painfold found was matched to the labels by hand, by {people}.",
+      "classmate": "a German-speaking classmate",
       "sample": "That is a small sample: {n} texts per language, so a single text moves a percentage by {points} points or more.",
       "tags": "Under the right theme",
       "presence": "In the right texts",
@@ -121,6 +122,7 @@
         "pains": "Pains",
         "gains": "Gains"
       },
+      "difference": "“Under the right theme” counts a job, pain or gain only when Painfold put it under the theme a person matched to the label. “In the right texts” only checks that a text has one of that kind at all, so it is higher, and on its own it overstates how well Painfold names pains and gains.",
       "explain": "Found: the share of labeled jobs, pains or gains that Painfold found. Correct: the share of what Painfold found that matches the labels.",
       "single": {
         "sentiment": "Sentiment correct",

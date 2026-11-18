@@ -14,9 +14,12 @@ export type PublishedRun = RunResults & { scores: Required<NonNullable<RunResult
 
 export type PublishedAnalysis = {
   runs: Partial<Record<AnalysisLang, PublishedRun>>
-  /** Same answer when run twice: two dev runs of the published model, if there are two. */
+  /** Same answer when run twice: the first two test runs of the published model, if there are two. */
   stability: Partial<Record<AnalysisLang, Rate>>
 }
+
+/** How the German theme mapping is credited in the stored mapping; the page shows it in the page's language. */
+export const GERMAN_CLASSMATE = 'a German-speaking classmate'
 
 const isPublished = (run: RunResults): run is PublishedRun =>
   run.split === 'test' && run.notAnalyzed === 0 && run.merged && run.scores?.tags !== undefined && run.scores.mappedBy !== undefined
@@ -28,7 +31,7 @@ export function publishedAnalysis(results: AnalysisResults): PublishedAnalysis {
     const run = results.runs.filter(candidate => candidate.lang === lang && isPublished(candidate)).at(-1) as PublishedRun | undefined
     if (!run) continue
     published.runs[lang] = run
-    const stable = results.stability.find(entry => entry.split === 'dev' && entry.lang === lang && entry.model === run.model)
+    const stable = results.stability.find(entry => entry.split === 'test' && entry.lang === lang && entry.model === run.model)
     if (stable) published.stability[lang] = stable.presence
   }
   return published

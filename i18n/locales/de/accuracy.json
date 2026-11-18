@@ -110,6 +110,7 @@
       "notMeasuredLanguage": "Auf {language} noch nicht gemessen.",
       "lead": "Von 100 Problemen, die Kundinnen und Kunden nennen, findet Painfold etwa {n}.",
       "measured": "Gemessen an {texts} von Hand gelabelten Texten aus dem Test-Teil, analysiert von {model} am {date}. Jedes gefundene Thema wurde von Hand den Labels zugeordnet, von {people}.",
+      "classmate": "einem deutschsprachigen Studienkollegen",
       "sample": "Das ist eine kleine Stichprobe: {n} Texte pro Sprache, also verschiebt ein einzelner Text einen Prozentwert um {points} Punkte oder mehr.",
       "tags": "Unter dem richtigen Thema",
       "presence": "In den richtigen Texten",
@@ -121,6 +122,7 @@
         "pains": "Probleme",
         "gains": "Wünsche"
       },
+      "difference": "„Unter dem richtigen Thema“ zählt nur, was Painfold dem Thema zuordnet, das eine Person dem Label zugeordnet hat. „In den richtigen Texten“ prüft nur, ob ein Text überhaupt etwas dieser Art enthält. Diese Zahl ist höher und überschätzt für sich allein, wie gut Painfold Probleme und Wünsche benennt.",
       "explain": "Gefunden: der Anteil der gelabelten Aufgaben, Probleme oder Wünsche, die Painfold gefunden hat. Richtig: der Anteil dessen, was Painfold gefunden hat, der zu den Labels passt.",
       "single": {
         "sentiment": "Stimmung richtig",

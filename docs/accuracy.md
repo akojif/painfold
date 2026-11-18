@@ -189,11 +189,13 @@ How it is counted:
 - **Grouping recall and precision:** for every pair of messages the labeller put under the same theme, whether the model did too, and the other way round. It measures the merging without any matching, but it is hard to read, so it is shown only here.
 - **Sentiment and type:** the share of messages with the labelled value, with confusion tables.
 - **Quotes found word for word:** quotes the model gave that were found word for word in the message; the others are dropped before the report.
-- **Same answer when run twice:** two dev runs of the same model, compared on whether each message has a job, a pain and a gain.
+- **Same answer when run twice:** test 1 and test 2, two runs of the test split with the same model and settings, compared on whether each message has a job, a pain and a gain.
 
 The sample is small: 60 test messages per language, and fewer labelled jobs, pains or gains of each kind, so a single message moves a number by two points or more. There are no targets for version 0.3: these results are published with their weaknesses, and the targets for version 0.4 are set from them.
 
 <!-- analysis:start -->
+Tag recall and precision count a job, pain or gain only when Painfold put it under the theme a person matched to the label. Presence only checks that a text has a job, pain or gain of that kind at all, so it is higher, and on its own it overstates how well Painfold names pains and gains.
+
 **English**: `test-en-claude-haiku-5-5-2026-11-17T22-20-37Z.json`, 60 texts, Claude Haiku 5.5, 2026-11-17, themes mapped by Francis Akoji.
 
 | Kind | Tag recall | Tag precision | Presence recall | Presence precision | Grouping recall | Grouping precision |
@@ -207,7 +209,7 @@ The sample is small: 60 test messages per language, and fewer labelled jobs, pai
 | Sentiment correct | 0.88 (53/60) |
 | Type correct | 0.95 (57/60) |
 | Quotes found word for word | 1.00 (143/143) |
-| Same answer when run twice (two dev runs) | 0.91 (164/180) |
+| Same answer when run twice (test 1 and test 2) | 0.94 (169/180) |
 
 Sentiment, labelled (rows) against Painfold's answer (columns):
 
@@ -242,7 +244,7 @@ Type, labelled (rows) against Painfold's answer (columns):
 | Sentiment correct | 0.88 (53/60) |
 | Type correct | 0.88 (53/60) |
 | Quotes found word for word | 1.00 (132/132) |
-| Same answer when run twice (two dev runs) | 0.93 (167/180) |
+| Same answer when run twice (test 1 and test 2) | 0.92 (166/180) |
 
 Sentiment, labelled (rows) against Painfold's answer (columns):
 
