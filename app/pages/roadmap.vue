@@ -1,21 +1,36 @@
 <script setup lang="ts">
-// What Painfold does now and what comes next, from app/utils/roadmap-items.ts.
-// No dates ahead: only released versions have one.
-// Prototype (proto/roadmap): three variations, swapped with the switcher and
-// kept in the address (?variant=b). The prerendered page is variation A; the
-// address is read once the page is running.
+// What Painfold does now and what comes next, from app/utils/roadmap-items.ts:
+// the released versions, then the work in four columns. No dates ahead: only
+// released versions have one.
 const { t } = useI18n()
+const { list, number } = useFormat()
 useHead({ title: () => `${t('roadmap.title')}, ${t('app.name')}` })
 
-const route = useRoute()
-const router = useRouter()
-const variant = ref<RoadmapVariant>('a')
-// Only once the first navigation has finished: an earlier replace is overwritten by it.
-onMounted(async () => {
-  await router.isReady()
-  const asked = route.query.variant
-  if (typeof asked === 'string' && (ROADMAP_VARIANTS as readonly string[]).includes(asked)) variant.value = asked as RoadmapVariant
-  watch(variant, value => router.replace({ path: route.path, query: { ...route.query, variant: value }, hash: route.hash }))
+const items = shallowRef<readonly RoadmapItem[]>(ROADMAP_ITEMS)
+
+// Development only: /roadmap/?fixture=large shows a long invented roadmap,
+// to check the page as it grows. Production builds leave it out.
+if (import.meta.dev) {
+  const route = useRoute()
+  const { mergeLocaleMessage } = useI18n()
+  onMounted(async () => {
+    if (route.query.fixture !== 'large') return
+    const fixture = await import('~~/tests/fixtures/roadmap-large')
+    for (const [locale, messages] of Object.entries(fixture.messages)) mergeLocaleMessage(locale, messages)
+    items.value = fixture.items
+  })
+}
+
+const summary = computed(() => {
+  const counts = statusCounts(items.value)
+  return t('roadmap.summary', {
+    version: releasesOf(items.value)[0]?.version ?? '',
+    counts: list([
+      t('roadmap.counts.inProgress', { n: number(counts.inProgress) }, counts.inProgress),
+      t('roadmap.counts.planned', { n: number(counts.planned) }, counts.planned),
+      t('roadmap.counts.idea', { n: number(counts.idea) }, counts.idea),
+    ]),
+  })
 })
 </script>
 
@@ -27,10 +42,23 @@ onMounted(async () => {
     <p class="mt-2 max-w-measure text-md text-fg-muted">
       {{ $t('roadmap.intro') }}
     </p>
+    <p class="mt-3 text-sm">
+      {{ summary }}
+    </p>
 
-    <RoadmapTimeline v-if="variant === 'a'" />
-    <RoadmapBoard v-else-if="variant === 'b'" />
-    <RoadmapVersions v-else />
+    <RoadmapReleases
+      class="mt-8"
+      :items="items"
+    />
+
+    <div class="mt-10 grid items-start gap-x-6 gap-y-10 md:grid-cols-2 lg:grid-cols-4">
+      <RoadmapColumn
+        v-for="column in COLUMNS"
+        :key="column"
+        :column="column"
+        :items="columnOf(items, column)"
+      />
+    </div>
 
     <a
       :href="ROADMAP_URL"
@@ -38,7 +66,5 @@ onMounted(async () => {
     >
       {{ $t('roadmap.full') }}
     </a>
-
-    <RoadmapSwitcher v-model="variant" />
   </div>
 </template>

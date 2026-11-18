@@ -9,7 +9,7 @@ test('German pages are prerendered under /de/ with the right language', async ({
   expect(html).toContain('lang="de-AT"')
   expect(html).toContain('Finden Sie, was Ihren Kunden wehtut.')
   expect(html).toMatch(/<link[^>]*rel="alternate"[^>]*href="https:\/\/painfold\.com\/?"[^>]*hreflang="en"/)
-  expect(await (await request.get('/de/roadmap/')).text()).toContain('Der erste Schritt: Ihr Feedback vertraulich bereinigen.')
+  expect(await (await request.get('/de/roadmap/')).text()).toContain('Hier steht, was veröffentlicht ist, was gerade entsteht und was danach kommt.')
 })
 
 test('switching language keeps the open file and every review decision', async ({ page }) => {
@@ -79,7 +79,7 @@ test.describe('choosing the language at the root', () => {
     await page.evaluate(() => localStorage.setItem('painfold-language', 'en'))
     await page.goto('/de/roadmap/')
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Roadmap')
-    await expect(page.getByText('Sie sind hier: v0.3.0')).toBeVisible()
+    await expect(page.getByText('Aktuelle Version: v0.3.0. 1 in Arbeit, 6 geplant und 2 Ideen.')).toBeVisible()
   })
 
   test('a saved German choice opens German at the root', async ({ page }) => {

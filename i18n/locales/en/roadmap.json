@@ -1,8 +1,7 @@
 {
   "roadmap": {
     "title": "Roadmap",
-    "intro": "Painfold helps you understand what hurts your customers. Cleaning your feedback privately is the first step.",
-    "current": "Current stage",
+    "intro": "Painfold cleans your customer feedback in your browser and finds what your customers are trying to get done, what frustrates them and what they wish for. Here is what is released, what is being built and what comes after.",
     "status": {
       "available": "Available",
       "preview": "Preview",
@@ -10,7 +9,6 @@
       "planned": "Planned",
       "next": "Next"
     },
-    "stagesLabel": "Stages",
     "full": "Read the full roadmap on GitHub",
     "stages": {
       "clean": {
@@ -68,12 +66,6 @@
         ]
       }
     },
-    "itemStatus": {
-      "released": "Released",
-      "inProgress": "In progress",
-      "planned": "Planned",
-      "idea": "Idea"
-    },
     "horizons": {
       "released": {
         "name": "Released",
@@ -96,17 +88,10 @@
         "hint": "Being considered, not planned yet."
       }
     },
-    "youAreHere": "You are here: v0.3.0",
-    "releasedOn": "Released {date}",
-    "noVersion": "No version yet",
-    "trackedIn": "Tracked in {link}",
     "linkRelease": "Release {label}",
     "linkIssue": "Issue {label}",
     "linkMilestone": "Milestone {label}",
     "newTab": "(opens in a new tab)",
-    "comingNext": "Coming next",
-    "filterLabel": "Show",
-    "filterAll": "All",
     "items": {
       "clean": {
         "name": "Clean",
@@ -157,11 +142,18 @@
         "summary": "Painfold as a privacy gate for AI assistants: files are cleaned on your machine before an assistant sees them."
       }
     },
-    "variants": {
-      "label": "Roadmap variation",
-      "a": "Timeline",
-      "b": "Now, next, later",
-      "c": "By version"
-    }
+    "summary": "Current version: {version}. {counts}.",
+    "counts": {
+      "inProgress": "{n} in progress",
+      "planned": "{n} planned",
+      "idea": "{n} idea | {n} ideas"
+    },
+    "allReleases": "All releases ({n})",
+    "fewerReleases": "Show fewer releases",
+    "showMore": "Show {n} more",
+    "showFewer": "Show fewer",
+    "more": "More",
+    "less": "Less",
+    "empty": "Nothing here yet"
   }
 }

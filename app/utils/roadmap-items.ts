@@ -1,16 +1,18 @@
-// What the roadmap page shows: the released versions, the release in
-// progress, and the open issues that are planned or only an idea. Names and
-// summaries are interface text, in i18n/locales under roadmap.items.<id>.
+// What the roadmap page shows: the released versions, the work in progress,
+// and the open issues that are planned or only an idea. Names and summaries
+// are interface text, in i18n/locales under roadmap.items.<id>.
 // Dates are only the dates versions were released; nothing ahead is dated.
+// Within a column, items are listed in this order, most important first.
 // Update a status when work starts or a version is released.
 
 export type ItemStatus = 'released' | 'inProgress' | 'planned' | 'idea'
-/** Where an item sits when the page groups by "now, next, later". */
+/** Where an item sits on the page: the released strip, or one of the columns. */
 export type Horizon = 'released' | 'now' | 'next' | 'later' | 'idea'
-export type ItemId = 'clean' | 'names' | 'jobs' | 'workspace' | 'report' | 'landing' | 'namesMore' | 'transcripts' | 'documents' | 'docker' | 'engine' | 'mcp'
+export type Column = Exclude<Horizon, 'released'>
 
 export interface RoadmapItem {
-  id: ItemId
+  /** The key of its name and summary under roadmap.items. */
+  id: string
   status: ItemStatus
   horizon: Horizon
   /** The version it ships in, when one is set. */
@@ -40,19 +42,26 @@ export const ROADMAP_ITEMS: readonly RoadmapItem[] = [
   { id: 'mcp', status: 'idea', horizon: 'idea', link: issue(157) },
 ]
 
-export const HORIZONS: readonly Horizon[] = ['released', 'now', 'next', 'later', 'idea']
-export const ITEM_STATUSES: readonly ItemStatus[] = ['released', 'inProgress', 'planned', 'idea']
+/** The columns after the released strip, in the order they are shown. */
+export const COLUMNS: readonly Column[] = ['now', 'next', 'later', 'idea']
+/** Cards shown per column, and releases in the strip, before "Show more". */
+export const COLUMN_CAP = 4
+export const RELEASES_SHOWN = 3
 
-/** The versions ahead, in order, then the items without a version. */
-export function upcomingByVersion(items: readonly RoadmapItem[] = ROADMAP_ITEMS): Array<{ version?: string, items: RoadmapItem[] }> {
-  const ahead = items.filter(item => item.status === 'inProgress' || item.status === 'planned')
-  const versions = [...new Set(ahead.flatMap(item => (item.version ? [item.version] : [])))]
-  return [
-    ...versions.map(version => ({ version, items: ahead.filter(item => item.version === version) })),
-    { items: ahead.filter(item => !item.version) },
-  ].filter(group => group.items.length > 0)
+/** Released versions, newest first. */
+export const releasesOf = (items: readonly RoadmapItem[]) =>
+  items.filter(item => item.status === 'released').sort((a, b) => (b.released ?? '').localeCompare(a.released ?? ''))
+
+/** One column's items, in the order of the list: most important first. */
+export const columnOf = (items: readonly RoadmapItem[], column: Column) => items.filter(item => item.horizon === column)
+
+/** How many items are in progress, planned and ideas, from the same list as the columns. */
+export function statusCounts(items: readonly RoadmapItem[]): Record<Exclude<ItemStatus, 'released'>, number> {
+  const count = (status: ItemStatus) => items.filter(item => item.status === status).length
+  return { inProgress: count('inProgress'), planned: count('planned'), idea: count('idea') }
 }
 
-/** Prototype only (proto/roadmap): the three page variations being compared. */
-export const ROADMAP_VARIANTS = ['a', 'b', 'c'] as const
-export type RoadmapVariant = typeof ROADMAP_VARIANTS[number]
+/** The first `cap` items, and how many more there are. */
+export function capped<T>(list: readonly T[], cap: number, open: boolean): { shown: readonly T[], more: number } {
+  return open || list.length <= cap ? { shown: list, more: 0 } : { shown: list.slice(0, cap), more: list.length - cap }
+}

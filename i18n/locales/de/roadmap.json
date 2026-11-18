@@ -1,8 +1,7 @@
 {
   "roadmap": {
     "title": "Roadmap",
-    "intro": "Painfold hilft Ihnen zu verstehen, was Ihren Kunden wehtut. Der erste Schritt: Ihr Feedback vertraulich bereinigen.",
-    "current": "Aktuelle Phase",
+    "intro": "Painfold bereinigt das Feedback Ihrer Kundinnen und Kunden in Ihrem Browser und findet, was sie erledigen wollen, was sie stört und was sie sich wünschen. Hier steht, was veröffentlicht ist, was gerade entsteht und was danach kommt.",
     "status": {
       "available": "Verfügbar",
       "preview": "Vorschau",
@@ -10,7 +9,6 @@
       "planned": "Geplant",
       "next": "Als Nächstes"
     },
-    "stagesLabel": "Phasen",
     "full": "Die ganze Roadmap auf GitHub lesen",
     "stages": {
       "clean": {
@@ -68,12 +66,6 @@
         ]
       }
     },
-    "itemStatus": {
-      "released": "Veröffentlicht",
-      "inProgress": "In Arbeit",
-      "planned": "Geplant",
-      "idea": "Idee"
-    },
     "horizons": {
       "released": {
         "name": "Veröffentlicht",
@@ -96,17 +88,10 @@
         "hint": "Wird überlegt, ist noch nicht geplant."
       }
     },
-    "youAreHere": "Sie sind hier: v0.3.0",
-    "releasedOn": "Veröffentlicht am {date}",
-    "noVersion": "Noch ohne Version",
-    "trackedIn": "Verfolgt in {link}",
     "linkRelease": "Version {label}",
     "linkIssue": "Issue {label}",
     "linkMilestone": "Meilenstein {label}",
     "newTab": "(öffnet in einem neuen Tab)",
-    "comingNext": "Als Nächstes",
-    "filterLabel": "Anzeigen",
-    "filterAll": "Alle",
     "items": {
       "clean": {
         "name": "Bereinigen",
@@ -157,11 +142,18 @@
         "summary": "Painfold als Datenschutz-Schranke für KI-Assistenten: Dateien werden auf Ihrem Rechner bereinigt, bevor ein Assistent sie sieht."
       }
     },
-    "variants": {
-      "label": "Roadmap-Variante",
-      "a": "Zeitleiste",
-      "b": "Jetzt, als Nächstes, später",
-      "c": "Nach Version"
-    }
+    "summary": "Aktuelle Version: {version}. {counts}.",
+    "counts": {
+      "inProgress": "{n} in Arbeit",
+      "planned": "{n} geplant",
+      "idea": "{n} Idee | {n} Ideen"
+    },
+    "allReleases": "Alle Versionen ({n})",
+    "fewerReleases": "Weniger Versionen zeigen",
+    "showMore": "{n} weitere zeigen",
+    "showFewer": "Weniger zeigen",
+    "more": "Mehr",
+    "less": "Weniger",
+    "empty": "Hier ist noch nichts"
   }
 }
