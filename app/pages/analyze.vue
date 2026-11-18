@@ -11,7 +11,8 @@ definePageMeta({
   needsReview: true,
   // Nothing to analyze without a checked file; this runs in the browser only.
   middleware: () => {
-    if (import.meta.client && !useSession().review.value && !useSmallScreen().narrow.value) return navigateTo(useLocalePath()('/'))
+    // While the app takes over a served page, the layout decides once it is mounted.
+    if (import.meta.client && !useNuxtApp().isHydrating && !useSession().review.value && !useSmallScreen().narrow.value) return navigateTo(useLocalePath()('/'))
   },
 })
 
