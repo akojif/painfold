@@ -10,6 +10,7 @@
 
 - **Your theme choice** (Light or Dark), in `localStorage` under `painfold-theme`. Choosing System removes it.
 - **Your language choice**, in `localStorage` under `painfold-language`.
+- **Your Anthropic API key**, only if you tick "Remember on this device", in `localStorage` under `painfold.anthropic-key`. Unticking it removes it. It is kept nowhere else: Painfold has no server. Otherwise the key is held in memory and forgotten when you close the tab or start over.
 - **The name model**, only if you download it (152 MB), in Cache Storage under `painfold-name-model`. You can remove it in Painfold.
 - **Each page's scroll position for the current tab**, kept by the browser routing library (vue-router) in `sessionStorage` under `vue-router:scroll`: only the app's page paths and numbers. It is gone when you close the tab. An end-to-end test fails if anything else is stored there.
 

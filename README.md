@@ -17,7 +17,7 @@ More in [docs/how-it-works.md](docs/how-it-works.md).
 - Your file never leaves your browser. There is no server that receives it.
 - No cookies, no analytics, no tracking.
 - Only cleaned text is sent to an AI, after you have reviewed it, and only to the one you choose: your own API key or a local model.
-- Painfold keeps only your theme and language choice; the browser keeps each page's scroll position for the current tab. Never your file or findings.
+- Painfold keeps your theme and language choice in this browser. If you tick "Remember on this device", it also keeps your API key there, and nowhere else. The name model, if you download it, is kept there too, and the browser keeps each page's scroll position for the current tab. Never your file or findings.
 
 Details, including what you download: [docs/privacy.md](docs/privacy.md).
 

@@ -38,7 +38,7 @@ Painfold now finds what your customers are trying to get done, what hurts and wh
 - Painfold reports more jobs than people labeled, and its themes are often broader than the labeled ones.
 - Results vary between two runs on the same texts, and the model takes no temperature setting that could reduce this.
 - The sample is small, and the German labels were made with the English labels available. All known weaknesses, with numbers, are on the Accuracy page.
-- The German interface has not been reviewed by a native speaker yet (#110).
+- The German interface text has not been reviewed by a native speaker yet ([#110](https://github.com/akojif/painfold/issues/110)).
 
 ## 0.2.0: Names (2026-11-12)
 
