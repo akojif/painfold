@@ -2,6 +2,12 @@
 
 All notable changes to Painfold. Versions follow the stages in [ROADMAP.md](ROADMAP.md).
 
+## Unreleased
+
+### Fixed
+
+- **Opening a step directly with nothing open** (a shared link, a bookmark, a reload of Review, Download, Analyze or Report) no longer shows the step for a moment before the start page. The served pages hold nothing of the step, and the start page it leads to is laid out as on a fresh load: before, it could keep the step's layout, squeezing the headline to one word per line.
+
 ## 0.3.0: Jobs, pains and gains (2026-11-18)
 
 Painfold now finds what your customers are trying to get done, what hurts and what they wish for, with an AI you choose. Only cleaned text is sent, after you have seen exactly what goes, and every count and quote in the report is checked in code.

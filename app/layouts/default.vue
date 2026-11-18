@@ -40,6 +40,15 @@ const working = computed(() => Boolean(current.value.meta.working) || (current.v
 const mounted = ref(false)
 // With no file open (a direct link), a small screen never renders a working page at all.
 const renderPage = computed(() => !(mounted.value && narrow.value && working.value && !table.value))
+// Review, Download, Analyze and Report need a checked file (Report also opens
+// for the demo). Their prerendered pages, and the first render while the app
+// takes over, show nothing, so a direct visit or a reload never shows a step it
+// cannot open, and the page the app takes over is the same one it was served.
+// Once mounted, the step appears, or the start page replaces it (#141 hotfix).
+const tagging = useTagging()
+const gated = computed(() => Boolean(current.value.meta.needsReview))
+const allowed = computed(() => Boolean(session.review.value) || (current.value.meta.step === 4 && tagging.demo.value))
+const showPage = computed(() => renderPage.value && (!gated.value || (mounted.value && allowed.value)))
 // Widened with nothing to review: where the page's own guard would have sent it.
 watch(narrow, (now) => {
   if (!now && current.value.meta.needsReview && !session.review.value && !useTagging().demo.value) void navigateTo(localePath('/'))
@@ -65,6 +74,7 @@ function onBeforeUnload(event: BeforeUnloadEvent) {
 }
 onMounted(() => {
   mounted.value = true
+  if (gated.value && !allowed.value && !narrow.value) void navigateTo(localePath('/'), { replace: true })
   window.addEventListener('beforeunload', onBeforeUnload)
 })
 onBeforeUnmount(() => window.removeEventListener('beforeunload', onBeforeUnload))
@@ -110,7 +120,7 @@ onBeforeUnmount(() => window.removeEventListener('beforeunload', onBeforeUnload)
           :file-open="Boolean(table)"
         />
         <div
-          v-if="renderPage"
+          v-if="showPage"
           class="flex flex-1 flex-col"
           :class="{ 'max-md:hidden': working }"
         >
