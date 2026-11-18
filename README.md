@@ -8,7 +8,7 @@ Find what hurts your customers, without exposing who they are. **[painfold.com](
 
 - Removes personal data from a CSV or XLSX file in your browser, in German and English: emails, phone numbers, IBANs, names, places and more.
 - You review every finding, by value or by row, and download the cleaned file.
-- Analysis (preview): finds your customers' jobs, pains and gains, with an AI you choose.
+- Analysis: finds your customers' jobs, pains and gains, with an AI you choose. Counts come from code, and every quote is checked word for word.
 
 More in [docs/how-it-works.md](docs/how-it-works.md).
 
@@ -23,7 +23,7 @@ Details, including what you download: [docs/privacy.md](docs/privacy.md).
 
 ## Accuracy
 
-97 % of test names are removed, and at least 92 % in every name-origin group. Numbers, method and known gaps: [painfold.com/accuracy/](https://painfold.com/accuracy/) and [docs/accuracy.md](docs/accuracy.md).
+97 % of test names are removed, and at least 92 % in every name-origin group. In the analysis, Painfold finds 77 % of the pains and 64 % of the gains customers mention under the right theme, and about half of the gains it reports match people's labels; the known weaknesses are listed with the numbers. Numbers, method and known gaps: [painfold.com/accuracy/](https://painfold.com/accuracy/) and [docs/accuracy.md](docs/accuracy.md).
 
 ## Run it locally
 

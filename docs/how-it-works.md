@@ -14,7 +14,7 @@ Painfold removes personal data from a CSV or XLSX file in your browser, and lets
 - Needs a screen at least 768 pixels wide (a laptop or desktop). On a phone, Painfold shows what it does: the start screen, roadmap and accuracy page read fine, and the tool itself opens on a bigger screen.
 - The same value always gets the same placeholder, such as `[EMAIL_3]`.
 
-Names and places are new in v0.2. Finding customer jobs, pains and gains follows in v0.3. See the [roadmap](../ROADMAP.md) and the [changelog](../CHANGELOG.md).
+Names and places are new in v0.2. Finding customer jobs, pains and gains is new in v0.3. See the [roadmap](../ROADMAP.md) and the [changelog](../CHANGELOG.md).
 
 What you download, and what Painfold stores, is in [privacy.md](privacy.md). The AI providers for the analysis are in [ai-providers.md](ai-providers.md).
 

@@ -109,6 +109,9 @@ test('shows how well jobs, pains and gains are found, or that they are not measu
     const pains = addRates(analysisRuns.map(run => run.scores.tags.pains.recall))
     if (path === '/accuracy/') await expect(section).toContainText(`Out of 100 pains customers mention, Painfold finds about ${Math.round(pains.hits / pains.of * 100)}.`)
     await expect(section.getByRole('table')).toHaveCount(2)
+    // The known weaknesses are published with the numbers, in the page's language.
+    await expect(section.getByRole('heading', { name: path === '/accuracy/' ? 'Known weaknesses' : 'Bekannte Schwächen', exact: true })).toBeVisible()
+    await expect(section.getByRole('listitem').first()).toContainText(path === '/accuracy/' ? 'Gains are the weakest kind.' : 'Wünsche sind die schwächste Art.')
   }
 })
 

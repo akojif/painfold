@@ -31,10 +31,10 @@ test.describe('start screen', () => {
     await expect(page.getByRole('button', { name: 'Choose a CSV or Excel file' })).toBeVisible()
     await expect(page.getByRole('button', { name: 'Try an example' })).toBeVisible()
     await expect(page.getByText('Your file is never uploaded. It stays in this browser.')).toHaveCount(1)
-    // Statuses come from the roadmap: the analysis is a preview until v0.3.0 is released with its quality numbers.
+    // Statuses come from the roadmap: the analysis is available since v0.3.0, released with its quality numbers.
     await expect(page.getByRole('list', { name: 'What Painfold does' }).getByRole('listitem')).toHaveText([
       /^Available\s*Clean your file\s*Personal data is replaced with placeholders\.$/,
-      /^Preview\s*Find jobs, pains and gains\s*Grouped into themes, counted in code, with real quotes\.$/,
+      /^Available\s*Find jobs, pains and gains\s*Grouped into themes, counted in code, with real quotes\.$/,
       /^Coming in v0\.4\s*Decide what to build\s*The strongest pains, framed as questions for your team\.$/,
     ])
   })

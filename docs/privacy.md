@@ -4,7 +4,7 @@
 
 - Your file is never uploaded. It stays in your browser, and an end-to-end test checks that no request leaves it while you import, check and download.
 - No cookies, no analytics, no tracking.
-- Analysis (in preview until v0.3.0): nothing is sent to an AI until you have reviewed what was removed, only the cleaned text is sent, and the AI is your choice (your own API key, sent straight from your browser to the provider, or a local model with Ollama). See [ai-providers.md](ai-providers.md).
+- Analysis: nothing is sent to an AI until you have reviewed what was removed, only the cleaned text is sent, and the AI is your choice (your own API key, sent straight from your browser to the provider, or a local model with Ollama). See [ai-providers.md](ai-providers.md).
 
 ## What is stored in your browser
 
