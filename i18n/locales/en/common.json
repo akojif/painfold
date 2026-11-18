@@ -12,6 +12,11 @@
       "analyze": "Analyze",
       "report": "Report"
     },
+    "meta": {
+      "left": "{n} left",
+      "running": "Running",
+      "themes": "{n} theme | {n} themes"
+    },
     "startOver": "Start over",
     "newTab": "(opens in a new tab)"
   },

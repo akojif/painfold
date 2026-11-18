@@ -93,11 +93,16 @@ test('long file names and links keep their end visible, with the full text as a 
 test.describe('at 768px', () => {
   test.use({ viewport: { width: 768, height: 900 } })
 
-  test('the header and the stepper stay on one line each', async ({ page }) => {
+  test('the workspace top bar keeps the steps on one row, in English and German, without scrolling sideways', async ({ page }) => {
     await open(page, FILES.worst)
-    const lineHeight = (locator: import('@playwright/test').Locator) => locator.evaluate(element => element.getBoundingClientRect().height)
-    expect(await lineHeight(page.getByRole('button', { name: /What leaves your browser/ }))).toBeLessThan(40)
-    expect(await lineHeight(page.getByRole('navigation', { name: 'Steps' }).locator('ol'))).toBeLessThan(30)
+    for (const [language, steps] of [['EN', 'Steps'], ['DE', 'Schritte']] as const) {
+      if (language === 'DE') await page.getByRole('group', { name: 'Language' }).getByRole('button', { name: 'German' }).click()
+      const bar = page.locator('header').first()
+      expect(await bar.evaluate(element => element.getBoundingClientRect().height), language).toBeLessThanOrEqual(57)
+      const tops = await page.getByRole('navigation', { name: steps }).getByRole('listitem').evaluateAll(items => items.map(item => Math.round(item.getBoundingClientRect().top)))
+      expect(new Set(tops).size, language).toBe(1)
+      expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth), language).toBeLessThanOrEqual(0)
+    }
   })
 
   test('punctuation after a finding stays on the line of the finding', async ({ page }) => {

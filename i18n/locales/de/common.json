@@ -12,6 +12,11 @@
       "analyze": "Analysieren",
       "report": "Bericht"
     },
+    "meta": {
+      "left": "{n} offen",
+      "running": "Läuft",
+      "themes": "{n} Thema | {n} Themen"
+    },
     "startOver": "Neu beginnen",
     "newTab": "(öffnet in neuem Tab)"
   },
