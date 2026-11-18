@@ -10,7 +10,7 @@ import { basename } from 'node:path'
 import { read, write } from 'xlsx'
 import { replayEvalRun, RUNS_DIR, type EvalRun } from './analysis-runs.ts'
 import type { ItemLabels } from './labels.ts'
-import { goldNames, mappingRows, mappingWorkbook, MAPPINGS_DIR, readMapping } from './theme-mapping.ts'
+import { goldNames, goldThemes, mappingRows, mappingWorkbook, MAPPINGS_DIR, readMapping } from './theme-mapping.ts'
 
 const [command, argument] = process.argv.slice(2).filter(value => value !== '--')
 if ((command !== 'sheet' && command !== 'convert') || !argument) {
@@ -31,7 +31,7 @@ const gold = goldNames(labels)
 
 if (command === 'sheet') {
   const out = `data/eval/analysis/mapping-${runFile.replace(/\.json$/, '.xlsx')}`
-  writeFileSync(out, write(mappingWorkbook(runFile, run.lang, rows, gold), { type: 'buffer', bookType: 'xlsx' }))
+  writeFileSync(out, write(mappingWorkbook(runFile, run.lang, rows, goldThemes(labels)), { type: 'buffer', bookType: 'xlsx' }))
   console.log(`Wrote ${out}: ${rows.length} model themes to map to ${Object.values(gold).flat().length} gold themes (${run.lang === 'en' ? 'English' : 'German'}).`)
 }
 else {

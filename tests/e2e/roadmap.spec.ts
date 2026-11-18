@@ -23,10 +23,10 @@ test('the roadmap page is prerendered and lists every stage with the current one
   await expect(stages.getByRole('heading', { level: 2 })).toHaveText(['v0.1 Clean', 'v0.2 Names', 'v0.3 Jobs, pains and gains', 'v0.4 Report', 'v0.5 Transcripts and documents', 'v1.0 Launch'])
   await expect(stages.first()).toContainText('Available')
   await expect(stages.nth(1)).toContainText('Available')
-  // Stage 3 is a preview until v0.3.0 is released with its quality numbers.
+  // Stage 3 was released with v0.3.0 and its quality numbers; it stays the current stage until v0.4 starts.
   await expect(stages.nth(2)).toHaveAttribute('aria-current', 'step')
   await expect(stages.nth(2)).toContainText('Current stage')
-  await expect(stages.nth(2)).toContainText('Preview')
+  await expect(stages.nth(2)).toContainText('Available')
   await expect(stages.nth(3)).toContainText('Next')
   await expect(stages.nth(4)).toContainText('Planned')
   await expect(page.getByRole('link', { name: 'Read the full roadmap on GitHub' })).toHaveAttribute('href', 'https://github.com/akojif/painfold/blob/main/ROADMAP.md')

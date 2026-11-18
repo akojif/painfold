@@ -110,6 +110,7 @@
       "notMeasuredLanguage": "Not measured in {language} yet.",
       "lead": "Out of 100 pains customers mention, Painfold finds about {n}.",
       "measured": "Measured on {texts} hand-labeled texts from the test split, analyzed by {model} on {date}. Each theme Painfold found was matched to the labels by hand, by {people}.",
+      "classmate": "a German-speaking classmate",
       "sample": "That is a small sample: {n} texts per language, so a single text moves a percentage by {points} points or more.",
       "tags": "Under the right theme",
       "presence": "In the right texts",
@@ -121,6 +122,7 @@
         "pains": "Pains",
         "gains": "Gains"
       },
+      "difference": "“Under the right theme” counts a job, pain or gain only when Painfold put it under the theme a person matched to the label. “In the right texts” only checks that a text has one of that kind at all, so it is higher, and on its own it overstates how well Painfold names pains and gains.",
       "explain": "Found: the share of labeled jobs, pains or gains that Painfold found. Correct: the share of what Painfold found that matches the labels.",
       "single": {
         "sentiment": "Sentiment correct",
@@ -130,7 +132,15 @@
       },
       "weaknesses": {
         "heading": "Known weaknesses",
-        "items": [],
+        "items": [
+          "Gains are the weakest kind. Under the right theme, Painfold finds about 2 in 3 labeled gains (66% in English, 63% in German), and about half of the gains it reports match the labels (48%, 47%). Wishes phrased as a question or as something missing are missed, and general praise is sometimes counted as a gain. A broader definition of a gain found more wishes during tuning, but also counted praise and turned complaints into wishes, so it was not kept. The targets for version 0.4 start here.",
+          "Painfold finds more jobs than people labeled: 65% (English) and 50% (German) of the jobs it reports match the labels.",
+          "Painfold's themes are often broader than the labelers' themes: one theme can cover two to four labeled ones, which counts against precision. How well it groups texts is measured on very few pairs of texts, so that number is shown only in the documentation.",
+          "A missing feature can be a pain, a wish or both. Painfold often records only the wish: for \"Great product, fair price. Reports could use a filter by project, though.\" it found a wish but no pain, and called the text praise.",
+          "Results vary between runs, and the model takes no temperature setting that could reduce this. Two runs on the same texts agree on whether a text has a job, pain or gain in 94% (English) and 92% (German) of cases, but put the same pairs of texts under one pain theme only 74% and 53% of the time.",
+          "The sample is small, and scores move with it: with nothing changed in between, some scores were higher on the test texts than on the texts used for tuning and some lower, by up to 28 points.",
+          "The German texts were labeled by a German-speaking classmate with the English labels available, so the two languages are not independent checks. Labeled themes with the same meaning were merged after labeling: suggested by Claude from the theme names, reviewed by Francis, and for German skimmed by a German-speaking classmate."
+        ],
         "next": "The targets for version 0.4 are set from these results."
       }
     }

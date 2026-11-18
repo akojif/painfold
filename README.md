@@ -8,7 +8,7 @@ Find what hurts your customers, without exposing who they are. **[painfold.com](
 
 - Removes personal data from a CSV or XLSX file in your browser, in German and English: emails, phone numbers, IBANs, names, places and more.
 - You review every finding, by value or by row, and download the cleaned file.
-- Analysis (preview): finds your customers' jobs, pains and gains, with an AI you choose.
+- Analysis: finds your customers' jobs, pains and gains, with an AI you choose. Counts come from code, and every quote is checked word for word.
 
 More in [docs/how-it-works.md](docs/how-it-works.md).
 
@@ -17,13 +17,13 @@ More in [docs/how-it-works.md](docs/how-it-works.md).
 - Your file never leaves your browser. There is no server that receives it.
 - No cookies, no analytics, no tracking.
 - Only cleaned text is sent to an AI, after you have reviewed it, and only to the one you choose: your own API key or a local model.
-- Painfold keeps only your theme and language choice; the browser keeps each page's scroll position for the current tab. Never your file or findings.
+- Painfold keeps your theme and language choice in this browser. If you tick "Remember on this device", it also keeps your API key there, and nowhere else. The name model, if you download it, is kept there too, and the browser keeps each page's scroll position for the current tab. Never your file or findings.
 
 Details, including what you download: [docs/privacy.md](docs/privacy.md).
 
 ## Accuracy
 
-97 % of test names are removed, and at least 92 % in every name-origin group. Numbers, method and known gaps: [painfold.com/accuracy/](https://painfold.com/accuracy/) and [docs/accuracy.md](docs/accuracy.md).
+97 % of test names are removed, and at least 92 % in every name-origin group. In the analysis, Painfold finds 77 % of the pains and 64 % of the gains customers mention under the right theme, and about half of the gains it reports match people's labels; the known weaknesses are listed with the numbers. Numbers, method and known gaps: [painfold.com/accuracy/](https://painfold.com/accuracy/) and [docs/accuracy.md](docs/accuracy.md).
 
 ## Run it locally
 

@@ -2,6 +2,44 @@
 
 All notable changes to Painfold. Versions follow the stages in [ROADMAP.md](ROADMAP.md).
 
+## 0.3.0: Jobs, pains and gains (2026-11-18)
+
+Painfold now finds what your customers are trying to get done, what hurts and what they wish for, with an AI you choose. Only cleaned text is sent, after you have seen exactly what goes, and every count and quote in the report is checked in code.
+
+### Added
+
+- **Analysis** of the cleaned feedback into customer jobs, pains and gains, each with sentiment and type (bug, feature request, question, praise, complaint, other). Texts are sent in batches, and every answer is checked before it is used.
+- **Your choice of AI:** your own Anthropic API key, sent straight from your browser to Anthropic and held in memory unless you choose "Remember on this device", or a local model with Ollama, where nothing leaves your machine.
+- **What will be sent, before it is sent:** the consent step shows every cleaned text, the instructions and the number of items, with a download of exactly what goes.
+- **The first report:** ranked jobs, pains and gains with counts, share, intensity and two to three quotes each. Counts are computed in code from the tagged texts, never by the AI, and every quote is verified to exist word for word in the cleaned text.
+- **Demo mode:** a stored real run on the sample file, replayed without a request or an API key.
+- **Warnings for text that could identify someone** together with other details: exact ages, "the only …", job titles with a place, and roles held by one person. They are shown in the review and never removed on their own. (Announced for 0.2.1, released here.)
+- **The flow** is Import, Review, Analyze, Report.
+- **Accuracy for the analysis** on the Accuracy page and in docs/accuracy.md, with its known weaknesses.
+
+### Changed
+
+- Every file becomes a list of feedback items behind the existing screens, so detection, review and export no longer depend on rows and columns. This prepares transcripts and documents (v0.5).
+- On a phone, the start screen explains what Painfold does; the tool itself needs a screen 768 px or wider.
+- "What Painfold does" is a full-width strip on the start page, with statuses from the roadmap.
+- Page and section headings are set in Sora; text stays in Geist.
+- The footer is one identical line on every page, and the start page states the privacy promise less often.
+- The name model downloads from a copy in a GitHub release first, and retries when Hugging Face is busy.
+- The README is shorter; the details moved into docs/.
+
+### Measured
+
+- Analysis, on the test split (60 hand-labeled texts per language), run once with the plan published beforehand, and with each theme Painfold found matched to the labels by hand: under the right theme, Painfold finds 88 % of jobs, 77 % of pains and 64 % of gains, and 58 %, 68 % and 47 % of what it reports match the labels (both languages together). Sentiment is right for 88 % of texts, type for 92 %, and 100 % of quotes were found word for word. Details: docs/accuracy.md and the Accuracy page.
+- Warnings for text that could identify someone, on a small hand-written test split: every labeled warning found, and no wrong warning.
+
+### Known limits
+
+- Gains are the weakest kind: wishes phrased as a question or as something missing are missed, and general praise is sometimes counted as a gain.
+- Painfold reports more jobs than people labeled, and its themes are often broader than the labeled ones.
+- Results vary between two runs on the same texts, and the model takes no temperature setting that could reduce this.
+- The sample is small, and the German labels were made with the English labels available. All known weaknesses, with numbers, are on the Accuracy page.
+- The German interface text has not been reviewed by a native speaker yet ([#110](https://github.com/akojif/painfold/issues/110)).
+
 ## 0.2.0: Names (2026-11-12)
 
 Names and places are found too, with a model that runs in your browser, and the interface is in English and German. Nothing is uploaded.

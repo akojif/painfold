@@ -189,14 +189,89 @@ How it is counted:
 - **Grouping recall and precision:** for every pair of messages the labeller put under the same theme, whether the model did too, and the other way round. It measures the merging without any matching, but it is hard to read, so it is shown only here.
 - **Sentiment and type:** the share of messages with the labelled value, with confusion tables.
 - **Quotes found word for word:** quotes the model gave that were found word for word in the message; the others are dropped before the report.
-- **Same answer when run twice:** two dev runs of the same model, compared on whether each message has a job, a pain and a gain.
+- **Same answer when run twice:** test 1 and test 2, two runs of the test split with the same model and settings, compared on whether each message has a job, a pain and a gain.
 
 The sample is small: 60 test messages per language, and fewer labelled jobs, pains or gains of each kind, so a single message moves a number by two points or more. There are no targets for version 0.3: these results are published with their weaknesses, and the targets for version 0.4 are set from them.
 
 <!-- analysis:start -->
-Not measured yet. The numbers appear here before version 0.3.0 is released.
+Tag recall and precision count a job, pain or gain only when Painfold put it under the theme a person matched to the label. Presence only checks that a text has a job, pain or gain of that kind at all, so it is higher, and on its own it overstates how well Painfold names pains and gains.
 
-All stored runs, dev runs for tuning included:
+**English**: `test-en-claude-haiku-5-5-2026-11-17T22-20-37Z.json`, 60 texts, Claude Haiku 5.5, 2026-11-17, themes mapped by Francis Akoji.
 
-No runs stored yet.
+| Kind | Tag recall | Tag precision | Presence recall | Presence precision | Grouping recall | Grouping precision |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Jobs | 0.89 (34/38) | 0.65 (34/52) | 0.95 (35/37) | 0.69 (35/51) | 0.65 (28/43) | 0.68 (28/41) |
+| Pains | 0.76 (32/42) | 0.71 (32/45) | 1.00 (41/41) | 0.95 (41/43) | 1.00 (4/4) | 0.21 (4/19) |
+| Gains | 0.66 (19/29) | 0.47 (19/40) | 0.97 (28/29) | 0.70 (28/40) | 1.00 (3/3) | 0.15 (3/20) |
+
+| Measure | Value |
+| --- | ---: |
+| Sentiment correct | 0.88 (53/60) |
+| Type correct | 0.95 (57/60) |
+| Quotes found word for word | 1.00 (143/143) |
+| Same answer when run twice (test 1 and test 2) | 0.94 (169/180) |
+
+Sentiment, labelled (rows) against Painfold's answer (columns):
+
+| Sentiment | positive | negative | mixed | neutral |
+| --- | ---: | ---: | ---: | ---: |
+| positive | 9 | 0 | 0 | 0 |
+| negative | 0 | 25 | 3 | 0 |
+| mixed | 0 | 0 | 6 | 0 |
+| neutral | 0 | 4 | 0 | 13 |
+
+Type, labelled (rows) against Painfold's answer (columns):
+
+| Type | bug | feature request | question | praise | complaint | other |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| bug | 15 | 0 | 0 | 0 | 1 | 0 |
+| feature request | 0 | 13 | 0 | 0 | 0 | 0 |
+| question | 0 | 0 | 11 | 0 | 0 | 0 |
+| praise | 0 | 1 | 0 | 9 | 0 | 0 |
+| complaint | 0 | 1 | 0 | 0 | 7 | 0 |
+| other | 0 | 0 | 0 | 0 | 0 | 2 |
+
+**German**: `test-de-claude-haiku-5-5-2026-11-17T22-21-31Z.json`, 60 texts, Claude Haiku 5.5, 2026-11-17, themes mapped by a German-speaking classmate.
+
+| Kind | Tag recall | Tag precision | Presence recall | Presence precision | Grouping recall | Grouping precision |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Jobs | 0.86 (24/28) | 0.50 (24/48) | 0.93 (26/28) | 0.54 (26/48) | 0.69 (18/26) | 0.27 (18/66) |
+| Pains | 0.78 (31/40) | 0.66 (31/47) | 1.00 (36/36) | 0.92 (36/39) | 0.94 (15/16) | 0.39 (15/38) |
+| Gains | 0.63 (15/24) | 0.47 (15/32) | 0.92 (22/24) | 0.69 (22/32) | 0.50 (1/2) | 0.07 (1/14) |
+
+| Measure | Value |
+| --- | ---: |
+| Sentiment correct | 0.88 (53/60) |
+| Type correct | 0.88 (53/60) |
+| Quotes found word for word | 1.00 (132/132) |
+| Same answer when run twice (test 1 and test 2) | 0.92 (166/180) |
+
+Sentiment, labelled (rows) against Painfold's answer (columns):
+
+| Sentiment | positive | negative | mixed | neutral |
+| --- | ---: | ---: | ---: | ---: |
+| positive | 12 | 0 | 0 | 0 |
+| negative | 0 | 22 | 2 | 1 |
+| mixed | 0 | 0 | 5 | 0 |
+| neutral | 0 | 4 | 0 | 14 |
+
+Type, labelled (rows) against Painfold's answer (columns):
+
+| Type | bug | feature request | question | praise | complaint | other |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| bug | 11 | 0 | 0 | 0 | 2 | 0 |
+| feature request | 1 | 7 | 0 | 0 | 0 | 0 |
+| question | 0 | 0 | 11 | 0 | 0 | 0 |
+| praise | 0 | 1 | 0 | 12 | 0 | 0 |
+| complaint | 2 | 0 | 0 | 0 | 9 | 1 |
+| other | 0 | 0 | 0 | 0 | 0 | 3 |
+
+Stored test runs:
+
+| Run | Texts | Not analyzed | Merged | Quotes kept |
+| --- | ---: | ---: | ---: | ---: |
+| `test-de-claude-haiku-5-5-2026-11-17T22-21-31Z.json` | 60 | 0 | yes | 1.00 (132/132) |
+| `test-de-claude-haiku-5-5-2026-11-17T22-23-10Z.json` | 60 | 0 | yes | 1.00 (141/141) |
+| `test-en-claude-haiku-5-5-2026-11-17T22-20-37Z.json` | 60 | 0 | yes | 1.00 (143/143) |
+| `test-en-claude-haiku-5-5-2026-11-17T22-22-26Z.json` | 60 | 0 | yes | 1.00 (137/137) |
 <!-- analysis:end -->

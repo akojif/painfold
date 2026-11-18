@@ -24,6 +24,8 @@ import { computeResults, RESULTS_PATH, resultsJson } from './analysis-results.ts
 import { recordRun, runFileName, RUNS_DIR, type EvalRun } from './analysis-runs.ts'
 import { post } from './ai-post.ts'
 import type { ItemLabels, LabelItem } from './labels.ts'
+import { runsLog } from './runs-log-file.ts'
+import { RUNS_LOG_PATH } from './runs-log.ts'
 import { MAPPINGS_DIR, type StoredMapping } from './theme-mapping.ts'
 
 const ITEMS_PATH = 'data/eval/analysis/items.jsonl'
@@ -63,7 +65,8 @@ if (values.run) {
   mkdirSync(RUNS_DIR, { recursive: true })
   for (const lang of langs as Array<'en' | 'de'>) {
     console.log(`Running the ${split} split in ${lang === 'en' ? 'English' : 'German'} with ${values.model}…`)
-    const run = await recordRun({
+    const started = performance.now()
+    const recorded = await recordRun({
       items,
       split,
       lang,
@@ -75,6 +78,7 @@ if (values.run) {
         merge: (system, asked, schema) => post(anthropicJsonRequest(key, values.model, system, asked, schema)),
       },
     })
+    const run: EvalRun = { ...recorded, durationMs: Math.round(performance.now() - started) }
     const file = runFileName(run)
     writeFileSync(`${RUNS_DIR}/${file}`, `${JSON.stringify(run, null, 1)}\n`)
     const price = PRICES[run.model]
@@ -110,5 +114,6 @@ for (const entry of results.stability) {
 if (values.write || values.run) {
   writeFileSync(RESULTS_PATH, resultsJson(results))
   writeFileSync(ANALYSIS_DOCS_PATH, withAnalysis(readFileSync(ANALYSIS_DOCS_PATH, 'utf8'), analysisMarkdown(results)))
-  console.log(`\nWrote ${RESULTS_PATH} and the analysis section of ${ANALYSIS_DOCS_PATH}`)
+  writeFileSync(RUNS_LOG_PATH, await runsLog(readFileSync(RUNS_LOG_PATH, 'utf8'), storedRuns(), results))
+  console.log(`\nWrote ${RESULTS_PATH}, the analysis section of ${ANALYSIS_DOCS_PATH} and the tables of ${RUNS_LOG_PATH}`)
 }

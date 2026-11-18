@@ -110,6 +110,7 @@
       "notMeasuredLanguage": "Auf {language} noch nicht gemessen.",
       "lead": "Von 100 Problemen, die Kundinnen und Kunden nennen, findet Painfold etwa {n}.",
       "measured": "Gemessen an {texts} von Hand gelabelten Texten aus dem Test-Teil, analysiert von {model} am {date}. Jedes gefundene Thema wurde von Hand den Labels zugeordnet, von {people}.",
+      "classmate": "einem deutschsprachigen Studienkollegen",
       "sample": "Das ist eine kleine Stichprobe: {n} Texte pro Sprache, also verschiebt ein einzelner Text einen Prozentwert um {points} Punkte oder mehr.",
       "tags": "Unter dem richtigen Thema",
       "presence": "In den richtigen Texten",
@@ -121,6 +122,7 @@
         "pains": "Probleme",
         "gains": "Wünsche"
       },
+      "difference": "„Unter dem richtigen Thema“ zählt nur, was Painfold dem Thema zuordnet, das eine Person dem Label zugeordnet hat. „In den richtigen Texten“ prüft nur, ob ein Text überhaupt etwas dieser Art enthält. Diese Zahl ist höher und überschätzt für sich allein, wie gut Painfold Probleme und Wünsche benennt.",
       "explain": "Gefunden: der Anteil der gelabelten Aufgaben, Probleme oder Wünsche, die Painfold gefunden hat. Richtig: der Anteil dessen, was Painfold gefunden hat, der zu den Labels passt.",
       "single": {
         "sentiment": "Stimmung richtig",
@@ -130,7 +132,15 @@
       },
       "weaknesses": {
         "heading": "Bekannte Schwächen",
-        "items": [],
+        "items": [
+          "Wünsche sind die schwächste Art. Unter dem richtigen Thema findet Painfold etwa 2 von 3 gelabelten Wünschen (66 % auf Englisch, 63 % auf Deutsch), und etwa die Hälfte der Wünsche, die es meldet, passt zu den Labels (48 %, 47 %). Wünsche, die als Frage oder als etwas Fehlendes formuliert sind, werden übersehen, und allgemeines Lob zählt manchmal als Wunsch. Eine breitere Definition von Wunsch fand beim Abstimmen mehr Wünsche, zählte aber auch Lob und machte aus Beschwerden Wünsche; sie wurde deshalb nicht übernommen. Hier setzen die Ziele für Version 0.4 an.",
+          "Painfold findet mehr Aufgaben, als gelabelt wurden: 65 % (Englisch) und 50 % (Deutsch) der Aufgaben, die es meldet, passen zu den Labels.",
+          "Die Themen von Painfold sind oft breiter als die gelabelten Themen: Ein Thema kann zwei bis vier gelabelte umfassen, was die Genauigkeit senkt. Wie gut es Texte gruppiert, wird an sehr wenigen Textpaaren gemessen; diese Zahl steht deshalb nur in der Dokumentation.",
+          "Eine fehlende Funktion kann ein Problem, ein Wunsch oder beides sein. Painfold erfasst oft nur den Wunsch: Bei „Great product, fair price. Reports could use a filter by project, though.“ fand es einen Wunsch, aber kein Problem, und ordnete den Text als Lob ein.",
+          "Die Ergebnisse schwanken zwischen zwei Läufen, und das Modell nimmt keine Temperatur-Einstellung an, mit der sich das verringern ließe. Zwei Läufe mit denselben Texten stimmen in 94 % (Englisch) und 92 % (Deutsch) der Fälle darin überein, ob ein Text eine Aufgabe, ein Problem oder einen Wunsch enthält, ordnen dieselben Textpaare aber nur zu 74 % und 53 % demselben Problem-Thema zu.",
+          "Die Stichprobe ist klein, und die Werte schwanken mit ihr: Ohne Änderung dazwischen lagen manche Werte bei den Testtexten höher als bei den Texten zum Abstimmen und manche niedriger, um bis zu 28 Punkte.",
+          "Die deutschen Texte hat ein deutschsprachiger Studienkollege gelabelt, mit Zugang zu den englischen Labels; die beiden Sprachen sind also keine unabhängigen Prüfungen. Gelabelte Themen mit derselben Bedeutung wurden danach zusammengeführt: vorgeschlagen von Claude anhand der Themennamen, geprüft von Francis und für Deutsch von einem deutschsprachigen Studienkollegen überflogen."
+        ],
         "next": "Die Ziele für Version 0.4 werden aus diesen Ergebnissen festgelegt."
       }
     }
