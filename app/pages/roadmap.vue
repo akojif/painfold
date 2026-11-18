@@ -51,9 +51,19 @@ const summary = computed(() => {
       :items="items"
     />
 
-    <div class="mt-10 grid items-start gap-x-6 gap-y-10 md:grid-cols-2 lg:grid-cols-4">
+    <!-- Now and Next share the first column: both are short and come first, so the
+         longer Later and Ideas get a column each. On a phone the order is the same. -->
+    <div class="mt-10 grid items-start gap-x-6 gap-y-10 md:grid-cols-2 lg:grid-cols-3">
+      <div class="space-y-10">
+        <RoadmapColumn
+          v-for="column in COLUMNS.slice(0, 2)"
+          :key="column"
+          :column="column"
+          :items="columnOf(items, column)"
+        />
+      </div>
       <RoadmapColumn
-        v-for="column in COLUMNS"
+        v-for="column in COLUMNS.slice(2)"
         :key="column"
         :column="column"
         :items="columnOf(items, column)"
