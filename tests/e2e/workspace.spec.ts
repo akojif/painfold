@@ -23,7 +23,15 @@ test('the top bar shows the steps as links once they can be reached, with what e
   await steps.getByRole('link', { name: /Import/ }).click()
   await expect(page).toHaveURL(/\/$/)
   await expect(steps.locator('[aria-current="step"]')).toHaveText(/Import/)
-  await expect(steps.getByRole('link', { name: /Review/ })).toBeVisible()
+
+  // Steps reached from the top bar show at once, never the empty page a direct visit gets first (#172).
+  await steps.getByRole('link', { name: /Review/ }).click()
+  await expect(page).toHaveURL(/\/review\/$/)
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText(/findings in 200 rows/)
+  await steps.getByRole('link', { name: /Analyze/ }).click()
+  await expect(page).toHaveURL(/\/analyze\/$/)
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Where should the analysis run?')
+  await expect(steps.locator('[aria-current="step"]')).toHaveText(/Analyze/)
 })
 
 test('the steps read in German', async ({ page }) => {
