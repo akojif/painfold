@@ -67,6 +67,101 @@
           "Dokumentation für Teams"
         ]
       }
+    },
+    "itemStatus": {
+      "released": "Veröffentlicht",
+      "inProgress": "In Arbeit",
+      "planned": "Geplant",
+      "idea": "Idee"
+    },
+    "horizons": {
+      "released": {
+        "name": "Veröffentlicht",
+        "hint": "Heute auf painfold.com nutzbar."
+      },
+      "now": {
+        "name": "Jetzt",
+        "hint": "Wird für die nächste Version gebaut."
+      },
+      "next": {
+        "name": "Als Nächstes",
+        "hint": "Die Phase danach."
+      },
+      "later": {
+        "name": "Später",
+        "hint": "Geplant, ohne Datum."
+      },
+      "idea": {
+        "name": "Ideen",
+        "hint": "Wird überlegt, ist noch nicht geplant."
+      }
+    },
+    "youAreHere": "Sie sind hier: v0.3.0",
+    "releasedOn": "Veröffentlicht am {date}",
+    "noVersion": "Noch ohne Version",
+    "trackedIn": "Verfolgt in {link}",
+    "linkRelease": "Version {label}",
+    "linkIssue": "Issue {label}",
+    "linkMilestone": "Meilenstein {label}",
+    "newTab": "(öffnet in einem neuen Tab)",
+    "comingNext": "Als Nächstes",
+    "filterLabel": "Anzeigen",
+    "filterAll": "Alle",
+    "items": {
+      "clean": {
+        "name": "Bereinigen",
+        "summary": "Personenbezogene Daten im Browser aus einer Feedback-Datei entfernen und die bereinigte Datei herunterladen."
+      },
+      "names": {
+        "name": "Namen",
+        "summary": "Auch Namen und Orte finden, mit einem Modell, das in Ihrem Browser läuft, und Painfold auf Deutsch oder Englisch nutzen."
+      },
+      "jobs": {
+        "name": "Aufgaben, Probleme und Wünsche",
+        "summary": "Sehen, was Ihre Kundinnen und Kunden erledigen wollen, was sie stört und was sie sich wünschen, mit einer KI Ihrer Wahl."
+      },
+      "workspace": {
+        "name": "Neuer Arbeitsbereich",
+        "summary": "Importieren, Prüfen und Analysieren in einem Arbeitsbereich: die vier Schritte oben, Filter an der Seite, sortierbare Tabellen."
+      },
+      "report": {
+        "name": "Bericht",
+        "summary": "Ein Bericht, mit dem Ihr Team in einer Besprechung arbeiten kann: die wichtigsten Erkenntnisse zuerst, Segmente und Trends und Fragen für Ihr Team."
+      },
+      "landing": {
+        "name": "Neue Startseite",
+        "summary": "Eine Startseite, die Schritt für Schritt zeigt, was in Ihrem Browser geprüft wird und dass nichts ihn verlässt."
+      },
+      "namesMore": {
+        "name": "Bessere Namenserkennung",
+        "summary": "Spitznamen, Namen am Satzanfang und mehr Namenszusätze, gemessen an einem neuen, unabhängigen Testsatz."
+      },
+      "transcripts": {
+        "name": "Interview-Transkripte",
+        "summary": "Transkripte als TXT, VTT oder SRT bereinigen, Sprecherinnen und Sprecher einheitlich ersetzt."
+      },
+      "documents": {
+        "name": "DOCX- und PDF-Dokumente",
+        "summary": "Dokumente bereinigen, samt Metadaten, Kommentaren und Änderungsverfolgung."
+      },
+      "docker": {
+        "name": "Docker-Image",
+        "summary": "Painfold auf eigenen Servern betreiben, mit einem lokalen Modell und ohne Internet."
+      },
+      "engine": {
+        "name": "Painfold Engine",
+        "summary": "Ein optionaler, selbst betriebener Dienst, der die Analyse mit einem lokalen Modell ausführt, für Teams, die Painfold selbst hosten."
+      },
+      "mcp": {
+        "name": "MCP-Server",
+        "summary": "Painfold als Datenschutz-Schranke für KI-Assistenten: Dateien werden auf Ihrem Rechner bereinigt, bevor ein Assistent sie sieht."
+      }
+    },
+    "variants": {
+      "label": "Roadmap-Variante",
+      "a": "Zeitleiste",
+      "b": "Jetzt, als Nächstes, später",
+      "c": "Nach Version"
     }
   }
 }

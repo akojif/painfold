@@ -11,7 +11,7 @@ test('the footer credits the author in a new tab, announced as one, without a he
   expect(await footer.innerText()).not.toMatch(/\p{Extended_Pictographic}/u)
 })
 
-test('the roadmap page is prerendered and lists every stage with the current one marked', async ({ page, request }) => {
+test('the roadmap page is prerendered and shows what is released, what is being built and what comes after', async ({ page, request }) => {
   const html = await (await request.get('/roadmap/')).text()
   expect(html).toContain('Cleaning your feedback privately is the first step.')
 
@@ -19,21 +19,28 @@ test('the roadmap page is prerendered and lists every stage with the current one
   await page.locator('footer').getByRole('link', { name: 'Roadmap' }).click()
   await expect(page).toHaveURL(/\/roadmap\/$/)
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Roadmap')
-  const stages = page.getByRole('list', { name: 'Stages' }).locator(':scope > li')
-  await expect(stages.getByRole('heading', { level: 2 })).toHaveText(['v0.1 Clean', 'v0.2 Names', 'v0.3 Jobs, pains and gains', 'v0.4 Report', 'v0.5 Transcripts and documents', 'v1.0 Launch'])
-  await expect(stages.first()).toContainText('Available')
-  await expect(stages.nth(1)).toContainText('Available')
-  // Stage 3 was released with v0.3.0 and its quality numbers; it stays the current stage until v0.4 starts.
-  await expect(stages.nth(2)).toHaveAttribute('aria-current', 'step')
-  await expect(stages.nth(2)).toContainText('Current stage')
-  await expect(stages.nth(2)).toContainText('Available')
-  await expect(stages.nth(3)).toContainText('Next')
-  await expect(stages.nth(4)).toContainText('Planned')
+  await expect(page.getByRole('heading', { level: 2 })).toHaveText(['Released', 'Now', 'Next', 'Later', 'Ideas'])
+  await expect(page.getByText('You are here: v0.3.0')).toBeVisible()
+  await expect(page.getByRole('link', { name: 'Release v0.3.0 (opens in a new tab)' })).toHaveAttribute('href', 'https://github.com/akojif/painfold/releases/tag/v0.3.0')
+  await expect(page.getByRole('link', { name: 'Issue #141 (opens in a new tab)' })).toHaveAttribute('target', '_blank')
   await expect(page.getByRole('link', { name: 'Read the full roadmap on GitHub' })).toHaveAttribute('href', 'https://github.com/akojif/painfold/blob/main/ROADMAP.md')
   await expect(page.getByRole('navigation', { name: 'Steps' })).toHaveCount(0)
   const source = page.locator('footer').getByRole('link', { name: 'Open source' })
   await expect(source).toHaveAttribute('href', 'https://github.com/akojif/painfold')
   await expect(source.locator('svg')).toHaveCount(1)
+})
+
+// Prototype only (proto/roadmap): the switcher between the three variations.
+test('the variation switcher swaps the page and keeps the choice in the address', async ({ page }) => {
+  await page.goto('/de/roadmap/?variant=c')
+  const switcher = page.getByRole('group', { name: 'Roadmap-Variante' })
+  await expect(switcher.locator('[aria-pressed="true"]')).toHaveText('c')
+  await expect(page.getByRole('group', { name: 'Anzeigen' })).toBeVisible()
+  await switcher.getByRole('button', { name: /^B:/ }).click()
+  await expect(page).toHaveURL(/\/de\/roadmap\/\?variant=b$/)
+  await expect(page.getByRole('heading', { level: 2, name: /^Jetzt/ })).toBeVisible()
+  await page.reload()
+  await expect(switcher.locator('[aria-pressed="true"]')).toHaveText('b')
 })
 
 test('the download page leads on to Analyze, and going back keeps the cleaned file', async ({ page }) => {
@@ -50,10 +57,13 @@ test('the download page leads on to Analyze, and going back keeps the cleaned fi
 test.describe('on a phone', () => {
   test.use({ viewport: { width: 390, height: 844 } })
 
-  test('the roadmap and the footer do not scroll sideways', async ({ page }) => {
-    await page.goto('/roadmap/')
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Roadmap')
-    expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0)
+  test('the roadmap and the footer do not scroll sideways, in every variation', async ({ page }) => {
+    for (const variant of ['a', 'b', 'c']) {
+      await page.goto(`/roadmap/?variant=${variant}`)
+      await expect(page.getByRole('heading', { level: 1 })).toHaveText('Roadmap')
+      await expect(page.getByRole('group', { name: 'Roadmap variation' }).locator('[aria-pressed="true"]')).toHaveText(variant)
+      expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth), variant).toBeLessThanOrEqual(0)
+    }
   })
 })
 
