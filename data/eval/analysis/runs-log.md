@@ -23,6 +23,10 @@ Runs are numbered per split and language in the order they were made. The prompt
 | dev 5 | German | `dev-de-claude-haiku-5-5-2026-11-17T22-00-08Z.json` | `ea192a4` | `claude-haiku-5-5` | `c49dbc91195d` | effort low, at most 16,000 tokens out, batches of 25 | 60 | 6 | 13,660 | 20,928 | $0.0118 | 57 s |
 | dev 6 | English | `dev-en-claude-haiku-5-5-2026-11-17T22-01-05Z.json` | `ea192a4` | `claude-haiku-5-5` | `b61172780ec8` | effort low, at most 16,000 tokens out, batches of 25 | 60 | 6 | 12,032 | 21,465 | $0.0119 | 60 s |
 | dev 6 | German | `dev-de-claude-haiku-5-5-2026-11-17T22-02-05Z.json` | `ea192a4` | `claude-haiku-5-5` | `c49dbc91195d` | effort low, at most 16,000 tokens out, batches of 25 | 60 | 6 | 13,772 | 26,150 | $0.0145 | 66 s |
+| test 1 | English | `test-en-claude-haiku-5-5-2026-11-17T22-20-37Z.json` | `68492d2` | `claude-haiku-5-5` | `37771f5d4668` | effort low, at most 16,000 tokens out, batches of 25 | 60 | 6 | 11,704 | 17,590 | $0.0100 | 54 s |
+| test 1 | German | `test-de-claude-haiku-5-5-2026-11-17T22-21-31Z.json` | `68492d2` | `claude-haiku-5-5` | `0287715bfa91` | effort low, at most 16,000 tokens out, batches of 25 | 60 | 6 | 13,136 | 20,111 | $0.0114 | 53 s |
+| test 2 | English | `test-en-claude-haiku-5-5-2026-11-17T22-22-26Z.json` | `68492d2` | `claude-haiku-5-5` | `37771f5d4668` | effort low, at most 16,000 tokens out, batches of 25 | 60 | 6 | 11,600 | 14,907 | $0.0086 | 44 s |
+| test 2 | German | `test-de-claude-haiku-5-5-2026-11-17T22-23-10Z.json` | `68492d2` | `claude-haiku-5-5` | `0287715bfa91` | effort low, at most 16,000 tokens out, batches of 25 | 60 | 6 | 13,289 | 15,778 | $0.0092 | 44 s |
 <!-- generated:runs:end -->
 
 ## Scores
@@ -44,6 +48,10 @@ Presence against the human labels: whether an item has a gain, or a pain, at all
 | dev 5 | German | `ea192a4` | 100% (34/34) | 89% (34/38) | 100% (37/37) | 97% (37/38) |
 | dev 6 | English | `ea192a4` | 96% (27/28) | 82% (27/33) | 94% (31/33) | 97% (31/32) |
 | dev 6 | German | `ea192a4` | 91% (31/34) | 97% (31/32) | 100% (37/37) | 95% (37/39) |
+| test 1 | English | `68492d2` | 97% (28/29) | 70% (28/40) | 100% (41/41) | 95% (41/43) |
+| test 1 | German | `68492d2` | 92% (22/24) | 69% (22/32) | 100% (36/36) | 92% (36/39) |
+| test 2 | English | `68492d2` | 97% (28/29) | 80% (28/35) | 100% (41/41) | 95% (41/43) |
+| test 2 | German | `68492d2` | 96% (23/24) | 66% (23/35) | 100% (36/36) | 92% (36/39) |
 <!-- generated:scores:end -->
 
 ## Notes
