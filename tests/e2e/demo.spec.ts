@@ -45,18 +45,32 @@ test('from the start page, the demo report opens without importing anything, sen
   await expect(note(page)).toContainText('Demo with made-up data.')
   await expect(note(page)).toContainText('No file is open here: rows refer to the sample file.')
   await expect(outbound(page)).toContainText('0 bytes')
-  // No file is open: no steps claiming an import, and no cleaned file to offer.
-  await expect(page.getByRole('navigation', { name: 'Steps' })).toHaveCount(0)
+  // No file is open: the top bar has the steps, as on every step, but claims no import,
+  // links only to the report itself, and there is no cleaned file to offer.
+  const steps = page.getByRole('navigation', { name: 'Steps' })
+  await expect(steps.getByRole('listitem')).toHaveText([/Import/, /Review/, /Analyze/, /Report/])
+  await expect(steps.locator('[aria-current="step"]')).toHaveText(/Report/)
+  await expect(steps).not.toContainText('done')
+  await expect(steps.getByRole('link')).toHaveCount(0)
+  await expect(page.getByRole('button', { name: 'Start over' })).toBeVisible()
   await expect(page.getByRole('heading', { name: 'The cleaned file' })).toHaveCount(0)
 
   // The numbers are the replay's, counted in code.
   const top = themes.pains[0] ?? themes.jobs[0]!
-  const entry = page.getByRole('listitem').filter({ has: page.getByRole('heading', { name: top.name, exact: true }) }).first()
-  await expect(entry).toContainText(String(top.count))
-  // A row opens its stored text, with its row number from the sample.
-  const source = page.getByRole('button', { name: /^Row \d+$/ }).first()
+  const entry = page.getByRole('row').filter({ has: page.getByRole('button', { name: top.name, exact: true }) }).first()
+  await expect(entry.getByRole('cell').nth(1)).toHaveText(String(top.count))
+  // Its drawer opens a stored text, with its row number from the sample.
+  await entry.getByRole('button', { name: top.name, exact: true }).click()
+  const drawer = page.getByRole('region', { name: top.name, exact: true })
+  const source = drawer.getByRole('button', { name: /^Row \d+$/ }).first()
   await source.click()
   await expect(page.locator(`#${await source.getAttribute('aria-controls')}`)).not.toBeEmpty()
+
+  // Start over leaves the demo for the start page.
+  await page.getByRole('button', { name: 'Start over' }).click()
+  await expect(page).toHaveURL(/\/$/)
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Find what hurts your customers. Without exposing who they are.')
+  await expect(page.getByRole('navigation', { name: 'Steps' })).toHaveCount(0)
   expect(asked).toEqual([])
 })
 
@@ -94,7 +108,7 @@ test('the German start page opens the German demo report, with German theme name
   await expect(note(page)).toContainText('Demo mit erfundenen Daten.')
   await expect(outbound(page)).toContainText('0 Bytes')
   const first = [...themes.jobs, ...themes.pains, ...themes.gains][0]!
-  await expect(page.getByRole('heading', { name: first.name, exact: true }).first()).toBeVisible()
+  await expect(page.getByRole('main').getByText(first.name, { exact: true }).first()).toBeVisible()
   expect(asked).toEqual([])
 })
 
@@ -107,7 +121,7 @@ test('switching the language on the demo report renames the themes, still withou
   await page.getByRole('button', { name: 'German' }).click()
   await expect(page).toHaveURL(/\/de\/report\/$/)
   const first = [...german.jobs, ...german.pains, ...german.gains][0]!
-  await expect(page.getByRole('heading', { name: first.name, exact: true }).first()).toBeVisible()
+  await expect(page.getByRole('main').getByText(first.name, { exact: true }).first()).toBeVisible()
   expect(asked).toEqual([])
 })
 

@@ -209,6 +209,13 @@
       "sendAfterTest": "Danach: prüfen, was gesendet wird, und senden. Das erscheint, sobald der Verbindungstest klappt.",
       "reviewSent": "Prüfen, was gesendet wird (1 Text) | Prüfen, was gesendet wird ({n} Texte)",
       "sentTexts": "Die Texte, die gesendet werden"
+    },
+    "report": {
+      "sidebar": "Abschnitte und die bereinigte Datei",
+      "onThisPage": "Auf dieser Seite",
+      "theme": "Thema",
+      "caption": "{kind}: eine Zeile pro Thema, die mit den meisten Texten zuerst. Wählen Sie ein Thema für seine Zitate und Texte.",
+      "quotes": "Zitate und Texte"
     }
   }
 }

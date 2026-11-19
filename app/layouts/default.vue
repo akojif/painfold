@@ -14,13 +14,15 @@ const route = useRoute()
 // A name and a URL, the same in every language, so they are not in the locale files.
 const author = { name: 'Francis Akoji', url: 'https://francisakoji.com' }
 const session = useSession()
+const tagging = useTagging()
 const { table, hasWork } = session
 // Pages outside the cleaning flow (the roadmap) have no step.
 const step = computed(() => route.meta.step as number | undefined)
 // The empty start screen explains the product instead; steps appear once a file
 // is open. Without one, a later step is only reached on a small screen from a
 // direct link (#139), where the steps would claim an import that never happened.
-const showSteps = computed(() => step.value !== undefined && Boolean(table.value))
+// The demo report has them with no file open too (#141); then no step is done.
+const showSteps = computed(() => step.value !== undefined && (Boolean(table.value) || (step.value === 4 && Boolean(tagging.demo.value))))
 // A file can be dropped anywhere, on every step. Without this a browser would
 // open a dropped file itself and leave the app, losing everything in memory.
 // Below 768 px a dropped file is caught but ignored (#139).
@@ -45,7 +47,6 @@ const renderPage = computed(() => !(mounted.value && narrow.value && working.val
 // takes over, show nothing, so a direct visit or a reload never shows a step it
 // cannot open, and the page the app takes over is the same one it was served.
 // Once mounted, the step appears, or the start page replaces it (#141 hotfix).
-const tagging = useTagging()
 const gated = computed(() => Boolean(current.value.meta.needsReview))
 const allowed = computed(() => Boolean(session.review.value) || (current.value.meta.step === 4 && tagging.demo.value))
 const showPage = computed(() => renderPage.value && (!gated.value || (mounted.value && allowed.value)))
@@ -53,7 +54,7 @@ const showPage = computed(() => renderPage.value && (!gated.value || (mounted.va
 const workspace = computed(() => showSteps.value && Boolean(current.value.meta.workspace))
 // Widened with nothing to review: where the page's own guard would have sent it.
 watch(narrow, (now) => {
-  if (!now && current.value.meta.needsReview && !session.review.value && !useTagging().demo.value) void navigateTo(localePath('/'))
+  if (!now && current.value.meta.needsReview && !session.review.value && !tagging.demo.value) void navigateTo(localePath('/'))
 })
 
 const startOver = useStartOver()

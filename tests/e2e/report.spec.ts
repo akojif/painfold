@@ -74,40 +74,55 @@ test('the report ranks jobs, pains and gains with numbers counted from the answe
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('What customers said')
   await expect(page.getByText(`${total} texts analyzed with Claude Haiku 5.5.`)).toBeVisible()
   await expect(page.getByText('A text can appear under several themes.')).toBeVisible()
-  await expect(page.getByRole('heading', { level: 2 })).toHaveText(['Jobs', 'Pains', 'Gains', 'The cleaned file'])
+  await expect(page.getByRole('main').getByRole('heading', { level: 2 })).toHaveText(['On this page', 'The cleaned file', 'Jobs', 'Pains', 'Gains'])
   await expect(page.getByRole('navigation', { name: 'Sections' }).getByRole('link')).toHaveText(['Jobs 1', 'Pains 1', 'Gains 1'])
 
+  // Each kind is a table, one row per theme, with the numbers counted in code.
   const jobs = page.getByRole('region', { name: 'Jobs' })
-  const job = jobs.getByRole('listitem').filter({ has: page.getByRole('heading', { name: 'Export reports' }) })
-  await expect(job).toContainText(`${total}`)
-  await expect(job).toContainText('100%')
-  await expect(job).toContainText('Moderate 2.0')
+  await expect(jobs.getByRole('columnheader')).toHaveText(['Theme', 'Texts', 'Share', 'Intensity'])
+  const job = jobs.getByRole('row').filter({ hasText: 'Export reports' })
+  await expect(job.getByRole('cell')).toHaveText(['Export reports', `${total}`, '100%', /^Moderate 2\.0/])
 
-  const pain = page.getByRole('region', { name: 'Pains' }).getByRole('listitem').filter({ has: page.getByRole('heading', { name: 'Slow exports' }) })
-  await expect(pain).toContainText(`${pains}`)
-  await expect(pain).toContainText(`${Math.round(pains / total * 100)}%`)
-  await expect(pain).toContainText('Strong 3.0')
+  const pain = page.getByRole('region', { name: 'Pains' }).getByRole('row').filter({ hasText: 'Slow exports' })
+  await expect(pain.getByRole('cell')).toHaveText(['Slow exports', `${pains}`, `${Math.round(pains / total * 100)}%`, /^Strong 3\.0/])
+
+  // The evidence opens in the drawer, with focus on its heading.
+  const theme = pain.getByRole('button', { name: 'Slow exports' })
+  await theme.click()
+  await expect(theme).toHaveAttribute('aria-expanded', 'true')
+  const drawer = page.getByRole('region', { name: 'Slow exports' })
+  await expect(drawer.getByRole('heading', { level: 2 })).toBeFocused()
+  await expect(drawer).toContainText('Pains')
+  await expect(drawer.getByRole('definition')).toHaveText([`${pains}`, `${Math.round(pains / total * 100)}%`, /^Strong 3\.0/])
   // Three quotes, from the first texts with the pain, each word for word in its text.
-  await expect(pain.locator('q')).toHaveCount(3)
+  await expect(drawer.locator('q')).toHaveCount(3)
   const first = texts.find(({ id }) => number(id) % 3 === 0)!
-  await expect(pain.locator('q').first()).toHaveText(first.text.slice(0, 15).trim())
+  await expect(drawer.locator('q').first()).toHaveText(first.text.slice(0, 15).trim())
 
   // Its source opens the whole text as it was sent.
-  const source = pain.getByRole('button', { name: /^Row \d+$/ }).first()
+  const source = drawer.getByRole('button', { name: /^Row \d+$/ }).first()
   await source.click()
   await expect(source).toHaveAttribute('aria-expanded', 'true')
-  await expect(pain.locator(`#${await source.getAttribute('aria-controls')}`)).toContainText(first.text.replace(/\s+/g, ' ').slice(0, 40))
+  await expect(drawer.locator(`#${await source.getAttribute('aria-controls')}`)).toContainText(first.text.replace(/\s+/g, ' ').slice(0, 40))
 
-  await pain.getByRole('button', { name: `All ${pains} texts` }).click()
-  await expect(pain.getByRole('button', { name: /^Row \d+$/ })).toHaveCount(3 + pains)
+  await drawer.getByRole('button', { name: `All ${pains} texts` }).click()
+  await expect(drawer.getByRole('button', { name: /^Row \d+$/ })).toHaveCount(3 + pains)
 
-  // Under five texts: listed apart, by name and count, its evidence on request.
+  // Escape closes it and returns focus to the theme.
+  await page.keyboard.press('Escape')
+  await expect(drawer).toHaveCount(0)
+  await expect(theme).toBeFocused()
+
+  // Under five texts: listed apart, by name and count, its evidence in the drawer too.
   const gains = page.getByRole('region', { name: 'Gains' })
   await expect(gains.getByRole('heading', { level: 3 })).toHaveText('1 more gain, found in fewer than 5 texts')
-  await expect(gains.getByRole('listitem').filter({ has: page.getByRole('heading', { level: 3 }) })).toHaveCount(0)
-  const few = gains.getByRole('button', { name: 'Dark mode 2 texts' })
-  await few.click()
-  await expect(gains.getByText('No quote was found word for word for this theme.')).toBeVisible()
+  await expect(gains.getByRole('table')).toHaveCount(0)
+  await gains.getByRole('button', { name: 'Dark mode 2 texts' }).click()
+  const few = page.getByRole('region', { name: 'Dark mode' })
+  await expect(few).toContainText('No quote was found word for word for this theme.')
+  await expect(few).not.toContainText('Share')
+  await few.getByRole('button', { name: 'Close details' }).click()
+  await expect(gains.getByRole('button', { name: 'Dark mode 2 texts' })).toBeFocused()
 
   expect(requests()).toBe(sentBefore)
 })
@@ -156,4 +171,22 @@ test('the report is step 4 and offers the cleaned file too', async ({ page }) =>
   await expect(steps.locator('[aria-current="step"]')).toHaveText(/Report/)
   const [download] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: 'Download the cleaned file' }).click()])
   expect(download.suggestedFilename()).toBe('support-tickets_cleaned.csv')
+})
+
+test('at 768 px the report has the top bar, the sidebar above the tables and no sideways scroll; the drawer floats', async ({ page }) => {
+  await page.setViewportSize({ width: 768, height: 900 })
+  await analyzeSample(page)
+  await expect(page.getByRole('navigation', { name: 'Steps' }).getByRole('listitem')).toHaveCount(4)
+  await expect(page.getByRole('complementary', { name: 'Sections and the cleaned file' })).toBeVisible()
+  await page.getByRole('region', { name: 'Pains' }).getByRole('button', { name: 'Slow exports' }).click()
+  await expect(page.getByRole('region', { name: 'Slow exports' })).toBeVisible()
+  for (const language of ['en', 'de']) {
+    // After the analysis the top bar counts kilobytes, rounded, so German fits too.
+    await expect(page.getByRole('button', { name: /What leaves your browser|Was Ihren Browser verlässt/ })).toContainText(/\d+ kB/)
+    if (language === 'de') {
+      await page.getByRole('button', { name: 'German' }).click()
+      await expect(page.getByRole('heading', { level: 1 })).toHaveText('Was Ihre Kunden sagen')
+    }
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(768)
+  }
 })
