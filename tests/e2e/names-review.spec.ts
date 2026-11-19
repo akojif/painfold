@@ -78,7 +78,8 @@ test('the download waits while names are checked, and the cleaned file has them 
   // On a fast machine the 200 rows may already be done; either way the button follows the state.
   await expect(waiting.or(done)).toBeVisible()
   if (await waiting.isVisible()) await expect(page.getByRole('button', { name: 'Download the cleaned file' })).toBeDisabled()
-  await expect(done).toBeVisible({ timeout: 60_000 })
+  // As long as the first test allows: whichever runs first in a worker also loads the model.
+  await expect(done).toBeVisible({ timeout: 180_000 })
   await expect(waiting).toBeHidden()
 
   await page.getByRole('link', { name: 'Download the cleaned file' }).last().click()
@@ -133,5 +134,6 @@ freshBrowser('without the name model, the review and the download say names were
 test('the German review explains the check in German', async ({ page }) => {
   await withModel(page, () => openSample(page), '/de/')
   await page.getByRole('button', { name: /^Personenbezogene Daten in/ }).click()
-  await expect(page.getByText('Namen und Orte geprüft.', { exact: true })).toBeVisible({ timeout: 60_000 })
+  // As long as the first test allows: whichever runs first in a worker also loads the model.
+  await expect(page.getByText('Namen und Orte geprüft.', { exact: true })).toBeVisible({ timeout: 180_000 })
 })
