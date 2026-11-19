@@ -6,7 +6,7 @@ import { detectItems } from '../../core/detect/items'
 import { readCsv } from '../../core/import/csv'
 import { itemsFromTable, textItems } from '../../core/items/table'
 import { Review } from '../../core/review/review'
-import { expect, openSample, test } from './fixtures'
+import { connectAnthropic, expect, openSample, openSentTexts, test } from './fixtures'
 
 // Stage 3, slice 3 (#125): what will be sent, shown before anything is sent.
 // The page is not linked yet, so these tests reach it through the app's router,
@@ -23,6 +23,9 @@ async function reviewSample(page: Page) {
 async function openAnalyze(page: Page) {
   await page.getByRole('link', { name: 'Continue to analyze' }).last().click()
   await expect(page).toHaveURL(/\/analyze\/$/)
+  // Analyze is two steps (#141): what will be sent appears once the connection test works.
+  await expect(page.getByRole('heading', { name: 'What will be sent' })).toHaveCount(0)
+  await connectAnthropic(page)
   await expect(page.getByRole('heading', { name: 'What will be sent' })).toBeVisible()
 }
 
@@ -58,18 +61,22 @@ test('shows how many cleaned texts go where, the terms, what is not sent, and th
   await expect(section).toContainText('does not use them for training')
   await expect(section).toContainText('Your file, the personal data you removed, the column names, short values such as a channel or a plan, and the columns you kept as they are.')
   await expect(section).toContainText(/About [\d,]+ tokens, roughly \$[\d.]+ to \$[\d.]+\./)
-  await expect(section.getByRole('listitem')).toHaveCount(20)
+  // The texts themselves are one click away, in the panel on the right (#141).
+  await expect(section.getByRole('listitem')).toHaveCount(0)
+  const texts = await openSentTexts(page)
+  await expect(texts.getByRole('listitem')).toHaveCount(20)
   // Short values such as a channel, a plan or a country are not feedback, and are not sent.
   expect(payload.texts.every(entry => entry.text.length > 3)).toBe(true)
-  await expect(section).not.toContainText(/^t\d+\s*(?:Email|Solo|GB|Chat)$/m)
-  await expect(section.getByRole('button', { name: `Show all ${payload.texts.length}` })).toBeVisible()
+  await expect(texts).not.toContainText(/^t\d+\s*(?:Email|Solo|GB|Chat)$/m)
+  await expect(texts.getByRole('button', { name: `Show all ${payload.texts.length}` })).toBeVisible()
 })
 
 test('the downloaded file is exactly the payload: the instructions and every cleaned text with its id, named by provider, model and date', async ({ page }) => {
   const { payload, review } = expectedPayload()
   await reviewSample(page)
   await openAnalyze(page)
-  const [download] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: 'Download exactly what will be sent (.json)' }).click()])
+  const texts = await openSentTexts(page)
+  const [download] = await Promise.all([page.waitForEvent('download'), texts.getByRole('button', { name: 'Download exactly what will be sent (.json)' }).click()])
   expect(download.suggestedFilename()).toMatch(/^painfold-payload-anthropic-claude-haiku-5-5-\d{4}-\d{2}-\d{2}\.json$/)
   const downloaded = JSON.parse(await text(download))
   expect(downloaded).toEqual(payload)
@@ -85,7 +92,7 @@ test('the list shows every text that will be sent, and can be searched', async (
   const { payload } = expectedPayload()
   await reviewSample(page)
   await openAnalyze(page)
-  const section = page.getByRole('region', { name: 'What will be sent' })
+  const section = await openSentTexts(page)
   await section.getByRole('button', { name: `Show all ${payload.texts.length}` }).click()
   while (await section.getByRole('button', { name: /^Show \d+ more$/ }).count() > 0) await section.getByRole('button', { name: /^Show \d+ more$/ }).click()
   await expect(section.getByRole('listitem')).toHaveCount(payload.texts.length)
@@ -100,11 +107,11 @@ test('nothing is sent from the consent step: no request to Anthropic or Ollama',
   for (const origin of ['https://api.anthropic.com', 'http://localhost:11434']) await page.route(`${origin}/**`, route => (sent.push(route.request().url()), route.abort()))
   await reviewSample(page)
   await openAnalyze(page)
-  const section = page.getByRole('region', { name: 'What will be sent' })
-  await section.getByRole('button', { name: /^Show all/ }).click()
-  await section.getByLabel('Search the texts').fill('export')
-  await Promise.all([page.waitForEvent('download'), section.getByRole('button', { name: /^Download exactly/ }).click()])
-  await expect(section.getByRole('button', { name: /^Send \d+ cleaned texts to Anthropic$/ })).toBeDisabled()
+  const texts = await openSentTexts(page)
+  await texts.getByRole('button', { name: /^Show all/ }).click()
+  await texts.getByLabel('Search the texts').fill('export')
+  await Promise.all([page.waitForEvent('download'), texts.getByRole('button', { name: /^Download exactly/ }).click()])
+  await expect(page.getByRole('region', { name: 'What will be sent' }).getByRole('button', { name: /^Send \d+ cleaned texts to Anthropic$/ })).toBeDisabled()
   expect(sent).toEqual([])
 })
 
@@ -117,7 +124,7 @@ test('when names were not checked, says so and asks for a confirmation', async (
   await expect(section.getByLabel('I have checked these texts for names, or they contain none.')).not.toBeChecked()
 })
 
-test('the privacy notice says that only approved cleaned text goes to the chosen AI, on the start page and next to the send button', async ({ page }) => {
+test('the privacy notice says that only approved cleaned text goes to the chosen AI, on the start page, Review and Analyze', async ({ page }) => {
   await page.goto('/')
   await expect(page.getByText('Only the cleaned text you approve is sent to the AI you choose.')).toBeVisible()
   await openSample(page)

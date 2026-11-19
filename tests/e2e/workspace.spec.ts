@@ -1,4 +1,4 @@
-import { expect, openSample, test } from './fixtures'
+import { connectAnthropic, expect, openSample, test } from './fixtures'
 
 // The workspace shell (#141): the top bar with the four steps on every step of
 // the working flow once a file is open, and the footer below.
@@ -164,5 +164,61 @@ test.describe('Download at 768 px', () => {
     const sidebar = page.getByRole('complementary', { name: 'The file and what it contains' })
     expect((await sidebar.boundingBox())!.y).toBeLessThan((await page.getByRole('heading', { level: 1 }).boundingBox())!.y)
     expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0)
+  })
+})
+
+test.describe('Analyze in two steps', () => {
+  test.use({ allowedOrigins: ['https://api.anthropic.com', 'http://localhost:11434'] })
+
+  test('first where it runs, then what is sent, once the connection test works', async ({ page }) => {
+    await openReviewTable(page)
+    await page.getByRole('link', { name: 'Continue to analyze' }).last().click()
+    await expect(page).toHaveURL(/\/analyze\/$/)
+    const sidebar = page.getByRole('complementary', { name: 'On this page' })
+    await expect(sidebar).toContainText('Not set up yet')
+    await expect(sidebar).toContainText('After a successful connection test')
+    // The privacy notice is in view before anything is set up.
+    await expect(sidebar).toContainText('Only the cleaned text you approve is sent to the AI you choose.')
+    await expect(page.getByRole('heading', { name: 'What will be sent' })).toHaveCount(0)
+
+    await connectAnthropic(page)
+    await expect(page.getByRole('heading', { name: 'What will be sent' })).toBeVisible()
+    await expect(sidebar).toContainText('Claude Haiku 5.5')
+    await expect(sidebar).not.toContainText('After a successful connection test')
+
+    // The texts sent are one click away, in a panel on the right; Escape closes it and focus returns.
+    const button = page.getByRole('button', { name: 'Review what will be sent (3 texts)' })
+    await expect(button).toHaveAttribute('aria-expanded', 'false')
+    await button.click()
+    const panel = page.getByRole('region', { name: 'The texts that will be sent' })
+    await expect(panel.getByRole('heading', { name: 'The texts that will be sent' })).toBeFocused()
+    await expect(panel.getByRole('listitem')).toHaveCount(3)
+    await page.keyboard.press('Escape')
+    await expect(panel).toHaveCount(0)
+    await expect(button).toBeFocused()
+  })
+
+  test('once connected, the settings are locked in a summary, with Change and Disconnect', async ({ page }) => {
+    await openReviewTable(page)
+    await page.getByRole('link', { name: 'Continue to analyze' }).last().click()
+    await page.getByLabel('Remember on this device').check()
+    await connectAnthropic(page, 'sk-ant-invented-key-9z8y')
+    const connected = page.getByRole('region', { name: 'Connected' })
+    await expect(connected).toBeFocused()
+    await expect(connected).toContainText('Anthropic, Claude Haiku 5.5')
+    await expect(connected).toContainText('Ending in 9z8y, remembered on this device')
+    await expect(page.getByLabel('API key', { exact: true })).toHaveCount(0)
+
+    // Change: the settings come back as they were, and sending waits for a new test.
+    await connected.getByRole('button', { name: 'Change' }).click()
+    await expect(page.getByLabel('API key', { exact: true })).toHaveValue('sk-ant-invented-key-9z8y')
+    await expect(page.getByRole('heading', { name: 'What will be sent' })).toHaveCount(0)
+
+    // Disconnect: the key is forgotten, here and on this device.
+    await connectAnthropic(page, 'sk-ant-invented-key-9z8y')
+    await page.getByRole('region', { name: 'Connected' }).getByRole('button', { name: 'Disconnect' }).click()
+    await expect(page.getByLabel('API key', { exact: true })).toHaveValue('')
+    await expect(page.getByLabel('Remember on this device')).not.toBeChecked()
+    expect(await page.evaluate(() => localStorage.getItem('painfold.anthropic-key'))).toBeNull()
   })
 })

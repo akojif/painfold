@@ -45,10 +45,10 @@ const position = (index: number) => index + 1
         <component
           :is="step.to && position(index) !== props.current ? NuxtLink : 'span'"
           :to="position(index) !== props.current ? step.to : undefined"
-          class="relative flex items-center gap-1.5 px-2.5 text-sm whitespace-nowrap lg:px-3"
+          class="relative flex items-center gap-1.5 px-2 text-sm whitespace-nowrap lg:px-3"
           :class="[
             position(index) === props.current
-              ? 'font-medium text-fg after:absolute after:inset-x-2.5 after:-bottom-px after:h-0.5 after:rounded-full after:bg-accent lg:after:inset-x-3'
+              ? 'font-medium text-fg after:absolute after:inset-x-2 after:-bottom-px after:h-0.5 after:rounded-full after:bg-accent lg:after:inset-x-3'
               : step.to ? 'focus-ring rounded-sm text-fg-muted hover:text-fg' : 'text-fg-muted',
           ]"
         >

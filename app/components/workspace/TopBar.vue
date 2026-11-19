@@ -17,7 +17,7 @@ function onLogo(event: MouseEvent) {
 
 <template>
   <header class="sticky top-0 z-20 border-b border-line bg-canvas">
-    <div class="flex h-14 items-stretch gap-4 px-4 lg:gap-6 lg:px-6">
+    <div class="flex h-14 items-stretch gap-3 px-3 lg:gap-6 lg:px-6">
       <a
         :href="localePath('/')"
         class="focus-ring flex items-center gap-2.5 self-center rounded-sm text-md font-semibold tracking-tight"
@@ -30,13 +30,13 @@ function onLogo(event: MouseEvent) {
         <span class="max-lg:sr-only">{{ $t('app.name') }}</span>
       </a>
       <WorkspaceSteps :current="current" />
-      <div class="ml-auto flex items-center gap-2">
+      <div class="ml-auto flex items-center gap-1.5 lg:gap-2">
         <LanguageToggle />
         <ThemeToggle />
         <OutboundIndicator compact />
         <button
           type="button"
-          class="press focus-ring ml-1 rounded-sm text-sm whitespace-nowrap text-fg-muted underline-offset-4 hover:text-fg hover:underline lg:ml-2"
+          class="press focus-ring ml-0.5 rounded-sm text-sm whitespace-nowrap text-fg-muted underline-offset-4 hover:text-fg hover:underline lg:ml-2"
           @click="startOver"
         >
           {{ $t('nav.startOver') }}

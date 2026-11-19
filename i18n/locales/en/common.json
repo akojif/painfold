@@ -194,6 +194,20 @@
     },
     "download": {
       "sidebar": "The file and what it contains"
+    },
+    "analyze": {
+      "sidebar": "On this page",
+      "onThisPage": "On this page",
+      "connection": "Where it runs",
+      "send": "Check and send",
+      "notSetUp": "Not set up yet",
+      "findingsLeft": "1 finding not reviewed | {n} findings not reviewed",
+      "namesNotChecked": "Names not checked",
+      "ready": "Ready to send",
+      "afterTest": "After a successful connection test",
+      "sendAfterTest": "Next: check what will be sent, then send it. This appears once the connection test works.",
+      "reviewSent": "Review what will be sent (1 text) | Review what will be sent ({n} texts)",
+      "sentTexts": "The texts that will be sent"
     }
   }
 }

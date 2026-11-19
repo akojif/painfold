@@ -1,5 +1,5 @@
 import type { Page, Route } from '@playwright/test'
-import { expect, openSample, test } from './fixtures'
+import { connectAnthropic, expect, openSample, test } from './fixtures'
 
 // Stage 3, slice 6 (#128): the first report. Playwright stands in for
 // Anthropic with fixed answers, so every number on the page can be checked
@@ -57,7 +57,7 @@ async function analyzeSample(page: Page) {
   await expect(page).toHaveURL(/\/review\/$/)
   await page.getByRole('link', { name: 'Continue to analyze' }).last().click()
   await expect(page).toHaveURL(/\/analyze\/$/)
-  await page.getByLabel('API key', { exact: true }).fill('sk-ant-invented-test-key')
+  await connectAnthropic(page)
   await page.getByLabel('I have checked these texts for names, or they contain none.').check()
   await page.getByRole('button', { name: /^Send \d+ cleaned texts to Anthropic$/ }).click()
   await page.getByRole('link', { name: 'Show the report' }).click()

@@ -1,5 +1,5 @@
 import type { Download, Page, Route } from '@playwright/test'
-import { expect, openSample, test } from './fixtures'
+import { connectAnthropic, expect, openSample, openSentTexts, test } from './fixtures'
 
 // Stage 3, slices 4 and 5 (#126, #127): sending the payload, checking the
 // answers, and merging the labels found into themes.
@@ -17,7 +17,7 @@ async function reviewSampleAndOpenAnalyze(page: Page) {
   await expect(page).toHaveURL(/\/review\/$/)
   await page.getByRole('link', { name: 'Continue to analyze' }).last().click()
   await expect(page).toHaveURL(/\/analyze\/$/)
-  await page.getByLabel('API key', { exact: true }).fill('sk-ant-invented-test-key')
+  await connectAnthropic(page)
   await page.getByLabel('I have checked these texts for names, or they contain none.').check()
 }
 
@@ -55,7 +55,7 @@ test('the requests hold exactly the downloaded payload, sent only after the clic
     return answer(route, batchOf(route), 't3')
   })
   await reviewSampleAndOpenAnalyze(page)
-  const [download] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: 'Download exactly what will be sent (.json)' }).click()])
+  const [download] = await Promise.all([page.waitForEvent('download'), (await openSentTexts(page)).getByRole('button', { name: 'Download exactly what will be sent (.json)' }).click()])
   const payload = JSON.parse(await text(download))
   expect(bodies).toHaveLength(0)
 
@@ -74,12 +74,14 @@ test('the requests hold exactly the downloaded payload, sent only after the clic
   expect(sent).toEqual(payload.texts)
 })
 
-test('the send button waits for a key and for the names confirmation', async ({ page }) => {
+test('the step that sends waits for a working connection, and the button for the names confirmation', async ({ page }) => {
   await reviewSampleAndOpenAnalyze(page)
+  // Changing the connection opens the settings again; a changed key needs a new test before anything can be sent (#141).
+  await page.getByRole('button', { name: 'Change' }).click()
   await page.getByLabel('API key', { exact: true }).fill('')
-  await expect(sendButton(page)).toBeDisabled()
-  await expect(page.getByText('Enter your API key above first.')).toBeVisible()
-  await page.getByLabel('API key', { exact: true }).fill('sk-ant-invented-test-key')
+  await expect(sendButton(page)).toHaveCount(0)
+  await expect(page.getByText('This appears once the connection test works.', { exact: false })).toBeVisible()
+  await connectAnthropic(page)
   await page.getByLabel('I have checked these texts for names, or they contain none.').uncheck()
   await expect(page.getByText('Confirm the line about names first.')).toBeVisible()
   await expect(sendButton(page)).toBeDisabled()
@@ -146,7 +148,7 @@ test('merging sends only the labels found, under the merge instructions shown be
   })
   await reviewSampleAndOpenAnalyze(page)
   await expect(page.getByText('The short labels the AI found, such as “Export takes too long”, go back to it once more, to group similar ones. Never the texts or quotes.')).toBeVisible()
-  const [download] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: 'Download exactly what will be sent (.json)' }).click()])
+  const [download] = await Promise.all([page.waitForEvent('download'), (await openSentTexts(page)).getByRole('button', { name: 'Download exactly what will be sent (.json)' }).click()])
   const payload = JSON.parse(await text(download))
   await sendButton(page).click()
   await expect(page.getByRole('region', { name: /^Analyzed/ })).toContainText('Grouped into')
