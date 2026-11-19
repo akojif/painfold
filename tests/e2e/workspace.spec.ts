@@ -43,3 +43,37 @@ test('the steps read in German', async ({ page }) => {
   await expect(steps.locator('[aria-current="step"]')).toHaveText(/^\s*Prüfen,\s*\d+ offen$/)
   await expect(page.locator('header').getByRole('button', { name: 'Neu beginnen' })).toBeVisible()
 })
+
+test('Import: the sidebar holds the file and where the rules found personal data', async ({ page }) => {
+  await page.goto('/')
+  await openSample(page)
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Choose what to check')
+  const sidebar = page.getByRole('complementary', { name: 'File and columns' })
+  await expect(sidebar.getByRole('heading', { level: 2 })).toHaveText(['File', 'Personal data by column'])
+  await expect(sidebar.getByTitle('support-tickets.csv', { exact: true })).toBeVisible()
+  await expect(sidebar.locator('dl > div')).toHaveText([/^Rows\s*200$/, /^Columns\s*9$/])
+  await expect(sidebar.getByText('Sample file with fake data.')).toBeVisible()
+  // Most personal data first, with what happens to the column when it is not checked.
+  const columns = sidebar.getByRole('listitem')
+  await expect(columns.first()).toHaveText(/^customer_email\s*Drop\s*200$/)
+  await expect(columns.filter({ hasText: 'message' })).toHaveText(/^message\s*\d+$/)
+  await expect(page.getByRole('button', { name: 'Find personal data in 200 rows' })).toBeVisible()
+})
+
+test.describe('Import at 768 px', () => {
+  test.use({ viewport: { width: 768, height: 900 } })
+
+  test('the sidebar comes first, and nothing scrolls sideways, in English and German', async ({ page }) => {
+    for (const [path, sidebarName] of [['/', 'File and columns'], ['/de/', 'Datei und Spalten']] as const) {
+      await page.goto(path)
+      await openSample(page)
+      const sidebar = page.getByRole('complementary', { name: sidebarName })
+      const top = async (locator: import('@playwright/test').Locator) => (await locator.boundingBox())!.y
+      expect(await top(sidebar)).toBeLessThan(await top(page.getByRole('heading', { level: 1 })))
+      expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth), path).toBeLessThanOrEqual(0)
+      await page.locator('header').getByRole('button', { name: /^(Start over|Neu beginnen)$/ }).click()
+      const dialog = page.getByRole('dialog')
+      if (await dialog.isVisible().catch(() => false)) await dialog.getByRole('button', { name: /^(Start over|Neu beginnen)$/ }).click()
+    }
+  })
+})

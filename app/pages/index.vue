@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { countsByColumn, itemsForColumns, textItems, type ColumnCounts } from '~~/core/items/table'
 
-definePageMeta({ step: 1 })
+// Once a file is open, the column step is the first page of the workspace (#141).
+definePageMeta({ step: 1, workspace: true })
 
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
@@ -49,6 +50,13 @@ watch(table, async (current) => {
 })
 
 const rowCount = computed(() => t('file.rows', { n: number(table.value?.rows.length ?? 0) }, table.value?.rows.length ?? 0))
+
+/** Columns where the rules found personal data, most first, with what happens to each. */
+const personalColumns = computed(() => (columnCounts.value ?? [])
+  .map(entry => ({ column: entry.column, total: Object.values(entry.counts).reduce((sum, count) => sum + (count ?? 0), 0) }))
+  .filter(entry => entry.total > 0)
+  .sort((a, b) => b.total - a.total)
+  .map(entry => ({ ...entry, name: table.value?.columns[entry.column] ?? '', role: roles.value[entry.column] })))
 
 // A newly opened file moves focus to the column step's heading, so keyboard and screen reader users start there.
 watch(table, async (now, before) => {
@@ -190,41 +198,58 @@ async function findPersonalData() {
       />
     </section>
 
-    <div
+    <WorkspaceBody
       v-else
-      class="max-w-4xl"
+      :sidebar-label="$t('workspace.importSidebar')"
     >
-      <div class="grid items-start gap-x-10 gap-y-4 md:grid-cols-[minmax(0,1fr)_minmax(0,18rem)]">
-        <div class="max-w-measure">
-          <h1
-            ref="summary"
-            tabindex="-1"
-            class="text-xl font-semibold outline-none"
+      <template #sidebar>
+        <section aria-labelledby="sidebar-file">
+          <h2
+            id="sidebar-file"
+            class="text-sm font-medium"
           >
-            {{ $t('columns.heading') }}
-          </h1>
-          <p class="mt-2 text-sm text-fg-muted">
-            {{ $t('columns.help') }}
-          </p>
-        </div>
-        <div class="min-w-0 space-y-1 text-sm text-fg-muted md:text-right">
-          <p class="flex min-w-0 gap-1 text-fg md:justify-end">
+            {{ $t('file.heading') }}
+          </h2>
+          <p class="mt-1.5 flex min-w-0 text-sm">
             <MiddleTruncate :text="table.fileName" />
           </p>
-          <p>{{ rowCount }}</p>
-          <p v-if="isSample">
+          <dl class="mt-2 space-y-1 text-sm">
+            <div class="flex justify-between gap-2">
+              <dt class="text-fg-muted">
+                {{ $t('file.rowsLabel') }}
+              </dt>
+              <dd class="font-mono tabular-nums">
+                {{ number(table.rows.length) }}
+              </dd>
+            </div>
+            <div class="flex justify-between gap-2">
+              <dt class="text-fg-muted">
+                {{ $t('file.columnsLabel') }}
+              </dt>
+              <dd class="font-mono tabular-nums">
+                {{ number(table.columns.length) }}
+              </dd>
+            </div>
+          </dl>
+          <p
+            v-if="isSample"
+            class="mt-2 text-sm text-fg-muted"
+          >
             {{ $t('file.sample') }}
           </p>
-          <p v-if="table.raggedRows > 0">
+          <p
+            v-if="table.raggedRows > 0"
+            class="mt-2 text-sm text-fg-muted"
+          >
             {{ $t('file.ragged', { n: number(table.raggedRows) }, table.raggedRows) }}
           </p>
           <label
             v-if="(table.sheetNames?.length ?? 0) > 1"
-            class="flex items-center gap-2 md:justify-end"
+            class="mt-2 flex items-center gap-2 text-sm"
           >
-            <span>{{ $t('file.sheet') }}</span>
+            <span class="text-fg-muted">{{ $t('file.sheet') }}</span>
             <select
-              class="focus-ring h-8 max-w-48 rounded-md border border-line-strong bg-canvas px-2 text-fg"
+              class="focus-ring h-8 min-w-0 flex-1 rounded-md border border-line-strong bg-canvas px-2 text-fg"
               :value="table.sheetName"
               @change="onSheet"
             >
@@ -239,61 +264,116 @@ async function findPersonalData() {
           </label>
           <button
             type="button"
-            class="focus-ring rounded-sm text-accent underline-offset-4 hover:underline"
+            class="press focus-ring mt-2 rounded-sm text-sm text-accent underline-offset-4 hover:underline"
             @click="chooseAnother"
           >
             {{ $t('file.chooseAnother') }}
           </button>
-        </div>
-      </div>
+        </section>
 
-      <ColumnTable
-        class="mt-8"
-        :counts="columnCounts"
-      />
-      <PreviewTable class="mt-8" />
-      <NameModelDownload class="mt-10" />
-
-      <div
-        class="sticky bottom-0 z-10 mt-8 -mb-8 border-t border-line bg-canvas py-4 sm:-mb-10"
-        data-toast-avoid
-      >
-        <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
+        <section aria-labelledby="sidebar-personal">
+          <h2
+            id="sidebar-personal"
+            class="text-sm font-medium"
+          >
+            {{ $t('columns.byColumn.heading') }}
+          </h2>
           <p
-            class="text-sm text-fg-muted tabular-nums"
-            aria-live="polite"
+            v-if="!columnCounts"
+            class="mt-1.5 text-sm text-fg-muted"
           >
-            {{ cleanedSummary }}
+            {{ $t('columns.byColumn.counting') }}
           </p>
-          <button
-            type="button"
-            class="press focus-ring h-10 rounded-md bg-fg px-4 font-medium text-canvas hover:opacity-90 disabled:opacity-50 max-sm:w-full"
-            :disabled="detecting"
-            @click="findPersonalData"
+          <p
+            v-else-if="personalColumns.length === 0"
+            class="mt-1.5 text-sm text-fg-muted"
           >
-            {{ backToReview ? $t('find.continue') : $t('find.button', { rows: rowCount }) }}
-          </button>
+            {{ $t('columns.byColumn.none') }}
+          </p>
+          <ul
+            v-else
+            class="mt-1.5 space-y-1 text-sm"
+          >
+            <li
+              v-for="entry in personalColumns"
+              :key="entry.column"
+              class="flex items-baseline justify-between gap-2"
+            >
+              <span class="min-w-0 truncate">{{ entry.name }}</span>
+              <span class="shrink-0 text-xs text-fg-muted">
+                <span
+                  v-if="entry.role !== 'scan'"
+                  :class="entry.role === 'keep' ? 'text-danger' : ''"
+                >{{ $t(`columns.roles.${entry.role}`) }}</span>
+                <span class="ml-1.5 font-mono tabular-nums">{{ number(entry.total) }}</span>
+              </span>
+            </li>
+          </ul>
+        </section>
+      </template>
+
+      <div class="flex flex-1 flex-col px-4 pt-6 sm:px-6 lg:pt-8">
+        <div class="max-w-measure">
+          <h1
+            ref="summary"
+            tabindex="-1"
+            class="text-xl font-semibold outline-none"
+          >
+            {{ $t('columns.heading') }}
+          </h1>
+          <p class="mt-2 text-sm text-fg-muted">
+            {{ $t('columns.help') }}
+          </p>
         </div>
-        <p
-          v-if="columnsChanged"
-          class="mt-3 text-sm text-fg-muted"
-        >
-          {{ $t('find.columnsChanged') }}
-        </p>
-        <DetectionProgress
-          v-if="detecting && detection.progress.value"
-          class="mt-3"
-          :done="detection.progress.value.done"
-          :total="detection.progress.value.total"
+
+        <ColumnTable
+          class="mt-8"
+          :counts="columnCounts"
         />
-        <p
-          v-if="detectionFailed"
-          role="alert"
-          class="mt-3 text-sm text-danger"
+        <PreviewTable class="mt-8" />
+        <NameModelDownload class="mt-10" />
+
+        <div
+          class="sticky bottom-0 z-10 mt-8 border-t border-line bg-canvas py-4"
+          data-toast-avoid
         >
-          {{ $t('find.failed') }}
-        </p>
+          <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
+            <p
+              class="text-sm text-fg-muted tabular-nums"
+              aria-live="polite"
+            >
+              {{ cleanedSummary }}
+            </p>
+            <button
+              type="button"
+              class="press focus-ring h-10 rounded-md bg-fg px-4 font-medium text-canvas hover:opacity-90 disabled:opacity-50 max-sm:w-full"
+              :disabled="detecting"
+              @click="findPersonalData"
+            >
+              {{ backToReview ? $t('find.continue') : $t('find.button', { rows: rowCount }) }}
+            </button>
+          </div>
+          <p
+            v-if="columnsChanged"
+            class="mt-3 text-sm text-fg-muted"
+          >
+            {{ $t('find.columnsChanged') }}
+          </p>
+          <DetectionProgress
+            v-if="detecting && detection.progress.value"
+            class="mt-3"
+            :done="detection.progress.value.done"
+            :total="detection.progress.value.total"
+          />
+          <p
+            v-if="detectionFailed"
+            role="alert"
+            class="mt-3 text-sm text-danger"
+          >
+            {{ $t('find.failed') }}
+          </p>
+        </div>
       </div>
-    </div>
+    </WorkspaceBody>
   </div>
 </template>

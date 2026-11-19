@@ -47,7 +47,10 @@
     "chooseAnother": "Choose another file",
     "sheet": "Sheet",
     "sample": "Sample file with fake data.",
-    "ragged": "1 row had a different number of cells than the header and was filled in. | {n} rows had a different number of cells than the header and were filled in."
+    "ragged": "1 row had a different number of cells than the header and was filled in. | {n} rows had a different number of cells than the header and were filled in.",
+    "heading": "File",
+    "rowsLabel": "Rows",
+    "columnsLabel": "Columns"
   },
   "header": {
     "outbound": "What leaves your browser",
@@ -153,5 +156,8 @@
   },
   "toast": {
     "close": "Close"
+  },
+  "workspace": {
+    "importSidebar": "File and columns"
   }
 }

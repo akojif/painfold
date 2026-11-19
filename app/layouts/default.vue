@@ -49,6 +49,8 @@ const tagging = useTagging()
 const gated = computed(() => Boolean(current.value.meta.needsReview))
 const allowed = computed(() => Boolean(session.review.value) || (current.value.meta.step === 4 && tagging.demo.value))
 const showPage = computed(() => renderPage.value && (!gated.value || (mounted.value && allowed.value)))
+// Workspace pages (#141) span the full width below the top bar and place their own sidebar.
+const workspace = computed(() => showSteps.value && Boolean(current.value.meta.workspace))
 // Widened with nothing to review: where the page's own guard would have sent it.
 watch(narrow, (now) => {
   if (!now && current.value.meta.needsReview && !session.review.value && !useTagging().demo.value) void navigateTo(localePath('/'))
@@ -112,8 +114,14 @@ onBeforeUnmount(() => window.removeEventListener('beforeunload', onBeforeUnload)
       </div>
     </header>
 
-    <div class="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 sm:px-6">
-      <main class="flex flex-1 flex-col py-8 sm:py-10">
+    <div
+      class="flex w-full flex-1 flex-col"
+      :class="workspace ? '' : 'mx-auto max-w-6xl px-4 sm:px-6'"
+    >
+      <main
+        class="flex flex-1 flex-col"
+        :class="workspace ? '' : 'py-8 sm:py-10'"
+      >
         <SmallScreenNotice
           v-if="working"
           class="md:hidden"
@@ -136,7 +144,10 @@ onBeforeUnmount(() => window.removeEventListener('beforeunload', onBeforeUnload)
       class="border-t border-line"
       data-toast-avoid
     >
-      <div class="mx-auto flex max-w-6xl flex-col items-center gap-1.5 px-4 py-4 text-sm text-fg-muted sm:px-6 md:h-14 md:flex-row md:justify-between md:gap-6 md:py-0">
+      <div
+        class="flex flex-col items-center gap-1.5 px-4 py-4 text-sm text-fg-muted sm:px-6 md:h-14 md:flex-row md:justify-between md:gap-6 md:py-0"
+        :class="workspace ? '' : 'mx-auto max-w-6xl'"
+      >
         <nav
           :aria-label="$t('footer.label')"
           class="flex items-center gap-5"
