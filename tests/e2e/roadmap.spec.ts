@@ -31,16 +31,17 @@ test('the roadmap page is prerendered and shows what is released, what is being 
   await expect(page.locator('#roadmap-releases > li h3')).toHaveCount(4)
   await page.getByRole('button', { name: 'Show fewer releases' }).click()
 
-  // Now carries the current work; Later shows four cards, the other two on request.
+  // Now carries the current work, Next the stage after it; Later shows four cards, the fifth on request.
   const now = page.getByRole('region', { name: /^Now/ })
   await expect(now.getByRole('heading', { level: 3 })).toHaveText(['Report'])
   await expect(now.getByRole('link', { name: 'Milestone v0.4 (opens in a new tab)' })).toHaveAttribute('target', '_blank')
+  await expect(page.getByRole('region', { name: /^Next/ }).getByRole('heading', { level: 3 })).toHaveText(['More AI providers'])
   const later = page.getByRole('region', { name: /^Later/ })
   await expect(later.getByRole('listitem')).toHaveCount(4)
-  const more = later.getByRole('button', { name: 'Show 2 more' })
+  const more = later.getByRole('button', { name: 'Show 1 more' })
   await expect(more).toHaveAttribute('aria-expanded', 'false')
   await more.click()
-  await expect(later.getByRole('listitem')).toHaveCount(6)
+  await expect(later.getByRole('listitem')).toHaveCount(5)
   await expect(later.getByRole('button', { name: 'Show fewer' })).toHaveAttribute('aria-expanded', 'true')
 
   // Later and Ideas show a first line, and the rest in place.
@@ -60,7 +61,7 @@ test('the German roadmap reads in German', async ({ page }) => {
   await page.goto('/de/roadmap/')
   await expect(page.getByText('Aktuelle Version: v0.3.1. 1 in Arbeit, 6 geplant und 2 Ideen.')).toBeVisible()
   await expect(page.getByRole('heading', { level: 2 })).toHaveText([/^Veröffentlicht/, /^Jetzt/, /^Als Nächstes/, /^Später/, /^Ideen/])
-  await expect(page.getByRole('button', { name: '2 weitere zeigen' })).toBeVisible()
+  await expect(page.getByRole('button', { name: '1 weitere zeigen' })).toBeVisible()
 })
 
 test('the download page leads on to Analyze, and going back keeps the cleaned file', async ({ page }) => {
