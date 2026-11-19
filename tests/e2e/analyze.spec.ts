@@ -50,7 +50,7 @@ test('Test connection sends only "Hello" to Anthropic, with the key and the brow
   await openAnalyze(page)
   await page.getByLabel('API key', { exact: true }).fill(KEY)
   await page.getByRole('button', { name: 'Test connection' }).click()
-  await expect(page.getByText('Connected to Claude Haiku 5.5.')).toBeVisible()
+  await expect(page.getByRole('region', { name: 'Connected' })).toContainText('Anthropic, Claude Haiku 5.5')
 
   expect(requests).toHaveLength(1)
   const request = requests[0]!
@@ -66,7 +66,7 @@ test('the request to the AI is listed in "What leaves your browser", with the by
   await openAnalyze(page)
   await page.getByLabel('API key', { exact: true }).fill(KEY)
   await page.getByRole('button', { name: 'Test connection' }).click()
-  await expect(page.getByText('Connected to Claude Haiku 5.5.')).toBeVisible()
+  await expect(page.getByRole('region', { name: 'Connected' })).toContainText('Anthropic, Claude Haiku 5.5')
   await page.getByRole('button', { name: /What leaves your browser/ }).click()
   const dialog = page.getByRole('dialog', { name: 'What leaves your browser' })
   await expect(dialog).toContainText('1 request went to the AI you chose.')
@@ -127,7 +127,7 @@ test('with Ollama, finds the models on this computer and tests one, without call
   await expect(page.getByLabel('Model')).toHaveValue('llama3.2:3b')
   await expect(page.getByText(/launchctl setenv OLLAMA_ORIGINS|setx OLLAMA_ORIGINS|OLLAMA_ORIGINS=/)).toContainText('http://localhost')
   await page.getByRole('button', { name: 'Test connection' }).click()
-  await expect(page.getByText('Connected to llama3.2:3b on this computer.')).toBeVisible()
+  await expect(page.getByRole('region', { name: 'Connected' })).toContainText('Ollama, llama3.2:3b')
   expect(toOllama.at(-1)!.postDataJSON()).toEqual({ model: 'llama3.2:3b', stream: false, messages: [{ role: 'user', content: 'Hello' }] })
   expect(toAnthropic).toHaveLength(0)
 })

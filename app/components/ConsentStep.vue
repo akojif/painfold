@@ -65,6 +65,13 @@ function send() {
   void tagging.start(built.value.payload, built.value.itemOf)
 }
 
+// The texts sent, exactly as the payload holds them, in a panel on the right, opened on request (#141).
+const listOpen = ref(false)
+const listButton = useTemplateRef<HTMLButtonElement>('listButton')
+function closeList() {
+  listOpen.value = false
+  nextTick(() => listButton.value?.focus())
+}
 const query = ref('')
 const shown = ref(PREVIEW)
 const matching = computed(() => {
@@ -142,7 +149,23 @@ function download() {
         </dd>
       </dl>
 
-      <div class="mt-6">
+      <button
+        ref="listButton"
+        type="button"
+        class="focus-ring press mt-6 rounded-sm text-sm text-accent underline-offset-4 hover:underline"
+        :aria-expanded="listOpen"
+        @click="listOpen = true"
+      >
+        {{ $t('workspace.analyze.reviewSent', { n: number(payload.texts.length) }, payload.texts.length) }}
+      </button>
+      <WorkspaceDrawer
+        overlay
+        :open="listOpen"
+        focus-on-open
+        :title="$t('workspace.analyze.sentTexts')"
+        :sub="$t('consent.count', { n: number(payload.texts.length), file: table?.fileName ?? '' }, payload.texts.length)"
+        @close="closeList"
+      >
         <label
           for="consent-search"
           class="text-sm text-fg-muted"
@@ -197,7 +220,7 @@ function download() {
             {{ $t('consent.download') }}
           </button>
         </div>
-      </div>
+      </WorkspaceDrawer>
 
       <details class="mt-6 text-sm">
         <summary class="focus-ring cursor-pointer rounded-sm text-fg-muted hover:text-fg">
@@ -244,7 +267,6 @@ function download() {
       </div>
 
       <!-- The privacy notice next to the one button that sends (#147). -->
-      <PrivacyNotice class="mt-6" />
       <div class="mt-4">
         <button
           v-if="!busy"

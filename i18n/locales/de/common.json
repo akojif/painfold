@@ -194,6 +194,20 @@
     },
     "download": {
       "sidebar": "Die Datei und was sie enthält"
+    },
+    "analyze": {
+      "sidebar": "Auf dieser Seite",
+      "onThisPage": "Auf dieser Seite",
+      "connection": "Wo sie läuft",
+      "send": "Prüfen und senden",
+      "notSetUp": "Noch nicht eingerichtet",
+      "findingsLeft": "1 Treffer nicht geprüft | {n} Treffer nicht geprüft",
+      "namesNotChecked": "Namen nicht geprüft",
+      "ready": "Bereit zum Senden",
+      "afterTest": "Nach einem erfolgreichen Verbindungstest",
+      "sendAfterTest": "Danach: prüfen, was gesendet wird, und senden. Das erscheint, sobald der Verbindungstest klappt.",
+      "reviewSent": "Prüfen, was gesendet wird (1 Text) | Prüfen, was gesendet wird ({n} Texte)",
+      "sentTexts": "Die Texte, die gesendet werden"
     }
   }
 }

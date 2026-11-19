@@ -2,10 +2,18 @@
 // The detail panel for the selected row. From 1,280 px it is docked: a
 // column beside the table, so the keyboard keeps moving through the rows.
 // Below that it floats over the table's right side, so the table keeps its
-// width. Escape closes it.
-const props = defineProps<{ open: boolean, title: string, sub?: string }>()
+// width; with `overlay` it floats at every width (Analyze, where nothing is
+// beside it). Escape closes it.
+const props = defineProps<{ open: boolean, title: string, sub?: string, overlay?: boolean, focusOnOpen?: boolean }>()
 const emit = defineEmits<{ close: [] }>()
 const headingId = useId()
+// Opened on request, focus moves to its heading; the page returns it on close.
+const heading = useTemplateRef<HTMLElement>('heading')
+watch(() => props.open, async (open) => {
+  if (!open || !props.focusOnOpen) return
+  await nextTick()
+  heading.value?.focus({ preventScroll: true })
+})
 
 function onKeydown(event: KeyboardEvent) {
   if (event.key !== 'Escape' || !props.open || event.defaultPrevented) return
@@ -25,13 +33,16 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
     <section
       v-if="open"
       :aria-labelledby="headingId"
-      class="fixed top-14 right-0 bottom-0 z-20 w-96 max-w-[calc(100vw-2rem)] overflow-y-auto border-l border-raised-line bg-raised shadow-overlay xl:sticky xl:z-auto xl:h-[calc(100dvh-3.5rem)] xl:w-auto xl:max-w-none xl:border-line xl:bg-surface xl:shadow-none"
+      class="fixed top-14 right-0 bottom-0 z-20 w-96 max-w-[calc(100vw-2rem)] overflow-y-auto border-l border-raised-line bg-raised shadow-overlay"
+      :class="overlay ? 'lg:w-[32rem]' : 'xl:sticky xl:z-auto xl:h-[calc(100dvh-3.5rem)] xl:w-auto xl:max-w-none xl:border-line xl:bg-surface xl:shadow-none'"
     >
       <div class="flex items-start justify-between gap-3 border-b border-line px-5 py-4">
         <div class="min-w-0">
           <h2
             :id="headingId"
-            class="text-md font-semibold text-pretty wrap-anywhere"
+            ref="heading"
+            tabindex="-1"
+            class="text-md font-semibold text-pretty wrap-anywhere outline-none"
           >
             {{ title }}
           </h2>

@@ -112,6 +112,25 @@ test.describe('at 768px', () => {
     }
   })
 
+  test.describe('with a request sent', () => {
+    test.use({ allowedOrigins: ['https://api.anthropic.com'] })
+
+    test('the top bar still fits once something has left the browser, in German', async ({ page }) => {
+    // A request makes the counter longer ("91 Bytes"): it must not push the bar past the edge.
+      await page.route('https://api.anthropic.com/**', route => route.fulfill({ status: 200, contentType: 'application/json', headers: { 'access-control-allow-origin': '*' }, body: JSON.stringify({ content: [{ type: 'text', text: 'Hi' }] }) }))
+      await page.goto('/de/')
+      await page.getByRole('button', { name: 'Beispiel ausprobieren' }).click()
+      await page.getByRole('button', { name: 'Beispieldatei öffnen' }).click()
+      await page.getByRole('button', { name: /^Personenbezogene Daten in/ }).click()
+      await page.getByRole('link', { name: 'Weiter zur Analyse' }).last().click()
+      await page.getByLabel('API-Schlüssel', { exact: true }).fill('sk-ant-invented-test-key')
+      await page.getByRole('button', { name: 'Verbindung testen' }).click()
+      await expect(page.getByRole('region', { name: 'Verbunden' })).toBeVisible()
+      await expect(page.locator('header').getByRole('button', { name: /Bytes/ })).not.toContainText(/^0 Bytes$/)
+      expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0)
+    })
+  })
+
   test('punctuation after a finding stays on the line of the finding', async ({ page }) => {
     await open(page, FILES.worst)
     await page.getByRole('tab', { name: 'By row' }).click()

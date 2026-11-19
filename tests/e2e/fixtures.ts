@@ -66,3 +66,27 @@ export async function expectRows(page: Page, rows: number) {
   const row = sidebar.locator('dl > div').filter({ has: page.locator('dt', { hasText: /^(Rows|Zeilen)$/ }) })
   await expect(row.locator('dd')).toHaveText(String(rows))
 }
+
+/**
+ * Analyze in two steps (#141): sets up Anthropic with an invented key and
+ * passes the connection test, so the step that sends appears. Answers only the
+ * test's "Hello"; nothing reaches Anthropic.
+ */
+export async function connectAnthropic(page: Page, key = 'sk-ant-invented-test-key') {
+  const hello = (route: import('@playwright/test').Route) => {
+    const body = route.request().postDataJSON() as { messages?: Array<{ content?: unknown }> } | null
+    if (body?.messages?.[0]?.content !== 'Hello') return route.fallback()
+    return route.fulfill({ status: 200, contentType: 'application/json', headers: { 'access-control-allow-origin': '*' }, body: JSON.stringify({ content: [{ type: 'text', text: 'Hi' }] }) })
+  }
+  await page.route('https://api.anthropic.com/**', hello)
+  await page.getByLabel('API key', { exact: true }).fill(key)
+  await page.getByRole('button', { name: 'Test connection' }).click()
+  await expect(page.getByRole('region', { name: 'Connected' })).toBeVisible()
+  await page.unroute('https://api.anthropic.com/**', hello)
+}
+
+/** Opens the list of texts that will be sent, in the panel on the right (#141). */
+export async function openSentTexts(page: Page) {
+  await page.getByRole('button', { name: /^Review what will be sent/ }).click()
+  return page.getByRole('region', { name: 'The texts that will be sent' })
+}
