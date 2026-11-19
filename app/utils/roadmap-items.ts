@@ -35,6 +35,7 @@ export const ROADMAP_ITEMS: readonly RoadmapItem[] = [
   { id: 'report', status: 'planned', horizon: 'next', version: 'v0.4', link: { kind: 'milestone', label: 'v0.4', url: `${REPO}/milestone/4` } },
   { id: 'landing', status: 'planned', horizon: 'later', link: issue(97) },
   { id: 'namesMore', status: 'planned', horizon: 'later', link: issue(82) },
+  { id: 'providers', status: 'planned', horizon: 'later', link: issue(181) },
   { id: 'transcripts', status: 'planned', horizon: 'later', version: 'v0.5', link: issue(87) },
   { id: 'documents', status: 'planned', horizon: 'later', version: 'v0.5', link: issue(88) },
   { id: 'docker', status: 'planned', horizon: 'later', version: 'v1.0', link: issue(75) },
