@@ -42,7 +42,8 @@ test('every link, canonical and hreflang link on every page ends in a slash', as
     await page.goto(path)
     const found = pageAddresses(await addresses(page), origin)
     expect(found.length, path).toBeGreaterThan(0)
-    expect(found.filter(address => !address.endsWith('/')), path).toEqual([])
+    // Pages end in a slash; a file such as /llms.txt keeps its extension.
+    expect(found.filter(address => !address.endsWith('/') && !/\.[a-z]+$/.test(address)), path).toEqual([])
   }
 })
 

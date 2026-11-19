@@ -20,7 +20,8 @@
     "roadmap": "Roadmap",
     "credit": "Built by {name}",
     "accuracy": "Accuracy",
-    "label": "Footer"
+    "label": "Footer",
+    "llms": "llms.txt"
   },
   "types": {
     "EMAIL": "email addresses",
