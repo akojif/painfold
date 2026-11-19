@@ -209,6 +209,13 @@
       "sendAfterTest": "Next: check what will be sent, then send it. This appears once the connection test works.",
       "reviewSent": "Review what will be sent (1 text) | Review what will be sent ({n} texts)",
       "sentTexts": "The texts that will be sent"
+    },
+    "report": {
+      "sidebar": "Sections and the cleaned file",
+      "onThisPage": "On this page",
+      "theme": "Theme",
+      "caption": "{kind}: one row per theme, the most texts first. Select a theme for its quotes and texts.",
+      "quotes": "Quotes and texts"
     }
   }
 }

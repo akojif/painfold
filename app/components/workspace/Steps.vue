@@ -2,7 +2,8 @@
 // The four steps of the working flow, as tabs in the workspace top bar. A
 // step is a link once it can be reached; each says what it holds now (how
 // much is left to review, an analysis running, how many themes). Steps
-// before the current one are marked done, for screen readers too.
+// before the current one are marked done, for screen readers too, once they
+// were reached: the demo report with no file open claims no import.
 import type { RouteLocationRaw } from 'vue-router'
 import { NuxtLink } from '#components'
 
@@ -28,6 +29,7 @@ const steps = computed<Step[]>(() => [
   { id: 'report', to: tagging.themes.value ? localePath('/report') : undefined, meta: themes.value ? t('nav.meta.themes', { n: number(themes.value) }, themes.value) : undefined },
 ])
 const position = (index: number) => index + 1
+const done = (step: Step, index: number) => position(index) < props.current && Boolean(step.to)
 </script>
 
 <template>
@@ -53,13 +55,13 @@ const position = (index: number) => index + 1
           ]"
         >
           <svg
-            v-if="position(index) < props.current"
+            v-if="done(step, index)"
             aria-hidden="true"
             viewBox="0 0 16 16"
             class="size-3.5 fill-none stroke-current stroke-2 text-accent"
           ><path d="M3.5 8.5 6.5 11.5 12.5 4.5" /></svg>
           {{ $t(`nav.steps.${step.id}`) }}<span
-            v-if="position(index) < props.current"
+            v-if="done(step, index)"
             class="sr-only"
           >, {{ $t('nav.done') }}</span>
           <span

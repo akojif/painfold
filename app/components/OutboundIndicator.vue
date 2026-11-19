@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import type { NetworkEntry } from '~/composables/useNetworkLog'
 
-/** In the workspace top bar the label waits for a wide screen, so the steps fit at 768 px; screen readers always hear it. */
+/** In the workspace top bar the label waits for a wide screen, and from 1 kB the count is rounded (48 kB), so the steps fit at 768 px; screen readers always hear the label and the exact count. */
 defineProps<{ compact?: boolean }>()
 const { t } = useI18n()
 const { number } = useFormat()
 const { entries, ai, foreign, sentBytes } = useNetworkLog()
 const dialog = useTemplateRef<HTMLDialogElement>('dialog')
 const label = computed(() => t('header.bytes', { n: number(sentBytes.value) }, sentBytes.value))
+const short = computed(() => (sentBytes.value < 1024 ? label.value : sentBytes.value < 1_000_000 ? t('network.kilobytes', { n: number(Math.round(sentBytes.value / 1024)) }) : t('network.megabytes', { n: number(Math.round(sentBytes.value / 1_000_000)) })))
 
 function size(entry: NetworkEntry) {
   if (entry.stored) return t('network.stored')
@@ -33,6 +34,12 @@ function size(entry: NetworkEntry) {
       />
       <span :class="compact ? 'max-xl:sr-only' : 'max-sm:sr-only'">{{ $t('header.outbound') }}</span>
       <span
+        v-if="compact && short !== label"
+        class="font-mono text-xs whitespace-nowrap"
+        :class="foreign.length > 0 ? 'text-danger' : 'text-fg'"
+      ><span aria-hidden="true">{{ short }}</span><span class="sr-only">{{ label }}</span></span>
+      <span
+        v-else
         class="font-mono text-xs whitespace-nowrap"
         :class="foreign.length > 0 ? 'text-danger' : 'text-fg'"
       >{{ label }}</span>
