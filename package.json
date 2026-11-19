@@ -11,7 +11,7 @@
   },
   "scripts": {
     "dev": "node scripts/fetch-model.ts && nuxt dev",
-    "generate": "node scripts/fetch-model.ts && nuxt generate && node scripts/remove-spa-fallback.ts && node scripts/apply-csp.ts && node scripts/write-cloudflare-assets.ts",
+    "generate": "node scripts/fetch-model.ts && nuxt generate && node scripts/remove-spa-fallback.ts && node scripts/apply-csp.ts && node scripts/write-llms-txt.ts && node scripts/write-cloudflare-assets.ts",
     "serve": "node scripts/serve-static.ts",
     "lint": "eslint .",
     "typecheck": "nuxt typecheck",

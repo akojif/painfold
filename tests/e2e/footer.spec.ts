@@ -11,7 +11,7 @@ const box = async (locator: Locator) => (await locator.boundingBox())!
 const sideways = (page: Page) => page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
 const LINE = 24 // one line of 13 px text, with room for the icon
 
-test('every page has the same footer, links only: Roadmap, Accuracy, the GitHub mark and the credit', async ({ page }) => {
+test('every page has the same footer, links only: Roadmap, Accuracy, the GitHub mark, llms.txt and the credit', async ({ page }) => {
   const texts: string[] = []
   for (const path of ['/', '/roadmap/', '/accuracy/', '/no-such-page/']) {
     await page.goto(path)
@@ -27,7 +27,7 @@ test('every page has the same footer, links only: Roadmap, Accuracy, the GitHub 
 
   expect(new Set(texts).size).toBe(1)
   expect(texts[0]).not.toMatch(/browser|uploaded/)
-  await expect(footer(page).getByRole('navigation', { name: 'Footer' }).getByRole('link')).toHaveText(['Roadmap', 'Accuracy', 'Open source'])
+  await expect(footer(page).getByRole('navigation', { name: 'Footer' }).getByRole('link')).toHaveText(['Roadmap', 'Accuracy', 'Open source', 'llms.txt'])
   const source = footer(page).getByRole('link', { name: 'Open source' })
   await expect(source).toHaveAttribute('href', 'https://github.com/akojif/painfold')
   // The GitHub mark is the link; its label is for screen readers.
@@ -57,7 +57,7 @@ for (const width of [1280, 768]) {
 }
 
 for (const width of [390, 320]) {
-  for (const [path, credit, links] of [['/', /^Built by/, ['Roadmap', 'Accuracy', 'Open source']], ['/de/', /^Entwickelt von/, ['Roadmap', 'Genauigkeit', 'Open Source']]] as const) {
+  for (const [path, credit, links] of [['/', /^Built by/, ['Roadmap', 'Accuracy', 'Open source', 'llms.txt']], ['/de/', /^Entwickelt von/, ['Roadmap', 'Genauigkeit', 'Open Source', 'llms.txt']]] as const) {
     test(`on a phone, ${width} px, ${path === '/' ? 'English' : 'German'}: two short centred lines, the links and the credit`, async ({ page }) => {
       await page.setViewportSize({ width, height: 800 })
       await page.goto(path)

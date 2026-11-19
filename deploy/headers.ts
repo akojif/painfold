@@ -91,8 +91,13 @@ export function headersFor(path: string): Record<string, string> {
     ...commonHeaders,
     'Content-Security-Policy': CODE_PREFIXES.some(prefix => path.startsWith(prefix)) ? assetPolicy() : "frame-ancestors 'none'",
     ...(IMMUTABLE_PREFIXES.some(prefix => path.startsWith(prefix)) ? { 'Cache-Control': 'public, max-age=31536000, immutable' } : {}),
+    // llms.txt is Markdown read as plain text, in UTF-8 (scripts/llms-txt.ts).
+    ...(path === LLMS_PATH ? { 'Content-Type': 'text/plain; charset=utf-8' } : {}),
   }
 }
+
+/** Where llms.txt is served (https://llmstxt.org). */
+export const LLMS_PATH = '/llms.txt'
 
 /**
  * Cloudflare's _headers file, written into the build by scripts/write-cloudflare-assets.ts.
@@ -107,6 +112,7 @@ export function cloudflareHeaders(): string {
     ['/*', page],
     [`${ASSET_PREFIX}*`, changedFrom(page, headersFor(`${ASSET_PREFIX}entry.js`))],
     [`${RUNTIME_PREFIX}*`, changedFrom(page, headersFor(`${RUNTIME_PREFIX}runtime.wasm`))],
+    [LLMS_PATH, changedFrom(page, headersFor(LLMS_PATH))],
   ]
   return rules.map(([path, headers]) => [
     path,
