@@ -20,7 +20,8 @@
     "roadmap": "Roadmap",
     "credit": "Entwickelt von {name}",
     "accuracy": "Genauigkeit",
-    "label": "Fußzeile"
+    "label": "Fußzeile",
+    "llms": "llms.txt"
   },
   "types": {
     "EMAIL": "E-Mail-Adressen",
