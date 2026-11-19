@@ -130,12 +130,41 @@ test('the report ranks jobs, pains and gains with numbers counted from the answe
 test('every bar uses one scale across jobs, pains and gains', async ({ page }) => {
   const { texts } = await analyzeSample(page)
   const pains = texts.filter(({ id }) => number(id) % 3 === 0).length
-  const bars = page.locator('[aria-hidden="true"] > span[style*="scaleX"]')
+  const bars = page.getByRole('main').locator('svg[data-value]')
   // The job is in every text: the largest share, a full bar. The pain's bar is its share of that.
-  await expect(bars.first()).toHaveAttribute('style', /scaleX\(1\)/)
-  const style = await bars.nth(1).getAttribute('style')
-  expect(Number(style!.match(/scaleX\(([\d.]+)\)/)![1])).toBeCloseTo(pains / texts.length, 5)
+  await expect(bars.first()).toHaveAttribute('data-value', '1')
+  expect(Number(await bars.nth(1).getAttribute('data-value'))).toBeCloseTo(pains / texts.length, 5)
 })
+
+/** The WCAG contrast ratio of two rgb() colours, as computed by the browser. */
+function contrast(a: string, b: string) {
+  const luminance = (color: string) => {
+    const [r, g, b] = color.match(/\d+(\.\d+)?/g)!.slice(0, 3).map(Number).map(v => v / 255).map(v => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4))
+    return 0.2126 * r! + 0.7152 * g! + 0.0722 * b!
+  }
+  const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x)
+  return (hi! + 0.05) / (lo! + 0.05)
+}
+
+for (const scheme of ['light', 'dark'] as const) {
+  test(`in ${scheme} mode the bars stand out from the page and their track, and every bar has its number beside it`, async ({ page }) => {
+    await page.emulateMedia({ colorScheme: scheme })
+    await analyzeSample(page)
+    const bars = page.getByRole('main').locator('svg[data-value]')
+    await expect(bars.first()).toBeVisible()
+    const colours = await bars.first().evaluate((svg) => {
+      const [track, bar] = [...svg.querySelectorAll('rect')].map(rect => getComputedStyle(rect).fill)
+      return { track: track!, bar: bar!, page: getComputedStyle(document.body).backgroundColor }
+    })
+    expect(contrast(colours.bar, colours.page)).toBeGreaterThanOrEqual(3)
+    expect(contrast(colours.bar, colours.track)).toBeGreaterThanOrEqual(3)
+    // Decoration only: hidden from screen readers, and the share is written in the same cell.
+    for (const bar of await bars.all()) {
+      await expect(bar).toHaveAttribute('aria-hidden', 'true')
+      await expect(bar.locator('xpath=ancestor::td[1]')).toHaveText(/^\d+(\.\d+)?\s?%$/)
+    }
+  })
+}
 
 /** Opens the report after the review, before any analysis: reachable only by going back and forth in history. */
 async function reportBeforeAnalysis(page: Page, start = '/') {

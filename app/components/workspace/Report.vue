@@ -253,15 +253,10 @@ function close() {
                 <td class="border-b border-line px-3">
                   <span class="flex items-center gap-3">
                     <span class="w-9 shrink-0 font-mono tabular-nums">{{ percent(theme.share) }}</span>
-                    <span
-                      aria-hidden="true"
-                      class="h-1 flex-1 overflow-hidden rounded-full bg-line"
-                    >
-                      <span
-                        class="block h-full origin-left bg-fg-muted"
-                        :style="{ transform: `scaleX(${barLength(theme.share, report.largestShare)})` }"
-                      />
-                    </span>
+                    <ChartBar
+                      class="min-w-0 flex-1"
+                      :value="barLength(theme.share, report.largestShare)"
+                    />
                   </span>
                 </td>
                 <td class="border-b border-line px-3">

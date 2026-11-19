@@ -79,6 +79,8 @@
   --pf-light-accent: #0F766E;        /* the one accent: links, focus, progress, the current stage */
   --pf-light-on-accent: #FFFFFF;
   --pf-light-danger: #B91C1C;        /* errors and risks only */
+  --pf-light-chart-bar: #5B6472;    /* charts: a magnitude bar (one neutral hue; accent and danger stay for status), 3:1 on every surface and its track */
+  --pf-light-chart-track: #E4E7EC;  /* charts: the track behind a bar */
   --pf-light-on-danger: #FFFFFF;
   --pf-light-pending: #FEF3C7;       /* personal data waiting for review (soft amber) */
   --pf-light-pending-line: #B45309;  /* its underline, so colour is not the only cue */
@@ -98,6 +100,8 @@
   --pf-dark-accent: #2DD4BF;
   --pf-dark-on-accent: #11161F;
   --pf-dark-danger: #F87171;
+  --pf-dark-chart-bar: #94A0B0;
+  --pf-dark-chart-track: #2A3341;
   --pf-dark-on-danger: #11161F;
   --pf-dark-pending: #3B2F12;
   --pf-dark-pending-line: #F59E0B;
@@ -122,6 +126,8 @@
   --pf-accent: var(--pf-light-accent);
   --pf-on-accent: var(--pf-light-on-accent);
   --pf-danger: var(--pf-light-danger);
+  --pf-chart-bar: var(--pf-light-chart-bar);
+  --pf-chart-track: var(--pf-light-chart-track);
   --pf-on-danger: var(--pf-light-on-danger);
   --pf-pending: var(--pf-light-pending);
   --pf-pending-line: var(--pf-light-pending-line);
@@ -146,6 +152,8 @@
     --pf-accent: var(--pf-dark-accent);
     --pf-on-accent: var(--pf-dark-on-accent);
     --pf-danger: var(--pf-dark-danger);
+    --pf-chart-bar: var(--pf-dark-chart-bar);
+    --pf-chart-track: var(--pf-dark-chart-track);
     --pf-on-danger: var(--pf-dark-on-danger);
     --pf-pending: var(--pf-dark-pending);
     --pf-pending-line: var(--pf-dark-pending-line);
@@ -170,6 +178,8 @@
   --pf-accent: var(--pf-dark-accent);
   --pf-on-accent: var(--pf-dark-on-accent);
   --pf-danger: var(--pf-dark-danger);
+  --pf-chart-bar: var(--pf-dark-chart-bar);
+  --pf-chart-track: var(--pf-dark-chart-track);
   --pf-on-danger: var(--pf-dark-on-danger);
   --pf-pending: var(--pf-dark-pending);
   --pf-pending-line: var(--pf-dark-pending-line);
@@ -205,6 +215,8 @@
   --color-on-accent: var(--pf-on-accent);
   --color-danger: var(--pf-danger);
   --color-on-danger: var(--pf-on-danger);
+  --color-chart-bar: var(--pf-chart-bar);
+  --color-chart-track: var(--pf-chart-track);
   --color-pending: var(--pf-pending);
   --color-pending-line: var(--pf-pending-line);
   --color-on-pending: var(--pf-on-pending);

@@ -43,6 +43,15 @@ test('lists every name-origin group with its removal recall, and marks none belo
   }
 })
 
+test('the removal bar says in words when it is below the target, not by colour alone', async ({ page }) => {
+  await page.goto('/accuracy/')
+  const removal = page.getByRole('term').filter({ hasText: /^Removed/ }).first()
+  if (overall < data.target) await expect(removal).toContainText('below target')
+  else await expect(removal).toHaveText('Removed')
+  // Every bar on the page is decoration beside a written number.
+  for (const bar of await page.locator('main svg[data-value]').all()) await expect(bar).toHaveAttribute('aria-hidden', 'true')
+})
+
 test('the language switch shows German or English alone', async ({ page }) => {
   await page.goto('/accuracy/')
   const names = page.getByRole('region', { name: 'Names', exact: true })
