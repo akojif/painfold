@@ -30,12 +30,13 @@ Not in scope here: what an AI provider does with text you chose to send (see its
 
 ## What to expect
 
-- An acknowledgement within 3 working days.
-- An assessment within 10 working days: whether it's confirmed, how serious it is, and the plan.
-- A fix in a new release. Privacy leaks come before anything else. You'll be kept up to date in the private report.
-- When it's fixed, a published advisory and a changelog entry. You'll be credited, unless you'd rather not be.
+Painfold is maintained by one person, so please allow some time.
 
-Painfold is a small open-source project with no bug bounty.
+- Your report is acknowledged within 7 days, with regular updates in the private report after that: whether it's confirmed, how serious it is, and the plan.
+- A fix comes in a new release. Privacy leaks come before anything else.
+- When it's fixed, an advisory and a changelog entry are published. You'll be credited, unless you'd rather not be.
+
+There's no bug bounty.
 
 ## Supported versions
 
