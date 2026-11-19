@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { NetworkEntry } from '~/composables/useNetworkLog'
 
+/** In the workspace top bar the label waits for a wide screen, so the steps fit at 768 px; screen readers always hear it. */
+defineProps<{ compact?: boolean }>()
 const { t } = useI18n()
 const { number } = useFormat()
 const { entries, ai, foreign, sentBytes } = useNetworkLog()
@@ -29,7 +31,7 @@ function size(entry: NetworkEntry) {
         class="size-1.5 rounded-full"
         :class="foreign.length > 0 ? 'bg-danger' : 'bg-accent'"
       />
-      <span class="max-sm:sr-only">{{ $t('header.outbound') }}</span>
+      <span :class="compact ? 'max-xl:sr-only' : 'max-sm:sr-only'">{{ $t('header.outbound') }}</span>
       <span
         class="font-mono text-xs whitespace-nowrap"
         :class="foreign.length > 0 ? 'text-danger' : 'text-fg'"

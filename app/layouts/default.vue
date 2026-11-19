@@ -15,7 +15,6 @@ const route = useRoute()
 const author = { name: 'Francis Akoji', url: 'https://francisakoji.com' }
 const session = useSession()
 const { table, hasWork } = session
-const mayDiscard = useDiscardGuard()
 // Pages outside the cleaning flow (the roadmap) have no step.
 const step = computed(() => route.meta.step as number | undefined)
 // The empty start screen explains the product instead; steps appear once a file
@@ -55,12 +54,7 @@ watch(narrow, (now) => {
   if (!now && current.value.meta.needsReview && !session.review.value && !useTagging().demo.value) void navigateTo(localePath('/'))
 })
 
-/** Back to the start screen with nothing open, after asking if work would be lost. */
-async function startOver() {
-  if (!(await mayDiscard())) return
-  session.clear()
-  await navigateTo(localePath('/'))
-}
+const startOver = useStartOver()
 
 // The logo leads to the start screen; with a file open, that means starting over.
 // A plain link, so this runs before any navigation; a new tab opens as usual.
@@ -88,7 +82,15 @@ onBeforeUnmount(() => window.removeEventListener('beforeunload', onBeforeUnload)
 
 <template>
   <div class="flex min-h-dvh flex-col">
-    <header class="sticky top-0 z-20 border-b border-line bg-canvas">
+    <!-- Once a file is open, the working flow has the workspace top bar: the steps, the controls and Start over (#141). -->
+    <WorkspaceTopBar
+      v-if="showSteps"
+      :current="step!"
+    />
+    <header
+      v-else
+      class="sticky top-0 z-20 border-b border-line bg-canvas"
+    >
       <div class="mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 px-4 sm:gap-4 sm:px-6">
         <a
           :href="localePath('/')"
@@ -111,21 +113,6 @@ onBeforeUnmount(() => window.removeEventListener('beforeunload', onBeforeUnload)
     </header>
 
     <div class="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 sm:px-6">
-      <!-- Once a file is open, Start over sits at the end of the steps on every step, in the same place. -->
-      <div
-        v-if="showSteps"
-        class="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 pt-6"
-      >
-        <AppStepper :current="step!" />
-        <button
-          v-if="table"
-          type="button"
-          class="press focus-ring rounded-sm text-sm text-fg-muted underline-offset-4 hover:text-fg hover:underline"
-          @click="startOver"
-        >
-          {{ $t('nav.startOver') }}
-        </button>
-      </div>
       <main class="flex flex-1 flex-col py-8 sm:py-10">
         <SmallScreenNotice
           v-if="working"
