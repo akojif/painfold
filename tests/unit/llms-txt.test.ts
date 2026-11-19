@@ -66,6 +66,7 @@ describe('llms.txt', () => {
     const doc = readFileSync('docs/privacy.md', 'utf8')
     expect(text).toContain(privacySection(doc, 'Privacy'))
     expect(text).toContain(privacySection(doc, 'What is stored in your browser'))
+    expect(text).toContain(privacySection(doc, "What Painfold doesn't protect against"))
     // Only links are rewritten: relative links become links to the repository.
     expect(privacySection(doc, 'Privacy')).not.toMatch(/\]\((?!https?:)/)
   })
