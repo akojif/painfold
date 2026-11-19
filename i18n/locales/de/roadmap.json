@@ -1,8 +1,7 @@
 {
   "roadmap": {
     "title": "Roadmap",
-    "intro": "Painfold hilft Ihnen zu verstehen, was Ihren Kunden wehtut. Der erste Schritt: Ihr Feedback vertraulich bereinigen.",
-    "current": "Aktuelle Phase",
+    "intro": "Painfold bereinigt das Feedback Ihrer Kundinnen und Kunden in Ihrem Browser und findet, was sie erledigen wollen, was sie stört und was sie sich wünschen. Hier steht, was veröffentlicht ist, was gerade entsteht und was danach kommt.",
     "status": {
       "available": "Verfügbar",
       "preview": "Vorschau",
@@ -10,7 +9,6 @@
       "planned": "Geplant",
       "next": "Als Nächstes"
     },
-    "stagesLabel": "Phasen",
     "full": "Die ganze Roadmap auf GitHub lesen",
     "stages": {
       "clean": {
@@ -67,6 +65,95 @@
           "Dokumentation für Teams"
         ]
       }
-    }
+    },
+    "horizons": {
+      "released": {
+        "name": "Veröffentlicht",
+        "hint": "Heute auf painfold.com nutzbar."
+      },
+      "now": {
+        "name": "Jetzt",
+        "hint": "Wird für die nächste Version gebaut."
+      },
+      "next": {
+        "name": "Als Nächstes",
+        "hint": "Die Phase danach."
+      },
+      "later": {
+        "name": "Später",
+        "hint": "Geplant, ohne Datum."
+      },
+      "idea": {
+        "name": "Ideen",
+        "hint": "Wird überlegt, ist noch nicht geplant."
+      }
+    },
+    "linkRelease": "Version {label}",
+    "linkIssue": "Issue {label}",
+    "linkMilestone": "Meilenstein {label}",
+    "newTab": "(öffnet in einem neuen Tab)",
+    "items": {
+      "clean": {
+        "name": "Bereinigen",
+        "summary": "Personenbezogene Daten im Browser aus einer Feedback-Datei entfernen und die bereinigte Datei herunterladen."
+      },
+      "names": {
+        "name": "Namen",
+        "summary": "Auch Namen und Orte finden, mit einem Modell, das in Ihrem Browser läuft, und Painfold auf Deutsch oder Englisch nutzen."
+      },
+      "jobs": {
+        "name": "Aufgaben, Probleme und Wünsche",
+        "summary": "Sehen, was Ihre Kundinnen und Kunden erledigen wollen, was sie stört und was sie sich wünschen, mit einer KI Ihrer Wahl."
+      },
+      "workspace": {
+        "name": "Neuer Arbeitsbereich",
+        "summary": "Importieren, Prüfen und Analysieren in einem Arbeitsbereich: die vier Schritte oben, Filter an der Seite, sortierbare Tabellen."
+      },
+      "report": {
+        "name": "Bericht",
+        "summary": "Ein Bericht, mit dem Ihr Team in einer Besprechung arbeiten kann: die wichtigsten Erkenntnisse zuerst, Segmente und Trends und Fragen für Ihr Team."
+      },
+      "landing": {
+        "name": "Neue Startseite",
+        "summary": "Eine Startseite, die Schritt für Schritt zeigt, was in Ihrem Browser geprüft wird und dass nichts ihn verlässt."
+      },
+      "namesMore": {
+        "name": "Bessere Namenserkennung",
+        "summary": "Spitznamen, Namen am Satzanfang und mehr Namenszusätze, gemessen an einem neuen, unabhängigen Testsatz."
+      },
+      "transcripts": {
+        "name": "Interview-Transkripte",
+        "summary": "Transkripte als TXT, VTT oder SRT bereinigen, Sprecherinnen und Sprecher einheitlich ersetzt."
+      },
+      "documents": {
+        "name": "DOCX- und PDF-Dokumente",
+        "summary": "Dokumente bereinigen, samt Metadaten, Kommentaren und Änderungsverfolgung."
+      },
+      "docker": {
+        "name": "Docker-Image",
+        "summary": "Painfold auf eigenen Servern betreiben, mit einem lokalen Modell und ohne Internet."
+      },
+      "engine": {
+        "name": "Painfold Engine",
+        "summary": "Ein optionaler, selbst betriebener Dienst, der die Analyse mit einem lokalen Modell ausführt, für Teams, die Painfold selbst hosten."
+      },
+      "mcp": {
+        "name": "MCP-Server",
+        "summary": "Painfold als Datenschutz-Schranke für KI-Assistenten: Dateien werden auf Ihrem Rechner bereinigt, bevor ein Assistent sie sieht."
+      }
+    },
+    "summary": "Aktuelle Version: {version}. {counts}.",
+    "counts": {
+      "inProgress": "{n} in Arbeit",
+      "planned": "{n} geplant",
+      "idea": "{n} Idee | {n} Ideen"
+    },
+    "allReleases": "Alle Versionen ({n})",
+    "fewerReleases": "Weniger Versionen zeigen",
+    "showMore": "{n} weitere zeigen",
+    "showFewer": "Weniger zeigen",
+    "more": "Mehr",
+    "less": "Weniger",
+    "empty": "Hier ist noch nichts"
   }
 }

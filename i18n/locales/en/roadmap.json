@@ -1,8 +1,7 @@
 {
   "roadmap": {
     "title": "Roadmap",
-    "intro": "Painfold helps you understand what hurts your customers. Cleaning your feedback privately is the first step.",
-    "current": "Current stage",
+    "intro": "Painfold cleans your customer feedback in your browser and finds what your customers are trying to get done, what frustrates them and what they wish for. Here is what is released, what is being built and what comes after.",
     "status": {
       "available": "Available",
       "preview": "Preview",
@@ -10,7 +9,6 @@
       "planned": "Planned",
       "next": "Next"
     },
-    "stagesLabel": "Stages",
     "full": "Read the full roadmap on GitHub",
     "stages": {
       "clean": {
@@ -67,6 +65,95 @@
           "Documentation for teams"
         ]
       }
-    }
+    },
+    "horizons": {
+      "released": {
+        "name": "Released",
+        "hint": "Use it today on painfold.com."
+      },
+      "now": {
+        "name": "Now",
+        "hint": "Being built for the next release."
+      },
+      "next": {
+        "name": "Next",
+        "hint": "The stage after that."
+      },
+      "later": {
+        "name": "Later",
+        "hint": "Planned, without a date."
+      },
+      "idea": {
+        "name": "Ideas",
+        "hint": "Being considered, not planned yet."
+      }
+    },
+    "linkRelease": "Release {label}",
+    "linkIssue": "Issue {label}",
+    "linkMilestone": "Milestone {label}",
+    "newTab": "(opens in a new tab)",
+    "items": {
+      "clean": {
+        "name": "Clean",
+        "summary": "Remove personal data from a feedback file in your browser and download the cleaned file."
+      },
+      "names": {
+        "name": "Names",
+        "summary": "Also find names and places, with a model that runs in your browser, and use Painfold in English or German."
+      },
+      "jobs": {
+        "name": "Jobs, pains and gains",
+        "summary": "See what your customers are trying to get done, what frustrates them and what they wish for, with an AI you choose."
+      },
+      "workspace": {
+        "name": "Workspace redesign",
+        "summary": "Import, Review and Analyze in one workspace: the four steps at the top, filters at the side, tables you can sort."
+      },
+      "report": {
+        "name": "Report",
+        "summary": "A report your team can act on in one meeting: the main findings first, segments and trends, and questions for your team."
+      },
+      "landing": {
+        "name": "New start page",
+        "summary": "A start page that shows, step by step, what is checked in your browser and that nothing leaves it."
+      },
+      "namesMore": {
+        "name": "Better name detection",
+        "summary": "Nicknames, names at the start of a sentence and more name particles, measured on a new, independent test set."
+      },
+      "transcripts": {
+        "name": "Interview transcripts",
+        "summary": "Clean transcripts as TXT, VTT or SRT, with speakers replaced consistently."
+      },
+      "documents": {
+        "name": "DOCX and PDF documents",
+        "summary": "Clean documents, with their metadata, comments and tracked changes removed."
+      },
+      "docker": {
+        "name": "Docker image",
+        "summary": "Run Painfold on your own servers, with a local model, offline."
+      },
+      "engine": {
+        "name": "Painfold Engine",
+        "summary": "An optional self-hosted service that runs the analysis with a local model, for teams that host Painfold themselves."
+      },
+      "mcp": {
+        "name": "MCP server",
+        "summary": "Painfold as a privacy gate for AI assistants: files are cleaned on your machine before an assistant sees them."
+      }
+    },
+    "summary": "Current version: {version}. {counts}.",
+    "counts": {
+      "inProgress": "{n} in progress",
+      "planned": "{n} planned",
+      "idea": "{n} idea | {n} ideas"
+    },
+    "allReleases": "All releases ({n})",
+    "fewerReleases": "Show fewer releases",
+    "showMore": "Show {n} more",
+    "showFewer": "Show fewer",
+    "more": "More",
+    "less": "Less",
+    "empty": "Nothing here yet"
   }
 }

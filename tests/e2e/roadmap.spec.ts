@@ -11,29 +11,52 @@ test('the footer credits the author in a new tab, announced as one, without a he
   expect(await footer.innerText()).not.toMatch(/\p{Extended_Pictographic}/u)
 })
 
-test('the roadmap page is prerendered and lists every stage with the current one marked', async ({ page, request }) => {
+test('the roadmap page is prerendered and shows what is released, what is being built and what comes after', async ({ page, request }) => {
   const html = await (await request.get('/roadmap/')).text()
-  expect(html).toContain('Cleaning your feedback privately is the first step.')
+  expect(html).toContain('Here is what is released, what is being built and what comes after.')
 
   await page.goto('/')
   await page.locator('footer').getByRole('link', { name: 'Roadmap' }).click()
   await expect(page).toHaveURL(/\/roadmap\/$/)
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Roadmap')
-  const stages = page.getByRole('list', { name: 'Stages' }).locator(':scope > li')
-  await expect(stages.getByRole('heading', { level: 2 })).toHaveText(['v0.1 Clean', 'v0.2 Names', 'v0.3 Jobs, pains and gains', 'v0.4 Report', 'v0.5 Transcripts and documents', 'v1.0 Launch'])
-  await expect(stages.first()).toContainText('Available')
-  await expect(stages.nth(1)).toContainText('Available')
-  // Stage 3 was released with v0.3.0 and its quality numbers; it stays the current stage until v0.4 starts.
-  await expect(stages.nth(2)).toHaveAttribute('aria-current', 'step')
-  await expect(stages.nth(2)).toContainText('Current stage')
-  await expect(stages.nth(2)).toContainText('Available')
-  await expect(stages.nth(3)).toContainText('Next')
-  await expect(stages.nth(4)).toContainText('Planned')
+  await expect(page.getByText('Current version: v0.3.0. 1 in progress, 6 planned, and 2 ideas.')).toBeVisible()
+  await expect(page.getByRole('heading', { level: 2 })).toHaveText([/^Released/, /^Now/, /^Next/, /^Later/, /^Ideas/])
+
+  // The releases, newest first; with three, there is nothing more to show.
+  await expect(page.locator('#roadmap-releases > li h3')).toHaveText([/v0\.3\.0\s*Jobs, pains and gains/, /v0\.2\.0\s*Names/, /v0\.1\.0\s*Clean/])
+  await expect(page.getByRole('link', { name: 'Release v0.3.0 (opens in a new tab)' })).toHaveAttribute('href', 'https://github.com/akojif/painfold/releases/tag/v0.3.0')
+  await expect(page.getByRole('button', { name: /All releases/ })).toHaveCount(0)
+
+  // Now carries the current work; Later shows four cards, the fifth on request.
+  const now = page.getByRole('region', { name: /^Now/ })
+  await expect(now.getByRole('heading', { level: 3 })).toHaveText(['Workspace redesign'])
+  await expect(now.getByRole('link', { name: 'Issue #141 (opens in a new tab)' })).toHaveAttribute('target', '_blank')
+  const later = page.getByRole('region', { name: /^Later/ })
+  await expect(later.getByRole('listitem')).toHaveCount(4)
+  const more = later.getByRole('button', { name: 'Show 1 more' })
+  await expect(more).toHaveAttribute('aria-expanded', 'false')
+  await more.click()
+  await expect(later.getByRole('listitem')).toHaveCount(5)
+  await expect(later.getByRole('button', { name: 'Show fewer' })).toHaveAttribute('aria-expanded', 'true')
+
+  // Later and Ideas show a first line, and the rest in place.
+  const engine = page.getByRole('region', { name: /^Ideas/ }).getByRole('listitem').first()
+  const toggle = engine.getByRole('button', { name: /^More\s*:\s*Painfold Engine$/ })
+  await toggle.click()
+  await expect(engine.getByRole('button', { name: /^Less\s*:\s*Painfold Engine$/ })).toHaveAttribute('aria-expanded', 'true')
+
   await expect(page.getByRole('link', { name: 'Read the full roadmap on GitHub' })).toHaveAttribute('href', 'https://github.com/akojif/painfold/blob/main/ROADMAP.md')
   await expect(page.getByRole('navigation', { name: 'Steps' })).toHaveCount(0)
   const source = page.locator('footer').getByRole('link', { name: 'Open source' })
   await expect(source).toHaveAttribute('href', 'https://github.com/akojif/painfold')
   await expect(source.locator('svg')).toHaveCount(1)
+})
+
+test('the German roadmap reads in German', async ({ page }) => {
+  await page.goto('/de/roadmap/')
+  await expect(page.getByText('Aktuelle Version: v0.3.0. 1 in Arbeit, 6 geplant und 2 Ideen.')).toBeVisible()
+  await expect(page.getByRole('heading', { level: 2 })).toHaveText([/^Veröffentlicht/, /^Jetzt/, /^Als Nächstes/, /^Später/, /^Ideen/])
+  await expect(page.getByRole('button', { name: '1 weitere zeigen' })).toBeVisible()
 })
 
 test('the download page leads on to Analyze, and going back keeps the cleaned file', async ({ page }) => {
@@ -50,10 +73,14 @@ test('the download page leads on to Analyze, and going back keeps the cleaned fi
 test.describe('on a phone', () => {
   test.use({ viewport: { width: 390, height: 844 } })
 
-  test('the roadmap and the footer do not scroll sideways', async ({ page }) => {
-    await page.goto('/roadmap/')
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Roadmap')
-    expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0)
+  test('the roadmap and the footer do not scroll sideways, with the columns stacked in order', async ({ page }) => {
+    for (const path of ['/roadmap/', '/de/roadmap/']) {
+      await page.goto(path)
+      await expect(page.getByRole('heading', { level: 1 })).toHaveText('Roadmap')
+      const tops = await page.getByRole('heading', { level: 2 }).evaluateAll(headings => headings.map(heading => heading.getBoundingClientRect().top))
+      expect(tops, path).toEqual([...tops].sort((a, b) => a - b))
+      expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth), path).toBeLessThanOrEqual(0)
+    }
   })
 })
 
