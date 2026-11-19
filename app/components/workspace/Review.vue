@@ -389,6 +389,12 @@ const bulk = computed(() => {
           >
             {{ $t('workspace.review.shownOf', { shown: number(rows.length), total: number(allRows.length) }, allRows.length) }}
           </p>
+          <p
+            v-else-if="ws.view === 'row'"
+            class="mb-2.5 text-sm text-fg-muted tabular-nums"
+          >
+            {{ $t('file.rows', { n: number(ws.unitIds.length) }, ws.unitIds.length) }}
+          </p>
         </div>
 
         <p
@@ -622,9 +628,9 @@ const bulk = computed(() => {
           id="view-row"
           role="tabpanel"
           aria-labelledby="view-tab-row"
-          class="mt-2 grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_18rem]"
+          class="mt-4 grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_18rem]"
         >
-          <div>
+          <div class="min-w-0 rounded-md border border-line bg-surface px-4">
             <ol v-if="ws.shownUnits.length > 0">
               <ReviewUnit
                 v-for="unit in ws.shownUnits"
@@ -640,7 +646,7 @@ const bulk = computed(() => {
             </ol>
             <p
               v-else
-              class="mt-4 text-fg-muted"
+              class="py-4 text-fg-muted"
             >
               {{ $t('review.noRows') }}
             </p>
@@ -652,7 +658,7 @@ const bulk = computed(() => {
           </div>
 
           <MarginNote
-            class="lg:sticky lg:top-20 lg:mt-4"
+            class="lg:rounded-md lg:border lg:border-line lg:bg-surface lg:p-4"
             docked
             :finding="ws.selected"
             :warning="ws.selectedWarning"

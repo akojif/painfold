@@ -4,8 +4,9 @@ import { cleaningReport, reportTimestamp } from '~~/core/export/report'
 import { NAME_MODEL } from '~~/deploy/model'
 
 definePageMeta({
-  // Downloading the cleaned file is part of the Review step (#142).
+  // Downloading the cleaned file is part of the Review step (#142), in the workspace (#141).
   step: 2,
+  workspace: true,
   // Below 768 px the layout shows SmallScreenNotice instead, also from a direct link (#139).
   working: true,
   needsReview: true,
@@ -81,18 +82,50 @@ function downloadReport() {
 </script>
 
 <template>
-  <ClientOnly>
-    <div
-      v-if="table && review"
-      class="max-w-2xl"
-    >
+  <WorkspaceBody
+    v-if="table && review"
+    :sidebar-label="$t('workspace.download.sidebar')"
+  >
+    <template #sidebar>
+      <section aria-labelledby="download-file">
+        <h2
+          id="download-file"
+          class="text-sm font-medium"
+        >
+          {{ $t('file.heading') }}
+        </h2>
+        <p class="mt-1.5 flex min-w-0 text-sm">
+          <MiddleTruncate :text="table.fileName" />
+        </p>
+        <dl class="mt-2 space-y-1 text-sm">
+          <div class="flex justify-between gap-2">
+            <dt class="text-fg-muted">
+              {{ $t('file.rowsLabel') }}
+            </dt>
+            <dd class="font-mono tabular-nums">
+              {{ number(table.rows.length) }}
+            </dd>
+          </div>
+        </dl>
+        <NuxtLink
+          :to="localePath('/review')"
+          class="focus-ring mt-2 inline-block rounded-sm text-sm text-accent underline-offset-4 hover:underline"
+        >
+          {{ $t('download.back') }}
+        </NuxtLink>
+      </section>
+
+      <div class="space-y-2 border-line text-sm text-fg-muted md:col-span-2 lg:mt-auto lg:border-t lg:pt-4">
+        <p>{{ $t('download.reportExplain') }}</p>
+        <p>{{ $t('download.mapStays') }}</p>
+        <p>{{ $t('review.limits') }}</p>
+      </div>
+    </template>
+
+    <div class="max-w-2xl px-4 pt-6 pb-16 sm:px-6 lg:pt-8">
       <h1 class="text-xl font-semibold">
         {{ $t('download.heading') }}
       </h1>
-      <MiddleTruncate
-        class="mt-1 text-sm text-fg-muted"
-        :text="table.fileName"
-      />
 
       <template v-if="checkingNames">
         <NameModelDownload
@@ -186,21 +219,7 @@ function downloadReport() {
             {{ $t('download.unchecked', { columns: unchecked.join(', ') }) }}
           </li>
         </ul>
-        <div class="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm">
-          <NuxtLink
-            :to="localePath('/review')"
-            class="focus-ring rounded-sm text-accent underline-offset-4 hover:underline"
-          >
-            {{ $t('download.back') }}
-          </NuxtLink>
-        </div>
       </section>
-
-      <div class="mt-10 space-y-2 text-sm text-fg-muted">
-        <p>{{ $t('download.reportExplain') }}</p>
-        <p>{{ $t('download.mapStays') }}</p>
-        <p>{{ $t('review.limits') }}</p>
-      </div>
 
       <section
         class="mt-10 border-t border-line pt-6"
@@ -223,5 +242,5 @@ function downloadReport() {
         </NuxtLink>
       </section>
     </div>
-  </ClientOnly>
+  </WorkspaceBody>
 </template>

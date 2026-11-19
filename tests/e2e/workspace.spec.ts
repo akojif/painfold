@@ -134,3 +134,35 @@ test.describe('Review at 768 px', () => {
     expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0)
   })
 })
+
+test('Review by row: the tab bar says how many rows are listed', async ({ page }) => {
+  await openReviewTable(page)
+  await page.getByRole('tab', { name: 'By row' }).click()
+  await expect(page.getByText('3 rows', { exact: true })).toBeVisible()
+  await expect(page.getByRole('tabpanel', { name: 'By row' }).locator('ol > li')).toHaveCount(3)
+})
+
+test('Download: the sidebar holds the file and what the cleaned file contains', async ({ page }) => {
+  await openReviewTable(page)
+  await page.getByRole('link', { name: 'Download the cleaned file' }).first().click()
+  await expect(page).toHaveURL(/\/download\/$/)
+  const sidebar = page.getByRole('complementary', { name: 'The file and what it contains' })
+  await expect(sidebar.getByTitle('tickets.csv', { exact: true })).toBeVisible()
+  await expect(sidebar.locator('dl > div')).toHaveText([/^Rows\s*3$/])
+  await expect(sidebar).toContainText('Automatic detection can miss personal data.')
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Your cleaned file is ready.')
+  await sidebar.getByRole('link', { name: 'Back to review' }).click()
+  await expect(page).toHaveURL(/\/review\/$/)
+})
+
+test.describe('Download at 768 px', () => {
+  test.use({ viewport: { width: 768, height: 900 } })
+
+  test('the sidebar comes first, and nothing scrolls sideways', async ({ page }) => {
+    await openReviewTable(page)
+    await page.getByRole('link', { name: 'Download the cleaned file' }).first().click()
+    const sidebar = page.getByRole('complementary', { name: 'The file and what it contains' })
+    expect((await sidebar.boundingBox())!.y).toBeLessThan((await page.getByRole('heading', { level: 1 }).boundingBox())!.y)
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0)
+  })
+})

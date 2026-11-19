@@ -191,6 +191,9 @@
       "inRows": "In 1 row | In {n} rows",
       "hidden": "The filters hide this value. N and P move through the values shown.",
       "whereItAppears": "Where it appears"
+    },
+    "download": {
+      "sidebar": "The file and what it contains"
     }
   }
 }
