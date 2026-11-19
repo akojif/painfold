@@ -191,6 +191,9 @@
       "inRows": "In 1 Zeile | In {n} Zeilen",
       "hidden": "Die Filter blenden diesen Wert aus. N und P gehen durch die angezeigten Werte.",
       "whereItAppears": "Wo er vorkommt"
+    },
+    "download": {
+      "sidebar": "Die Datei und was sie enthält"
     }
   }
 }
