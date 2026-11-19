@@ -121,6 +121,10 @@
         "name": "Bessere Namenserkennung",
         "summary": "Spitznamen, Namen am Satzanfang und mehr Namenszusätze, gemessen an einem neuen, unabhängigen Testsatz."
       },
+      "providers": {
+        "name": "Weitere KI-Anbieter",
+        "summary": "Mit OpenAI, xAI, Azure OpenAI oder einem anderen OpenAI-kompatiblen Dienst analysieren, direkt aus Ihrem Browser mit Ihrem eigenen Schlüssel."
+      },
       "transcripts": {
         "name": "Interview-Transkripte",
         "summary": "Transkripte als TXT, VTT oder SRT bereinigen, Sprecherinnen und Sprecher einheitlich ersetzt."
