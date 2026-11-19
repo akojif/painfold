@@ -19,7 +19,7 @@ test('the roadmap page is prerendered and shows what is released, what is being 
   await page.locator('footer').getByRole('link', { name: 'Roadmap' }).click()
   await expect(page).toHaveURL(/\/roadmap\/$/)
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Roadmap')
-  await expect(page.getByText('Current version: v0.3.0. 1 in progress, 6 planned, and 2 ideas.')).toBeVisible()
+  await expect(page.getByText('Current version: v0.3.0. 1 in progress, 7 planned, and 2 ideas.')).toBeVisible()
   await expect(page.getByRole('heading', { level: 2 })).toHaveText([/^Released/, /^Now/, /^Next/, /^Later/, /^Ideas/])
 
   // The releases, newest first; with three, there is nothing more to show.
@@ -27,16 +27,16 @@ test('the roadmap page is prerendered and shows what is released, what is being 
   await expect(page.getByRole('link', { name: 'Release v0.3.0 (opens in a new tab)' })).toHaveAttribute('href', 'https://github.com/akojif/painfold/releases/tag/v0.3.0')
   await expect(page.getByRole('button', { name: /All releases/ })).toHaveCount(0)
 
-  // Now carries the current work; Later shows four cards, the fifth on request.
+  // Now carries the current work; Later shows four cards, the other two on request.
   const now = page.getByRole('region', { name: /^Now/ })
   await expect(now.getByRole('heading', { level: 3 })).toHaveText(['Workspace redesign'])
   await expect(now.getByRole('link', { name: 'Issue #141 (opens in a new tab)' })).toHaveAttribute('target', '_blank')
   const later = page.getByRole('region', { name: /^Later/ })
   await expect(later.getByRole('listitem')).toHaveCount(4)
-  const more = later.getByRole('button', { name: 'Show 1 more' })
+  const more = later.getByRole('button', { name: 'Show 2 more' })
   await expect(more).toHaveAttribute('aria-expanded', 'false')
   await more.click()
-  await expect(later.getByRole('listitem')).toHaveCount(5)
+  await expect(later.getByRole('listitem')).toHaveCount(6)
   await expect(later.getByRole('button', { name: 'Show fewer' })).toHaveAttribute('aria-expanded', 'true')
 
   // Later and Ideas show a first line, and the rest in place.
@@ -54,9 +54,9 @@ test('the roadmap page is prerendered and shows what is released, what is being 
 
 test('the German roadmap reads in German', async ({ page }) => {
   await page.goto('/de/roadmap/')
-  await expect(page.getByText('Aktuelle Version: v0.3.0. 1 in Arbeit, 6 geplant und 2 Ideen.')).toBeVisible()
+  await expect(page.getByText('Aktuelle Version: v0.3.0. 1 in Arbeit, 7 geplant und 2 Ideen.')).toBeVisible()
   await expect(page.getByRole('heading', { level: 2 })).toHaveText([/^Veröffentlicht/, /^Jetzt/, /^Als Nächstes/, /^Später/, /^Ideen/])
-  await expect(page.getByRole('button', { name: '1 weitere zeigen' })).toBeVisible()
+  await expect(page.getByRole('button', { name: '2 weitere zeigen' })).toBeVisible()
 })
 
 test('the download page leads on to Analyze, and going back keeps the cleaned file', async ({ page }) => {

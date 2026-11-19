@@ -121,6 +121,10 @@
         "name": "Better name detection",
         "summary": "Nicknames, names at the start of a sentence and more name particles, measured on a new, independent test set."
       },
+      "providers": {
+        "name": "More AI providers",
+        "summary": "Analyze with OpenAI, xAI, Azure OpenAI or another OpenAI-compatible service, straight from your browser with your own key."
+      },
       "transcripts": {
         "name": "Interview transcripts",
         "summary": "Clean transcripts as TXT, VTT or SRT, with speakers replaced consistently."
