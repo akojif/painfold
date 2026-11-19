@@ -67,7 +67,7 @@ test('rule findings can be reviewed at once; names arrive in the background with
   await expect(page.getByText(/^Names checked: [\d,]+ names? and [\d,]+ places? added\.$/)).toBeAttached()
   expect(await page.evaluate(() => document.activeElement?.getAttribute('data-value'))).toBe(next)
   expect(await findings(page)).toBeGreaterThan(before)
-  await expect(page.getByRole('heading', { name: 'Names', exact: true })).toBeVisible()
+  await expect(page.getByRole('group', { name: 'Type' }).getByRole('checkbox', { name: /^Names/ })).toBeVisible()
 })
 
 test('the download waits while names are checked, and the cleaned file has them removed', async ({ page }) => {

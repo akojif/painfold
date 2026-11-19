@@ -158,6 +158,39 @@
     "close": "Schließen"
   },
   "workspace": {
-    "importSidebar": "Datei und Spalten"
+    "importSidebar": "Datei und Spalten",
+    "drawer": {
+      "close": "Details schließen",
+      "closeTitle": "Schließen (Escape)"
+    },
+    "review": {
+      "sidebar": "Filter, Namen und Datenschutz",
+      "filters": "Filter",
+      "clearFilters": "Filter zurücksetzen",
+      "type": "Art",
+      "statusLegend": "Status",
+      "status": {
+        "pending": "Offen",
+        "removed": "Entfernt",
+        "kept": "Behalten"
+      },
+      "warnings": "Hinweise",
+      "nearWarning": "In Zeilen mit Hinweis",
+      "names": "Namen und Orte",
+      "shownOf": "{shown} von 1 Wert | {shown} von {total} Werten",
+      "caption": "Gefundene personenbezogene Daten, eine Zeile je Wert. Einen Wert auswählen für die Details; N und P gehen durch die angezeigten Werte, R entfernt, K behält.",
+      "columns": {
+        "value": "Wert",
+        "rows": "Zeilen",
+        "decision": "Entscheidung"
+      },
+      "warningType": "Hinweis, {reason}",
+      "noMatch": "Keine Werte passen zu diesen Filtern.",
+      "keys": "Tasten: N und P gehen durch die angezeigten Werte, R entfernt, K behält, M markiert ausgewählten Text als übersehen, Z macht rückgängig.",
+      "warningRow": "Zeile {n}, könnte jemanden erkennbar machen",
+      "inRows": "In 1 Zeile | In {n} Zeilen",
+      "hidden": "Die Filter blenden diesen Wert aus. N und P gehen durch die angezeigten Werte.",
+      "whereItAppears": "Wo er vorkommt"
+    }
   }
 }

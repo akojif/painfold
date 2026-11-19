@@ -23,7 +23,8 @@ const row = (page: Page, n: number) => page.locator('main ol > li').filter({ has
 const progress = (page: Page) => page.getByText(/reviewed, .* left/)
 const current = (page: Page) => page.locator('[data-finding][aria-current="true"]')
 const currentValue = (page: Page) => page.locator('[data-value][aria-current="true"]')
-const values = (page: Page) => page.getByRole('navigation', { name: 'Values found' })
+const values = (page: Page) => page.getByRole('tabpanel', { name: 'By value' })
+const typeFilter = (page: Page, type: string) => page.getByRole('group', { name: 'Type' }).getByRole('checkbox', { name: new RegExp(`^${type}`) })
 
 async function byRow(page: Page) {
   await page.getByRole('tab', { name: 'By row' }).click()
@@ -43,12 +44,12 @@ async function selectText(page: Page, rowNumber: number, text: string) {
 }
 
 test.describe('review step', () => {
-  test('opens by value: each value once, grouped by type, with progress and the limits notice', async ({ page }) => {
+  test('opens by value: each value once, with its type, progress and the limits notice', async ({ page }) => {
     await openReview(page)
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('3 findings in 4 rows')
     await expect(progress(page)).toHaveText('0 reviewed, 3 left')
     await expect(page.getByRole('tab', { name: 'By value' })).toHaveAttribute('aria-selected', 'true')
-    await expect(values(page).getByRole('heading')).toHaveText(['Email addresses', 'IP addresses'])
+    await expect(values(page).locator('tbody tr td:nth-child(2)')).toHaveText(['Email address', 'IP address'])
     await expect(values(page).locator('[data-value]')).toHaveCount(2)
     await expect(currentValue(page)).toHaveAccessibleName('Email address, not reviewed: anna@example.com')
     await expect(page.getByText('Appears in 2 rows. Removing it replaces every copy with [EMAIL_1].')).toBeVisible()
@@ -74,7 +75,7 @@ test.describe('review step', () => {
   test('Keep (K) marks the value as kept', async ({ page }) => {
     await openReview(page)
     await page.keyboard.press('k')
-    await expect(values(page).getByRole('button', { name: 'Email address, kept: anna@example.com' })).toContainText('Kept')
+    await expect(values(page).getByRole('row').filter({ has: page.getByRole('button', { name: 'Email address, kept: anna@example.com' }) })).toContainText('Kept')
     await expect(progress(page)).toHaveText('2 reviewed, 1 left')
   })
 
@@ -99,14 +100,33 @@ test.describe('review step', () => {
     })
   })
 
-  test('"Remove all" in a type heading removes only that type, in one undo step', async ({ page }) => {
+  test('with one type chosen in the filters, "Remove all" removes only that type, in one undo step', async ({ page }) => {
     await openReview(page)
-    await values(page).getByRole('button', { name: 'Remove all 2 email addresses' }).click()
+    await expect(page.getByRole('button', { name: 'Remove all 3 left' })).toBeVisible()
+    await typeFilter(page, 'Email addresses').check()
+    await page.getByRole('button', { name: 'Remove all 2 email addresses' }).click()
     await expect(progress(page)).toHaveText('2 reviewed, 1 left')
-    await expect(values(page).getByRole('button', { name: /Remove all .* email addresses/ })).toHaveCount(0)
-    await expect(values(page).getByRole('button', { name: 'Remove 1 IP address' })).toBeVisible()
+    await expect(page.getByRole('button', { name: /Remove all .* email addresses/ })).toHaveCount(0)
+    await typeFilter(page, 'Email addresses').uncheck()
+    await typeFilter(page, 'IP addresses').check()
+    await expect(page.getByRole('button', { name: 'Remove 1 IP address' })).toBeVisible()
     await page.keyboard.press('z')
     await expect(progress(page)).toHaveText('0 reviewed, 3 left')
+  })
+
+  test('N and P follow the filters: they move through the values shown', async ({ page }) => {
+    await openReview(page)
+    await typeFilter(page, 'IP addresses').check()
+    await expect(values(page).locator('[data-value]')).toHaveCount(1)
+    // The selected email is now hidden; N goes to the one value shown, and stays there.
+    await page.keyboard.press('n')
+    await expect(currentValue(page)).toHaveAccessibleName(/192\.0\.2\.7/)
+    await page.keyboard.press('n')
+    await expect(currentValue(page)).toHaveAccessibleName(/192\.0\.2\.7/)
+    // A decision moves on only within what is shown: nothing else is left here.
+    await page.keyboard.press('r')
+    await expect(progress(page)).toHaveText('1 reviewed, 2 left')
+    await expect(values(page).getByRole('button', { name: 'IP address, removed: [IP_1]' })).toBeVisible()
   })
 
   test('N and P, and the arrow keys on a value, move between values', async ({ page }) => {
