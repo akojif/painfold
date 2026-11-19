@@ -107,7 +107,7 @@
       },
       "workspace": {
         "name": "Workspace redesign",
-        "summary": "Import, Review and Analyze in one workspace: the four steps at the top, filters at the side, tables you can sort."
+        "summary": "Import, Review, Analyze and Report in one workspace: the four steps at the top, context and filters at the side, tables you can sort."
       },
       "report": {
         "name": "Report",

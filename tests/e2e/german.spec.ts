@@ -79,7 +79,7 @@ test.describe('choosing the language at the root', () => {
     await page.evaluate(() => localStorage.setItem('painfold-language', 'en'))
     await page.goto('/de/roadmap/')
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Roadmap')
-    await expect(page.getByText('Aktuelle Version: v0.3.0. 1 in Arbeit, 7 geplant und 2 Ideen.')).toBeVisible()
+    await expect(page.getByText('Aktuelle Version: v0.3.1. 1 in Arbeit, 6 geplant und 2 Ideen.')).toBeVisible()
   })
 
   test('a saved German choice opens German at the root', async ({ page }) => {
