@@ -117,6 +117,10 @@ ${privacySection(sources.privacyDoc, 'What is stored in your browser')}
 - It does not send anything to an AI until the person has reviewed what was removed, seen what will be sent and pressed Send.
 - On a phone the site only explains what Painfold does; working on a file needs a screen at least 768 pixels wide.
 
+### What Painfold doesn't protect against
+
+${privacySection(sources.privacyDoc, "What Painfold doesn't protect against")}
+
 ## Accuracy
 
 Measured on small evaluation sets of invented German and English feedback; read the numbers with their known weaknesses.
@@ -137,7 +141,9 @@ Roadmap page: ${SITE}/roadmap/ (German: ${SITE}/de/roadmap/)
 
 - [Start page](${SITE}/): open a file or try the sample. German: ${SITE}/de/
 - [How it works](${REPO}/blob/main/docs/how-it-works.md): what Painfold does, step by step
-- [Privacy](${REPO}/blob/main/docs/privacy.md): what stays in the browser, what is stored and what is downloaded
+- [Privacy](${REPO}/blob/main/docs/privacy.md): what stays in the browser, what is stored and what is downloaded, the data flow, the tests behind each claim ("How we prove it") and what Painfold doesn't protect against
+- [Security](${REPO}/blob/main/SECURITY.md): how to report a privacy leak or security problem privately
+- [Feedback](${REPO}/blob/main/docs/feedback.md): no analytics or tracking, what the host sees, and where to ask questions and share ideas (${REPO}/discussions)
 - [Accuracy](${SITE}/accuracy/): measured accuracy and known weaknesses. German: ${SITE}/de/accuracy/
 - [Roadmap](${SITE}/roadmap/): released versions and what comes next. German: ${SITE}/de/roadmap/
 - [Source code](${REPO}): the GitHub repository
