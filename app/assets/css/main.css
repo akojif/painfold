@@ -69,6 +69,7 @@
 :root {
   --pf-light-canvas: #FFFFFF;        /* page */
   --pf-light-surface: #F7F8FA;       /* panels, lists, the side of a split view */
+  --pf-light-tint: #EEF1F5;          /* a fill that groups or selects: a selected row, a filter on hover, a track */
   --pf-light-raised: #FFFFFF;        /* things that float above the page: toasts (the page is already white) */
   --pf-light-raised-line: #CDD3DC;   /* their border, stronger than a hairline */
   --pf-light-line: #E4E7EC;          /* hairline borders and dividers */
@@ -87,6 +88,7 @@
 
   --pf-dark-canvas: #11161F;
   --pf-dark-surface: #161C27;
+  --pf-dark-tint: #1C2330;
   --pf-dark-raised: #222A37;
   --pf-dark-raised-line: #3A4556;
   --pf-dark-line: #232B38;
@@ -110,6 +112,7 @@
   color-scheme: light;
   --pf-canvas: var(--pf-light-canvas);
   --pf-surface: var(--pf-light-surface);
+  --pf-tint: var(--pf-light-tint);
   --pf-raised: var(--pf-light-raised);
   --pf-raised-line: var(--pf-light-raised-line);
   --pf-line: var(--pf-light-line);
@@ -133,6 +136,7 @@
     color-scheme: dark;
     --pf-canvas: var(--pf-dark-canvas);
     --pf-surface: var(--pf-dark-surface);
+    --pf-tint: var(--pf-dark-tint);
     --pf-raised: var(--pf-dark-raised);
     --pf-raised-line: var(--pf-dark-raised-line);
     --pf-line: var(--pf-dark-line);
@@ -156,6 +160,7 @@
   color-scheme: dark;
   --pf-canvas: var(--pf-dark-canvas);
   --pf-surface: var(--pf-dark-surface);
+  --pf-tint: var(--pf-dark-tint);
   --pf-raised: var(--pf-dark-raised);
   --pf-raised-line: var(--pf-dark-raised-line);
   --pf-line: var(--pf-dark-line);
@@ -189,6 +194,7 @@
 
   --color-canvas: var(--pf-canvas);
   --color-surface: var(--pf-surface);
+  --color-tint: var(--pf-tint);
   --color-raised: var(--pf-raised);
   --color-raised-line: var(--pf-raised-line);
   --color-line: var(--pf-line);

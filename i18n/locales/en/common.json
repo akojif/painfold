@@ -158,6 +158,39 @@
     "close": "Close"
   },
   "workspace": {
-    "importSidebar": "File and columns"
+    "importSidebar": "File and columns",
+    "drawer": {
+      "close": "Close details",
+      "closeTitle": "Close (Escape)"
+    },
+    "review": {
+      "sidebar": "Filters, names and privacy",
+      "filters": "Filters",
+      "clearFilters": "Clear filters",
+      "type": "Type",
+      "statusLegend": "Status",
+      "status": {
+        "pending": "To review",
+        "removed": "Removed",
+        "kept": "Kept"
+      },
+      "warnings": "Warnings",
+      "nearWarning": "In rows with a warning",
+      "names": "Names and places",
+      "shownOf": "{shown} of 1 value | {shown} of {total} values",
+      "caption": "Personal data found, one row per distinct value. Select a value for its details; N and P move through the values shown, R removes, K keeps.",
+      "columns": {
+        "value": "Value",
+        "rows": "Rows",
+        "decision": "Decision"
+      },
+      "warningType": "Warning, {reason}",
+      "noMatch": "No values match these filters.",
+      "keys": "Keys: N and P move through the values shown, R removes, K keeps, M marks selected text as missed, Z undoes.",
+      "warningRow": "Row {n}, could identify someone",
+      "inRows": "In 1 row | In {n} rows",
+      "hidden": "The filters hide this value. N and P move through the values shown.",
+      "whereItAppears": "Where it appears"
+    }
   }
 }

@@ -30,10 +30,14 @@ const warningMark = (page: Page, text: string) => page.locator('[data-warning]')
 test('warnings are listed after the personal data and say what they are', async ({ page }) => {
   await openReview(page)
   await expect(page.getByText('2 warnings to check')).toBeVisible()
-  const group = page.getByRole('region', { name: 'Could identify someone' })
-  await expect(group.getByRole('button')).toHaveCount(3) // "Remove all 2" and the two warnings
-  await group.getByRole('button', { name: /“The only …”, row 2, not checked: only female CFO/ }).click()
-  const note = page.getByRole('complementary')
+  // The warnings come after the personal data in the table, and the Type filter shows them alone.
+  const table = page.getByRole('tabpanel', { name: 'By value' })
+  await expect(table.locator('[data-warning-value]')).toHaveCount(2)
+  await page.getByRole('group', { name: 'Type' }).getByRole('checkbox', { name: /^Warnings/ }).check()
+  await expect(table.locator('[data-value]')).toHaveCount(0)
+  await expect(page.getByRole('button', { name: 'Remove all 2 warnings that are not checked yet' })).toBeVisible()
+  await table.getByRole('button', { name: /“The only …”, row 2, not checked: only female CFO/ }).click()
+  const note = page.getByRole('complementary').filter({ hasText: 'Could identify someone, row 2' })
   await expect(note).toContainText('Could identify someone, row 2')
   await expect(note).toContainText('“The only …”. It describes one person.')
   await expect(note).toContainText('It stays in the file unless you remove it. Removing it replaces it with [ROLE_1].')

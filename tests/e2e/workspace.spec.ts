@@ -77,3 +77,60 @@ test.describe('Import at 768 px', () => {
     }
   })
 })
+
+// Review (#141): the table of values, its filters and the drawer.
+const reviewCsv = [
+  'id,message',
+  '1,"Bitte an anna@example.com schreiben, danke."',
+  '2,"Nochmal: anna@example.com, bitte rasch antworten"',
+  '3,"Unser Server 192.0.2.7 meldet seit gestern Fehler"',
+].join('\n')
+async function openReviewTable(page: import('@playwright/test').Page) {
+  await page.goto('/')
+  await page.getByTestId('file-input').setInputFiles({ name: 'tickets.csv', mimeType: 'text/csv', buffer: Buffer.from(reviewCsv) })
+  await page.getByRole('button', { name: /Find personal data/ }).click()
+  await expect(page).toHaveURL(/\/review\/$/)
+}
+const valueButtons = (page: import('@playwright/test').Page) => page.getByRole('tabpanel', { name: 'By value' }).locator('[data-value]')
+
+test('Review: sorting a column reorders the table, and N follows the new order', async ({ page }) => {
+  await openReviewTable(page)
+  await expect(valueButtons(page)).toHaveText(['anna@example.com', '192.0.2.7'])
+  await page.getByRole('button', { name: 'Rows', exact: true }).click()
+  await expect(page.getByRole('columnheader', { name: 'Rows' })).toHaveAttribute('aria-sort', 'descending')
+  await page.getByRole('button', { name: 'Rows', exact: true }).click()
+  await expect(page.getByRole('columnheader', { name: 'Rows' })).toHaveAttribute('aria-sort', 'ascending')
+  await expect(valueButtons(page)).toHaveText(['192.0.2.7', 'anna@example.com'])
+  await valueButtons(page).first().click()
+  await page.keyboard.press('n')
+  await expect(page.locator('[data-value][aria-current="true"]')).toHaveText('anna@example.com')
+})
+
+test.describe('Review at 1,024 px', () => {
+  test.use({ viewport: { width: 1024, height: 900 } })
+
+  test('the drawer opens only when a value is chosen, over the table, and Escape closes it', async ({ page }) => {
+    await openReviewTable(page)
+    const drawer = page.getByRole('region', { name: 'Email address' })
+    await expect(drawer).toHaveCount(0)
+    await valueButtons(page).first().click()
+    await expect(drawer).toBeVisible()
+    await expect(drawer).toContainText('Where it appears')
+    await page.keyboard.press('Escape')
+    await expect(drawer).toHaveCount(0)
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0)
+  })
+})
+
+test.describe('Review at 768 px', () => {
+  test.use({ viewport: { width: 768, height: 900 } })
+
+  test('there is no drawer: the note is the bar at the bottom, and nothing scrolls sideways', async ({ page }) => {
+    await openReviewTable(page)
+    await valueButtons(page).first().click()
+    await expect(page.getByRole('region', { name: 'Email address' })).toHaveCount(0)
+    await expect(page.getByRole('button', { name: 'Remove R' })).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Where it appears' })).toBeVisible()
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0)
+  })
+})
