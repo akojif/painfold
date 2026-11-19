@@ -59,3 +59,10 @@ export async function openSample(page: Page) {
   await page.getByRole('button', { name: /^(Try an example|Beispiel ausprobieren)$/ }).click()
   await page.getByRole('button', { name: /^(Open the sample|Beispieldatei öffnen)$/ }).click()
 }
+
+/** The open file's row count, as the workspace sidebar on the column step shows it (#141). */
+export async function expectRows(page: Page, rows: number) {
+  const sidebar = page.getByRole('complementary', { name: /^(File and columns|Datei und Spalten)$/ })
+  const row = sidebar.locator('dl > div').filter({ has: page.locator('dt', { hasText: /^(Rows|Zeilen)$/ }) })
+  await expect(row.locator('dd')).toHaveText(String(rows))
+}

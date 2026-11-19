@@ -5,15 +5,15 @@ import { detectItems } from '../../core/detect/items'
 import { itemsFromTable, textItems } from '../../core/items/table'
 import { importFile } from '../../core/import'
 import { GERMAN_EXCEL_TEXT, windows1252 } from '../fixtures/german-excel'
-import { expect, openSample, test } from './fixtures'
+import { expect, expectRows, openSample, test } from './fixtures'
 
 const sampleCsv = readFileSync(new URL('../../data/sample/support-tickets.csv', import.meta.url))
 const fileInput = (page: import('@playwright/test').Page) => page.getByTestId('file-input')
 
-async function expectLoaded(page: import('@playwright/test').Page, name: string, rows: string) {
+async function expectLoaded(page: import('@playwright/test').Page, name: string, rows: number) {
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Choose what to check')
   await expect(page.getByTitle(name, { exact: true })).toBeVisible()
-  await expect(page.getByText(rows, { exact: true })).toBeVisible()
+  await expectRows(page, rows)
 }
 
 const columnRow = (page: import('@playwright/test').Page, column: string) =>
@@ -84,7 +84,7 @@ test.describe('start screen', () => {
       const target = document.querySelector('footer')!
       for (const type of ['dragenter', 'dragover', 'drop']) target.dispatchEvent(new DragEvent(type, { dataTransfer: data, bubbles: true, cancelable: true }))
     }, 'id,message\n1,Bitte an anna@example.com antworten, danke für die Hilfe\n')
-    await expectLoaded(page, 'dropped.csv', '1 row')
+    await expectLoaded(page, 'dropped.csv', 1)
   })
 
   test('dragging a file over the page shows the drop overlay', async ({ page }) => {
@@ -104,7 +104,7 @@ test.describe('choosing a file', () => {
     await page.goto('/')
     await upload(page, 'support-tickets.csv', sampleCsv)
 
-    await expectLoaded(page, 'support-tickets.csv', '200 rows')
+    await expectLoaded(page, 'support-tickets.csv', 200)
     await expect(page.getByRole('heading', { level: 1 })).toBeFocused()
     await expect(page.getByRole('radio', { name: 'Use message as the feedback column' })).toBeChecked()
     await expect(page.getByText('Feedback column, always checked')).toBeVisible()
@@ -201,7 +201,7 @@ test.describe('choosing a file', () => {
   test('a CSV saved by German Excel keeps its umlauts', async ({ page }) => {
     await page.goto('/')
     await upload(page, 'Rückmeldungen.csv', windows1252(GERMAN_EXCEL_TEXT))
-    await expectLoaded(page, 'Rückmeldungen.csv', '3 rows')
+    await expectLoaded(page, 'Rückmeldungen.csv', 3)
     await expect(page.getByRole('radio', { name: 'Use Rückmeldung as the feedback column' })).toBeChecked()
     await page.getByText('Show first 3 rows').click()
     const preview = page.getByRole('region', { name: 'Preview of the first rows' })
@@ -223,7 +223,7 @@ test.describe('choosing a file', () => {
   test('the sample file is labelled as fake data', async ({ page }) => {
     await page.goto('/')
     await openSample(page)
-    await expectLoaded(page, 'support-tickets.csv', '200 rows')
+    await expectLoaded(page, 'support-tickets.csv', 200)
     await expect(page.getByText('Sample file with fake data.')).toBeVisible()
   })
 
@@ -247,7 +247,7 @@ test.describe('import errors', () => {
       await upload(page, name, Buffer.from(content))
       await expect(page.getByTestId('toast')).toContainText(message)
       await upload(page, 'support-tickets.csv', sampleCsv)
-      await expectLoaded(page, 'support-tickets.csv', '200 rows')
+      await expectLoaded(page, 'support-tickets.csv', 200)
     })
   }
 })

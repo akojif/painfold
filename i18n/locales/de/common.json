@@ -47,7 +47,10 @@
     "chooseAnother": "Andere Datei wählen",
     "sheet": "Tabellenblatt",
     "sample": "Beispieldatei mit erfundenen Daten.",
-    "ragged": "1 Zeile hatte eine andere Anzahl an Zellen als die Kopfzeile und wurde aufgefüllt. | {n} Zeilen hatten eine andere Anzahl an Zellen als die Kopfzeile und wurden aufgefüllt."
+    "ragged": "1 Zeile hatte eine andere Anzahl an Zellen als die Kopfzeile und wurde aufgefüllt. | {n} Zeilen hatten eine andere Anzahl an Zellen als die Kopfzeile und wurden aufgefüllt.",
+    "heading": "Datei",
+    "rowsLabel": "Zeilen",
+    "columnsLabel": "Spalten"
   },
   "header": {
     "outbound": "Was Ihren Browser verlässt",
@@ -153,5 +156,8 @@
   },
   "toast": {
     "close": "Schließen"
+  },
+  "workspace": {
+    "importSidebar": "Datei und Spalten"
   }
 }
