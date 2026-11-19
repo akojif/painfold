@@ -2,11 +2,42 @@
 
 All notable changes to Painfold. Versions follow the stages in [ROADMAP.md](ROADMAP.md).
 
-## Unreleased
+## 0.3.1: Workspace redesign (2026-11-20)
+
+Import, Review, Analyze and Report now work as one workspace: a top bar with the four steps, the page's context and filters at the side, tables you can sort, and details in a panel beside them. Nothing about what is found, sent or counted has changed.
+
+### Changed
+
+- **One workspace with a top bar.** Once a file is open, a top bar shows Painfold, the four steps (Import, Review, Analyze, Report) and the language, theme, "What leaves your browser" and Start over controls.
+  - Each step is a link once it can be reached, and says what it holds now: how many findings are left, an analysis running, how many themes.
+  - Steps you have finished are marked done.
+  - The demo report shows the steps too, without claiming an import.
+- **Import:** a sidebar with the file, its rows and columns, and what happens to each column, next to the column table and the preview.
+- **Review:** a filter sidebar (type, status, warnings) with counts, and a sortable table with one row per distinct value. A value's details open in a panel beside the table: where it appears and the decision. N and P move through the values the filters show.
+- **Analyze** comes in two steps:
+  - first, where the analysis runs; once the connection test works, it shows as connected, with Change and Disconnect;
+  - then, check and send. The cleaned texts that will be sent open in a panel on request instead of a long list, and the privacy notice sits in the sidebar.
+- **Report:** jobs, pains and gains as tables (theme, texts, share, intensity). A theme's quotes and all its texts open in the panel. The sidebar has the sections with their counts and the cleaned file.
+- **Charts:** the report's share bars and the Accuracy page's bars are drawn the same way, in colours checked for contrast in light and dark. Every bar has its number written beside it, and a bar below its target also says "below target" in words.
+- **Roadmap page** (/roadmap/): released versions, what is being built now, what comes next and later, and ideas, each linked to its issue or release.
+- **No sideways scrolling at 768 px**, the narrowest width the working flow supports, in English and German. After an analysis, the top bar rounds the bytes sent to kB so the German steps still fit; screen readers hear the exact count.
 
 ### Fixed
 
 - **Opening a step directly with nothing open** (a shared link, a bookmark, a reload of Review, Download, Analyze or Report) no longer shows the step for a moment before the start page. The served pages hold nothing of the step, and the start page it leads to is laid out as on a fresh load: before, it could keep the step's layout, squeezing the headline to one word per line.
+
+### Documentation
+
+- **Security policy** (SECURITY.md): how to report a privacy leak or security problem privately, and what counts.
+- **How we prove it** in docs/privacy.md: a data-flow diagram, each privacy claim with the test that checks it, and what Painfold doesn't protect against.
+- **Feedback** (docs/feedback.md): no analytics or tracking, what the host sees, and where to ask questions and share ideas (GitHub Discussions).
+- Contributing guide, issue templates with a warning never to paste real personal data, and a quick start in the README.
+- **painfold.com/llms.txt**: what Painfold is, its privacy model, accuracy and roadmap, built from the site's own sources.
+
+### Known limits
+
+- The analysis prompts, parsing and scoring are unchanged from 0.3.0, so the measured accuracy still applies.
+- The German interface text has not been reviewed by a native speaker yet ([#110](https://github.com/akojif/painfold/issues/110)).
 
 ## 0.3.0: Jobs, pains and gains (2026-11-18)
 

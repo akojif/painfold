@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import type { Page } from '@playwright/test'
 import { utils, write } from 'xlsx'
-import { expect, openSample, test } from './fixtures'
+import { expect, expectRows, openSample, test } from './fixtures'
 
 // Files dropped anywhere, on every step, and what each kind of file does.
 
@@ -32,12 +32,12 @@ test.describe('on the start screen', () => {
     await page.goto('/')
     await drop(page, 'tickets.csv', sampleCsv)
     await expect(heading(page)).toHaveText('Choose what to check')
-    await expect(page.getByText('200 rows', { exact: true })).toBeVisible()
+    await expectRows(page, 200)
 
     await page.goto('/')
     await drop(page, 'feedback.xlsx', xlsx(), 'footer')
     await expect(heading(page)).toHaveText('Choose what to check')
-    await expect(page.getByText('2 rows', { exact: true })).toBeVisible()
+    await expectRows(page, 2)
   })
 
   for (const [name, content] of [
@@ -94,7 +94,7 @@ test.describe('during a review', () => {
     await drop(page, 'feedback.xlsx', xlsx())
     await asked.getByRole('button', { name: 'Start over' }).click()
     await expect(heading(page)).toHaveText('Choose what to check')
-    await expect(page.getByText('2 rows', { exact: true })).toBeVisible()
+    await expectRows(page, 2)
   })
 
   test('dropping a document leaves the review alone and says why, in place', async ({ page }) => {

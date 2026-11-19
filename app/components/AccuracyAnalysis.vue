@@ -110,7 +110,10 @@ const missing = computed(() => (props.language === 'both' ? '' : t(`accuracy.lan
           <dt class="text-sm max-sm:col-span-2">
             {{ $t(`accuracy.analysis.single.${row.key}`) }}
           </dt>
-          <AccuracyBar :value="share(row.rate)" />
+          <ChartBar
+            tone="accent"
+            :value="share(row.rate)"
+          />
           <dd class="text-right font-mono text-sm tabular-nums">
             {{ percent(share(row.rate)) }}
           </dd>

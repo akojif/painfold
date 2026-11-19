@@ -12,6 +12,11 @@
       "analyze": "Analyze",
       "report": "Report"
     },
+    "meta": {
+      "left": "{n} left",
+      "running": "Running",
+      "themes": "{n} theme | {n} themes"
+    },
     "startOver": "Start over",
     "newTab": "(opens in a new tab)"
   },
@@ -43,7 +48,10 @@
     "chooseAnother": "Choose another file",
     "sheet": "Sheet",
     "sample": "Sample file with fake data.",
-    "ragged": "1 row had a different number of cells than the header and was filled in. | {n} rows had a different number of cells than the header and were filled in."
+    "ragged": "1 row had a different number of cells than the header and was filled in. | {n} rows had a different number of cells than the header and were filled in.",
+    "heading": "File",
+    "rowsLabel": "Rows",
+    "columnsLabel": "Columns"
   },
   "header": {
     "outbound": "What leaves your browser",
@@ -149,5 +157,65 @@
   },
   "toast": {
     "close": "Close"
+  },
+  "workspace": {
+    "importSidebar": "File and columns",
+    "drawer": {
+      "close": "Close details",
+      "closeTitle": "Close (Escape)"
+    },
+    "review": {
+      "sidebar": "Filters, names and privacy",
+      "filters": "Filters",
+      "clearFilters": "Clear filters",
+      "type": "Type",
+      "statusLegend": "Status",
+      "status": {
+        "pending": "To review",
+        "removed": "Removed",
+        "kept": "Kept"
+      },
+      "warnings": "Warnings",
+      "nearWarning": "In rows with a warning",
+      "names": "Names and places",
+      "shownOf": "{shown} of 1 value | {shown} of {total} values",
+      "caption": "Personal data found, one row per distinct value. Select a value for its details; N and P move through the values shown, R removes, K keeps.",
+      "columns": {
+        "value": "Value",
+        "rows": "Rows",
+        "decision": "Decision"
+      },
+      "warningType": "Warning, {reason}",
+      "noMatch": "No values match these filters.",
+      "keys": "Keys: N and P move through the values shown, R removes, K keeps, M marks selected text as missed, Z undoes.",
+      "warningRow": "Row {n}, could identify someone",
+      "inRows": "In 1 row | In {n} rows",
+      "hidden": "The filters hide this value. N and P move through the values shown.",
+      "whereItAppears": "Where it appears"
+    },
+    "download": {
+      "sidebar": "The file and what it contains"
+    },
+    "analyze": {
+      "sidebar": "On this page",
+      "onThisPage": "On this page",
+      "connection": "Where it runs",
+      "send": "Check and send",
+      "notSetUp": "Not set up yet",
+      "findingsLeft": "1 finding not reviewed | {n} findings not reviewed",
+      "namesNotChecked": "Names not checked",
+      "ready": "Ready to send",
+      "afterTest": "After a successful connection test",
+      "sendAfterTest": "Next: check what will be sent, then send it. This appears once the connection test works.",
+      "reviewSent": "Review what will be sent (1 text) | Review what will be sent ({n} texts)",
+      "sentTexts": "The texts that will be sent"
+    },
+    "report": {
+      "sidebar": "Sections and the cleaned file",
+      "onThisPage": "On this page",
+      "theme": "Theme",
+      "caption": "{kind}: one row per theme, the most texts first. Select a theme for its quotes and texts.",
+      "quotes": "Quotes and texts"
+    }
   }
 }

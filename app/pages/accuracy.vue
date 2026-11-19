@@ -152,9 +152,13 @@ const GITHUB = 'https://github.com/akojif/painfold/blob/main'
           class="grid grid-cols-[minmax(0,1fr)_3.5rem] items-center gap-x-4 gap-y-1 sm:grid-cols-[16rem_minmax(0,1fr)_3.5rem]"
         >
           <dt class="text-sm max-sm:col-span-2">
-            {{ $t(`accuracy.names.${row.key}`) }}
+            {{ $t(`accuracy.names.${row.key}`) }}<span
+              v-if="row.key === 'removal' && share(row.counts) < data.target"
+              class="text-danger"
+            >, {{ $t('accuracy.groups.below') }}</span>
           </dt>
-          <AccuracyBar
+          <ChartBar
+            tone="accent"
             :value="share(row.counts)"
             :target="row.key === 'removal' ? data.target : undefined"
           />
@@ -203,7 +207,8 @@ const GITHUB = 'https://github.com/akojif/painfold/blob/main'
             v-if="language === 'both' && share(row.removal) < data.target"
             class="text-danger"
           >, {{ $t('accuracy.groups.below') }}</span></span>
-          <AccuracyBar
+          <ChartBar
+            tone="accent"
             :value="share(row.removal)"
             :target="language === 'both' ? data.target : undefined"
           />
@@ -237,7 +242,10 @@ const GITHUB = 'https://github.com/akojif/painfold/blob/main'
           <dt class="text-sm max-sm:col-span-2">
             {{ $t(`accuracy.long.positions[${index}]`) }}
           </dt>
-          <AccuracyBar :value="share(pick(position))" />
+          <ChartBar
+            tone="accent"
+            :value="share(pick(position))"
+          />
           <dd class="text-right font-mono text-sm tabular-nums">
             {{ percent(share(pick(position))) }}
           </dd>

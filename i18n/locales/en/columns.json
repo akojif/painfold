@@ -18,7 +18,12 @@
     "empty": "Empty column",
     "summary": "Cleaned file: {columns}, {checked} checked, {kept} kept as is, {dropped} dropped",
     "columnCount": "1 column | {n} columns",
-    "noFeedback": "No column looks like feedback. Mark the one that holds it with the circle at the start of its row."
+    "noFeedback": "No column looks like feedback. Mark the one that holds it with the circle at the start of its row.",
+    "byColumn": {
+      "heading": "Personal data by column",
+      "counting": "Counting…",
+      "none": "None found by the rules. Names are checked when the review starts."
+    }
   },
   "preview": {
     "heading": "Show first {n} rows",

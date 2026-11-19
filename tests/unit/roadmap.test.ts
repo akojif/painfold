@@ -24,7 +24,7 @@ describe('roadmap page', () => {
   })
 
   it('highlights the stage in progress or in preview, or else the latest available one', () => {
-    expect(currentStage()?.id).toBe('jobs')
+    expect(currentStage()?.id).toBe('report')
     expect(currentStage([
       { id: 'clean', version: 'v0.1', status: 'available' },
       { id: 'names', version: 'v0.2', status: 'available' },

@@ -11,6 +11,9 @@ const model = ref(ANTHROPIC_MODELS[0]!.id)
 const key = ref('')
 const remember = ref(false)
 const ollamaModel = ref<string>()
+// Whether the connection test worked for the current settings: Analyze shows the
+// step that sends only then (#141). Any change of settings clears it.
+const tested = ref(false)
 let loaded = false
 
 function readStored(): string | undefined {
@@ -49,5 +52,5 @@ export function useAiSettings() {
     if (!remember.value) key.value = ''
   }
 
-  return { where, model, key, remember, ollamaModel, forgetKey }
+  return { where, model, key, remember, ollamaModel, tested, forgetKey }
 }

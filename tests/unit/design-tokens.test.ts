@@ -39,6 +39,14 @@ const pairs: Array<[foreground: string, background: string, minimum: number]> = 
   ['pending-line', 'pending', NON_TEXT],
   ['pending-line', 'canvas', NON_TEXT],
   ['token', 'canvas', NON_TEXT],
+  // Charts (#141): a bar must stand out from every surface it sits on, a
+  // selected row's tint and its own track; the status bars too.
+  ['chart-bar', 'canvas', NON_TEXT],
+  ['chart-bar', 'surface', NON_TEXT],
+  ['chart-bar', 'tint', NON_TEXT],
+  ['chart-bar', 'chart-track', NON_TEXT],
+  ['accent', 'chart-track', NON_TEXT],
+  ['danger', 'chart-track', NON_TEXT],
 ]
 
 describe('design tokens', () => {

@@ -20,17 +20,19 @@ const startLayout = (page: Page) => page.evaluate(() => {
   }
 })
 
-/** Follows a direct visit until it reaches the start page; while the step's address shows, nothing in main may be visible. */
+/** Follows a direct visit until it reaches the start page; while the step's address shows, nothing in main may be visible, and no steps. */
 async function visitUntilStart(page: Page, path: string, start: string) {
   await page.goto(path, { waitUntil: 'commit' })
   for (let i = 0; i < 200; i++) {
     // Only once the stylesheets have loaded: a browser paints nothing before that, so there is nothing to see yet.
     const state = await page.evaluate(() => {
       const styled = [...document.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"]')].every(link => link.sheet !== null)
-      return styled ? { path: location.pathname, text: document.querySelector('main')?.innerText.trim() ?? '' } : undefined
+      return styled ? { path: location.pathname, text: document.querySelector('main')?.innerText.trim() ?? '', steps: document.querySelector('header nav') !== null } : undefined
     }).catch(() => undefined)
     if (state?.path === start) break
     if (state) expect(state.text, `${path}: visible before the start page`).toBe('')
+    // Nor the workspace top bar with its steps: the site header stays until the start page.
+    if (state) expect(state.steps, `${path}: steps before the start page`).toBe(false)
     await page.waitForTimeout(15)
   }
   await expect(page).toHaveURL(new RegExp(`${start}$`))

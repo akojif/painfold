@@ -63,17 +63,22 @@ for (const width of [1280, 768]) {
   })
 }
 
-test('every type and its bulk removal stay in view with thousands of values', async ({ page }) => {
+test('with thousands of values, every type, its bulk removal and the table stay usable', async ({ page }) => {
   await open(page, FILES.huge)
-  const values = page.getByRole('navigation', { name: 'Values found' })
-  await expect(values.getByRole('heading')).toHaveText(['Email addresses', 'Phone numbers'])
-  await expect(values.getByRole('button', { name: 'Remove all 5,000 phone numbers' })).toBeAttached()
-  await expect(values.getByRole('button', { name: 'Show 100 more' })).toHaveCount(2)
+  const types = page.getByRole('group', { name: 'Type' }).getByRole('checkbox')
+  await expect(types).toHaveCount(2)
+  await page.getByRole('group', { name: 'Type' }).getByRole('checkbox', { name: /^Phone numbers/ }).check()
+  await expect(page.getByRole('button', { name: 'Remove all 5,000 phone numbers' })).toBeVisible()
+  // The table shows a batch at a time.
+  await expect(page.getByRole('tabpanel', { name: 'By value' }).locator('[data-value]')).toHaveCount(200)
+  await expect(page.getByRole('button', { name: 'Show 200 more' })).toBeVisible()
 })
 
 test('a single finding is counted in the singular', async ({ page }) => {
   await open(page, FILES.one)
-  await expect(page.getByRole('navigation', { name: 'Values found' }).getByRole('button', { name: 'Remove 1 email address' })).toHaveText('Remove 1')
+  await page.getByRole('group', { name: 'Type' }).getByRole('checkbox', { name: /^Email addresses/ }).check()
+  await expect(page.getByRole('button', { name: 'Remove 1 email address' })).toBeVisible()
+  await expect(page.getByText('1 not reviewed will be removed.')).toBeVisible()
 })
 
 test('with no findings, the panel does not ask to select one', async ({ page }) => {
@@ -93,11 +98,37 @@ test('long file names and links keep their end visible, with the full text as a 
 test.describe('at 768px', () => {
   test.use({ viewport: { width: 768, height: 900 } })
 
-  test('the header and the stepper stay on one line each', async ({ page }) => {
+  test('the workspace top bar keeps the steps on one row, in English and German, without scrolling sideways', async ({ page }) => {
     await open(page, FILES.worst)
-    const lineHeight = (locator: import('@playwright/test').Locator) => locator.evaluate(element => element.getBoundingClientRect().height)
-    expect(await lineHeight(page.getByRole('button', { name: /What leaves your browser/ }))).toBeLessThan(40)
-    expect(await lineHeight(page.getByRole('navigation', { name: 'Steps' }).locator('ol'))).toBeLessThan(30)
+    for (const [language, steps] of [['EN', 'Steps'], ['DE', 'Schritte']] as const) {
+      if (language === 'DE') await page.getByRole('group', { name: 'Language' }).getByRole('button', { name: 'German' }).click()
+      // After the switch, wait for the page in that language before measuring it.
+      await expect(page.getByRole('navigation', { name: steps }).getByRole('listitem')).toHaveCount(4)
+      const bar = page.locator('header').first()
+      expect(await bar.evaluate(element => element.getBoundingClientRect().height), language).toBeLessThanOrEqual(57)
+      const tops = await page.getByRole('navigation', { name: steps }).getByRole('listitem').evaluateAll(items => items.map(item => Math.round(item.getBoundingClientRect().top)))
+      expect(new Set(tops).size, language).toBe(1)
+      expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth), language).toBeLessThanOrEqual(0)
+    }
+  })
+
+  test.describe('with a request sent', () => {
+    test.use({ allowedOrigins: ['https://api.anthropic.com'] })
+
+    test('the top bar still fits once something has left the browser, in German', async ({ page }) => {
+    // A request makes the counter longer ("91 Bytes"): it must not push the bar past the edge.
+      await page.route('https://api.anthropic.com/**', route => route.fulfill({ status: 200, contentType: 'application/json', headers: { 'access-control-allow-origin': '*' }, body: JSON.stringify({ content: [{ type: 'text', text: 'Hi' }] }) }))
+      await page.goto('/de/')
+      await page.getByRole('button', { name: 'Beispiel ausprobieren' }).click()
+      await page.getByRole('button', { name: 'Beispieldatei öffnen' }).click()
+      await page.getByRole('button', { name: /^Personenbezogene Daten in/ }).click()
+      await page.getByRole('link', { name: 'Weiter zur Analyse' }).last().click()
+      await page.getByLabel('API-Schlüssel', { exact: true }).fill('sk-ant-invented-test-key')
+      await page.getByRole('button', { name: 'Verbindung testen' }).click()
+      await expect(page.getByRole('region', { name: 'Verbunden' })).toBeVisible()
+      await expect(page.locator('header').getByRole('button', { name: /Bytes/ })).not.toContainText(/^0 Bytes$/)
+      expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0)
+    })
   })
 
   test('punctuation after a finding stays on the line of the finding', async ({ page }) => {

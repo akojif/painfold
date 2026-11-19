@@ -93,6 +93,20 @@
       "shown": "Die Demo-Analyse wird angezeigt. Aus Ihrem Browser wurde nichts gesendet.",
       "report": "Bericht anzeigen",
       "leave": "Selbst analysieren"
+    },
+    "connected": {
+      "title": "Verbunden",
+      "ai": "KI",
+      "how": "Wie",
+      "anthropic": "Anthropic, {model}",
+      "ollama": "Ollama, {model}",
+      "direct": "Direkt aus diesem Browser zu Anthropic",
+      "local": "Auf diesem Computer, nichts verlässt ihn",
+      "keyEnding": "Endet auf {last}",
+      "remembered": ", auf diesem Gerät gemerkt",
+      "forgotten": ", vergessen, wenn Sie den Tab schließen",
+      "change": "Ändern",
+      "disconnect": "Trennen"
     }
   }
 }

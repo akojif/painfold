@@ -14,14 +14,15 @@ const route = useRoute()
 // A name and a URL, the same in every language, so they are not in the locale files.
 const author = { name: 'Francis Akoji', url: 'https://francisakoji.com' }
 const session = useSession()
+const tagging = useTagging()
 const { table, hasWork } = session
-const mayDiscard = useDiscardGuard()
 // Pages outside the cleaning flow (the roadmap) have no step.
 const step = computed(() => route.meta.step as number | undefined)
 // The empty start screen explains the product instead; steps appear once a file
 // is open. Without one, a later step is only reached on a small screen from a
 // direct link (#139), where the steps would claim an import that never happened.
-const showSteps = computed(() => step.value !== undefined && Boolean(table.value))
+// The demo report has them with no file open too (#141); then no step is done.
+const showSteps = computed(() => step.value !== undefined && (Boolean(table.value) || (step.value === 4 && Boolean(tagging.demo.value))))
 // A file can be dropped anywhere, on every step. Without this a browser would
 // open a dropped file itself and leave the app, losing everything in memory.
 // Below 768 px a dropped file is caught but ignored (#139).
@@ -46,21 +47,17 @@ const renderPage = computed(() => !(mounted.value && narrow.value && working.val
 // takes over, show nothing, so a direct visit or a reload never shows a step it
 // cannot open, and the page the app takes over is the same one it was served.
 // Once mounted, the step appears, or the start page replaces it (#141 hotfix).
-const tagging = useTagging()
 const gated = computed(() => Boolean(current.value.meta.needsReview))
 const allowed = computed(() => Boolean(session.review.value) || (current.value.meta.step === 4 && tagging.demo.value))
 const showPage = computed(() => renderPage.value && (!gated.value || (mounted.value && allowed.value)))
+// Workspace pages (#141) span the full width below the top bar and place their own sidebar.
+const workspace = computed(() => showSteps.value && Boolean(current.value.meta.workspace))
 // Widened with nothing to review: where the page's own guard would have sent it.
 watch(narrow, (now) => {
-  if (!now && current.value.meta.needsReview && !session.review.value && !useTagging().demo.value) void navigateTo(localePath('/'))
+  if (!now && current.value.meta.needsReview && !session.review.value && !tagging.demo.value) void navigateTo(localePath('/'))
 })
 
-/** Back to the start screen with nothing open, after asking if work would be lost. */
-async function startOver() {
-  if (!(await mayDiscard())) return
-  session.clear()
-  await navigateTo(localePath('/'))
-}
+const startOver = useStartOver()
 
 // The logo leads to the start screen; with a file open, that means starting over.
 // A plain link, so this runs before any navigation; a new tab opens as usual.
@@ -88,7 +85,15 @@ onBeforeUnmount(() => window.removeEventListener('beforeunload', onBeforeUnload)
 
 <template>
   <div class="flex min-h-dvh flex-col">
-    <header class="sticky top-0 z-20 border-b border-line bg-canvas">
+    <!-- Once a file is open, the working flow has the workspace top bar: the steps, the controls and Start over (#141). -->
+    <WorkspaceTopBar
+      v-if="showSteps"
+      :current="step!"
+    />
+    <header
+      v-else
+      class="sticky top-0 z-20 border-b border-line bg-canvas"
+    >
       <div class="mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 px-4 sm:gap-4 sm:px-6">
         <a
           :href="localePath('/')"
@@ -110,23 +115,14 @@ onBeforeUnmount(() => window.removeEventListener('beforeunload', onBeforeUnload)
       </div>
     </header>
 
-    <div class="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 sm:px-6">
-      <!-- Once a file is open, Start over sits at the end of the steps on every step, in the same place. -->
-      <div
-        v-if="showSteps"
-        class="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 pt-6"
+    <div
+      class="flex w-full flex-1 flex-col"
+      :class="workspace ? '' : 'mx-auto max-w-6xl px-4 sm:px-6'"
+    >
+      <main
+        class="flex flex-1 flex-col"
+        :class="workspace ? '' : 'py-8 sm:py-10'"
       >
-        <AppStepper :current="step!" />
-        <button
-          v-if="table"
-          type="button"
-          class="press focus-ring rounded-sm text-sm text-fg-muted underline-offset-4 hover:text-fg hover:underline"
-          @click="startOver"
-        >
-          {{ $t('nav.startOver') }}
-        </button>
-      </div>
-      <main class="flex flex-1 flex-col py-8 sm:py-10">
         <SmallScreenNotice
           v-if="working"
           class="md:hidden"
@@ -149,7 +145,10 @@ onBeforeUnmount(() => window.removeEventListener('beforeunload', onBeforeUnload)
       class="border-t border-line"
       data-toast-avoid
     >
-      <div class="mx-auto flex max-w-6xl flex-col items-center gap-1.5 px-4 py-4 text-sm text-fg-muted sm:px-6 md:h-14 md:flex-row md:justify-between md:gap-6 md:py-0">
+      <div
+        class="flex flex-col items-center gap-1.5 px-4 py-4 text-sm text-fg-muted sm:px-6 md:h-14 md:flex-row md:justify-between md:gap-6 md:py-0"
+        :class="workspace ? '' : 'mx-auto max-w-6xl'"
+      >
         <nav
           :aria-label="$t('footer.label')"
           class="flex items-center gap-5"

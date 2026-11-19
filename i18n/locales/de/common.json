@@ -12,6 +12,11 @@
       "analyze": "Analysieren",
       "report": "Bericht"
     },
+    "meta": {
+      "left": "{n} offen",
+      "running": "Läuft",
+      "themes": "{n} Thema | {n} Themen"
+    },
     "startOver": "Neu beginnen",
     "newTab": "(öffnet in neuem Tab)"
   },
@@ -43,7 +48,10 @@
     "chooseAnother": "Andere Datei wählen",
     "sheet": "Tabellenblatt",
     "sample": "Beispieldatei mit erfundenen Daten.",
-    "ragged": "1 Zeile hatte eine andere Anzahl an Zellen als die Kopfzeile und wurde aufgefüllt. | {n} Zeilen hatten eine andere Anzahl an Zellen als die Kopfzeile und wurden aufgefüllt."
+    "ragged": "1 Zeile hatte eine andere Anzahl an Zellen als die Kopfzeile und wurde aufgefüllt. | {n} Zeilen hatten eine andere Anzahl an Zellen als die Kopfzeile und wurden aufgefüllt.",
+    "heading": "Datei",
+    "rowsLabel": "Zeilen",
+    "columnsLabel": "Spalten"
   },
   "header": {
     "outbound": "Was Ihren Browser verlässt",
@@ -149,5 +157,65 @@
   },
   "toast": {
     "close": "Schließen"
+  },
+  "workspace": {
+    "importSidebar": "Datei und Spalten",
+    "drawer": {
+      "close": "Details schließen",
+      "closeTitle": "Schließen (Escape)"
+    },
+    "review": {
+      "sidebar": "Filter, Namen und Datenschutz",
+      "filters": "Filter",
+      "clearFilters": "Filter zurücksetzen",
+      "type": "Art",
+      "statusLegend": "Status",
+      "status": {
+        "pending": "Offen",
+        "removed": "Entfernt",
+        "kept": "Behalten"
+      },
+      "warnings": "Hinweise",
+      "nearWarning": "In Zeilen mit Hinweis",
+      "names": "Namen und Orte",
+      "shownOf": "{shown} von 1 Wert | {shown} von {total} Werten",
+      "caption": "Gefundene personenbezogene Daten, eine Zeile je Wert. Einen Wert auswählen für die Details; N und P gehen durch die angezeigten Werte, R entfernt, K behält.",
+      "columns": {
+        "value": "Wert",
+        "rows": "Zeilen",
+        "decision": "Entscheidung"
+      },
+      "warningType": "Hinweis, {reason}",
+      "noMatch": "Keine Werte passen zu diesen Filtern.",
+      "keys": "Tasten: N und P gehen durch die angezeigten Werte, R entfernt, K behält, M markiert ausgewählten Text als übersehen, Z macht rückgängig.",
+      "warningRow": "Zeile {n}, könnte jemanden erkennbar machen",
+      "inRows": "In 1 Zeile | In {n} Zeilen",
+      "hidden": "Die Filter blenden diesen Wert aus. N und P gehen durch die angezeigten Werte.",
+      "whereItAppears": "Wo er vorkommt"
+    },
+    "download": {
+      "sidebar": "Die Datei und was sie enthält"
+    },
+    "analyze": {
+      "sidebar": "Auf dieser Seite",
+      "onThisPage": "Auf dieser Seite",
+      "connection": "Wo sie läuft",
+      "send": "Prüfen und senden",
+      "notSetUp": "Noch nicht eingerichtet",
+      "findingsLeft": "1 Treffer nicht geprüft | {n} Treffer nicht geprüft",
+      "namesNotChecked": "Namen nicht geprüft",
+      "ready": "Bereit zum Senden",
+      "afterTest": "Nach einem erfolgreichen Verbindungstest",
+      "sendAfterTest": "Danach: prüfen, was gesendet wird, und senden. Das erscheint, sobald der Verbindungstest klappt.",
+      "reviewSent": "Prüfen, was gesendet wird (1 Text) | Prüfen, was gesendet wird ({n} Texte)",
+      "sentTexts": "Die Texte, die gesendet werden"
+    },
+    "report": {
+      "sidebar": "Abschnitte und die bereinigte Datei",
+      "onThisPage": "Auf dieser Seite",
+      "theme": "Thema",
+      "caption": "{kind}: eine Zeile pro Thema, die mit den meisten Texten zuerst. Wählen Sie ein Thema für seine Zitate und Texte.",
+      "quotes": "Zitate und Texte"
+    }
   }
 }

@@ -107,7 +107,7 @@
       },
       "workspace": {
         "name": "Neuer Arbeitsbereich",
-        "summary": "Importieren, Prüfen und Analysieren in einem Arbeitsbereich: die vier Schritte oben, Filter an der Seite, sortierbare Tabellen."
+        "summary": "Importieren, Prüfen, Analysieren und Bericht in einem Arbeitsbereich: die vier Schritte oben, Kontext und Filter an der Seite, sortierbare Tabellen."
       },
       "report": {
         "name": "Bericht",
