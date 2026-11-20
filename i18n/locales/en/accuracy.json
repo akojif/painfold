@@ -112,6 +112,7 @@
       "measured": "Measured on {texts} hand-labeled texts from the test split, analyzed by {model} on {date}. Each theme Painfold found was matched to the labels by hand, by {people}.",
       "classmate": "a German-speaking classmate",
       "sample": "That is a small sample: {n} texts per language, so a single text moves a percentage by {points} points or more.",
+      "source": "The texts were written by a Claude model (Claude Opus 5.5) during development, in the same working session that wrote the first version of the instructions, prompt version 1. The labels were made by people, as described above. The instructions were tuned on the texts set aside for tuning only, and both tuning rounds were reverted, so prompt version 1 is what is measured.",
       "tags": "Under the right theme",
       "presence": "In the right texts",
       "kind": "Kind",
@@ -139,7 +140,8 @@
           "A missing feature can be a pain, a wish or both. Painfold often records only the wish: for \"Great product, fair price. Reports could use a filter by project, though.\" it found a wish but no pain, and called the text praise.",
           "Results vary between runs, and the model takes no temperature setting that could reduce this. Two runs on the same texts agree on whether a text has a job, pain or gain in 94% (English) and 92% (German) of cases, but put the same pairs of texts under one pain theme only 74% and 53% of the time.",
           "The sample is small, and scores move with it: with nothing changed in between, some scores were higher on the test texts than on the texts used for tuning and some lower, by up to 28 points.",
-          "The German texts were labeled by a German-speaking classmate with the English labels available, so the two languages are not independent checks. Labeled themes with the same meaning were merged after labeling: suggested by Claude from the theme names, reviewed by Francis, and for German skimmed by a German-speaking classmate."
+          "The German texts were labeled by a German-speaking classmate with the English labels available, so the two languages are not independent checks. Labeled themes with the same meaning were merged after labeling: suggested by Claude from the theme names, reviewed by Francis, and for German skimmed by a German-speaking classmate.",
+          "The texts are synthetic and were written by a model from the same family as the one that analyzes them, and the working session that wrote prompt version 1 also wrote the test texts. Both likely make the scores optimistic. Version 0.4 is measured on a separately sourced test set."
         ],
         "next": "The targets for version 0.4 are set from these results."
       }

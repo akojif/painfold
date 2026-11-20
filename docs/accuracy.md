@@ -178,9 +178,9 @@ Measured with `npm run bench` (three runs) on an Apple M3 Pro with 18 GB of memo
 
 ## Jobs, pains and gains
 
-The analysis (Stage 3) is measured on 240 invented feedback messages about an invoicing and accounting app ([data/eval/analysis/](../data/README.md)), 120 in English and 120 in German, each language split into 60 dev and 60 test messages. The messages and the instructions to the model were written by the same person; the labels were not. The English half is labelled by Francis, the German half by a German-speaking classmate: for each message, its jobs, pains and gains (as short theme names the labeller keeps consistent), its sentiment and its type.
+The analysis (Stage 3) is measured on 240 invented feedback messages about an invoicing and accounting app ([data/eval/analysis/](../data/README.md)), 120 in English and 120 in German, each language split into 60 dev and 60 test messages. The messages were written by a Claude model (Claude Opus 5.5) during development, in the same Claude Code working session that wrote the first version of the instructions, prompt version 1. The labels were not: they were made by people. The English half is labelled by Francis, the German half by a German-speaking classmate: for each message, its jobs, pains and gains (as short theme names the labeller keeps consistent), its sentiment and its type.
 
-The instructions were tuned on the dev split only. The test split was run once per language, after tuning, and that run is what is published. Each run stores the model's answers, so the numbers below are recomputed from them, through the same code as the app, without a request.
+The instructions were tuned on the dev split only, and both tuning rounds were reverted, so prompt version 1 is what is measured. The test split was run once per language, after tuning, and that run is what is published. Each run stores the model's answers, so the numbers below are recomputed from them, through the same code as the app, without a request.
 
 How it is counted:
 
@@ -192,6 +192,8 @@ How it is counted:
 - **Same answer when run twice:** test 1 and test 2, two runs of the test split with the same model and settings, compared on whether each message has a job, a pain and a gain.
 
 The sample is small: 60 test messages per language, and fewer labelled jobs, pains or gains of each kind, so a single message moves a number by two points or more. There are no targets for version 0.3: these results are published with their weaknesses, and the targets for version 0.4 are set from them.
+
+**The texts are synthetic and likely make the scores optimistic.** They were written by a model from the same family as the evaluated analyzer (Claude), and the working session that wrote prompt version 1 also wrote the test texts. Version 0.4 is measured on a separately sourced test set (#178).
 
 <!-- analysis:start -->
 Tag recall and precision count a job, pain or gain only when Painfold put it under the theme a person matched to the label. Presence only checks that a text has a job, pain or gain of that kind at all, so it is higher, and on its own it overstates how well Painfold names pains and gains.

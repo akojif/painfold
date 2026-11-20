@@ -63,7 +63,17 @@ export type LlmsSources = {
   items: Record<string, { name: string, summary: string }>
   accuracy: AccuracyData
   analysis: AnalysisResults
+  /** How the analysis texts were made, and the weakness that follows (accuracy.analysis in i18n/locales/en/accuracy.json). */
+  analysisText: { source: string, synthetic: string }
   privacyDoc: string
+}
+
+/** The Accuracy page's sentence on how the analysis texts were made, and the known weakness about synthetic texts. */
+export function analysisTextOf(locale: { accuracy: { analysis: { source: string, weaknesses: { items: string[] } } } }) {
+  const { source, weaknesses } = locale.accuracy.analysis
+  const synthetic = weaknesses.items.find(item => item.startsWith('The texts are synthetic'))
+  if (!synthetic) throw new Error('accuracy.analysis.weaknesses needs the item on synthetic texts')
+  return { source, synthetic }
 }
 
 /** Reads every source from the repository. */
@@ -74,6 +84,7 @@ export function readSources(root = '.'): LlmsSources {
     items: (JSON.parse(read('i18n/locales/en/roadmap.json')) as { roadmap: { items: LlmsSources['items'] } }).roadmap.items,
     accuracy: JSON.parse(read('data/eval/accuracy.json')) as AccuracyData,
     analysis: JSON.parse(read('data/eval/analysis/results.json')) as AnalysisResults,
+    analysisText: analysisTextOf(JSON.parse(read('i18n/locales/en/accuracy.json')) as { accuracy: { analysis: { source: string, weaknesses: { items: string[] } } } }),
     privacyDoc: read('docs/privacy.md'),
   }
 }
@@ -129,6 +140,7 @@ Measured on small evaluation sets of invented German and English feedback; read 
 ${analysis
   ? `- Jobs, pains and gains, under the right theme, on ${analysis.texts} hand-labelled test texts per language: ${percent(analysis.jobs.found)} of jobs, ${percent(analysis.pains.found)} of pains and ${percent(analysis.gains.found)} of gains are found; of what is reported, ${percent(analysis.jobs.correct)}, ${percent(analysis.pains.correct)} and ${percent(analysis.gains.correct)} match the labels. ${percent(analysis.quotes)} of quotes were found word for word.`
   : '- Jobs, pains and gains: not measured yet.'}
+- How the analysis texts were made: ${sources.analysisText.source} ${sources.analysisText.synthetic}
 - Numbers, method and known weaknesses: ${SITE}/accuracy/ (German: ${SITE}/de/accuracy/) and ${REPO}/blob/main/docs/accuracy.md
 
 ## Roadmap
