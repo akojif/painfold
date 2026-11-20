@@ -133,6 +133,42 @@ test.describe('Review at 768 px', () => {
     await expect(page.getByRole('heading', { name: 'Where it appears' })).toBeVisible()
     expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0)
   })
+  test('the filters start collapsed to one row, open on request, and say how many are active (#185)', async ({ page }) => {
+    await openReviewTable(page)
+    const type = page.getByRole('group', { name: 'Type' })
+    const toggle = page.getByRole('button', { name: 'Show filters' })
+    await expect(type).toBeHidden()
+    await expect(toggle).toHaveAttribute('aria-expanded', 'false')
+    // The table starts right below the collapsed row: its first values are in view.
+    await expect(valueButtons(page).first()).toBeInViewport()
+
+    await toggle.click()
+    await expect(page.getByRole('button', { name: 'Hide filters' })).toHaveAttribute('aria-expanded', 'true')
+    await type.getByRole('checkbox', { name: /^Email addresses/ }).check()
+    await page.getByRole('button', { name: 'Hide filters' }).click()
+    await expect(type).toBeHidden()
+    // Collapsed, the heading still says a filter is on, and Clear filters stays at hand.
+    await expect(page.getByRole('heading', { name: 'Filters, 1 active' })).toBeVisible()
+    await expect(valueButtons(page)).toHaveText(['anna@example.com'])
+    await page.getByRole('button', { name: 'Clear filters' }).first().click()
+    await expect(page.getByRole('heading', { name: 'Filters', exact: true })).toBeVisible()
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0)
+  })
+
+  test('in German, the toggle reads in German and nothing scrolls sideways', async ({ page }) => {
+    await openReviewTable(page)
+    await page.getByRole('button', { name: 'German' }).click()
+    await page.getByRole('button', { name: 'Filter anzeigen' }).click()
+    await expect(page.getByRole('group', { name: 'Art' })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Filter ausblenden' })).toBeVisible()
+    expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0)
+  })
+})
+
+test('from 1,024 px the filters are always open, with no toggle', async ({ page }) => {
+  await openReviewTable(page)
+  await expect(page.getByRole('group', { name: 'Type' })).toBeVisible()
+  await expect(page.getByRole('button', { name: /^(Show|Hide) filters$/ })).toHaveCount(0)
 })
 
 test('Review by row: the tab bar says how many rows are listed', async ({ page }) => {

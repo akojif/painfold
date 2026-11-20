@@ -191,7 +191,10 @@
       "warningRow": "Row {n}, could identify someone",
       "inRows": "In 1 row | In {n} rows",
       "hidden": "The filters hide this value. N and P move through the values shown.",
-      "whereItAppears": "Where it appears"
+      "whereItAppears": "Where it appears",
+      "activeFilters": "1 active | {n} active",
+      "showFilters": "Show filters",
+      "hideFilters": "Hide filters"
     },
     "download": {
       "sidebar": "The file and what it contains"
