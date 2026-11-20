@@ -49,7 +49,11 @@ const passes = (row: Row, skip?: FilterName) =>
   (skip === 'type' || filters.type.length === 0 || filters.type.includes(row.type))
   && (skip === 'status' || filters.status.length === 0 || filters.status.includes(row.status))
   && (skip === 'warning' || filters.warning.length === 0 || nearWarning(row))
-const filtered = computed(() => filters.type.length + filters.status.length + filters.warning.length > 0)
+const activeFilters = computed(() => filters.type.length + filters.status.length + filters.warning.length)
+const filtered = computed(() => activeFilters.value > 0)
+// Below 1,024 px the sidebar sits above the table, so the filters start
+// collapsed to one row (#185); from 1,024 px they are always open.
+const filtersOpen = ref(false)
 function clearFilters() {
   filters.type = []
   filters.status = []
@@ -189,33 +193,53 @@ const bulk = computed(() => {
             id="review-filters"
             class="text-sm font-medium"
           >
-            {{ $t('workspace.review.filters') }}
+            {{ $t('workspace.review.filters') }}<span
+              v-if="filtered"
+              class="font-normal text-fg-muted lg:sr-only"
+            >, {{ $t('workspace.review.activeFilters', { n: number(activeFilters) }, activeFilters) }}</span>
           </h2>
-          <button
-            v-if="filtered"
-            type="button"
-            class="focus-ring press rounded-sm text-sm text-accent underline-offset-4 hover:underline"
-            @click="clearFilters"
-          >
-            {{ $t('workspace.review.clearFilters') }}
-          </button>
+          <div class="flex items-baseline gap-3">
+            <button
+              v-if="filtered"
+              type="button"
+              class="focus-ring press rounded-sm text-sm text-accent underline-offset-4 hover:underline"
+              @click="clearFilters"
+            >
+              {{ $t('workspace.review.clearFilters') }}
+            </button>
+            <button
+              type="button"
+              class="focus-ring press rounded-sm text-sm text-accent underline-offset-4 hover:underline lg:hidden"
+              aria-controls="review-filter-options"
+              :aria-expanded="filtersOpen"
+              @click="filtersOpen = !filtersOpen"
+            >
+              {{ filtersOpen ? $t('workspace.review.hideFilters') : $t('workspace.review.showFilters') }}
+            </button>
+          </div>
         </div>
-        <WorkspaceFacet
-          v-model="filters.type"
-          :legend="$t('workspace.review.type')"
-          :options="typeOptions"
-        />
-        <WorkspaceFacet
-          v-model="filters.status"
-          :legend="$t('workspace.review.statusLegend')"
-          :options="statusOptions"
-        />
-        <WorkspaceFacet
-          v-if="ws.warnings.length > 0"
-          v-model="filters.warning"
-          :legend="$t('workspace.review.warnings')"
-          :options="warningOptions"
-        />
+        <div
+          id="review-filter-options"
+          class="space-y-5"
+          :class="filtersOpen ? '' : 'max-lg:hidden'"
+        >
+          <WorkspaceFacet
+            v-model="filters.type"
+            :legend="$t('workspace.review.type')"
+            :options="typeOptions"
+          />
+          <WorkspaceFacet
+            v-model="filters.status"
+            :legend="$t('workspace.review.statusLegend')"
+            :options="statusOptions"
+          />
+          <WorkspaceFacet
+            v-if="ws.warnings.length > 0"
+            v-model="filters.warning"
+            :legend="$t('workspace.review.warnings')"
+            :options="warningOptions"
+          />
+        </div>
       </section>
       <section
         v-else
