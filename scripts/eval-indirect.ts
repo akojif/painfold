@@ -1,5 +1,5 @@
 // Measures the warnings for indirect identifiers (core/detect/indirect/) on a
-// hand-written set of invented feedback, data/eval/indirect.jsonl: exact ages,
+// set of invented feedback written for the tests, data/eval/indirect.jsonl: exact ages,
 // "the only …", job titles with a place and unique roles, in German and
 // English, with traps that must not warn (durations, versions, the age of
 // things, "the only problem", a role mentioned in passing).

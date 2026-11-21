@@ -65,6 +65,8 @@ export type LlmsSources = {
   analysis: AnalysisResults
   /** How the analysis texts were made, and the weakness that follows (accuracy.analysis in i18n/locales/en/accuracy.json). */
   analysisText: { source: string, synthetic: string }
+  /** How the detection test texts were made, and the known gap that follows (accuracy.measured and accuracy.gaps). */
+  detectionText: { source: string, synthetic: string }
   privacyDoc: string
 }
 
@@ -76,6 +78,15 @@ export function analysisTextOf(locale: { accuracy: { analysis: { source: string,
   return { source, synthetic }
 }
 
+type DetectionLocale = { accuracy: { measured: { source: string }, gaps: { items: string[] } } }
+
+/** The Accuracy page's sentence on how the detection test texts were made, and the known gap about synthetic texts. */
+export function detectionTextOf(locale: DetectionLocale) {
+  const synthetic = locale.accuracy.gaps.items.find(item => item.startsWith('The test texts are synthetic'))
+  if (!synthetic) throw new Error('accuracy.gaps needs the item on synthetic test texts')
+  return { source: locale.accuracy.measured.source, synthetic }
+}
+
 /** Reads every source from the repository. */
 export function readSources(root = '.'): LlmsSources {
   const read = (path: string) => readFileSync(`${root}/${path}`, 'utf8')
@@ -85,6 +96,7 @@ export function readSources(root = '.'): LlmsSources {
     accuracy: JSON.parse(read('data/eval/accuracy.json')) as AccuracyData,
     analysis: JSON.parse(read('data/eval/analysis/results.json')) as AnalysisResults,
     analysisText: analysisTextOf(JSON.parse(read('i18n/locales/en/accuracy.json')) as { accuracy: { analysis: { source: string, weaknesses: { items: string[] } } } }),
+    detectionText: detectionTextOf(JSON.parse(read('i18n/locales/en/accuracy.json')) as DetectionLocale),
     privacyDoc: read('docs/privacy.md'),
   }
 }
@@ -137,6 +149,7 @@ ${privacySection(sources.privacyDoc, "What Painfold doesn't protect against")}
 Measured on small evaluation sets of invented German and English feedback; read the numbers with their known weaknesses.
 
 - Names: ${percent(names.removed)} of test names are removed, and at least ${percent(names.weakest)} in every one of ${names.groups} name-origin groups.
+- How the personal-data test texts were made: ${sources.detectionText.source} ${sources.detectionText.synthetic}
 ${analysis
   ? `- Jobs, pains and gains, under the right theme, on ${analysis.texts} hand-labelled test texts per language: ${percent(analysis.jobs.found)} of jobs, ${percent(analysis.pains.found)} of pains and ${percent(analysis.gains.found)} of gains are found; of what is reported, ${percent(analysis.jobs.correct)}, ${percent(analysis.pains.correct)} and ${percent(analysis.gains.correct)} match the labels. ${percent(analysis.quotes)} of quotes were found word for word.`
   : '- Jobs, pains and gains: not measured yet.'}

@@ -6,7 +6,7 @@
     "findingsLabel": "In short",
     "findings": {
       "names": "Names: {removal} are removed in German and English feedback, and at least {min} in every one of {groups} name-origin groups.",
-      "rules": "Emails, phone numbers, IBANs and the other kinds of personal data: {removal} of the values in hand-written hard cases are removed.",
+      "rules": "Emails, phone numbers, IBANs and the other kinds of personal data: {removal} of the values in the hard cases written for the tests are removed.",
       "targetMet": "Stage 2 target, at least {target} of names removed in every group: met.",
       "targetMissed": "Stage 2 target, at least {target} of names removed in every group: not met yet."
     },
@@ -18,8 +18,9 @@
     },
     "measured": {
       "heading": "How it's measured",
-      "sets": "Painfold is measured on made-up feedback with known personal data, in German and English: hand-written hard cases, hand-written names typical of 13 communities living in Austria, long texts, and generated messages.",
-      "browser": "The name model is measured in a browser, the way it runs for you. Its rules were tuned on a separate set of sentences; the test sentences were checked only once, after tuning. They were written by the same person who tuned the rules, so a test set written by someone else is planned.",
+      "sets": "Painfold is measured on made-up feedback with known personal data, in German and English: hard cases and names typical of 13 communities living in Austria, both written for the tests, long texts, and generated messages.",
+      "source": "The hard cases, the names, the long texts and the warnings were written by a Claude model (Claude Opus 5.5) during development, in the same working session that wrote and tuned the detection rules. The generated messages come from templates in the same code.",
+      "browser": "The name model is measured in a browser, the way it runs for you. Its rules were tuned on a separate set of sentences; the test sentences were checked only once, after tuning. A test set written by someone else is planned.",
       "terms": "Removed: the value is gone from the cleaned file, whatever kind of data it was taken for. Removed as a name: removed and recognized as a name."
     },
     "names": {
@@ -64,7 +65,7 @@
     },
     "rules": {
       "heading": "Other personal data",
-      "note": "Hand-written hard cases: values written in unusual ways, pasted or disguised, and look-alikes that must not be removed, such as order numbers.",
+      "note": "Hard cases written for the tests: values written in unusual ways, pasted or disguised, and look-alikes that must not be removed, such as order numbers.",
       "type": "Kind of data",
       "found": "Found",
       "correct": "Correct",
@@ -83,7 +84,8 @@
         "Small towns: in \"Mehmet Aydın aus Wels\" the name is removed, but not \"Wels\".",
         "Email addresses spelled out to fool spam filters (\"name AT example DOT net\").",
         "English addresses that start with a flat number (\"Flat 2, 14 Market Street\").",
-        "A few document numbers that look like an Austrian social security number are removed although they are not one."
+        "A few document numbers that look like an Austrian social security number are removed although they are not one.",
+        "The test texts are synthetic: a Claude model wrote them in the same working session that wrote and tuned the detection rules, so the scores are likely optimistic. The name model itself was trained elsewhere, but its rules and post-processing were tuned in that session. A test set written by someone else is planned (#82)."
       ],
       "mark": "Anything missed can be marked in the review with M."
     },
@@ -102,7 +104,7 @@
     },
     "warnings": {
       "heading": "Could identify someone",
-      "text": "Painfold warns about text that can point to one person together with other details: exact ages, “the only …”, job titles with a small place, and roles one person holds. Warnings are never removed on their own. Measured on {n} hand-written warnings, with the places given; the set is small and was written by the same author as the rules, so expect real feedback to score lower."
+      "text": "Painfold warns about text that can point to one person together with other details: exact ages, “the only …”, job titles with a small place, and roles one person holds. Warnings are never removed on their own. Measured on {n} warnings written for the tests, with the places given; the set is small and was written in the same working session as the rules, so expect real feedback to score lower."
     },
     "analysis": {
       "heading": "Jobs, pains and gains",

@@ -2,6 +2,16 @@
 
 All notable changes to Painfold. Versions follow the stages in [ROADMAP.md](ROADMAP.md).
 
+## Unreleased
+
+### Changed
+
+- **Review at 768 px:** below 1,024 px the filters start collapsed to one row, with Show filters, so the table starts higher; the heading says how many filters are on, and Clear filters stays at hand (#189).
+
+### Fixed
+
+- **Who wrote the evaluation texts is now stated, on the Accuracy page, in the docs and in llms.txt.** The analysis texts and the personal-data test texts (hard cases, names, long texts and warnings) were written by a Claude model (Claude Opus 5.5) during development, in the same working session that wrote the prompts and the detection rules; before, the page said they were written by "the same person" or "hand-written". The labels were made by people. Both are listed as known weaknesses: the texts are synthetic, so the scores are likely optimistic. Version 0.4 measures the analysis on a separately sourced test set, and an independently written name test set is planned (#82). (#190 for the analysis texts, and the follow-up for the personal-data test texts)
+
 ## 0.3.1: Workspace redesign (2026-11-20)
 
 Import, Review, Analyze and Report now work as one workspace: a top bar with the four steps, the page's context and filters at the side, tables you can sort, and details in a panel beside them. Nothing about what is found, sent or counted has changed.
