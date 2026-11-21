@@ -140,7 +140,7 @@ describe('evaluation set', () => {
   })
 })
 
-describe('hand-written name set', () => {
+describe('name set', () => {
   type NameItem = Item & { group?: string, split: 'dev' | 'test' }
   const all = read(EVAL_NAMES_PATH).trim().split('\n').map(line => JSON.parse(line) as NameItem)
   // Look-alikes (greetings followed by words that are not names) belong to no group.

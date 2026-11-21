@@ -56,6 +56,12 @@ describe('llms.txt', () => {
     expect(text).toContain('Claude Opus 5.5')
   })
 
+  it('says how the personal-data test texts were made, word for word as on the Accuracy page, with the gap that follows', () => {
+    const page = JSON.parse(readFileSync('i18n/locales/en/accuracy.json', 'utf8')) as { accuracy: { measured: { source: string }, gaps: { items: string[] } } }
+    expect(text).toContain(page.accuracy.measured.source)
+    expect(text).toContain(page.accuracy.gaps.items.find(item => item.startsWith('The test texts are synthetic'))!)
+  })
+
   it('lists every roadmap item with its status, version, release date and link', () => {
     const status = { released: 'Released', inProgress: 'In progress', planned: 'Planned', idea: 'Idea' }
     for (const item of ROADMAP_ITEMS) {
