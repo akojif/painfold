@@ -6,7 +6,7 @@
     "findingsLabel": "Kurz gesagt",
     "findings": {
       "names": "Namen: {removal} werden in deutschem und englischem Feedback entfernt, mindestens {min} in jeder der {groups} Herkunftsgruppen.",
-      "rules": "E-Mail-Adressen, Telefonnummern, IBANs und die übrigen personenbezogenen Daten: {removal} der Werte in handgeschriebenen schwierigen Fällen werden entfernt.",
+      "rules": "E-Mail-Adressen, Telefonnummern, IBANs und die übrigen personenbezogenen Daten: {removal} der Werte in den für die Tests geschriebenen schwierigen Fällen werden entfernt.",
       "targetMet": "Ziel für Stufe 2, mindestens {target} der Namen in jeder Gruppe entfernt: erreicht.",
       "targetMissed": "Ziel für Stufe 2, mindestens {target} der Namen in jeder Gruppe entfernt: noch nicht erreicht."
     },
@@ -18,8 +18,9 @@
     },
     "measured": {
       "heading": "Wie gemessen wird",
-      "sets": "Painfold wird an erfundenem Feedback mit bekannten personenbezogenen Daten gemessen, auf Deutsch und Englisch: handgeschriebene schwierige Fälle, handgeschriebene Namen aus 13 in Österreich lebenden Gemeinschaften, lange Texte und generierte Nachrichten.",
-      "browser": "Das Namensmodell wird im Browser gemessen, so wie es bei Ihnen läuft. Seine Regeln wurden an eigenen Sätzen abgestimmt; die Testsätze wurden nur einmal geprüft, nach der Abstimmung. Sie stammen von derselben Person, die die Regeln abgestimmt hat; ein Testdatensatz von jemand anderem ist geplant.",
+      "sets": "Painfold wird an erfundenem Feedback mit bekannten personenbezogenen Daten gemessen, auf Deutsch und Englisch: schwierige Fälle und Namen aus 13 in Österreich lebenden Gemeinschaften, beide für die Tests geschrieben, lange Texte und generierte Nachrichten.",
+      "source": "Die schwierigen Fälle, die Namen, die langen Texte und die Hinweise hat ein Claude-Modell (Claude Opus 5.5) während der Entwicklung geschrieben, in derselben Arbeitssitzung, in der auch die Erkennungsregeln entstanden und abgestimmt wurden. Die generierten Nachrichten stammen aus Vorlagen im selben Code.",
+      "browser": "Das Namensmodell wird im Browser gemessen, so wie es bei Ihnen läuft. Seine Regeln wurden an eigenen Sätzen abgestimmt; die Testsätze wurden nur einmal geprüft, nach der Abstimmung. Ein Testdatensatz, den jemand anderes schreibt, ist geplant.",
       "terms": "Entfernt: Der Wert ist aus der bereinigten Datei verschwunden, egal, für welche Art von Daten er gehalten wurde. Als Name entfernt: entfernt und als Name erkannt."
     },
     "names": {
@@ -64,7 +65,7 @@
     },
     "rules": {
       "heading": "Weitere personenbezogene Daten",
-      "note": "Handgeschriebene schwierige Fälle: ungewöhnlich geschriebene, eingefügte oder verschleierte Werte und Ähnliches, das nicht entfernt werden darf, etwa Bestellnummern.",
+      "note": "Für die Tests geschriebene schwierige Fälle: ungewöhnlich geschriebene, eingefügte oder verschleierte Werte und Ähnliches, das nicht entfernt werden darf, etwa Bestellnummern.",
       "type": "Art der Daten",
       "found": "Gefunden",
       "correct": "Richtig",
@@ -83,7 +84,8 @@
         "Kleine Orte: In „Mehmet Aydın aus Wels“ wird der Name entfernt, aber nicht „Wels“.",
         "Ausgeschriebene E-Mail-Adressen, die Spamfilter austricksen sollen („name AT example DOT net“).",
         "Englische Adressen, die mit einer Wohnungsnummer beginnen („Flat 2, 14 Market Street“).",
-        "Einige Dokumentnummern, die wie eine österreichische Sozialversicherungsnummer aussehen, werden entfernt, obwohl sie keine sind."
+        "Einige Dokumentnummern, die wie eine österreichische Sozialversicherungsnummer aussehen, werden entfernt, obwohl sie keine sind.",
+        "Die Testtexte sind synthetisch: Ein Claude-Modell hat sie in derselben Arbeitssitzung geschrieben, in der die Erkennungsregeln entstanden und abgestimmt wurden; die Werte sind daher wahrscheinlich zu günstig. Das Namensmodell selbst wurde anderswo trainiert, seine Regeln und Nachbearbeitung aber in dieser Sitzung abgestimmt. Ein Testdatensatz, den jemand anderes schreibt, ist geplant (#82)."
       ],
       "mark": "Was übersehen wurde, können Sie in der Prüfung mit M markieren."
     },
@@ -102,7 +104,7 @@
     },
     "warnings": {
       "heading": "Könnte jemanden erkennbar machen",
-      "text": "Painfold weist auf Text hin, der zusammen mit anderen Angaben auf eine Person zeigen kann: genaue Altersangaben, „die einzige …“, Berufe mit kleinem Ort und Rollen, die eine Person innehat. Hinweise werden nie von selbst entfernt. Gemessen an {n} selbst geschriebenen Hinweisen, mit vorgegebenen Orten; die Menge ist klein und von derselben Person geschrieben wie die Regeln, echtes Feedback schneidet daher wohl schlechter ab."
+      "text": "Painfold weist auf Text hin, der zusammen mit anderen Angaben auf eine Person zeigen kann: genaue Altersangaben, „die einzige …“, Berufe mit kleinem Ort und Rollen, die eine Person innehat. Hinweise werden nie von selbst entfernt. Gemessen an {n} für die Tests geschriebenen Hinweisen, mit vorgegebenen Orten; die Menge ist klein und in derselben Arbeitssitzung geschrieben wie die Regeln, echtes Feedback schneidet daher wohl schlechter ab."
     },
     "analysis": {
       "heading": "Aufgaben, Probleme und Wünsche",

@@ -104,6 +104,7 @@ const GITHUB = 'https://github.com/akojif/painfold/blob/main'
       </h2>
       <div class="mt-2 max-w-measure space-y-2 text-fg-muted">
         <p>{{ $t('accuracy.measured.sets') }}</p>
+        <p>{{ $t('accuracy.measured.source') }}</p>
         <p>{{ $t('accuracy.measured.browser') }}</p>
         <p>{{ $t('accuracy.measured.terms') }}</p>
       </div>
