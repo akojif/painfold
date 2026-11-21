@@ -49,6 +49,13 @@ describe('llms.txt', () => {
     expect(text).toContain(`${percent(quotes.hits, quotes.of)} of quotes were found word for word`)
   })
 
+  it('says how the analysis texts were made, word for word as on the Accuracy page, with the weakness that follows', () => {
+    const page = JSON.parse(readFileSync('i18n/locales/en/accuracy.json', 'utf8')) as { accuracy: { analysis: { source: string, weaknesses: { items: string[] } } } }
+    expect(text).toContain(page.accuracy.analysis.source)
+    expect(text).toContain(page.accuracy.analysis.weaknesses.items.find(item => item.startsWith('The texts are synthetic'))!)
+    expect(text).toContain('Claude Opus 5.5')
+  })
+
   it('lists every roadmap item with its status, version, release date and link', () => {
     const status = { released: 'Released', inProgress: 'In progress', planned: 'Planned', idea: 'Idea' }
     for (const item of ROADMAP_ITEMS) {

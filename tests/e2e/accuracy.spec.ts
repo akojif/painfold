@@ -121,6 +121,10 @@ test('shows how well jobs, pains and gains are found, or that they are not measu
     // The known weaknesses are published with the numbers, in the page's language.
     await expect(section.getByRole('heading', { name: path === '/accuracy/' ? 'Known weaknesses' : 'Bekannte Schwächen', exact: true })).toBeVisible()
     await expect(section.getByRole('listitem').first()).toContainText(path === '/accuracy/' ? 'Gains are the weakest kind.' : 'Wünsche sind die schwächste Art.')
+    // Who wrote the texts, and what follows from it: stated next to the numbers.
+    const english = path === '/accuracy/'
+    await expect(section).toContainText(english ? 'The texts were written by a Claude model (Claude Opus 5.5) during development' : 'Die Texte hat ein Claude-Modell (Claude Opus 5.5) während der Entwicklung geschrieben')
+    await expect(section.getByRole('listitem').filter({ hasText: english ? 'The texts are synthetic' : 'Die Texte sind synthetisch' })).toContainText(english ? 'likely make the scores optimistic' : 'wahrscheinlich zu günstig')
   }
 })
 

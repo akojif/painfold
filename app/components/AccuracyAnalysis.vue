@@ -68,6 +68,7 @@ const missing = computed(() => (props.language === 'both' ? '' : t(`accuracy.lan
       <div class="mt-2 max-w-measure space-y-2 text-sm text-fg-muted">
         <p>{{ $t('accuracy.analysis.measured', { texts: number(texts), model: models, date: date(latest), people }) }}</p>
         <p>{{ $t('accuracy.analysis.sample', { n: number(perLanguage), points: number(Math.round(100 / perLanguage)) }) }}</p>
+        <p>{{ $t('accuracy.analysis.source') }}</p>
       </div>
 
       <h3 class="mt-6 text-sm font-medium">
