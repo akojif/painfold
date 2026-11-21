@@ -27,3 +27,6 @@ coverage/
 # OS and editor files
 .DS_Store
 *.log
+
+# v0.4 test texts before review (scripts/eval-v04-*.ts): never committed from here
+data/eval/analysis/v04/private/

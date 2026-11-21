@@ -1,19 +1,25 @@
 """Writes the labelling spreadsheets for the analysis evaluation (#129).
 
     python3 scripts/labelling/make_sheets.py
+    python3 scripts/labelling/make_sheets.py <items.jsonl> <out dir> <file prefix>
 
-Reads data/eval/analysis/items.jsonl and writes one XLSX file per language to
+Without arguments it reads data/eval/analysis/items.jsonl and writes one XLSX file per language to
 data/eval/analysis/labelling-en.xlsx and labelling-de.xlsx: a guidelines tab,
 an items tab (one row per item, with dropdowns for sentiment and type) and a
 themes tab, where the labeller keeps the names they use. The files open in
 Excel, LibreOffice and Google Sheets (File, Import). The dev/test split is
 not in the files: labellers label every item the same way.
 
+With arguments (the v0.4 test set, scripts/eval-v04-*.ts), it reads the given
+items file and writes <prefix>-<lang>.xlsx into the given folder, only for the
+languages present, and prints nothing from the items.
+
 Needs Python 3 with openpyxl (MIT), used only here: SheetJS, which the app
 uses, cannot write dropdowns. The generated files are committed, so nobody
 needs Python to label or to convert (scripts/convert-labels.ts).
 """
 import json
+import sys
 from pathlib import Path
 
 from openpyxl import Workbook
@@ -179,8 +185,12 @@ def themes_sheet(book, lang):
 
 
 def main():
-    items = [json.loads(line) for line in ITEMS.read_text(encoding='utf-8').splitlines() if line.strip()]
+    args = sys.argv[1:]
+    items_path, out, prefix = (Path(args[0]), Path(args[1]), args[2]) if len(args) == 3 else (ITEMS, OUT, 'labelling')
+    items = [json.loads(line) for line in items_path.read_text(encoding='utf-8').splitlines() if line.strip()]
     for lang in ('en', 'de'):
+        if not any(item['lang'] == lang for item in items):
+            continue
         book = Workbook()
         guide_sheet(book, lang)
         items_sheet(book, lang, [item for item in items if item['lang'] == lang])
@@ -188,9 +198,9 @@ def main():
         # Fixed metadata, so the same input gives the same file.
         book.properties.creator = 'Painfold'
         book.properties.title = f'Painfold analysis labels ({lang})'
-        path = OUT / f'labelling-{lang}.xlsx'
+        path = out / f'{prefix}-{lang}.xlsx'
         book.save(path)
-        print(f'Wrote {path.relative_to(ROOT)}')
+        print(f'Wrote {path}')
 
 
 if __name__ == '__main__':
