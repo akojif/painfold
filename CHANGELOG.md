@@ -10,7 +10,7 @@ All notable changes to Painfold. Versions follow the stages in [ROADMAP.md](ROAD
 
 ### Fixed
 
-- **Who wrote the evaluation texts is now stated, on the Accuracy page, in the docs and in llms.txt.** The analysis texts and the personal-data test texts (hard cases, names, long texts and warnings) were written by a Claude model (Claude Opus 5.5) during development, in the same working session that wrote the prompts and the detection rules; before, the page said they were written by "the same person" or "hand-written". The labels were made by people. Both are listed as known weaknesses: the texts are synthetic, so the scores are likely optimistic. Version 0.4 measures the analysis on a separately sourced test set, and an independently written name test set is planned (#82). (#190 for the analysis texts, and the follow-up for the personal-data test texts)
+- **Who wrote the evaluation texts is now stated, on the Accuracy page, in the docs and in llms.txt.** The analysis texts and the personal-data test texts (hard cases, names, long texts and warnings) were written by a Claude model (Claude Opus 5.5) during development, in the same working session that wrote the prompts and the detection rules; before, the page said they were written by "the same person" or "hand-written". The labels were made by people. Both are listed as known weaknesses: the texts are synthetic, so the scores are likely optimistic. Version 0.4 measures the analysis on a separately sourced test set, and an independently written name test set is planned (#82). (#190 for the analysis texts, #191 for the personal-data test texts)
 
 ## 0.3.1: Workspace redesign (2026-11-20)
 
