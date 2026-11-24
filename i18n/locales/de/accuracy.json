@@ -6,7 +6,7 @@
     "findingsLabel": "Kurz gesagt",
     "findings": {
       "names": "Namen: {removal} werden in deutschem und englischem Feedback entfernt, mindestens {min} in jeder der {groups} Herkunftsgruppen.",
-      "rules": "E-Mail-Adressen, Telefonnummern, IBANs und die übrigen personenbezogenen Daten: {removal} der Werte in handgeschriebenen schwierigen Fällen werden entfernt.",
+      "rules": "E-Mail-Adressen, Telefonnummern, IBANs und die übrigen personenbezogenen Daten: {removal} der Werte in den für die Tests geschriebenen schwierigen Fällen werden entfernt.",
       "targetMet": "Ziel für Stufe 2, mindestens {target} der Namen in jeder Gruppe entfernt: erreicht.",
       "targetMissed": "Ziel für Stufe 2, mindestens {target} der Namen in jeder Gruppe entfernt: noch nicht erreicht."
     },
@@ -18,8 +18,9 @@
     },
     "measured": {
       "heading": "Wie gemessen wird",
-      "sets": "Painfold wird an erfundenem Feedback mit bekannten personenbezogenen Daten gemessen, auf Deutsch und Englisch: handgeschriebene schwierige Fälle, handgeschriebene Namen aus 13 in Österreich lebenden Gemeinschaften, lange Texte und generierte Nachrichten.",
-      "browser": "Das Namensmodell wird im Browser gemessen, so wie es bei Ihnen läuft. Seine Regeln wurden an eigenen Sätzen abgestimmt; die Testsätze wurden nur einmal geprüft, nach der Abstimmung. Sie stammen von derselben Person, die die Regeln abgestimmt hat; ein Testdatensatz von jemand anderem ist geplant.",
+      "sets": "Painfold wird an erfundenem Feedback mit bekannten personenbezogenen Daten gemessen, auf Deutsch und Englisch: schwierige Fälle und Namen aus 13 in Österreich lebenden Gemeinschaften, beide für die Tests geschrieben, lange Texte und generierte Nachrichten.",
+      "source": "Die schwierigen Fälle, die Namen, die langen Texte und die Hinweise hat ein Claude-Modell (Claude Opus 5.5) während der Entwicklung geschrieben, in derselben Arbeitssitzung, in der auch die Erkennungsregeln entstanden und abgestimmt wurden. Die generierten Nachrichten stammen aus Vorlagen im selben Code.",
+      "browser": "Das Namensmodell wird im Browser gemessen, so wie es bei Ihnen läuft. Seine Regeln wurden an eigenen Sätzen abgestimmt; die Testsätze wurden nur einmal geprüft, nach der Abstimmung. Ein Testdatensatz, den jemand anderes schreibt, ist geplant.",
       "terms": "Entfernt: Der Wert ist aus der bereinigten Datei verschwunden, egal, für welche Art von Daten er gehalten wurde. Als Name entfernt: entfernt und als Name erkannt."
     },
     "names": {
@@ -64,7 +65,7 @@
     },
     "rules": {
       "heading": "Weitere personenbezogene Daten",
-      "note": "Handgeschriebene schwierige Fälle: ungewöhnlich geschriebene, eingefügte oder verschleierte Werte und Ähnliches, das nicht entfernt werden darf, etwa Bestellnummern.",
+      "note": "Für die Tests geschriebene schwierige Fälle: ungewöhnlich geschriebene, eingefügte oder verschleierte Werte und Ähnliches, das nicht entfernt werden darf, etwa Bestellnummern.",
       "type": "Art der Daten",
       "found": "Gefunden",
       "correct": "Richtig",
@@ -83,7 +84,8 @@
         "Kleine Orte: In „Mehmet Aydın aus Wels“ wird der Name entfernt, aber nicht „Wels“.",
         "Ausgeschriebene E-Mail-Adressen, die Spamfilter austricksen sollen („name AT example DOT net“).",
         "Englische Adressen, die mit einer Wohnungsnummer beginnen („Flat 2, 14 Market Street“).",
-        "Einige Dokumentnummern, die wie eine österreichische Sozialversicherungsnummer aussehen, werden entfernt, obwohl sie keine sind."
+        "Einige Dokumentnummern, die wie eine österreichische Sozialversicherungsnummer aussehen, werden entfernt, obwohl sie keine sind.",
+        "Die Testtexte sind synthetisch: Ein Claude-Modell hat sie in derselben Arbeitssitzung geschrieben, in der die Erkennungsregeln entstanden und abgestimmt wurden; die Werte sind daher wahrscheinlich zu günstig. Das Namensmodell selbst wurde anderswo trainiert, seine Regeln und Nachbearbeitung aber in dieser Sitzung abgestimmt. Ein Testdatensatz, den jemand anderes schreibt, ist geplant (#82)."
       ],
       "mark": "Was übersehen wurde, können Sie in der Prüfung mit M markieren."
     },
@@ -102,7 +104,7 @@
     },
     "warnings": {
       "heading": "Könnte jemanden erkennbar machen",
-      "text": "Painfold weist auf Text hin, der zusammen mit anderen Angaben auf eine Person zeigen kann: genaue Altersangaben, „die einzige …“, Berufe mit kleinem Ort und Rollen, die eine Person innehat. Hinweise werden nie von selbst entfernt. Gemessen an {n} selbst geschriebenen Hinweisen, mit vorgegebenen Orten; die Menge ist klein und von derselben Person geschrieben wie die Regeln, echtes Feedback schneidet daher wohl schlechter ab."
+      "text": "Painfold weist auf Text hin, der zusammen mit anderen Angaben auf eine Person zeigen kann: genaue Altersangaben, „die einzige …“, Berufe mit kleinem Ort und Rollen, die eine Person innehat. Hinweise werden nie von selbst entfernt. Gemessen an {n} für die Tests geschriebenen Hinweisen, mit vorgegebenen Orten; die Menge ist klein und in derselben Arbeitssitzung geschrieben wie die Regeln, echtes Feedback schneidet daher wohl schlechter ab."
     },
     "analysis": {
       "heading": "Aufgaben, Probleme und Wünsche",
@@ -112,6 +114,7 @@
       "measured": "Gemessen an {texts} von Hand gelabelten Texten aus dem Test-Teil, analysiert von {model} am {date}. Jedes gefundene Thema wurde von Hand den Labels zugeordnet, von {people}.",
       "classmate": "einem deutschsprachigen Studienkollegen",
       "sample": "Das ist eine kleine Stichprobe: {n} Texte pro Sprache, also verschiebt ein einzelner Text einen Prozentwert um {points} Punkte oder mehr.",
+      "source": "Die Texte hat ein Claude-Modell (Claude Opus 5.5) während der Entwicklung geschrieben, in derselben Arbeitssitzung, in der auch die erste Fassung der Anweisungen entstand, Prompt-Version 1. Die Labels stammen von Menschen, wie oben beschrieben. Die Anweisungen wurden nur an den Texten zum Abstimmen abgestimmt, und beide Abstimmungsrunden wurden zurückgenommen; gemessen wird also Prompt-Version 1.",
       "tags": "Unter dem richtigen Thema",
       "presence": "In den richtigen Texten",
       "kind": "Art",
@@ -139,7 +142,8 @@
           "Eine fehlende Funktion kann ein Problem, ein Wunsch oder beides sein. Painfold erfasst oft nur den Wunsch: Bei „Great product, fair price. Reports could use a filter by project, though.“ fand es einen Wunsch, aber kein Problem, und ordnete den Text als Lob ein.",
           "Die Ergebnisse schwanken zwischen zwei Läufen, und das Modell nimmt keine Temperatur-Einstellung an, mit der sich das verringern ließe. Zwei Läufe mit denselben Texten stimmen in 94 % (Englisch) und 92 % (Deutsch) der Fälle darin überein, ob ein Text eine Aufgabe, ein Problem oder einen Wunsch enthält, ordnen dieselben Textpaare aber nur zu 74 % und 53 % demselben Problem-Thema zu.",
           "Die Stichprobe ist klein, und die Werte schwanken mit ihr: Ohne Änderung dazwischen lagen manche Werte bei den Testtexten höher als bei den Texten zum Abstimmen und manche niedriger, um bis zu 28 Punkte.",
-          "Die deutschen Texte hat ein deutschsprachiger Studienkollege gelabelt, mit Zugang zu den englischen Labels; die beiden Sprachen sind also keine unabhängigen Prüfungen. Gelabelte Themen mit derselben Bedeutung wurden danach zusammengeführt: vorgeschlagen von Claude anhand der Themennamen, geprüft von Francis und für Deutsch von einem deutschsprachigen Studienkollegen überflogen."
+          "Die deutschen Texte hat ein deutschsprachiger Studienkollege gelabelt, mit Zugang zu den englischen Labels; die beiden Sprachen sind also keine unabhängigen Prüfungen. Gelabelte Themen mit derselben Bedeutung wurden danach zusammengeführt: vorgeschlagen von Claude anhand der Themennamen, geprüft von Francis und für Deutsch von einem deutschsprachigen Studienkollegen überflogen.",
+          "Die Texte sind synthetisch und stammen von einem Modell aus derselben Familie wie das, das sie analysiert, und die Arbeitssitzung, die Prompt-Version 1 schrieb, schrieb auch die Testtexte. Beides macht die Werte wahrscheinlich zu günstig. Version 0.4 wird an einem getrennt beschafften Testsatz gemessen."
         ],
         "next": "Die Ziele für Version 0.4 werden aus diesen Ergebnissen festgelegt."
       }

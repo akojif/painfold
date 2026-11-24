@@ -26,7 +26,7 @@ import { readMessages, type Messages } from '../i18n/messages.ts'
 import type { IndirectReason } from '../core/detect/indirect/index.ts'
 
 export type Lang = 'de' | 'en'
-// group and split exist only in the hand-written name set (see scripts/fake-data/names.ts).
+// group and split exist only in the name set (see scripts/fake-data/names.ts).
 export type EvalItem = { id: string, lang: Lang, group?: string, split?: 'dev' | 'test', text: string, spans: Array<{ start: number, end: number, type: PiiType, text: string }> }
 export type Score = { labelled: number, found: number, detected: number, correct: number }
 export type SetScores = { byType: Map<PiiType, Record<Lang, Score>>, anyType: Record<Lang, Score> }
@@ -36,9 +36,9 @@ export type Mistake = { id: string, kind: 'missed' | 'wrong', type: PiiType, tex
 // set's dev split may be used to tune the detectors; only its test split is reported.
 export const SETS: ReadonlyArray<{ name: string, stored: StoredSet }> = [
   { name: 'Generated', stored: 'generated' },
-  { name: 'Hand-written hard cases', stored: 'hard-cases' },
-  { name: 'Hand-written long texts', stored: 'long-texts' },
-  { name: 'Hand-written names (test split)', stored: 'names-test' },
+  { name: 'Hard cases', stored: 'hard-cases' },
+  { name: 'Long texts', stored: 'long-texts' },
+  { name: 'Names (test split)', stored: 'names-test' },
 ]
 export const NAMES_PATH = 'data/eval/names.jsonl'
 

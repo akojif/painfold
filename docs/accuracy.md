@@ -4,7 +4,7 @@ How well Painfold finds personal data, how fast it is, and how well it finds cus
 
 ## In short
 
-Detection is measured per data type and language, on generated messages, on hand-written hard cases and on hand-written names from 13 communities living in Austria, and checked in CI. On the name test split, 97 % of names are removed (0.98 in German, 0.96 in English), and at least 92 % in every name-origin group; the model is measured in the browser, as users run it. On the hard cases nothing that only looks like personal data is removed, apart from one known case, and the known misses are listed. A 5,000-row file is cleaned in about 1.5 seconds; with the name model in the browser, names in it are checked in 70 to 115 seconds, in the background. Text that could identify someone together with other details (exact ages, "the only …", a job title with a small place) gets a warning, never removed on its own; on a small hand-written set every warning is found. The same numbers are on the [Accuracy page](https://painfold.com/accuracy/).
+Detection is measured per data type and language, on generated messages, on hard cases and on names from 13 communities living in Austria, and checked in CI. The test texts are synthetic, written by a Claude model in the same working session that wrote the rules, so the scores are likely optimistic. On the name test split, 97 % of names are removed (0.98 in German, 0.96 in English), and at least 92 % in every name-origin group; the model is measured in the browser, as users run it. On the hard cases nothing that only looks like personal data is removed, apart from one known case, and the known misses are listed. A 5,000-row file is cleaned in about 1.5 seconds; with the name model in the browser, names in it are checked in 70 to 115 seconds, in the background. Text that could identify someone together with other details (exact ages, "the only …", a job title with a small place) gets a warning, never removed on its own; on a small set written for the tests every warning is found. The same numbers are on the [Accuracy page](https://painfold.com/accuracy/).
 
 Automatic detection can miss personal data, including names. Review the results before sharing the cleaned file.
 
@@ -13,11 +13,13 @@ Automatic detection can miss personal data, including names. Review the results 
 Detection is measured on the evaluation set in [data/eval/](../data/README.md), with `npm run eval`, by the rules and the name model together, as in the app. The rules run in Node. The name model is measured only in the browser: `npm run eval:names` runs the built names worker in headless Chromium, on the same WebAssembly runtime users get, and stores what it finds in [data/eval/name-detections.json](../data/eval/name-detections.json). An end-to-end test reruns it on every pull request and fails if anything differs, so these numbers cannot go stale. (Native ONNX Runtime in Node gives different results on different processors, so it is never used for the numbers.) Four sets are reported separately:
 
 - **Generated:** 1,200 messages built from the same templates as the sample file. The detectors could be tuned to these sentences, so treat these numbers as a check that nothing broke.
-- **Hand-written hard cases:** written separately to catch what templates don't: obfuscated and pasted values, numbers written with dashes, dots or non-breaking spaces, and look-alikes that must not be removed (order and invoice numbers, ISBNs, EANs, versions, ordinary dates).
-- **Hand-written long texts:** 8 German and English support messages of 5,000 to 6,000 characters (about 1,200 to 1,400 model tokens), each with a name near the start, one in the middle and one in the last sentence. The name model reads at most 512 tokens at a time, so long texts are checked in overlapping chunks; this set shows that names are found wherever they are. It was written after the name rules were tuned and is only reported.
-- **Hand-written names:** 286 German and English sentences with invented names typical of communities living in Austria, because names in Austrian feedback come from many backgrounds, not only German and English ones. They include real diacritics (ć, š, ž, ğ, ı, ș, ő, ł), variant transliterations (Mohammed, Muhammad, Mohamad, Mohammad), multi-part and particle names (Abdul Rahman, Al-Hassan, van der Berg), possessives and lowercase chat names. Name recall is also reported per name-origin group, with the same target for every group. The group exists only in the evaluation data; Painfold never infers anyone's origin. A dev split (3 sentences per group, plus 26 look-alikes such as "Hallo Team" or "Liebe Grüße") was used to tune the name rules; only the test split (19 sentences, 25 names per group, written before any tuning) is reported. The test sentences were written by the same author as the tuning, but the test split was run only once, after tuning, and never used to tune. The generated set and the hard cases were measured with the name model once, after tuning, and were not used to tune it either.
+- **Hard cases:** written separately to catch what templates don't: obfuscated and pasted values, numbers written with dashes, dots or non-breaking spaces, and look-alikes that must not be removed (order and invoice numbers, ISBNs, EANs, versions, ordinary dates).
+- **Long texts:** 8 German and English support messages of 5,000 to 6,000 characters (about 1,200 to 1,400 model tokens), each with a name near the start, one in the middle and one in the last sentence. The name model reads at most 512 tokens at a time, so long texts are checked in overlapping chunks; this set shows that names are found wherever they are. It was written after the name rules were tuned and is only reported.
+- **Names:** 286 German and English sentences with invented names typical of communities living in Austria, because names in Austrian feedback come from many backgrounds, not only German and English ones. They include real diacritics (ć, š, ž, ğ, ı, ș, ő, ł), variant transliterations (Mohammed, Muhammad, Mohamad, Mohammad), multi-part and particle names (Abdul Rahman, Al-Hassan, van der Berg), possessives and lowercase chat names. Name recall is also reported per name-origin group, with the same target for every group. The group exists only in the evaluation data; Painfold never infers anyone's origin. A dev split (3 sentences per group, plus 26 look-alikes such as "Hallo Team" or "Liebe Grüße") was used to tune the name rules; only the test split (19 sentences, 25 names per group, written before any tuning) is reported. The test sentences were written by the same author as the tuning, but the test split was run only once, after tuning, and never used to tune. The generated set and the hard cases were measured with the name model once, after tuning, and were not used to tune it either.
 
-- **Hand-written indirect identifiers:** 80 short German and English messages ([data/eval/indirect.jsonl](../data/eval/indirect.jsonl)) for the warnings about text that could identify someone: exact ages, "the only …", job titles with a place and unique roles, plus traps that must not warn (durations, versions, order numbers, the age of things, "the only problem", a role mentioned in passing, a job title in a large city). The places in each text are given, as the name model would find them, so the numbers measure the warning rules, not the model. A dev split (40 messages) was used to tune the rules; the test split (40 messages, 23 warnings, written before any tuning) was run once, after tuning, and is what is reported. These are warnings, never removed on their own, so a miss means a reviewer is not pointed at the text, and a wrong warning costs one key press.
+- **Indirect identifiers:** 80 short German and English messages ([data/eval/indirect.jsonl](../data/eval/indirect.jsonl)) for the warnings about text that could identify someone: exact ages, "the only …", job titles with a place and unique roles, plus traps that must not warn (durations, versions, order numbers, the age of things, "the only problem", a role mentioned in passing, a job title in a large city). The places in each text are given, as the name model would find them, so the numbers measure the warning rules, not the model. A dev split (40 messages) was used to tune the rules; the test split (40 messages, 23 warnings, written before any tuning) was run once, after tuning, and is what is reported. These are warnings, never removed on their own, so a miss means a reviewer is not pointed at the text, and a wrong warning costs one key press.
+
+**Who wrote the test texts.** The hard cases, names, long texts and indirect-identifier messages were written by a Claude model (Claude Opus 5.5) during development, in the same Claude Code working session that wrote and tuned the detection rules and the name model's post-processing; the generated messages come from templates in the same code. The name model itself was trained elsewhere. The texts are synthetic and written by the same agent that tuned the rules, so the scores are likely optimistic; a test set written by someone else is planned ([#82](https://github.com/akojif/painfold/issues/82)).
 
 How it is counted:
 
@@ -53,7 +55,7 @@ The hard cases have only a few values per type and language, so one miss moves a
 | Places | 0.98 | 0.99 | 82 | 0.78 | 0.97 | 94 |
 | **Removed by any type** | 1.00 | 1.00 | 1049 | 0.96 | 1.00 | 1000 |
 
-**Hand-written hard cases**
+**Hard cases**
 
 | Data type | DE recall | DE precision | DE values | EN recall | EN precision | EN values |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -72,7 +74,7 @@ The hard cases have only a few values per type and language, so one miss moves a
 | Places | 1.00 | 1.00 | 5 | 1.00 | 1.00 | 2 |
 | **Removed by any type** | 0.98 | 0.98 | 53 | 0.94 | 1.00 | 31 |
 
-**Hand-written long texts**
+**Long texts**
 
 | Data type | DE recall | DE precision | DE values | EN recall | EN precision | EN values |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -80,7 +82,7 @@ The hard cases have only a few values per type and language, so one miss moves a
 | Places | 0.67 | 1.00 | 3 | 1.00 | 1.00 | 3 |
 | **Removed by any type** | 0.93 | 1.00 | 15 | 1.00 | 1.00 | 15 |
 
-**Hand-written names (test split)**
+**Names (test split)**
 
 | Data type | DE recall | DE precision | DE values | EN recall | EN precision | EN values |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -136,13 +138,13 @@ The hard cases have only a few values per type and language, so one miss moves a
 
 ## Known gaps
 
-From the hand-written cases:
+From the hard cases and names:
 
 - Document numbers written like an SV-Nummer with a dash, whose second part looks like a date and happens to pass the check digit (`Vorgang 2024-010106`), are removed as SV-Nummern. Most are left alone: a dash form needs a date-like second part, and order, invoice and customer words before the number rule it out.
 - Email addresses spelled out to fool spam filters (`name AT example DOT net`).
 - English addresses that start with a flat number (`Flat 2, 14 Market Street`).
 
-Warnings for indirect identifiers. The test split scores 1.00, but it is small (23 warnings) and was written by the same author as the rules, so real feedback will score lower. Known not to warn:
+Warnings for indirect identifiers. The test split scores 1.00, but it is small (23 warnings) and was written in the same working session as the rules, so real feedback will score lower. Known not to warn:
 
 - Ages written as words ("zweiundvierzig", "forty-two"), ages after a comma ("meine Frau, 42, …"), and ages after a person other than with "ist" or "is" ("my mum turned 80").
 - Roles and job titles that are not on the lists in `core/detect/indirect/roles.ts`, and German compounds of words shorter than six letters.
@@ -178,9 +180,9 @@ Measured with `npm run bench` (three runs) on an Apple M3 Pro with 18 GB of memo
 
 ## Jobs, pains and gains
 
-The analysis (Stage 3) is measured on 240 invented feedback messages about an invoicing and accounting app ([data/eval/analysis/](../data/README.md)), 120 in English and 120 in German, each language split into 60 dev and 60 test messages. The messages and the instructions to the model were written by the same person; the labels were not. The English half is labelled by Francis, the German half by a German-speaking classmate: for each message, its jobs, pains and gains (as short theme names the labeller keeps consistent), its sentiment and its type.
+The analysis (Stage 3) is measured on 240 invented feedback messages about an invoicing and accounting app ([data/eval/analysis/](../data/README.md)), 120 in English and 120 in German, each language split into 60 dev and 60 test messages. The messages were written by a Claude model (Claude Opus 5.5) during development, in the same Claude Code working session that wrote the first version of the instructions, prompt version 1. The labels were not: they were made by people. The English half is labelled by Francis, the German half by a German-speaking classmate: for each message, its jobs, pains and gains (as short theme names the labeller keeps consistent), its sentiment and its type.
 
-The instructions were tuned on the dev split only. The test split was run once per language, after tuning, and that run is what is published. Each run stores the model's answers, so the numbers below are recomputed from them, through the same code as the app, without a request.
+The instructions were tuned on the dev split only, and both tuning rounds were reverted, so prompt version 1 is what is measured. The test split was run once per language, after tuning, and that run is what is published. Each run stores the model's answers, so the numbers below are recomputed from them, through the same code as the app, without a request.
 
 How it is counted:
 
@@ -192,6 +194,8 @@ How it is counted:
 - **Same answer when run twice:** test 1 and test 2, two runs of the test split with the same model and settings, compared on whether each message has a job, a pain and a gain.
 
 The sample is small: 60 test messages per language, and fewer labelled jobs, pains or gains of each kind, so a single message moves a number by two points or more. There are no targets for version 0.3: these results are published with their weaknesses, and the targets for version 0.4 are set from them.
+
+**The texts are synthetic and likely make the scores optimistic.** They were written by a model from the same family as the evaluated analyzer (Claude), and the working session that wrote prompt version 1 also wrote the test texts. Version 0.4 is measured on a separately sourced test set (#178).
 
 <!-- analysis:start -->
 Tag recall and precision count a job, pain or gain only when Painfold put it under the theme a person matched to the label. Presence only checks that a text has a job, pain or gain of that kind at all, so it is higher, and on its own it overstates how well Painfold names pains and gains.

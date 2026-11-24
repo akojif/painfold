@@ -1,4 +1,4 @@
-// Hand-written edge cases for the evaluation set, in the same [[TYPE:value]]
+// Edge cases for the evaluation set, written by a Claude model (Claude Opus 5.5) in the session that wrote the rules, in the same [[TYPE:value]]
 // markup. Text that is not marked must not be detected: these cases check for
 // false positives as much as for misses. Every value is fake (see values.ts).
 import type { Lang } from './values.ts'

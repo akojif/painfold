@@ -26,7 +26,7 @@ test('shows the findings and the Stage 2 status from the eval output', async ({ 
   await page.goto('/accuracy/')
   const findings = page.getByRole('region', { name: 'In short' })
   await expect(findings).toContainText(`Names: ${percent(overall)} are removed in German and English feedback, and at least ${percent(weakest)} in every one of 13 name-origin groups.`)
-  await expect(findings).toContainText(`${percent(both(data.sets['hard-cases'].any))} of the values in hand-written hard cases are removed.`)
+  await expect(findings).toContainText(`${percent(both(data.sets['hard-cases'].any))} of the values in the hard cases written for the tests are removed.`)
   await expect(findings).toContainText(weakest >= data.target ? ': met.' : ': not met yet.')
 })
 
@@ -121,6 +121,22 @@ test('shows how well jobs, pains and gains are found, or that they are not measu
     // The known weaknesses are published with the numbers, in the page's language.
     await expect(section.getByRole('heading', { name: path === '/accuracy/' ? 'Known weaknesses' : 'Bekannte Schwächen', exact: true })).toBeVisible()
     await expect(section.getByRole('listitem').first()).toContainText(path === '/accuracy/' ? 'Gains are the weakest kind.' : 'Wünsche sind die schwächste Art.')
+    // Who wrote the texts, and what follows from it: stated next to the numbers.
+    const english = path === '/accuracy/'
+    await expect(section).toContainText(english ? 'The texts were written by a Claude model (Claude Opus 5.5) during development' : 'Die Texte hat ein Claude-Modell (Claude Opus 5.5) während der Entwicklung geschrieben')
+    await expect(section.getByRole('listitem').filter({ hasText: english ? 'The texts are synthetic' : 'Die Texte sind synthetisch' })).toContainText(english ? 'likely make the scores optimistic' : 'wahrscheinlich zu günstig')
+  }
+})
+
+test('says who wrote the personal-data test texts, and lists the gap that follows, in English and German', async ({ page }) => {
+  for (const [path, source, gap] of [
+    ['/accuracy/', 'were written by a Claude model (Claude Opus 5.5) during development, in the same working session that wrote and tuned the detection rules', 'The test texts are synthetic'],
+    ['/de/accuracy/', 'hat ein Claude-Modell (Claude Opus 5.5) während der Entwicklung geschrieben, in derselben Arbeitssitzung, in der auch die Erkennungsregeln entstanden', 'Die Testtexte sind synthetisch'],
+  ] as const) {
+    await page.goto(path)
+    await expect(page.getByText(source)).toBeVisible()
+    await expect(page.getByRole('listitem').filter({ hasText: gap })).toHaveCount(1)
+    await expect(page.locator('main')).not.toContainText(/hand-written|handgeschrieben|same person|derselben Person/i)
   }
 })
 

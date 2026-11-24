@@ -1,4 +1,4 @@
-// Hand-written name cases for the held-out name evaluation, in the same
+// Name cases for the held-out name evaluation, written by a Claude model (Claude Opus 5.5) in the session that wrote the rules, in the same
 // [[TYPE:value]] markup as the hard cases. Names in Austrian feedback come from
 // many communities, so each group below holds invented names typical of one of
 // them, inside German and English sentences: real diacritics, variant
