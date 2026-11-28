@@ -56,7 +56,7 @@ jobs:
     # it needs, so no run depends on Ubuntu's package servers. Its version must
     # match @playwright/test (a unit test checks); pinned by digest, like the actions.
     container:
-      image: mcr.microsoft.com/playwright:v1.65.0-resolute@sha256:4d70b558dbaff71611b2f3e7a32aa2b4d42cfc892078ad368cb7ea229c2ffd1f
+      image: mcr.microsoft.com/playwright:v1.65.1-resolute@sha256:dcf385f7a31aa1cbb0a7a0c97a539142bf70480b661f89f26a774ec1fe2edd1d
       # Chromium needs more shared memory than a container gets by default.
       options: --ipc=host
     steps:
@@ -95,7 +95,7 @@ jobs:
     # it needs, so no run depends on Ubuntu's package servers. Its version must
     # match @playwright/test (a unit test checks); pinned by digest, like the actions.
     container:
-      image: mcr.microsoft.com/playwright:v1.65.0-resolute@sha256:4d70b558dbaff71611b2f3e7a32aa2b4d42cfc892078ad368cb7ea229c2ffd1f
+      image: mcr.microsoft.com/playwright:v1.65.1-resolute@sha256:dcf385f7a31aa1cbb0a7a0c97a539142bf70480b661f89f26a774ec1fe2edd1d
       # Chromium needs more shared memory than a container gets by default.
       options: --ipc=host
     steps:
