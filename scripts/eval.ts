@@ -14,6 +14,7 @@
 // - "Removed by any type" counts a labelled value as removed when detections
 //   of any type cover it, which is what matters for the cleaned file.
 import { readFileSync, writeFileSync } from 'node:fs'
+import { evaluateIndirect, indirectTable, readIndirect } from './eval-indirect.ts'
 import { isFirstName } from '../core/detect/first-names.ts'
 import { detect } from '../core/detect/index.ts'
 import { combined } from '../core/detect/merge.ts'
@@ -21,9 +22,11 @@ import type { Detection } from '../core/detect/types.ts'
 import { PII_TYPES, type PiiType } from '../core/pii-types.ts'
 import { asDetections, readStoredDetections, STORED_SETS, type StoredDetections, type StoredSet } from './name-detections.ts'
 import { NAME_MODEL } from '../deploy/model.ts'
+import { readMessages, type Messages } from '../i18n/messages.ts'
+import type { IndirectReason } from '../core/detect/indirect/index.ts'
 
 export type Lang = 'de' | 'en'
-// group and split exist only in the hand-written name set (see scripts/fake-data/names.ts).
+// group and split exist only in the name set (see scripts/fake-data/names.ts).
 export type EvalItem = { id: string, lang: Lang, group?: string, split?: 'dev' | 'test', text: string, spans: Array<{ start: number, end: number, type: PiiType, text: string }> }
 export type Score = { labelled: number, found: number, detected: number, correct: number }
 export type SetScores = { byType: Map<PiiType, Record<Lang, Score>>, anyType: Record<Lang, Score> }
@@ -33,9 +36,9 @@ export type Mistake = { id: string, kind: 'missed' | 'wrong', type: PiiType, tex
 // set's dev split may be used to tune the detectors; only its test split is reported.
 export const SETS: ReadonlyArray<{ name: string, stored: StoredSet }> = [
   { name: 'Generated', stored: 'generated' },
-  { name: 'Hand-written hard cases', stored: 'hard-cases' },
-  { name: 'Hand-written long texts', stored: 'long-texts' },
-  { name: 'Hand-written names (test split)', stored: 'names-test' },
+  { name: 'Hard cases', stored: 'hard-cases' },
+  { name: 'Long texts', stored: 'long-texts' },
+  { name: 'Names (test split)', stored: 'names-test' },
 ]
 export const NAMES_PATH = 'data/eval/names.jsonl'
 
@@ -253,14 +256,15 @@ export function withAccuracy(readme: string, tables: string): string {
 }
 
 export function currentTables(stored: StoredDetections | undefined = readStoredDetections()): string {
-  const typeNames = JSON.parse(readFileSync('i18n/locales/en.json', 'utf8')).typeMany as Record<PiiType, string>
+  const typeNames = readMessages('en').typeMany as Record<PiiType, string>
   const sets = toMarkdown(SETS.map((set) => {
     const items = itemsOf(set.stored)
     return { name: set.name, scores: evaluate(items, finderFor(set.stored, items, stored)) }
   }), typeNames)
   const test = itemsOf('names-test')
   const long = itemsOf('long-texts')
-  return `${sets}\n\n${nameTables(test, finderFor('names-test', test, stored), finderFor('names-test-without-list', test, stored))}\n\n${positionTable(long, finderFor('long-texts', long, stored))}`
+  const kindNames = (readMessages('en').warning as Messages).kind as Record<IndirectReason, string>
+  return `${sets}\n\n${nameTables(test, finderFor('names-test', test, stored), finderFor('names-test-without-list', test, stored))}\n\n${positionTable(long, finderFor('long-texts', long, stored))}\n\n${indirectTable(evaluateIndirect(readIndirect('test')), kindNames)}`
 }
 
 /**
@@ -274,6 +278,8 @@ export type AccuracyData = {
   sets: Record<'generated' | 'hard-cases' | 'names-test' | 'long-texts', { types: Partial<Record<PiiType, Record<Lang, Score>>>, any: Record<Lang, Score> }>
   names: { groups: string[], removal: Record<string, Record<Lang, Counts>>, typeCorrect: Record<string, Record<Lang, Counts>>, withoutList: Record<string, Record<Lang, Counts>>, onList: number, total: number }
   positions: Array<Record<Lang, Counts>>
+  /** Warnings for indirect identifiers, per kind, on the test split of data/eval/indirect.jsonl. */
+  indirect: Record<string, Record<Lang, Score>>
   model: { source: string, original: string, license: string, revision: string }
 }
 
@@ -304,6 +310,7 @@ export function accuracyData(stored: StoredDetections | undefined = readStoredDe
       total: names.length,
     },
     positions: positionCounts(long, finderFor('long-texts', long, stored)),
+    indirect: evaluateIndirect(readIndirect('test')),
     model: { source: NAME_MODEL.source, original: NAME_MODEL.original, license: NAME_MODEL.license, revision: NAME_MODEL.revision },
   }
 }

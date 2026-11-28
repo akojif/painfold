@@ -13,6 +13,11 @@ test('the interface font is self-hosted and loads', async ({ page }) => {
   })
 
   expect(loaded).toContain('Geist')
+  expect(loaded).toContain('Sora')
+  expect(loaded).toContain('Geist Mono')
+  // Headings in Sora, text in Geist.
+  expect(await page.locator('h1').evaluate(element => getComputedStyle(element).fontFamily)).toMatch(/^"?Sora/)
+  expect(await page.locator('body').evaluate(element => getComputedStyle(element).fontFamily)).toMatch(/^"?Geist"?,/)
   expect(fontRequests.length).toBeGreaterThan(0)
   // The foreign-request fixture already fails on other origins; this states the intent.
   for (const url of fontRequests) expect(url).toMatch(/\.woff2$/)

@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
 import type { BrowserContext, Download, Page } from '@playwright/test'
-import { expect, test as freshBrowser, waitForHydrationOnGoto } from './fixtures'
+import { expect, openSample, test as freshBrowser, waitForHydrationOnGoto } from './fixtures'
 
 // Names and places found in the background while the rule findings are
 // reviewed (ROADMAP Stage 2, #65). The tests that use the name model share one
@@ -41,7 +41,7 @@ async function withModel(page: Page, open: () => Promise<void>, path = '/') {
   if (await download.isVisible()) await download.click()
   await expect(stored).toBeVisible({ timeout: 60_000 })
 }
-const sample = (page: Page) => () => page.getByRole('button', { name: 'Try the sample file' }).click()
+const sample = (page: Page) => () => openSample(page)
 const upload = (csv: string) => (page: Page) => () => page.getByTestId('file-input').setInputFiles({ name: 'large.csv', mimeType: 'text/csv', buffer: Buffer.from(csv) })
 const medium = upload(mediumCsv)
 const findButton = (page: Page) => page.getByRole('button', { name: /^Find personal data in/ })
@@ -67,21 +67,22 @@ test('rule findings can be reviewed at once; names arrive in the background with
   await expect(page.getByText(/^Names checked: [\d,]+ names? and [\d,]+ places? added\.$/)).toBeAttached()
   expect(await page.evaluate(() => document.activeElement?.getAttribute('data-value'))).toBe(next)
   expect(await findings(page)).toBeGreaterThan(before)
-  await expect(page.getByRole('heading', { name: 'Names', exact: true })).toBeVisible()
+  await expect(page.getByRole('group', { name: 'Type' }).getByRole('checkbox', { name: /^Names/ })).toBeVisible()
 })
 
 test('the download waits while names are checked, and the cleaned file has them removed', async ({ page }) => {
   await withModel(page, sample(page))
   await findButton(page).click()
-  const waiting = page.getByText('The download is available when names are checked.')
+  const waiting = page.getByText('Downloading and analyzing are available when names are checked.')
   const done = page.getByText('Names and places checked.', { exact: true })
   // On a fast machine the 200 rows may already be done; either way the button follows the state.
   await expect(waiting.or(done)).toBeVisible()
-  if (await waiting.isVisible()) await expect(page.getByRole('button', { name: 'Continue to download' })).toBeDisabled()
-  await expect(done).toBeVisible({ timeout: 60_000 })
+  if (await waiting.isVisible()) await expect(page.getByRole('button', { name: 'Download the cleaned file' })).toBeDisabled()
+  // As long as the first test allows: whichever runs first in a worker also loads the model.
+  await expect(done).toBeVisible({ timeout: 180_000 })
   await expect(waiting).toBeHidden()
 
-  await page.getByRole('link', { name: 'Continue to download' }).last().click()
+  await page.getByRole('link', { name: 'Download the cleaned file' }).last().click()
   await expect(page.getByText('Names and places were checked with the name model.')).toBeVisible()
   const [csvDownload] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: /^Download support-tickets_cleaned/ }).click()])
   const csv = await text(csvDownload)
@@ -110,7 +111,7 @@ test('Stop asks first; skipping is recorded, and names can still be checked afte
   await expect(page.getByText(/^Names were (checked in [\d,]+ of 600 rows, then skipped|skipped for this file)/)).toBeVisible()
   await expect(page.getByText('The download is available when names are checked.')).toBeHidden()
 
-  await page.getByRole('link', { name: 'Continue to download' }).last().click()
+  await page.getByRole('link', { name: 'Download the cleaned file' }).last().click()
   await expect(page.getByText(/^Names were (checked in [\d,]+ of 600 rows; the check was skipped|not checked: the check was skipped)/)).toBeVisible()
   const [reportDownload] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: 'Download cleaning report (.txt)' }).click()])
   expect(await text(reportDownload)).toMatch(/Names were (checked in [\d,]+ of 600 rows; the check was|not checked: the check was)/)
@@ -126,12 +127,13 @@ freshBrowser('without the name model, the review and the download say names were
   await findButton(page).click()
   await expect(page.getByText('Names aren\'t checked.')).toBeVisible()
   await expect(page.getByText('The download is available when names are checked.')).toBeHidden()
-  await page.getByRole('link', { name: 'Continue to download' }).last().click()
+  await page.getByRole('link', { name: 'Download the cleaned file' }).last().click()
   await expect(page.getByText('Names and places were not checked: the name model was not downloaded.')).toBeVisible()
 })
 
 test('the German review explains the check in German', async ({ page }) => {
-  await withModel(page, () => page.getByRole('button', { name: 'Beispieldatei ausprobieren' }).click(), '/de/')
+  await withModel(page, () => openSample(page), '/de/')
   await page.getByRole('button', { name: /^Personenbezogene Daten in/ }).click()
-  await expect(page.getByText('Namen und Orte geprüft.', { exact: true })).toBeVisible({ timeout: 60_000 })
+  // As long as the first test allows: whichever runs first in a worker also loads the model.
+  await expect(page.getByText('Namen und Orte geprüft.', { exact: true })).toBeVisible({ timeout: 180_000 })
 })

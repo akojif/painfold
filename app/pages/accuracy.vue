@@ -4,6 +4,8 @@
 // --write` and checked by a unit test). Findings first, then the evidence,
 // with plain numbers and simple bars. Prerendered: nothing is loaded.
 import accuracy from '~~/data/eval/accuracy.json'
+import analysisResults from '~~/data/eval/analysis/results.json'
+import type { AnalysisResults } from '~~/scripts/analysis-results'
 import type { AccuracyData } from '~~/scripts/eval'
 
 const data = accuracy as AccuracyData
@@ -57,7 +59,13 @@ function typeRows(set: 'hard-cases' | 'generated') {
     .map(([type, byLang]) => ({ type, score: pick(byLang as Record<Lang, Score>) }))
     .filter(row => row.score.labelled > 0)
 }
+// Warnings for text that could identify someone, per kind, on their test split.
+const warningRows = computed(() => Object.entries(data.indirect).map(([type, byLang]) => ({ type, score: pick(byLang) })))
+const warningCount = computed(() => warningRows.value.reduce((total, row) => total + row.score.labelled, 0))
 const precision = (score: Score) => (score.detected === 0 ? undefined : score.correct / score.detected)
+
+// The analysis evaluation (#129): only fully scored test runs are published.
+const analysis = publishedAnalysis(analysisResults as AnalysisResults)
 
 const GITHUB = 'https://github.com/akojif/painfold/blob/main'
 </script>
@@ -96,6 +104,7 @@ const GITHUB = 'https://github.com/akojif/painfold/blob/main'
       </h2>
       <div class="mt-2 max-w-measure space-y-2 text-fg-muted">
         <p>{{ $t('accuracy.measured.sets') }}</p>
+        <p>{{ $t('accuracy.measured.source') }}</p>
         <p>{{ $t('accuracy.measured.browser') }}</p>
         <p>{{ $t('accuracy.measured.terms') }}</p>
       </div>
@@ -144,9 +153,13 @@ const GITHUB = 'https://github.com/akojif/painfold/blob/main'
           class="grid grid-cols-[minmax(0,1fr)_3.5rem] items-center gap-x-4 gap-y-1 sm:grid-cols-[16rem_minmax(0,1fr)_3.5rem]"
         >
           <dt class="text-sm max-sm:col-span-2">
-            {{ $t(`accuracy.names.${row.key}`) }}
+            {{ $t(`accuracy.names.${row.key}`) }}<span
+              v-if="row.key === 'removal' && share(row.counts) < data.target"
+              class="text-danger"
+            >, {{ $t('accuracy.groups.below') }}</span>
           </dt>
-          <AccuracyBar
+          <ChartBar
+            tone="accent"
             :value="share(row.counts)"
             :target="row.key === 'removal' ? data.target : undefined"
           />
@@ -178,22 +191,27 @@ const GITHUB = 'https://github.com/akojif/painfold/blob/main'
       <p class="mt-1 max-w-measure text-sm text-fg-muted">
         {{ $t('accuracy.groups.note') }}
       </p>
+      <p
+        v-if="language !== 'both'"
+        class="mt-1 max-w-measure text-sm text-fg-muted"
+      >
+        {{ $t('accuracy.groups.perLanguage') }}
+      </p>
       <ul class="mt-4 divide-y divide-line border-y border-line">
         <li
           v-for="row in groupRows"
           :key="row.group"
           class="grid grid-cols-[minmax(0,1fr)_3.5rem] items-center gap-x-4 gap-y-1 py-2.5 sm:grid-cols-[16rem_minmax(0,1fr)_3.5rem]"
         >
-          <span class="text-sm max-sm:col-span-2">
-            {{ $t(`accuracy.groups.names.${row.group}`) }}
-            <span
-              v-if="share(row.removal) < data.target"
-              class="text-danger"
-            >, {{ $t('accuracy.groups.below') }}</span>
-          </span>
-          <AccuracyBar
+          <!-- The target applies to each group across both languages, so it is only marked there. -->
+          <span class="text-sm max-sm:col-span-2">{{ $t(`accuracy.groups.names.${row.group}`) }}<span
+            v-if="language === 'both' && share(row.removal) < data.target"
+            class="text-danger"
+          >, {{ $t('accuracy.groups.below') }}</span></span>
+          <ChartBar
+            tone="accent"
             :value="share(row.removal)"
-            :target="data.target"
+            :target="language === 'both' ? data.target : undefined"
           />
           <span class="text-right font-mono text-sm tabular-nums">{{ percent(share(row.removal)) }}</span>
           <span class="col-span-full text-xs text-fg-muted tabular-nums sm:col-start-2">
@@ -225,7 +243,10 @@ const GITHUB = 'https://github.com/akojif/painfold/blob/main'
           <dt class="text-sm max-sm:col-span-2">
             {{ $t(`accuracy.long.positions[${index}]`) }}
           </dt>
-          <AccuracyBar :value="share(pick(position))" />
+          <ChartBar
+            tone="accent"
+            :value="share(pick(position))"
+          />
           <dd class="text-right font-mono text-sm tabular-nums">
             {{ percent(share(pick(position))) }}
           </dd>
@@ -275,6 +296,28 @@ const GITHUB = 'https://github.com/akojif/painfold/blob/main'
           :share="share"
         />
       </details>
+    </section>
+
+    <section
+      class="mt-10"
+      aria-labelledby="warnings"
+    >
+      <h2
+        id="warnings"
+        class="text-md font-semibold"
+      >
+        {{ $t('accuracy.warnings.heading') }}
+      </h2>
+      <p class="mt-2 max-w-measure text-fg-muted">
+        {{ $t('accuracy.warnings.text', { n: number(warningCount) }) }}
+      </p>
+      <AccuracyTypeTable
+        class="mt-4"
+        labels="warning.kind"
+        :rows="warningRows"
+        :precision="precision"
+        :share="share"
+      />
     </section>
 
     <section
@@ -329,6 +372,12 @@ const GITHUB = 'https://github.com/akojif/painfold/blob/main'
         {{ $t('accuracy.model.text', { model: data.model.original, license: data.model.license }) }}
       </p>
     </section>
+
+    <AccuracyAnalysis
+      class="mt-10"
+      :published="analysis"
+      :language="language"
+    />
 
     <section
       class="mt-10 border-t border-line pt-6"

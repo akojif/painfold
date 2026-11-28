@@ -68,18 +68,19 @@ describe('handleNameRequest', () => {
     expect(sent).toEqual([{ kind: 'model-progress', id: 3, loaded: 50 }, { kind: 'model-progress', id: 3, loaded: 100 }, { kind: 'loaded', id: 3 }])
   })
 
-  it('reports the model download, then finds names cell by cell', async () => {
+  it('reports the model download, then finds names item by item, with progress by unit', async () => {
     const sent: NameResponse[] = []
-    const rows = [['1', 'Anna rief an'], ['2', 'Alles gut'], ['3', '2026-01-04']]
-    await handleNameRequest({ kind: 'names', id: 4, rows, columns: [1], ortPath: '/ort/x/' }, response => sent.push(response), fakeModel([]))
+    const items = [{ id: 'a', text: 'Anna rief an', unit: 'r0' }, { id: 'b', text: 'Alles gut', unit: 'r1' }, { id: 'c', text: '2026-01-04', unit: 'r1' }]
+    await handleNameRequest({ kind: 'names', id: 4, items, ortPath: '/ort/x/' }, response => sent.push(response), fakeModel([]))
     expect(sent.filter(r => r.kind === 'model-progress')).toEqual([{ kind: 'model-progress', id: 4, loaded: 50 }, { kind: 'model-progress', id: 4, loaded: 100 }])
-    expect(sent.at(-1)).toEqual({ kind: 'result', id: 4, cells: [{ row: 0, column: 1, detections: [{ type: 'NAME', start: 0, end: 4, value: 'Anna' }] }] })
+    expect(sent.filter(r => r.kind === 'progress').at(-1)).toEqual({ kind: 'progress', id: 4, done: 2, total: 2 })
+    expect(sent.at(-1)).toEqual({ kind: 'result', id: 4, items: [{ id: 'a', detections: [{ type: 'NAME', start: 0, end: 4, value: 'Anna' }] }] })
   })
 
   it('labels each distinct text once and skips cells without letters', async () => {
     const labelled: string[] = []
-    const rows = [['Anna rief an'], ['Anna rief an'], ['12345'], ['']]
-    await handleNameRequest({ kind: 'names', id: 1, rows, columns: [0], ortPath: '/ort/x/' }, () => {}, fakeModel(labelled))
+    const items = ['Anna rief an', 'Anna rief an', '12345', ''].map((text, index) => ({ id: String(index), text }))
+    await handleNameRequest({ kind: 'names', id: 1, items, ortPath: '/ort/x/' }, () => {}, fakeModel(labelled))
     expect(labelled).toEqual(['Anna rief an'])
   })
 
@@ -92,7 +93,7 @@ describe('handleNameRequest', () => {
       },
       label: async () => [],
     }
-    await handleNameRequest({ kind: 'names', id: 2, rows: [['Anna aus Wien']], columns: [0], ortPath: '/ort/x/' }, response => sent.push(response), failing)
+    await handleNameRequest({ kind: 'names', id: 2, items: [{ id: 'a', text: 'Anna aus Wien' }], ortPath: '/ort/x/' }, response => sent.push(response), failing)
     expect(sent).toEqual([{ kind: 'error', id: 2, message: 'Model files missing' }])
   })
 })
@@ -113,10 +114,10 @@ describe('long texts', () => {
   it('finds names early, in the middle and late in a text far longer than the model reads', async () => {
     const text = `Anna schreibt: ${filler.repeat(4)}Ben hat das auch gesehen. ${filler.repeat(4)}Liebe Grüße, Clara`
     const sent: NameResponse[] = []
-    await handleNameRequest({ kind: 'names', id: 1, rows: [[text]], columns: [0], ortPath: '/ort/x/' }, response => sent.push(response), reading)
+    await handleNameRequest({ kind: 'names', id: 1, items: [{ id: 'a', text }], ortPath: '/ort/x/' }, response => sent.push(response), reading)
     const result = sent.at(-1)
     expect(result?.kind).toBe('result')
-    const found = result?.kind === 'result' ? result.cells[0]!.detections.map(d => `${d.type}:${d.value}@${text.slice(d.start, d.end) === d.value}`) : []
+    const found = result?.kind === 'result' ? result.items[0]!.detections.map(d => `${d.type}:${d.value}@${text.slice(d.start, d.end) === d.value}`) : []
     expect(found).toEqual(['NAME:Anna@true', 'NAME:Ben@true', 'NAME:Clara@true'])
   })
 })

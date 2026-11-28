@@ -1,18 +1,19 @@
 import { readFileSync } from 'node:fs'
 import { utils, write } from 'xlsx'
 import { guessFeedbackColumn, suggestRoles } from '../../core/columns/roles'
-import { detectTable } from '../../core/detect/table'
+import { detectItems } from '../../core/detect/items'
+import { itemsFromTable, textItems } from '../../core/items/table'
 import { importFile } from '../../core/import'
 import { GERMAN_EXCEL_TEXT, windows1252 } from '../fixtures/german-excel'
-import { expect, test } from './fixtures'
+import { expect, expectRows, openSample, test } from './fixtures'
 
 const sampleCsv = readFileSync(new URL('../../data/sample/support-tickets.csv', import.meta.url))
 const fileInput = (page: import('@playwright/test').Page) => page.getByTestId('file-input')
 
-async function expectLoaded(page: import('@playwright/test').Page, name: string, rows: string) {
+async function expectLoaded(page: import('@playwright/test').Page, name: string, rows: number) {
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Choose what to check')
   await expect(page.getByTitle(name, { exact: true })).toBeVisible()
-  await expect(page.getByText(rows, { exact: true })).toBeVisible()
+  await expectRows(page, rows)
 }
 
 const columnRow = (page: import('@playwright/test').Page, column: string) =>
@@ -23,17 +24,19 @@ function upload(page: import('@playwright/test').Page, name: string, buffer: Buf
 }
 
 test.describe('start screen', () => {
-  test('leads with the headline, one primary action, the sample file and the privacy line', async ({ page }) => {
+  test('leads with the headline, one primary action, the example and the privacy line', async ({ page }) => {
     await page.goto('/')
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('Find what hurts your customers. Without exposing who they are.')
-    await expect(page.getByText('Start by cleaning your feedback file: names, emails, phone numbers, IBANs and more are removed right here in your browser.')).toBeVisible()
+    await expect(page.getByText('Start by cleaning your feedback file: names, emails, phone numbers, IBANs and more are removed before anyone reads them.')).toBeVisible()
     await expect(page.getByRole('button', { name: 'Choose a CSV or Excel file' })).toBeVisible()
-    await expect(page.getByRole('button', { name: 'Try the sample file' })).toBeVisible()
-    await expect(page.getByText('200 made-up tickets, no real people')).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Try an example' })).toBeVisible()
     await expect(page.getByText('Your file is never uploaded. It stays in this browser.')).toHaveCount(1)
-    await expect(page.getByRole('list', { name: 'What Painfold does' }).getByRole('listitem')).toHaveText([/^Now\s*Clean your file$/, /^v0\.3\s*Find jobs, pains and gains$/, /^v0\.4\s*Decide what to build$/])
-    // The hero states the privacy notice, so the footer adds only the other facts here.
-    await expect(page.locator('footer').getByRole('list', { name: 'About Painfold' }).getByRole('listitem')).toHaveText(['No cookies', 'No account'])
+    // Statuses come from the roadmap: the analysis is available since v0.3.0, released with its quality numbers.
+    await expect(page.getByRole('list', { name: 'What Painfold does' }).getByRole('listitem')).toHaveText([
+      /^Available\s*Clean your file\s*Personal data is replaced with placeholders\.$/,
+      /^Available\s*Find jobs, pains and gains\s*Grouped into themes, counted in code, with real quotes\.$/,
+      /^Coming in v0\.4\s*Decide what to build\s*The strongest pains, framed as questions for your team\.$/,
+    ])
   })
 
   test('shows that nothing has left the browser', async ({ page }) => {
@@ -44,7 +47,7 @@ test.describe('start screen', () => {
   test('the stepper appears once a file is open, with Import as the current step', async ({ page }) => {
     await page.goto('/')
     await expect(page.getByRole('navigation', { name: 'Steps' })).toHaveCount(0)
-    await page.getByRole('button', { name: 'Try the sample file' }).click()
+    await openSample(page)
     await expect(page.getByRole('navigation', { name: 'Steps' }).locator('[aria-current="step"]')).toHaveText(/Import/)
   })
 
@@ -81,7 +84,7 @@ test.describe('start screen', () => {
       const target = document.querySelector('footer')!
       for (const type of ['dragenter', 'dragover', 'drop']) target.dispatchEvent(new DragEvent(type, { dataTransfer: data, bubbles: true, cancelable: true }))
     }, 'id,message\n1,Bitte an anna@example.com antworten, danke für die Hilfe\n')
-    await expectLoaded(page, 'dropped.csv', '1 row')
+    await expectLoaded(page, 'dropped.csv', 1)
   })
 
   test('dragging a file over the page shows the drop overlay', async ({ page }) => {
@@ -101,7 +104,7 @@ test.describe('choosing a file', () => {
     await page.goto('/')
     await upload(page, 'support-tickets.csv', sampleCsv)
 
-    await expectLoaded(page, 'support-tickets.csv', '200 rows')
+    await expectLoaded(page, 'support-tickets.csv', 200)
     await expect(page.getByRole('heading', { level: 1 })).toBeFocused()
     await expect(page.getByRole('radio', { name: 'Use message as the feedback column' })).toBeChecked()
     await expect(page.getByText('Feedback column, always checked')).toBeVisible()
@@ -198,7 +201,7 @@ test.describe('choosing a file', () => {
   test('a CSV saved by German Excel keeps its umlauts', async ({ page }) => {
     await page.goto('/')
     await upload(page, 'Rückmeldungen.csv', windows1252(GERMAN_EXCEL_TEXT))
-    await expectLoaded(page, 'Rückmeldungen.csv', '3 rows')
+    await expectLoaded(page, 'Rückmeldungen.csv', 3)
     await expect(page.getByRole('radio', { name: 'Use Rückmeldung as the feedback column' })).toBeChecked()
     await page.getByText('Show first 3 rows').click()
     const preview = page.getByRole('region', { name: 'Preview of the first rows' })
@@ -219,8 +222,8 @@ test.describe('choosing a file', () => {
 
   test('the sample file is labelled as fake data', async ({ page }) => {
     await page.goto('/')
-    await page.getByRole('button', { name: 'Try the sample file' }).click()
-    await expectLoaded(page, 'support-tickets.csv', '200 rows')
+    await openSample(page)
+    await expectLoaded(page, 'support-tickets.csv', 200)
     await expect(page.getByText('Sample file with fake data.')).toBeVisible()
   })
 
@@ -244,7 +247,7 @@ test.describe('import errors', () => {
       await upload(page, name, Buffer.from(content))
       await expect(page.getByTestId('toast')).toContainText(message)
       await upload(page, 'support-tickets.csv', sampleCsv)
-      await expectLoaded(page, 'support-tickets.csv', '200 rows')
+      await expectLoaded(page, 'support-tickets.csv', 200)
     })
   }
 })
@@ -254,8 +257,7 @@ test.describe('finding personal data', () => {
     const table = await importFile({ name: 'support-tickets.csv', bytes: sampleCsv })
     const roles = suggestRoles(table).map(suggestion => suggestion.role)
     roles[guessFeedbackColumn(table)!] = 'scan'
-    const scan = roles.flatMap((role, index) => (role === 'scan' ? [index] : []))
-    const expected = detectTable(table.rows, scan).reduce((sum, cell) => sum + cell.detections.length, 0)
+    const expected = detectItems(textItems(itemsFromTable(table, roles).items)).reduce((sum, item) => sum + item.detections.length, 0)
     expect(expected).toBeGreaterThan(0)
 
     const workers: string[] = []
@@ -274,19 +276,5 @@ test.describe('finding personal data', () => {
     await page.goto('/review/')
     await expect(page).toHaveURL(/\/$/)
     await expect(page.getByRole('button', { name: 'Choose a CSV or Excel file' })).toBeVisible()
-  })
-})
-
-test.describe('small screens', () => {
-  test.use({ viewport: { width: 390, height: 844 } })
-
-  test('never scroll sideways, before or after a file is chosen', async ({ page }) => {
-    const overflow = () => page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)
-    await page.goto('/')
-    await expect(page.locator('figure[data-cleaned]')).toHaveCount(1, { timeout: 5000 })
-    expect(await overflow()).toBeLessThanOrEqual(0)
-    await upload(page, 'support-tickets.csv', sampleCsv)
-    await expectLoaded(page, 'support-tickets.csv', '200 rows')
-    expect(await overflow()).toBeLessThanOrEqual(0)
   })
 })

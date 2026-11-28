@@ -1,5 +1,5 @@
 import type { Page } from '@playwright/test'
-import { expect, test } from './fixtures'
+import { expect, openSample, test } from './fixtures'
 
 // Starting over and leaving the flow: ask first whenever work would be lost
 // (a review, or changed column choices, not downloaded since), never when
@@ -7,7 +7,7 @@ import { expect, test } from './fixtures'
 
 const sample = async (page: Page, path = '/') => {
   await page.goto(path)
-  await page.getByRole('button', { name: path === '/' ? 'Try the sample file' : 'Beispieldatei ausprobieren' }).click()
+  await openSample(page)
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(path === '/' ? 'Choose what to check' : 'Wählen Sie, was geprüft wird')
 }
 const review = async (page: Page) => {
@@ -38,7 +38,7 @@ test.describe('nothing to lose: no question', () => {
 
   test('after the cleaned file is downloaded, starting over does not ask, and leaving does not warn', async ({ page }) => {
     await review(page)
-    await page.getByRole('link', { name: 'Continue to download' }).last().click()
+    await page.getByRole('link', { name: 'Download the cleaned file' }).last().click()
     await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: /^Download support-tickets_cleaned/ }).click()])
     let warned = false
     page.on('dialog', async (shown) => {
@@ -100,7 +100,7 @@ test.describe('work to lose: ask first', () => {
 
   test('the download step asks before starting over when nothing was downloaded', async ({ page }) => {
     await review(page)
-    await page.getByRole('link', { name: 'Continue to download' }).last().click()
+    await page.getByRole('link', { name: 'Download the cleaned file' }).last().click()
     await page.getByRole('button', { name: 'Start over' }).click()
     await expect(dialog(page)).toBeVisible()
   })

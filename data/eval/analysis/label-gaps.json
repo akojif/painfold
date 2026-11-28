@@ -1,0 +1,9 @@
+[
+  { "id": "en-113", "kind": "pains", "found": "support does not respond", "why": "The text asks whether anyone reads the messages" },
+  { "id": "de-113", "kind": "pains", "found": "support does not respond", "why": "Same as en-113, in German" },
+  { "id": "en-008", "kind": "gains", "found": "a refund of the double payment", "why": "The text asks for the refund outright" },
+  { "id": "en-116", "kind": "gains", "found": "keep or restore invoice duplication", "why": "The text calls it the feature they used most" },
+  { "id": "en-089", "kind": "gains", "found": "payment terms per invoice", "why": "\"which is not what I want\" names the wanted outcome" },
+  { "id": "en-040", "kind": "gains", "found": "payroll for more than one country", "why": "The customer uses a second tool to get it" },
+  { "id": "de-040", "kind": "gains", "found": "payroll for more than one country", "why": "Same as en-040, in German" }
+]

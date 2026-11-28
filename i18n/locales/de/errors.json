@@ -1,0 +1,25 @@
+{
+  "importErrors": {
+    "empty-file": "Diese Datei ist leer. Wählen Sie eine Datei mit einer Kopfzeile und mindestens einer Zeile Feedback.",
+    "file-too-large": "Diese Datei ist größer als 50 MB. Teilen Sie sie in kleinere Dateien auf und bereinigen Sie sie einzeln.",
+    "no-rows": "Diese Datei enthält nur eine Kopfzeile. Fügen Sie Feedback-Zeilen hinzu oder wählen Sie eine andere Datei.",
+    "too-many-rows": "Diese Datei hat mehr als 50.000 Zeilen. Teilen Sie sie in kleinere Dateien auf und bereinigen Sie sie einzeln.",
+    "legacy-excel": "Das ist eine alte Excel-Datei (.xls). Öffnen Sie sie in Excel, speichern Sie sie als .xlsx oder .csv und wählen Sie sie dann erneut aus.",
+    "unreadable": "Diese Datei konnte nicht gelesen werden. Sie ist vielleicht beschädigt oder mit einem Passwort geschützt. Exportieren Sie sie bitte noch einmal."
+  },
+  "error": {
+    "notFound": {
+      "title": "Seite nicht gefunden",
+      "heading": "Hier gibt es nichts zu bereinigen.",
+      "body": "Diese Seite gibt es nicht. Vielleicht ist der Link veraltet oder es hat sich ein Tippfehler eingeschlichen. Kein Problem: Es wurde nichts hochgeladen."
+    },
+    "other": {
+      "title": "Etwas ist schiefgelaufen",
+      "heading": "Etwas ist schiefgelaufen.",
+      "body": "Laden Sie die Seite neu und versuchen Sie es noch einmal. Ihre Datei hat diesen Browser nie verlassen."
+    },
+    "home": "Zurück zum Start",
+    "roadmap": "Zur Roadmap",
+    "path": "Die Adresse {path} wurde nicht gefunden."
+  }
+}

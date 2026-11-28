@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { detectTable } from '../../core/detect/table'
+import { detectItems } from '../../core/detect/items'
+import { itemsFromTable, textItems } from '../../core/items/table'
 import { cleanedFileName, cleanedTable, leakedValues, neutralizeFormula, removedByType, reportFileName, toCsv } from '../../core/export/csv'
 import { importFile } from '../../core/import'
 import { Review } from '../../core/review/review'
@@ -33,7 +34,8 @@ const CSV = [
 async function setUp() {
   const table = await importFile({ name: 'tickets.csv', bytes: new TextEncoder().encode(CSV) })
   const roles = ['keep', 'drop', 'scan', 'keep'] as const
-  const review = new Review(table.rows, [2], detectTable(table.rows, [2]))
+  const { items } = itemsFromTable(table, roles)
+  const review = new Review(items, detectItems(textItems(items)))
   return { table, roles: [...roles], review }
 }
 

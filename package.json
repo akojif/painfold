@@ -1,6 +1,6 @@
 {
   "name": "painfold",
-  "version": "0.2.0",
+  "version": "0.3.1",
   "private": true,
   "description": "Find what hurts your customers, without exposing who they are.",
   "license": "MIT",
@@ -11,29 +11,37 @@
   },
   "scripts": {
     "dev": "node scripts/fetch-model.ts && nuxt dev",
-    "generate": "node scripts/fetch-model.ts && nuxt generate && node scripts/remove-spa-fallback.ts && node scripts/apply-csp.ts && node scripts/write-cloudflare-assets.ts",
+    "generate": "node scripts/fetch-model.ts && nuxt generate && node scripts/remove-spa-fallback.ts && node scripts/apply-csp.ts && node scripts/write-llms-txt.ts && node scripts/write-cloudflare-assets.ts",
     "serve": "node scripts/serve-static.ts",
     "lint": "eslint .",
     "typecheck": "nuxt typecheck",
     "test": "vitest run",
     "test:e2e": "playwright test",
+    "audit": "node scripts/audit.ts",
     "eval": "node scripts/eval.ts",
     "bench": "BENCH=1 playwright test performance --reporter=line",
     "postinstall": "nuxt prepare",
     "licenses": "license-checker-rseidelsohn --excludePrivatePackages --excludePackages \"tosource@2.0.0-alpha.3\" --excludePackagesStartingWith \"@img/sharp-libvips-\" --onlyAllow \"MIT;Apache-2.0;ISC;BSD-2-Clause;BSD-3-Clause;0BSD;BlueOak-1.0.0;CC0-1.0;Python-2.0;MPL-2.0;CC-BY-4.0;CC-BY-3.0\" --summary",
     "models": "node scripts/fetch-model.ts",
+    "check:providers": "node scripts/check-providers.ts",
+    "labels:convert": "node scripts/convert-labels.ts",
+    "try:tagging": "node scripts/try-tagging.ts",
+    "demo:generate": "node scripts/demo-generate.ts",
     "models:upload": "node scripts/upload-model.ts",
     "test:model": "vitest run --config vitest.model.config.ts",
     "eval:names": "node scripts/eval-names.ts",
+    "eval:analysis": "node scripts/eval-analysis.ts",
+    "mapping:sheet": "node scripts/mapping.ts sheet",
+    "mapping:convert": "node scripts/mapping.ts convert",
     "verify": "node scripts/verify.ts"
   },
   "dependencies": {
     "@huggingface/transformers": "^4.3.2",
     "@nuxtjs/i18n": "10.6.0",
     "nuxt": "4.6.4",
-    "papaparse": "5.7.0",
+    "papaparse": "5.7.1",
     "vue": "3.5.45",
-    "vue-router": "5.4.0",
+    "vue-router": "5.5.1",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   },
   "devDependencies": {
@@ -48,7 +56,7 @@
     "typescript": "6.0.3",
     "vitest": "5.1.0",
     "vue-tsc": "3.3.14",
-    "wrangler": "4.154.0"
+    "wrangler": "4.162.0"
   },
   "allowScripts": {
     "esbuild": false,

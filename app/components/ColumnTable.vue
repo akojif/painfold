@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { personalKind } from '~~/core/columns/roles'
-import type { ColumnCounts } from '~~/core/detect/table'
+import type { ColumnCounts } from '~~/core/items/table'
 import { PII_TYPES } from '~~/core/pii-types'
 
 // Every column of the file with what happens to it. counts: how much personal

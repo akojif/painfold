@@ -1,0 +1,163 @@
+{
+  "roadmap": {
+    "title": "Roadmap",
+    "intro": "Painfold bereinigt das Feedback Ihrer Kundinnen und Kunden in Ihrem Browser und findet, was sie erledigen wollen, was sie stört und was sie sich wünschen. Hier steht, was veröffentlicht ist, was gerade entsteht und was danach kommt.",
+    "status": {
+      "available": "Verfügbar",
+      "preview": "Vorschau",
+      "inProgress": "In Arbeit",
+      "planned": "Geplant",
+      "next": "Als Nächstes"
+    },
+    "full": "Die ganze Roadmap auf GitHub lesen",
+    "stages": {
+      "clean": {
+        "name": "Bereinigen",
+        "summary": "Personenbezogene Daten in Ihrem Browser aus einer Feedback-Datei entfernen und die bereinigte Datei herunterladen.",
+        "points": [
+          "E-Mail-Adressen, Telefonnummern, IBANs und acht weitere Arten personenbezogener Daten",
+          "Jeden Treffer vor dem Download prüfen und korrigieren",
+          "Nichts wird hochgeladen"
+        ]
+      },
+      "names": {
+        "name": "Namen",
+        "summary": "Auch Namen und Orte finden, mit einem Modell, das in Ihrem Browser läuft.",
+        "points": [
+          "Personen und Orte auf Deutsch und Englisch",
+          "Eine Oberfläche auf Deutsch und Englisch",
+          "Veröffentlichte Genauigkeit für jede Art personenbezogener Daten"
+        ]
+      },
+      "jobs": {
+        "name": "Aufgaben, Probleme und Wünsche",
+        "summary": "Sehen, was Ihre Kunden erledigen wollen, was sie stört und was sie sich wünschen.",
+        "points": [
+          "Ihr eigener KI-Schlüssel oder ein lokales Modell",
+          "Vor der Analyse genau sehen, was gesendet wird",
+          "Jedes Zitat wird mit Ihren Daten abgeglichen"
+        ]
+      },
+      "report": {
+        "name": "Bericht",
+        "summary": "Ein Bericht, mit dem Ihr Team in einem Meeting arbeiten kann.",
+        "points": [
+          "Die drei wichtigsten Erkenntnisse zuerst",
+          "Segmente und Trends, wenn Ihre Datei sie hergibt",
+          "Chancen als „Wie könnten wir …“-Fragen"
+        ]
+      },
+      "sources": {
+        "name": "Transkripte und Dokumente",
+        "summary": "Auch Interview-Transkripte und Dokumente bereinigen und auswerten, nicht nur Tabellen.",
+        "points": [
+          "Zuerst Transkripte (TXT, VTT, SRT), dann DOCX und PDF",
+          "Sprecher einheitlich ersetzt, Dokument-Metadaten entfernt",
+          "Bereinigter Text als TXT oder Markdown"
+        ]
+      },
+      "launch": {
+        "name": "Start",
+        "summary": "Painfold in 30 Sekunden ausprobieren oder auf Ihren eigenen Servern betreiben.",
+        "points": [
+          "Eine Demo mit fertigen Ergebnissen, ohne API-Schlüssel",
+          "Ein Docker-Image zum Selbst-Hosten mit einem lokalen Modell",
+          "Dokumentation für Teams"
+        ]
+      }
+    },
+    "horizons": {
+      "released": {
+        "name": "Veröffentlicht",
+        "hint": "Heute auf painfold.com nutzbar."
+      },
+      "now": {
+        "name": "Jetzt",
+        "hint": "Wird für die nächste Version gebaut."
+      },
+      "next": {
+        "name": "Als Nächstes",
+        "hint": "Die Phase danach."
+      },
+      "later": {
+        "name": "Später",
+        "hint": "Geplant, ohne Datum."
+      },
+      "idea": {
+        "name": "Ideen",
+        "hint": "Wird überlegt, ist noch nicht geplant."
+      }
+    },
+    "linkRelease": "Version {label}",
+    "linkIssue": "Issue {label}",
+    "linkMilestone": "Meilenstein {label}",
+    "newTab": "(öffnet in einem neuen Tab)",
+    "items": {
+      "clean": {
+        "name": "Bereinigen",
+        "summary": "Personenbezogene Daten im Browser aus einer Feedback-Datei entfernen und die bereinigte Datei herunterladen."
+      },
+      "names": {
+        "name": "Namen",
+        "summary": "Auch Namen und Orte finden, mit einem Modell, das in Ihrem Browser läuft, und Painfold auf Deutsch oder Englisch nutzen."
+      },
+      "jobs": {
+        "name": "Aufgaben, Probleme und Wünsche",
+        "summary": "Sehen, was Ihre Kundinnen und Kunden erledigen wollen, was sie stört und was sie sich wünschen, mit einer KI Ihrer Wahl."
+      },
+      "workspace": {
+        "name": "Neuer Arbeitsbereich",
+        "summary": "Importieren, Prüfen, Analysieren und Bericht in einem Arbeitsbereich: die vier Schritte oben, Kontext und Filter an der Seite, sortierbare Tabellen."
+      },
+      "report": {
+        "name": "Bericht",
+        "summary": "Ein Bericht, mit dem Ihr Team in einer Besprechung arbeiten kann: die wichtigsten Erkenntnisse zuerst, Segmente und Trends und Fragen für Ihr Team."
+      },
+      "landing": {
+        "name": "Neue Startseite",
+        "summary": "Eine Startseite, die Schritt für Schritt zeigt, was in Ihrem Browser geprüft wird und dass nichts ihn verlässt."
+      },
+      "namesMore": {
+        "name": "Bessere Namenserkennung",
+        "summary": "Spitznamen, Namen am Satzanfang und mehr Namenszusätze, gemessen an einem neuen, unabhängigen Testsatz."
+      },
+      "providers": {
+        "name": "Weitere KI-Anbieter",
+        "summary": "Mit OpenAI, xAI, Azure OpenAI oder einem anderen OpenAI-kompatiblen Dienst analysieren, direkt aus Ihrem Browser mit Ihrem eigenen Schlüssel."
+      },
+      "transcripts": {
+        "name": "Interview-Transkripte",
+        "summary": "Transkripte als TXT, VTT oder SRT bereinigen, Sprecherinnen und Sprecher einheitlich ersetzt."
+      },
+      "documents": {
+        "name": "DOCX- und PDF-Dokumente",
+        "summary": "Dokumente bereinigen, samt Metadaten, Kommentaren und Änderungsverfolgung."
+      },
+      "docker": {
+        "name": "Docker-Image",
+        "summary": "Painfold auf eigenen Servern betreiben, mit einem lokalen Modell und ohne Internet."
+      },
+      "engine": {
+        "name": "Painfold Engine",
+        "summary": "Ein optionaler, selbst betriebener Dienst, der die Analyse mit einem lokalen Modell ausführt, für Teams, die Painfold selbst hosten."
+      },
+      "mcp": {
+        "name": "MCP-Server",
+        "summary": "Painfold als Datenschutz-Schranke für KI-Assistenten: Dateien werden auf Ihrem Rechner bereinigt, bevor ein Assistent sie sieht."
+      }
+    },
+    "summary": "Aktuelle Version: {version}. {counts}.",
+    "counts": {
+      "inProgress": "{n} in Arbeit",
+      "planned": "{n} geplant",
+      "idea": "{n} Idee | {n} Ideen"
+    },
+    "allReleases": "Alle Versionen ({n})",
+    "fewerReleases": "Weniger Versionen zeigen",
+    "showMore": "{n} weitere zeigen",
+    "showFewer": "Weniger zeigen",
+    "more": "Mehr",
+    "less": "Weniger",
+    "empty": "Hier ist noch nichts"
+  }
+}

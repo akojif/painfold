@@ -1,0 +1,224 @@
+{
+  "app": {
+    "name": "Painfold",
+    "tagline": "Finden Sie, was Ihren Kunden wehtut, ohne preiszugeben, wer sie sind."
+  },
+  "nav": {
+    "label": "Schritte",
+    "done": "erledigt",
+    "steps": {
+      "import": "Importieren",
+      "review": "Prüfen",
+      "analyze": "Analysieren",
+      "report": "Bericht"
+    },
+    "meta": {
+      "left": "{n} offen",
+      "running": "Läuft",
+      "themes": "{n} Thema | {n} Themen"
+    },
+    "startOver": "Neu beginnen",
+    "newTab": "(öffnet in neuem Tab)"
+  },
+  "footer": {
+    "source": "Open Source",
+    "roadmap": "Roadmap",
+    "credit": "Entwickelt von {name}",
+    "accuracy": "Genauigkeit",
+    "label": "Fußzeile",
+    "llms": "llms.txt"
+  },
+  "types": {
+    "EMAIL": "E-Mail-Adressen",
+    "PHONE": "Telefonnummern",
+    "IBAN": "IBANs",
+    "CARD": "Kartennummern",
+    "SVNR": "österreichische Sozialversicherungsnummern",
+    "VAT_ID": "UID-Nummern",
+    "URL": "Links",
+    "IP": "IP-Adressen",
+    "DATE_OF_BIRTH": "Geburtsdaten",
+    "ADDRESS": "Adressen",
+    "POSTCODE": "Postleitzahlen",
+    "NAME": "Namen",
+    "PLACE": "Orte"
+  },
+  "file": {
+    "rows": "keine Zeilen | 1 Zeile | {n} Zeilen",
+    "chooseAnother": "Andere Datei wählen",
+    "sheet": "Tabellenblatt",
+    "sample": "Beispieldatei mit erfundenen Daten.",
+    "ragged": "1 Zeile hatte eine andere Anzahl an Zellen als die Kopfzeile und wurde aufgefüllt. | {n} Zeilen hatten eine andere Anzahl an Zellen als die Kopfzeile und wurden aufgefüllt.",
+    "heading": "Datei",
+    "rowsLabel": "Zeilen",
+    "columnsLabel": "Spalten"
+  },
+  "header": {
+    "outbound": "Was Ihren Browser verlässt",
+    "bytes": "0 Bytes | 1 Byte | {n} Bytes"
+  },
+  "typeOne": {
+    "EMAIL": "E-Mail-Adresse",
+    "PHONE": "Telefonnummer",
+    "IBAN": "IBAN",
+    "CARD": "Kartennummer",
+    "SVNR": "Sozialversicherungsnummer",
+    "VAT_ID": "UID-Nummer",
+    "URL": "Link",
+    "IP": "IP-Adresse",
+    "DATE_OF_BIRTH": "Geburtsdatum",
+    "ADDRESS": "Adresse",
+    "POSTCODE": "Postleitzahl",
+    "NAME": "Name",
+    "PLACE": "Ort"
+  },
+  "typeShort": {
+    "EMAIL": "E-Mail",
+    "PHONE": "Telefon",
+    "IBAN": "IBAN",
+    "CARD": "Karte",
+    "SVNR": "SV-Nummer",
+    "VAT_ID": "UID",
+    "URL": "Link",
+    "IP": "IP",
+    "DATE_OF_BIRTH": "Geburtsdatum",
+    "ADDRESS": "Adresse",
+    "POSTCODE": "PLZ",
+    "NAME": "Name",
+    "PLACE": "Ort"
+  },
+  "typeMany": {
+    "EMAIL": "E-Mail-Adressen",
+    "PHONE": "Telefonnummern",
+    "IBAN": "IBANs",
+    "CARD": "Kartennummern",
+    "SVNR": "Sozialversicherungsnummern",
+    "VAT_ID": "UID-Nummern",
+    "URL": "Links",
+    "IP": "IP-Adressen",
+    "DATE_OF_BIRTH": "Geburtsdaten",
+    "ADDRESS": "Adressen",
+    "POSTCODE": "Postleitzahlen",
+    "NAME": "Namen",
+    "PLACE": "Orte"
+  },
+  "theme": {
+    "label": "Darstellung",
+    "system": "Systemeinstellung verwenden",
+    "light": "Hell",
+    "dark": "Dunkel"
+  },
+  "typeManyLower": {
+    "EMAIL": "E-Mail-Adressen",
+    "PHONE": "Telefonnummern",
+    "IBAN": "IBANs",
+    "CARD": "Kartennummern",
+    "SVNR": "SV-Nummern",
+    "VAT_ID": "UID-Nummern",
+    "URL": "Links",
+    "IP": "IP-Adressen",
+    "DATE_OF_BIRTH": "Geburtsdaten",
+    "ADDRESS": "Adressen",
+    "POSTCODE": "Postleitzahlen",
+    "NAME": "Namen",
+    "PLACE": "Orte"
+  },
+  "typeOneLower": {
+    "EMAIL": "E-Mail-Adresse",
+    "PHONE": "Telefonnummer",
+    "IBAN": "IBAN",
+    "CARD": "Kartennummer",
+    "SVNR": "SV-Nummer",
+    "VAT_ID": "UID-Nummer",
+    "URL": "Link",
+    "IP": "IP-Adresse",
+    "DATE_OF_BIRTH": "Geburtsdatum",
+    "ADDRESS": "Adresse",
+    "POSTCODE": "Postleitzahl",
+    "NAME": "Name",
+    "PLACE": "Ort"
+  },
+  "language": {
+    "label": "Sprache",
+    "en": "Englisch",
+    "de": "Deutsch"
+  },
+  "discard": {
+    "title": "Neu beginnen?",
+    "body": "Ihre Datei und Ihre Prüfentscheidungen werden gelöscht. Es wurde nichts hochgeladen, also bleibt auch nirgendwo anders etwas gespeichert.",
+    "confirm": "Neu beginnen",
+    "cancel": "Weiterarbeiten"
+  },
+  "resetReview": {
+    "title": "Prüfung zurücksetzen?",
+    "body": "Personenbezogene Daten werden mit der neuen Spaltenauswahl neu gesucht, und Ihre Prüfentscheidungen werden gelöscht.",
+    "confirm": "Neu suchen",
+    "cancel": "Weiterarbeiten"
+  },
+  "toast": {
+    "close": "Schließen"
+  },
+  "workspace": {
+    "importSidebar": "Datei und Spalten",
+    "drawer": {
+      "close": "Details schließen",
+      "closeTitle": "Schließen (Escape)"
+    },
+    "review": {
+      "sidebar": "Filter, Namen und Datenschutz",
+      "filters": "Filter",
+      "clearFilters": "Filter zurücksetzen",
+      "type": "Art",
+      "statusLegend": "Status",
+      "status": {
+        "pending": "Offen",
+        "removed": "Entfernt",
+        "kept": "Behalten"
+      },
+      "warnings": "Hinweise",
+      "nearWarning": "In Zeilen mit Hinweis",
+      "names": "Namen und Orte",
+      "shownOf": "{shown} von 1 Wert | {shown} von {total} Werten",
+      "caption": "Gefundene personenbezogene Daten, eine Zeile je Wert. Einen Wert auswählen für die Details; N und P gehen durch die angezeigten Werte, R entfernt, K behält.",
+      "columns": {
+        "value": "Wert",
+        "rows": "Zeilen",
+        "decision": "Entscheidung"
+      },
+      "warningType": "Hinweis, {reason}",
+      "noMatch": "Keine Werte passen zu diesen Filtern.",
+      "keys": "Tasten: N und P gehen durch die angezeigten Werte, R entfernt, K behält, M markiert ausgewählten Text als übersehen, Z macht rückgängig.",
+      "warningRow": "Zeile {n}, könnte jemanden erkennbar machen",
+      "inRows": "In 1 Zeile | In {n} Zeilen",
+      "hidden": "Die Filter blenden diesen Wert aus. N und P gehen durch die angezeigten Werte.",
+      "whereItAppears": "Wo er vorkommt",
+      "activeFilters": "1 aktiv | {n} aktiv",
+      "showFilters": "Filter anzeigen",
+      "hideFilters": "Filter ausblenden"
+    },
+    "download": {
+      "sidebar": "Die Datei und was sie enthält"
+    },
+    "analyze": {
+      "sidebar": "Auf dieser Seite",
+      "onThisPage": "Auf dieser Seite",
+      "connection": "Wo sie läuft",
+      "send": "Prüfen und senden",
+      "notSetUp": "Noch nicht eingerichtet",
+      "findingsLeft": "1 Treffer nicht geprüft | {n} Treffer nicht geprüft",
+      "namesNotChecked": "Namen nicht geprüft",
+      "ready": "Bereit zum Senden",
+      "afterTest": "Nach einem erfolgreichen Verbindungstest",
+      "sendAfterTest": "Danach: prüfen, was gesendet wird, und senden. Das erscheint, sobald der Verbindungstest klappt.",
+      "reviewSent": "Prüfen, was gesendet wird (1 Text) | Prüfen, was gesendet wird ({n} Texte)",
+      "sentTexts": "Die Texte, die gesendet werden"
+    },
+    "report": {
+      "sidebar": "Abschnitte und die bereinigte Datei",
+      "onThisPage": "Auf dieser Seite",
+      "theme": "Thema",
+      "caption": "{kind}: eine Zeile pro Thema, die mit den meisten Texten zuerst. Wählen Sie ein Thema für seine Zitate und Texte.",
+      "quotes": "Zitate und Texte"
+    }
+  }
+}

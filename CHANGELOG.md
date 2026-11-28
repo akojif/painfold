@@ -2,6 +2,91 @@
 
 All notable changes to Painfold. Versions follow the stages in [ROADMAP.md](ROADMAP.md).
 
+## Unreleased
+
+### Changed
+
+- **Review at 768 px:** below 1,024 px the filters start collapsed to one row, with Show filters, so the table starts higher; the heading says how many filters are on, and Clear filters stays at hand (#189).
+
+### Fixed
+
+- **Who wrote the evaluation texts is now stated, on the Accuracy page, in the docs and in llms.txt.** The analysis texts and the personal-data test texts (hard cases, names, long texts and warnings) were written by a Claude model (Claude Opus 5.5) during development, in the same working session that wrote the prompts and the detection rules; before, the page said they were written by "the same person" or "hand-written". The labels were made by people. Both are listed as known weaknesses: the texts are synthetic, so the scores are likely optimistic. Version 0.4 measures the analysis on a separately sourced test set, and an independently written name test set is planned (#82). (#190 for the analysis texts, #191 for the personal-data test texts)
+
+## 0.3.1: Workspace redesign (2026-11-20)
+
+Import, Review, Analyze and Report now work as one workspace: a top bar with the four steps, the page's context and filters at the side, tables you can sort, and details in a panel beside them. Nothing about what is found, sent or counted has changed.
+
+### Changed
+
+- **One workspace with a top bar.** Once a file is open, a top bar shows Painfold, the four steps (Import, Review, Analyze, Report) and the language, theme, "What leaves your browser" and Start over controls.
+  - Each step is a link once it can be reached, and says what it holds now: how many findings are left, an analysis running, how many themes.
+  - Steps you have finished are marked done.
+  - The demo report shows the steps too, without claiming an import.
+- **Import:** a sidebar with the file, its rows and columns, and what happens to each column, next to the column table and the preview.
+- **Review:** a filter sidebar (type, status, warnings) with counts, and a sortable table with one row per distinct value. A value's details open in a panel beside the table: where it appears and the decision. N and P move through the values the filters show.
+- **Analyze** comes in two steps:
+  - first, where the analysis runs; once the connection test works, it shows as connected, with Change and Disconnect;
+  - then, check and send. The cleaned texts that will be sent open in a panel on request instead of a long list, and the privacy notice sits in the sidebar.
+- **Report:** jobs, pains and gains as tables (theme, texts, share, intensity). A theme's quotes and all its texts open in the panel. The sidebar has the sections with their counts and the cleaned file.
+- **Charts:** the report's share bars and the Accuracy page's bars are drawn the same way, in colours checked for contrast in light and dark. Every bar has its number written beside it, and a bar below its target also says "below target" in words.
+- **Roadmap page** (/roadmap/): released versions, what is being built now, what comes next and later, and ideas, each linked to its issue or release.
+- **No sideways scrolling at 768 px**, the narrowest width the working flow supports, in English and German. After an analysis, the top bar rounds the bytes sent to kB so the German steps still fit; screen readers hear the exact count.
+
+### Fixed
+
+- **Opening a step directly with nothing open** (a shared link, a bookmark, a reload of Review, Download, Analyze or Report) no longer shows the step for a moment before the start page. The served pages hold nothing of the step, and the start page it leads to is laid out as on a fresh load: before, it could keep the step's layout, squeezing the headline to one word per line.
+
+### Documentation
+
+- **Security policy** (SECURITY.md): how to report a privacy leak or security problem privately, and what counts.
+- **How we prove it** in docs/privacy.md: a data-flow diagram, each privacy claim with the test that checks it, and what Painfold doesn't protect against.
+- **Feedback** (docs/feedback.md): no analytics or tracking, what the host sees, and where to ask questions and share ideas (GitHub Discussions).
+- Contributing guide, issue templates with a warning never to paste real personal data, and a quick start in the README.
+- **painfold.com/llms.txt**: what Painfold is, its privacy model, accuracy and roadmap, built from the site's own sources.
+
+### Known limits
+
+- The analysis prompts, parsing and scoring are unchanged from 0.3.0, so the measured accuracy still applies.
+- The German interface text has not been reviewed by a native speaker yet ([#110](https://github.com/akojif/painfold/issues/110)).
+
+## 0.3.0: Jobs, pains and gains (2026-11-18)
+
+Painfold now finds what your customers are trying to get done, what hurts and what they wish for, with an AI you choose. Only cleaned text is sent, after you have seen exactly what goes, and every count and quote in the report is checked in code.
+
+### Added
+
+- **Analysis** of the cleaned feedback into customer jobs, pains and gains, each with sentiment and type (bug, feature request, question, praise, complaint, other). Texts are sent in batches, and every answer is checked before it is used.
+- **Your choice of AI:** your own Anthropic API key, sent straight from your browser to Anthropic and held in memory unless you choose "Remember on this device", or a local model with Ollama, where nothing leaves your machine.
+- **What will be sent, before it is sent:** the consent step shows every cleaned text, the instructions and the number of items, with a download of exactly what goes.
+- **The first report:** ranked jobs, pains and gains with counts, share, intensity and two to three quotes each. Counts are computed in code from the tagged texts, never by the AI, and every quote is verified to exist word for word in the cleaned text.
+- **Demo mode:** a stored real run on the sample file, replayed without a request or an API key.
+- **Warnings for text that could identify someone** together with other details: exact ages, "the only …", job titles with a place, and roles held by one person. They are shown in the review and never removed on their own. (Announced for 0.2.1, released here.)
+- **The flow** is Import, Review, Analyze, Report.
+- **Accuracy for the analysis** on the Accuracy page and in docs/accuracy.md, with its known weaknesses.
+
+### Changed
+
+- Every file becomes a list of feedback items behind the existing screens, so detection, review and export no longer depend on rows and columns. This prepares transcripts and documents (v0.5).
+- On a phone, the start screen explains what Painfold does; the tool itself needs a screen 768 px or wider.
+- "What Painfold does" is a full-width strip on the start page, with statuses from the roadmap.
+- Page and section headings are set in Sora; text stays in Geist.
+- The footer is one identical line on every page, and the start page states the privacy promise less often.
+- The name model downloads from a copy in a GitHub release first, and retries when Hugging Face is busy.
+- The README is shorter; the details moved into docs/.
+
+### Measured
+
+- Analysis, on the test split (60 hand-labeled texts per language), run once with the plan published beforehand, and with each theme Painfold found matched to the labels by hand: under the right theme, Painfold finds 88 % of jobs, 77 % of pains and 64 % of gains, and 58 %, 68 % and 47 % of what it reports match the labels (both languages together). Sentiment is right for 88 % of texts, type for 92 %, and 100 % of quotes were found word for word. Details: docs/accuracy.md and the Accuracy page.
+- Warnings for text that could identify someone, on a small hand-written test split: every labeled warning found, and no wrong warning.
+
+### Known limits
+
+- Gains are the weakest kind: wishes phrased as a question or as something missing are missed, and general praise is sometimes counted as a gain.
+- Painfold reports more jobs than people labeled, and its themes are often broader than the labeled ones.
+- Results vary between two runs on the same texts, and the model takes no temperature setting that could reduce this.
+- The sample is small, and the German labels were made with the English labels available. All known weaknesses, with numbers, are on the Accuracy page.
+- The German interface text has not been reviewed by a native speaker yet ([#110](https://github.com/akojif/painfold/issues/110)).
+
 ## 0.2.0: Names (2026-11-12)
 
 Names and places are found too, with a model that runs in your browser, and the interface is in English and German. Nothing is uploaded.

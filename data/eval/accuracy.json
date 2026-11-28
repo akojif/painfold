@@ -941,6 +941,64 @@
       }
     }
   ],
+  "indirect": {
+    "age": {
+      "de": {
+        "labelled": 5,
+        "found": 5,
+        "detected": 5,
+        "correct": 5
+      },
+      "en": {
+        "labelled": 4,
+        "found": 4,
+        "detected": 4,
+        "correct": 4
+      }
+    },
+    "only": {
+      "de": {
+        "labelled": 2,
+        "found": 2,
+        "detected": 2,
+        "correct": 2
+      },
+      "en": {
+        "labelled": 2,
+        "found": 2,
+        "detected": 2,
+        "correct": 2
+      }
+    },
+    "role-place": {
+      "de": {
+        "labelled": 2,
+        "found": 2,
+        "detected": 2,
+        "correct": 2
+      },
+      "en": {
+        "labelled": 2,
+        "found": 2,
+        "detected": 2,
+        "correct": 2
+      }
+    },
+    "unique-role": {
+      "de": {
+        "labelled": 3,
+        "found": 3,
+        "detected": 3,
+        "correct": 3
+      },
+      "en": {
+        "labelled": 3,
+        "found": 3,
+        "detected": 3,
+        "correct": 3
+      }
+    }
+  },
   "model": {
     "source": "Xenova/distilbert-base-multilingual-cased-ner-hrl",
     "original": "Davlan/distilbert-base-multilingual-cased-ner-hrl",

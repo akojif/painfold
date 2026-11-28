@@ -1,12 +1,18 @@
 <script setup lang="ts">
-import { cleanedFileName, cleanedTable, removedByType, reportFileName, toCsv } from '~~/core/export/csv'
+import { removedByType, reportFileName } from '~~/core/export/csv'
 import { cleaningReport, reportTimestamp } from '~~/core/export/report'
 import { NAME_MODEL } from '~~/deploy/model'
 
 definePageMeta({
-  step: 3,
+  // Downloading the cleaned file is part of the Review step (#142), in the workspace (#141).
+  step: 2,
+  workspace: true,
+  // Below 768 px the layout shows SmallScreenNotice instead, also from a direct link (#139).
+  working: true,
+  needsReview: true,
   middleware: () => {
-    if (import.meta.client && !useSession().review.value) return navigateTo(useLocalePath()('/'))
+    // While the app takes over a served page, the layout decides once it is mounted.
+    if (import.meta.client && !useNuxtApp().isHydrating && !useSession().review.value && !useSmallScreen().narrow.value) return navigateTo(useLocalePath()('/'))
   },
 })
 
@@ -16,11 +22,16 @@ const { number } = useFormat()
 const session = useSession()
 const { table, roles, review, revision } = session
 
-const fileName = computed(() => cleanedFileName(table.value?.fileName ?? ''))
+const { fileName, download } = useCleanedFile()
 // Largest first, in the summary and in the cleaning report.
 const removed = computed(() => (revision.value, review.value ? [...removedByType(review.value)].sort((a, b) => b[1] - a[1]) : []))
 const notReviewed = computed(() => (revision.value, review.value?.counts().left ?? 0))
 const kept = computed(() => (revision.value, review.value?.findings.filter(finding => review.value?.decisionFor(finding.key) === 'keep').length ?? 0))
+// Warnings for text that could identify someone: kept unless the reviewer removed them.
+const warnings = computed(() => (revision.value, review.value?.warningCounts() ?? { total: 0, removed: 0, dismissed: 0, open: 0 }))
+const warningsNote = computed(() => warnings.value.total > 0
+  ? t('warning.summary', { removed: number(warnings.value.removed), kept: number(warnings.value.total - warnings.value.removed) })
+  : undefined)
 const dropped = computed(() => table.value?.columns.filter((_, index) => roles.value[index] === 'drop') ?? [])
 const unchecked = computed(() => table.value?.columns.filter((_, index) => roles.value[index] === 'keep') ?? [])
 
@@ -29,7 +40,6 @@ const { version } = useRuntimeConfig().public
 // Whether names and places were checked, for the summary and the cleaning report.
 // The download waits while they are still being checked (see the review).
 const nameScan = useNameScan()
-const { narrow } = useSmallScreen()
 const checkingNames = nameScan.busy
 const namesChecked = computed(() => nameScan.status.value === 'done' || (nameScan.status.value === 'skipped' && nameScan.done.value > 0))
 const namesNote = computed(() => {
@@ -37,14 +47,8 @@ const namesNote = computed(() => {
   if (status.value === 'done') return t('download.names.checked')
   if (status.value === 'skipped') return done.value > 0 ? t('download.names.partly', { done: number(done.value), total: number(total.value) }) : t('download.names.skipped')
   if (status.value === 'failed') return t('download.names.failed')
-  return narrow.value ? t('download.names.smallScreen') : t('download.names.notChecked')
+  return t('download.names.notChecked')
 })
-
-function download() {
-  if (!table.value || !review.value) return
-  session.markDownloaded()
-  saveTextFile(fileName.value, toCsv(cleanedTable(table.value, roles.value, review.value), { delimiter: table.value.delimiter ?? ',' }))
-}
 
 function downloadReport() {
   if (!table.value) return
@@ -52,6 +56,7 @@ function downloadReport() {
     namesNote.value,
     ...(notReviewed.value > 0 ? [t('download.notReviewed', { n: number(notReviewed.value) }, notReviewed.value)] : []),
     ...(kept.value > 0 ? [t('download.kept', { n: number(kept.value) }, kept.value)] : []),
+    ...(warningsNote.value ? [warningsNote.value] : []),
     ...(dropped.value.length > 0 ? [t('download.dropped', { columns: dropped.value.join(', ') })] : []),
     ...(unchecked.value.length > 0 ? [t('download.unchecked', { columns: unchecked.value.join(', ') })] : []),
   ]
@@ -77,18 +82,50 @@ function downloadReport() {
 </script>
 
 <template>
-  <ClientOnly>
-    <div
-      v-if="table && review"
-      class="max-w-2xl"
-    >
+  <WorkspaceBody
+    v-if="table && review"
+    :sidebar-label="$t('workspace.download.sidebar')"
+  >
+    <template #sidebar>
+      <section aria-labelledby="download-file">
+        <h2
+          id="download-file"
+          class="text-sm font-medium"
+        >
+          {{ $t('file.heading') }}
+        </h2>
+        <p class="mt-1.5 flex min-w-0 text-sm">
+          <MiddleTruncate :text="table.fileName" />
+        </p>
+        <dl class="mt-2 space-y-1 text-sm">
+          <div class="flex justify-between gap-2">
+            <dt class="text-fg-muted">
+              {{ $t('file.rowsLabel') }}
+            </dt>
+            <dd class="font-mono tabular-nums">
+              {{ number(table.rows.length) }}
+            </dd>
+          </div>
+        </dl>
+        <NuxtLink
+          :to="localePath('/review')"
+          class="focus-ring mt-2 inline-block rounded-sm text-sm text-accent underline-offset-4 hover:underline"
+        >
+          {{ $t('download.back') }}
+        </NuxtLink>
+      </section>
+
+      <div class="space-y-2 border-line text-sm text-fg-muted md:col-span-2 lg:mt-auto lg:border-t lg:pt-4">
+        <p>{{ $t('download.reportExplain') }}</p>
+        <p>{{ $t('download.mapStays') }}</p>
+        <p>{{ $t('review.limits') }}</p>
+      </div>
+    </template>
+
+    <div class="max-w-2xl px-4 pt-6 pb-16 sm:px-6 lg:pt-8">
       <h1 class="text-xl font-semibold">
         {{ $t('download.heading') }}
       </h1>
-      <MiddleTruncate
-        class="mt-1 text-sm text-fg-muted"
-        :text="table.fileName"
-      />
 
       <template v-if="checkingNames">
         <NameModelDownload
@@ -172,6 +209,9 @@ function downloadReport() {
           <li v-if="kept > 0">
             {{ $t('download.kept', { n: number(kept) }, kept) }}
           </li>
+          <li v-if="warningsNote">
+            {{ warningsNote }}
+          </li>
           <li v-if="dropped.length > 0">
             {{ $t('download.dropped', { columns: dropped.join(', ') }) }}
           </li>
@@ -179,21 +219,7 @@ function downloadReport() {
             {{ $t('download.unchecked', { columns: unchecked.join(', ') }) }}
           </li>
         </ul>
-        <div class="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm">
-          <NuxtLink
-            :to="localePath('/review')"
-            class="focus-ring rounded-sm text-accent underline-offset-4 hover:underline"
-          >
-            {{ $t('download.back') }}
-          </NuxtLink>
-        </div>
       </section>
-
-      <div class="mt-10 space-y-2 text-sm text-fg-muted">
-        <p>{{ $t('download.reportExplain') }}</p>
-        <p>{{ $t('download.mapStays') }}</p>
-        <p>{{ $t('review.limits') }}</p>
-      </div>
 
       <section
         class="mt-10 border-t border-line pt-6"
@@ -209,12 +235,12 @@ function downloadReport() {
           {{ $t('download.next.body') }}
         </p>
         <NuxtLink
-          :to="localePath('/roadmap')"
-          class="focus-ring mt-2 inline-block rounded-sm text-sm text-accent underline-offset-4 hover:underline"
+          :to="localePath('/analyze')"
+          class="focus-ring press mt-3 inline-flex h-9 items-center rounded-md bg-fg px-3.5 font-medium text-canvas"
         >
           {{ $t('download.next.link') }}
         </NuxtLink>
       </section>
     </div>
-  </ClientOnly>
+  </WorkspaceBody>
 </template>

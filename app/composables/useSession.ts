@@ -1,6 +1,8 @@
 import type { ColumnRole, RoleSuggestion } from '~~/core/columns/roles'
 import { guessFeedbackColumn, suggestRoles } from '~~/core/columns/roles'
-import type { CellDetections } from '~~/core/detect/table'
+import type { ItemDetections } from '~~/core/detect/items'
+import { itemsFromTable, sheetIndexOf } from '~~/core/items/table'
+import { placeOf, type Item, type ItemSet, type Place } from '~~/core/items/types'
 import type { ImportedTable } from '~~/core/import'
 import { Review } from '~~/core/review/review'
 
@@ -14,6 +16,8 @@ const suggestions = shallowRef<RoleSuggestion[]>([])
 const roles = ref<ColumnRole[]>([])
 const feedbackColumn = ref<number>()
 const review = shallowRef<Review>()
+// The feedback items the review was started with (core/items/): the checked cells.
+const items = shallowRef<ItemSet>()
 const revision = ref(0)
 // The column choices as suggested when the file was opened, as they were when
 // the review started, and the state of the review when the cleaned file was
@@ -21,6 +25,25 @@ const revision = ref(0)
 const suggestedChoices = ref('')
 const reviewedChoices = ref('')
 const downloadedAt = ref<{ revision: number, choices: string }>()
+
+// Each unit's place ("Row 17"), items and kept values, for the review screen
+// and the report, and each item by its id. Built once for all callers.
+const unitIndex = computed(() => {
+  const places = new Map<string, Place>()
+  const byUnit = new Map<string, Item[]>()
+  const attributes = new Map<string, Record<string, string>>()
+  const byId = new Map<string, Item>()
+  for (const unit of items.value?.units ?? []) {
+    places.set(unit.id, placeOf(unit.source))
+    byUnit.set(unit.id, [])
+    attributes.set(unit.id, unit.attributes)
+  }
+  for (const item of items.value?.items ?? []) {
+    byUnit.get(item.unit)?.push(item)
+    byId.set(item.id, item)
+  }
+  return { places, byUnit, attributes, byId }
+})
 
 export function useSession() {
   const choices = computed(() => JSON.stringify([roles.value, feedbackColumn.value]))
@@ -32,6 +55,7 @@ export function useSession() {
     roles.value = suggestions.value.map(suggestion => suggestion.role)
     feedbackColumn.value = undefined
     review.value = undefined
+    items.value = undefined
     downloadedAt.value = undefined
     setFeedbackColumn(guessFeedbackColumn(imported))
     suggestedChoices.value = choices.value
@@ -47,9 +71,23 @@ export function useSession() {
 
   const scanColumns = computed(() => roles.value.flatMap((role, index) => (role === 'scan' ? [index] : [])))
 
-  function startReview(cells: CellDetections[]) {
+  /** The checked cells as feedback items, with the rows as units: what detection runs on. */
+  function itemsToCheck(): ItemSet | undefined {
+    if (!table.value) return undefined
+    return itemsFromTable({ ...table.value, sheetIndex: sheetIndexOf(table.value) }, roles.value, { feedbackColumn: feedbackColumn.value })
+  }
+
+  const placeOfUnit = (unit: string): Place => unitIndex.value.places.get(unit) ?? { kind: 'row', number: 0 }
+  const itemsOfUnit = (unit: string): readonly Item[] => unitIndex.value.byUnit.get(unit) ?? []
+  const attributesOfUnit = (unit: string): Record<string, string> => unitIndex.value.attributes.get(unit) ?? {}
+  const itemById = (id: string): Item | undefined => unitIndex.value.byId.get(id)
+
+  function startReview(set: ItemSet, results: ItemDetections[]) {
     if (!table.value) return
-    review.value = new Review(table.value.rows, scanColumns.value, cells)
+    items.value = set
+    review.value = new Review(set.items, results)
+    // A new review means a new analysis.
+    useTagging().reset()
     reviewedChoices.value = choices.value
     revision.value++
   }
@@ -81,16 +119,20 @@ export function useSession() {
   }
 
   function clear() {
+    // Start over also forgets an API key that was not to be remembered, and any analysis.
+    useAiSettings().forgetKey()
+    useTagging().reset()
     table.value = undefined
     isSample.value = false
     suggestions.value = []
     roles.value = []
     feedbackColumn.value = undefined
     review.value = undefined
+    items.value = undefined
     downloadedAt.value = undefined
     suggestedChoices.value = ''
     reviewedChoices.value = ''
   }
 
-  return { table, isSample, suggestions, roles, feedbackColumn, review, revision, scanColumns, columnsChanged, hasWork, load, setFeedbackColumn, startReview, change, markDownloaded, clear }
+  return { table, isSample, suggestions, roles, feedbackColumn, review, items, placeOfUnit, itemsOfUnit, attributesOfUnit, itemById, revision, scanColumns, columnsChanged, hasWork, load, setFeedbackColumn, itemsToCheck, startReview, change, markDownloaded, clear }
 }

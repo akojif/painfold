@@ -163,7 +163,11 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
+      # Fails on high or critical advisories like npm audit --audit-level=high, except
+      # dated exceptions by exact advisory ID, each with its reason, in
+      # scripts/audit-check.ts. Currently GHSA-fc5q-39xc-vjpf (picomatch, build-time
+      # only, no fixed release as of 2026-11-17) until 2026-12-01, tracked in #167.
       - name: Fail on high or critical vulnerabilities
-        run: npm audit --audit-level=high
+        run: npm run audit
       - name: Fail on licenses outside the allowlist
         run: npm run licenses

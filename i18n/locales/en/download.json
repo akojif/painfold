@@ -1,0 +1,18 @@
+{
+  "download": {
+    "heading": "Your cleaned file is ready.",
+    "removed": "Replaced with placeholders",
+    "nothingRemoved": "Nothing was found or marked, so the text is unchanged.",
+    "kept": "1 finding was kept. | {n} findings were kept.",
+    "dropped": "Left out: {columns}.",
+    "unchecked": "Copied without checking: {columns}.",
+    "button": "Download {name}",
+    "back": "Back to review",
+    "reportButton": "Download cleaning report (.txt)",
+    "next": {
+      "title": "Your file is clean.",
+      "body": "Next: find what your customers are trying to get done, what hurts, and what they wish for. You see exactly what is sent before anything leaves your browser.",
+      "link": "Continue to analyze"
+    }
+  }
+}

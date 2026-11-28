@@ -1,0 +1,80 @@
+{"id": "indirect-dev-001", "lang": "de", "split": "dev", "text": "Ich bin 58 Jahre alt und finde den Export-Knopf nicht.", "places": [], "warnings": [{"start": 8, "end": 20, "reason": "age", "text": "58 Jahre alt"}]}
+{"id": "indirect-dev-002", "lang": "de", "split": "dev", "text": "Meine Mutter ist 84 und kommt mit der App nicht zurecht.", "places": [], "warnings": [{"start": 17, "end": 19, "reason": "age", "text": "84"}]}
+{"id": "indirect-dev-003", "lang": "de", "split": "dev", "text": "Als 71-jährige Pensionistin wünsche ich mir größere Schrift.", "places": [], "warnings": [{"start": 4, "end": 14, "reason": "age", "text": "71-jährige"}]}
+{"id": "indirect-dev-004", "lang": "de", "split": "dev", "text": "Seit 12 Jahren Kunde, aber so langsam war es noch nie.", "places": [], "warnings": []}
+{"id": "indirect-dev-005", "lang": "de", "split": "dev", "text": "Wir haben 3 Jahre Garantie, trotzdem keine Antwort.", "places": [], "warnings": []}
+{"id": "indirect-dev-006", "lang": "de", "split": "dev", "text": "Ich bin die einzige Hebamme in Pinkafeld und brauche die Termine offline.", "places": [{"start": 31, "end": 40, "value": "Pinkafeld"}], "warnings": [{"start": 12, "end": 27, "reason": "only", "text": "einzige Hebamme"}]}
+{"id": "indirect-dev-007", "lang": "de", "split": "dev", "text": "Ich bin Apothekerin in Zell am See, die Kundendaten fehlen.", "places": [{"start": 23, "end": 34, "value": "Zell am See"}], "warnings": [{"start": 8, "end": 19, "reason": "role-place", "text": "Apothekerin"}]}
+{"id": "indirect-dev-008", "lang": "de", "split": "dev", "text": "Ich arbeite als Lehrer in Linz, die Klassenliste lädt nicht.", "places": [{"start": 26, "end": 30, "value": "Linz"}], "warnings": []}
+{"id": "indirect-dev-009", "lang": "de", "split": "dev", "text": "Als Bürgermeister von Gramastetten bitte ich um einen Rückruf.", "places": [{"start": 22, "end": 34, "value": "Gramastetten"}], "warnings": [{"start": 4, "end": 17, "reason": "unique-role", "text": "Bürgermeister"}]}
+{"id": "indirect-dev-010", "lang": "de", "split": "dev", "text": "Unsere Schulleiterin in Mattighofen hat das Problem gemeldet.", "places": [{"start": 24, "end": 35, "value": "Mattighofen"}], "warnings": [{"start": 7, "end": 20, "reason": "unique-role", "text": "Schulleiterin"}]}
+{"id": "indirect-dev-011", "lang": "de", "split": "dev", "text": "Die Rechnung 2024-118 kam doppelt.", "places": [], "warnings": []}
+{"id": "indirect-dev-012", "lang": "de", "split": "dev", "text": "Das einzige Problem ist der Login.", "places": [], "warnings": []}
+{"id": "indirect-dev-013", "lang": "de", "split": "dev", "text": "Ich bin 33, und das Formular verlangt mein Geburtsjahr dreimal.", "places": [], "warnings": [{"start": 8, "end": 10, "reason": "age", "text": "33"}]}
+{"id": "indirect-dev-014", "lang": "de", "split": "dev", "text": "Der Tischler in Wien hat die Lieferung nicht bekommen.", "places": [{"start": 16, "end": 20, "value": "Wien"}], "warnings": []}
+{"id": "indirect-dev-015", "lang": "de", "split": "dev", "text": "Als Obfrau des Sportvereins Union Haslach brauche ich Mitgliederlisten.", "places": [], "warnings": [{"start": 4, "end": 10, "reason": "unique-role", "text": "Obfrau"}]}
+{"id": "indirect-dev-016", "lang": "de", "split": "dev", "text": "Version 4.12 stürzt beim Speichern ab.", "places": [], "warnings": []}
+{"id": "indirect-dev-017", "lang": "de", "split": "dev", "text": "Mein 10 Jahre altes Tablet zeigt nur die Hälfte an.", "places": [], "warnings": []}
+{"id": "indirect-dev-018", "lang": "de", "split": "dev", "text": "Ich bin Physiotherapeutin in Bad Hall und sehe keine Termine.", "places": [{"start": 29, "end": 37, "value": "Bad Hall"}], "warnings": [{"start": 8, "end": 25, "reason": "role-place", "text": "Physiotherapeutin"}]}
+{"id": "indirect-dev-019", "lang": "de", "split": "dev", "text": "Die einzige weibliche Mechanikerin im Betrieb hat das bemerkt.", "places": [], "warnings": [{"start": 4, "end": 34, "reason": "only", "text": "einzige weibliche Mechanikerin"}]}
+{"id": "indirect-dev-020", "lang": "de", "split": "dev", "text": "Kundin seit 2019, bitte melden.", "places": [], "warnings": []}
+{"id": "indirect-dev-021", "lang": "en", "split": "dev", "text": "I'm 67 and the text is far too small.", "places": [], "warnings": [{"start": 4, "end": 6, "reason": "age", "text": "67"}]}
+{"id": "indirect-dev-022", "lang": "en", "split": "dev", "text": "My 9-year-old daughter found the bug before I did.", "places": [], "warnings": [{"start": 3, "end": 13, "reason": "age", "text": "9-year-old"}]}
+{"id": "indirect-dev-023", "lang": "en", "split": "dev", "text": "The 5-year-old printer still works, the driver does not.", "places": [], "warnings": []}
+{"id": "indirect-dev-024", "lang": "en", "split": "dev", "text": "As the only paramedic in Kirkby Stephen, I need offline maps.", "places": [{"start": 25, "end": 39, "value": "Kirkby Stephen"}], "warnings": [{"start": 7, "end": 21, "reason": "only", "text": "only paramedic"}]}
+{"id": "indirect-dev-025", "lang": "en", "split": "dev", "text": "I work as a dentist in Ambleside and the reminders fail.", "places": [{"start": 23, "end": 32, "value": "Ambleside"}], "warnings": [{"start": 12, "end": 19, "reason": "role-place", "text": "dentist"}]}
+{"id": "indirect-dev-026", "lang": "en", "split": "dev", "text": "I'm a nurse in Munich and the shift export is broken.", "places": [{"start": 15, "end": 21, "value": "Munich"}], "warnings": []}
+{"id": "indirect-dev-027", "lang": "en", "split": "dev", "text": "As headteacher of Larchfield Primary I need class exports.", "places": [], "warnings": [{"start": 3, "end": 14, "reason": "unique-role", "text": "headteacher"}]}
+{"id": "indirect-dev-028", "lang": "en", "split": "dev", "text": "Our CEO keeps asking about the roadmap.", "places": [], "warnings": []}
+{"id": "indirect-dev-029", "lang": "en", "split": "dev", "text": "The only option is to restart the app.", "places": [], "warnings": []}
+{"id": "indirect-dev-030", "lang": "en", "split": "dev", "text": "Order 4471 never arrived.", "places": [], "warnings": []}
+{"id": "indirect-dev-031", "lang": "en", "split": "dev", "text": "I am 52 years old and not a tech person.", "places": [], "warnings": [{"start": 5, "end": 17, "reason": "age", "text": "52 years old"}]}
+{"id": "indirect-dev-032", "lang": "en", "split": "dev", "text": "I am the mayor and our council needs this.", "places": [], "warnings": [{"start": 9, "end": 14, "reason": "unique-role", "text": "mayor"}]}
+{"id": "indirect-dev-033", "lang": "en", "split": "dev", "text": "The only woman on our night shift reported it first.", "places": [], "warnings": [{"start": 4, "end": 14, "reason": "only", "text": "only woman"}]}
+{"id": "indirect-dev-034", "lang": "en", "split": "dev", "text": "I've used this for 8 years now.", "places": [], "warnings": []}
+{"id": "indirect-dev-035", "lang": "en", "split": "dev", "text": "Aged 45, I expected an easier setup.", "places": [], "warnings": [{"start": 5, "end": 7, "reason": "age", "text": "45"}]}
+{"id": "indirect-dev-036", "lang": "en", "split": "dev", "text": "Our vet in Hawes uses the same software.", "places": [{"start": 11, "end": 16, "value": "Hawes"}], "warnings": [{"start": 4, "end": 7, "reason": "role-place", "text": "vet"}]}
+{"id": "indirect-dev-037", "lang": "en", "split": "dev", "text": "We have 2 locations and 40 staff.", "places": [], "warnings": []}
+{"id": "indirect-dev-038", "lang": "en", "split": "dev", "text": "The pharmacist in Hamburg told me to write here.", "places": [{"start": 18, "end": 25, "value": "Hamburg"}], "warnings": []}
+{"id": "indirect-dev-039", "lang": "en", "split": "dev", "text": "Page 2 of 3 is missing.", "places": [], "warnings": []}
+{"id": "indirect-dev-040", "lang": "en", "split": "dev", "text": "The vicar of Grasmere asked me to report this.", "places": [{"start": 13, "end": 21, "value": "Grasmere"}], "warnings": [{"start": 4, "end": 9, "reason": "unique-role", "text": "vicar"}]}
+{"id": "indirect-test-001", "lang": "de", "split": "test", "text": "Ich bin 46 Jahre alt und kann die PDF nicht öffnen.", "places": [], "warnings": [{"start": 8, "end": 20, "reason": "age", "text": "46 Jahre alt"}]}
+{"id": "indirect-test-002", "lang": "de", "split": "test", "text": "Mein Vater ist 90 Jahre alt und braucht Hilfe beim Login.", "places": [], "warnings": [{"start": 15, "end": 27, "reason": "age", "text": "90 Jahre alt"}]}
+{"id": "indirect-test-003", "lang": "de", "split": "test", "text": "Eine 38-jährige Kundin hat zweimal bezahlt.", "places": [], "warnings": [{"start": 5, "end": 15, "reason": "age", "text": "38-jährige"}]}
+{"id": "indirect-test-004", "lang": "de", "split": "test", "text": "Wir sind seit 25 Jahren Mitglied.", "places": [], "warnings": []}
+{"id": "indirect-test-005", "lang": "de", "split": "test", "text": "Das 3 Jahre alte Handy lädt die Seite nicht.", "places": [], "warnings": []}
+{"id": "indirect-test-006", "lang": "de", "split": "test", "text": "Ich bin der einzige Notar in Rohrbach und brauche Signaturen.", "places": [{"start": 29, "end": 37, "value": "Rohrbach"}], "warnings": [{"start": 12, "end": 25, "reason": "only", "text": "einzige Notar"}]}
+{"id": "indirect-test-007", "lang": "de", "split": "test", "text": "Ich bin Steuerberater in Freistadt, der Export fehlt.", "places": [{"start": 25, "end": 34, "value": "Freistadt"}], "warnings": [{"start": 8, "end": 21, "reason": "role-place", "text": "Steuerberater"}]}
+{"id": "indirect-test-008", "lang": "de", "split": "test", "text": "Ich bin Ärztin in Graz und die Befunde laden langsam.", "places": [{"start": 18, "end": 22, "value": "Graz"}], "warnings": []}
+{"id": "indirect-test-009", "lang": "de", "split": "test", "text": "Als Pfarrer in Kirchberg verwalte ich die Anmeldungen.", "places": [{"start": 15, "end": 24, "value": "Kirchberg"}], "warnings": [{"start": 4, "end": 11, "reason": "unique-role", "text": "Pfarrer"}]}
+{"id": "indirect-test-010", "lang": "de", "split": "test", "text": "Die Direktorin der Volksschule Neukirchen hat angerufen.", "places": [], "warnings": [{"start": 4, "end": 14, "reason": "unique-role", "text": "Direktorin"}]}
+{"id": "indirect-test-011", "lang": "de", "split": "test", "text": "Bestellung 77 fehlt immer noch.", "places": [], "warnings": []}
+{"id": "indirect-test-012", "lang": "de", "split": "test", "text": "Die einzige Lösung war ein Neustart.", "places": [], "warnings": []}
+{"id": "indirect-test-013", "lang": "de", "split": "test", "text": "Mit 80 Jahren tue ich mich mit dem Passwort schwer.", "places": [], "warnings": [{"start": 4, "end": 13, "reason": "age", "text": "80 Jahren"}]}
+{"id": "indirect-test-014", "lang": "de", "split": "test", "text": "Die Friseurin in Salzburg meinte, das sei normal.", "places": [{"start": 17, "end": 25, "value": "Salzburg"}], "warnings": []}
+{"id": "indirect-test-015", "lang": "de", "split": "test", "text": "Ich bin Tierärztin in Gmünd und die Fotos fehlen.", "places": [{"start": 22, "end": 27, "value": "Gmünd"}], "warnings": [{"start": 8, "end": 18, "reason": "role-place", "text": "Tierärztin"}]}
+{"id": "indirect-test-016", "lang": "de", "split": "test", "text": "Die einzige Frau in der Werkstatt bin ich.", "places": [], "warnings": [{"start": 4, "end": 16, "reason": "only", "text": "einzige Frau"}]}
+{"id": "indirect-test-017", "lang": "de", "split": "test", "text": "Ab Version 2.30 geht der Import nicht mehr.", "places": [], "warnings": []}
+{"id": "indirect-test-018", "lang": "de", "split": "test", "text": "Unser Bürgermeister in Mistelbach nutzt das auch.", "places": [{"start": 23, "end": 33, "value": "Mistelbach"}], "warnings": [{"start": 6, "end": 19, "reason": "unique-role", "text": "Bürgermeister"}]}
+{"id": "indirect-test-019", "lang": "de", "split": "test", "text": "Mein 7 Jahre alter Laptop wird sehr heiß.", "places": [], "warnings": []}
+{"id": "indirect-test-020", "lang": "de", "split": "test", "text": "Ich bin 29 und finde die App unübersichtlich.", "places": [], "warnings": [{"start": 8, "end": 10, "reason": "age", "text": "29"}]}
+{"id": "indirect-test-021", "lang": "en", "split": "test", "text": "I'm 74 and I can't find the logout button.", "places": [], "warnings": [{"start": 4, "end": 6, "reason": "age", "text": "74"}]}
+{"id": "indirect-test-022", "lang": "en", "split": "test", "text": "A 61-year-old customer called twice about this.", "places": [], "warnings": [{"start": 2, "end": 13, "reason": "age", "text": "61-year-old"}]}
+{"id": "indirect-test-023", "lang": "en", "split": "test", "text": "The 3-year-old laptop handles it fine.", "places": [], "warnings": []}
+{"id": "indirect-test-024", "lang": "en", "split": "test", "text": "I'm the only female engineer at our plant in Ballymena.", "places": [{"start": 45, "end": 54, "value": "Ballymena"}], "warnings": [{"start": 8, "end": 28, "reason": "only", "text": "only female engineer"}]}
+{"id": "indirect-test-025", "lang": "en", "split": "test", "text": "I'm a solicitor in Keswick and need audit logs.", "places": [{"start": 19, "end": 26, "value": "Keswick"}], "warnings": [{"start": 6, "end": 15, "reason": "role-place", "text": "solicitor"}]}
+{"id": "indirect-test-026", "lang": "en", "split": "test", "text": "I'm a teacher in Berlin and the grades page is slow.", "places": [{"start": 17, "end": 23, "value": "Berlin"}], "warnings": []}
+{"id": "indirect-test-027", "lang": "en", "split": "test", "text": "As principal of Northgate Academy I need bulk accounts.", "places": [], "warnings": [{"start": 3, "end": 12, "reason": "unique-role", "text": "principal"}]}
+{"id": "indirect-test-028", "lang": "en", "split": "test", "text": "Your CEO should fix this.", "places": [], "warnings": []}
+{"id": "indirect-test-029", "lang": "en", "split": "test", "text": "The only way to export is by email.", "places": [], "warnings": []}
+{"id": "indirect-test-030", "lang": "en", "split": "test", "text": "Invoice 2025-03 shows the wrong total.", "places": [], "warnings": []}
+{"id": "indirect-test-031", "lang": "en", "split": "test", "text": "My grandmother is 88 years old and gave up on the app.", "places": [], "warnings": [{"start": 18, "end": 30, "reason": "age", "text": "88 years old"}]}
+{"id": "indirect-test-032", "lang": "en", "split": "test", "text": "As the bishop of Lismore I approve these requests.", "places": [{"start": 17, "end": 24, "value": "Lismore"}], "warnings": [{"start": 7, "end": 13, "reason": "unique-role", "text": "bishop"}]}
+{"id": "indirect-test-033", "lang": "en", "split": "test", "text": "I'm the only pharmacist in town and I rely on this.", "places": [], "warnings": [{"start": 8, "end": 23, "reason": "only", "text": "only pharmacist"}]}
+{"id": "indirect-test-034", "lang": "en", "split": "test", "text": "We've been customers for 6 years.", "places": [], "warnings": []}
+{"id": "indirect-test-035", "lang": "en", "split": "test", "text": "Age: 39", "places": [], "warnings": [{"start": 5, "end": 7, "reason": "age", "text": "39"}]}
+{"id": "indirect-test-036", "lang": "en", "split": "test", "text": "The farmer in Tebay next door has the same problem.", "places": [{"start": 14, "end": 19, "value": "Tebay"}], "warnings": [{"start": 4, "end": 10, "reason": "role-place", "text": "farmer"}]}
+{"id": "indirect-test-037", "lang": "en", "split": "test", "text": "There are 12 people on my team.", "places": [], "warnings": []}
+{"id": "indirect-test-038", "lang": "en", "split": "test", "text": "The accountant in Cologne recommended you.", "places": [{"start": 18, "end": 25, "value": "Cologne"}], "warnings": []}
+{"id": "indirect-test-039", "lang": "en", "split": "test", "text": "Version 1.9 was better.", "places": [], "warnings": []}
+{"id": "indirect-test-040", "lang": "en", "split": "test", "text": "As fire chief in Hexham I need this to work offline.", "places": [{"start": 17, "end": 23, "value": "Hexham"}], "warnings": [{"start": 3, "end": 13, "reason": "unique-role", "text": "fire chief"}]}

@@ -1,0 +1,120 @@
+{"id":"en-001","lang":"en","split":"dev","jobs":["Keep bank transactions up to date"],"pains":["Bank connection keeps dropping"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"en-002","lang":"en","split":"dev","jobs":["Send invoices and get paid on time"],"pains":[],"gains":["Set my own reminder schedule"],"sentiment":"positive","type":"feature request"}
+{"id":"en-003","lang":"en","split":"test","jobs":["Work with my accountant"],"pains":[],"gains":["Own access for my accountant"],"sentiment":"neutral","type":"question"}
+{"id":"en-004","lang":"en","split":"dev","jobs":["Run payroll"],"pains":[],"gains":["Payroll done in minutes"],"sentiment":"positive","type":"praise"}
+{"id":"en-005","lang":"en","split":"dev","jobs":["Get financial reports"],"pains":["Slow report export","Exported report is empty"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"en-006","lang":"en","split":"test","jobs":["File VAT returns"],"pains":["Can't find VAT return"],"gains":[],"sentiment":"negative","type":"question","comment":"Frustrated, so negative rather than neutral"}
+{"id":"en-007","lang":"en","split":"dev","jobs":["Capture receipts and expenses"],"pains":["App keeps crashing"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"en-008","lang":"en","split":"dev","jobs":[],"pains":["Charged twice"],"gains":[],"sentiment":"negative","type":"complaint","comment":"Billing error; could also count as bug"}
+{"id":"en-009","lang":"en","split":"dev","jobs":[],"pains":["Missing report filters"],"gains":["Filter reports by project"],"sentiment":"mixed","type":"praise"}
+{"id":"en-010","lang":"en","split":"dev","jobs":[],"pains":["Invoice PDF cuts off text"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"en-011","lang":"en","split":"test","jobs":[],"pains":[],"gains":["New dashboard"],"sentiment":"positive","type":"praise"}
+{"id":"en-012","lang":"en","split":"test","jobs":[],"pains":["Can't get a timely support answer"],"gains":[],"sentiment":"negative","type":"complaint"}
+{"id":"en-013","lang":"en","split":"test","jobs":["Track project hours and costs","See profit per project"],"pains":["No profit per project view"],"gains":["Profit per project report"],"sentiment":"negative","type":"feature request"}
+{"id":"en-014","lang":"en","split":"test","jobs":["Send invoices and get paid on time"],"pains":["Re-creating the same invoices monthly"],"gains":["Recurring invoices"],"sentiment":"neutral","type":"feature request"}
+{"id":"en-015","lang":"en","split":"dev","jobs":[],"pains":["Locked out after phone change","Can't get a timely support answer"],"gains":[],"sentiment":"negative","type":"complaint","comment":"2FA works as designed, so complaint rather than bug"}
+{"id":"en-016","lang":"en","split":"dev","jobs":["Reconcile payments"],"pains":[],"gains":[],"sentiment":"neutral","type":"question"}
+{"id":"en-017","lang":"en","split":"test","jobs":[],"pains":["Price increase without new value"],"gains":[],"sentiment":"negative","type":"complaint"}
+{"id":"en-018","lang":"en","split":"test","jobs":["Turn online orders into invoices"],"pains":[],"gains":["Web shop orders imported automatically"],"sentiment":"neutral","type":"question"}
+{"id":"en-019","lang":"en","split":"test","jobs":["Keep bank transactions up to date"],"pains":["Credit card account does not sync"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"en-020","lang":"en","split":"test","jobs":[],"pains":["Confusing new navigation"],"gains":[],"sentiment":"negative","type":"complaint"}
+{"id":"en-021","lang":"en","split":"test","jobs":["Run payroll"],"pains":["Wrong tax year on payslip"],"gains":[],"sentiment":"mixed","type":"bug"}
+{"id":"en-022","lang":"en","split":"dev","jobs":["Bill clients in foreign currencies"],"pains":["Converting currencies by hand"],"gains":["Multi-currency invoicing"],"sentiment":"neutral","type":"feature request"}
+{"id":"en-023","lang":"en","split":"test","jobs":[],"pains":[],"gains":["Helpful support"],"sentiment":"positive","type":"praise"}
+{"id":"en-024","lang":"en","split":"dev","jobs":[],"pains":["Eye strain from bright screen"],"gains":["Dark mode"],"sentiment":"neutral","type":"feature request"}
+{"id":"en-025","lang":"en","split":"test","jobs":["Capture receipts and expenses"],"pains":["Receipt upload fails offline"],"gains":["Offline mode"],"sentiment":"mixed","type":"feature request"}
+{"id":"en-026","lang":"en","split":"test","jobs":["File VAT returns"],"pains":[],"gains":["VAT deadline reminder"],"sentiment":"mixed","type":"praise"}
+{"id":"en-027","lang":"en","split":"test","jobs":[],"pains":["Slow app performance"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"en-028","lang":"en","split":"dev","jobs":["Work with my accountant"],"pains":[],"gains":["Export in standard format"],"sentiment":"neutral","type":"question"}
+{"id":"en-029","lang":"en","split":"dev","jobs":["Create quotes"],"pains":["Re-entering client details"],"gains":["Saved client details"],"sentiment":"negative","type":"complaint"}
+{"id":"en-030","lang":"en","split":"dev","jobs":["Send invoices and get paid on time"],"pains":[],"gains":["Hassle-free invoicing"],"sentiment":"positive","type":"praise"}
+{"id":"en-031","lang":"en","split":"test","jobs":["Get financial reports"],"pains":["Report builder hard to use"],"gains":["Months as columns in reports"],"sentiment":"mixed","type":"question"}
+{"id":"en-032","lang":"en","split":"test","jobs":[],"pains":[],"gains":[],"sentiment":"positive","type":"praise"}
+{"id":"en-033","lang":"en","split":"test","jobs":[],"pains":["Can't cancel extra user seat"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"en-034","lang":"en","split":"test","jobs":["Capture receipts and expenses"],"pains":["Receipts read incorrectly"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"en-035","lang":"en","split":"dev","jobs":[],"pains":[],"gains":[],"sentiment":"neutral","type":"other"}
+{"id":"en-036","lang":"en","split":"test","jobs":["Send invoices and get paid on time"],"pains":["Building overdue list by hand"],"gains":["Filter overdue invoices"],"sentiment":"neutral","type":"feature request"}
+{"id":"en-037","lang":"en","split":"test","jobs":["Keep bank transactions up to date"],"pains":["Bank connection keeps dropping"],"gains":[],"sentiment":"neutral","type":"question"}
+{"id":"en-038","lang":"en","split":"dev","jobs":[],"pains":["Can't get a timely support answer"],"gains":[],"sentiment":"negative","type":"complaint"}
+{"id":"en-039","lang":"en","split":"test","jobs":[],"pains":["Too expensive for one-person business"],"gains":[],"sentiment":"mixed","type":"complaint"}
+{"id":"en-040","lang":"en","split":"dev","jobs":["Pay contractors abroad"],"pains":["Payroll only covers local staff"],"gains":[],"sentiment":"negative","type":"complaint","comment":"Could also be read as a feature request"}
+{"id":"en-041","lang":"en","split":"dev","jobs":["Send invoices and get paid on time"],"pains":[],"gains":["Stripe marks invoices paid"],"sentiment":"neutral","type":"feature request"}
+{"id":"en-042","lang":"en","split":"test","jobs":[],"pains":["Logo size keeps resetting"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"en-043","lang":"en","split":"dev","jobs":["Know my cash position"],"pains":[],"gains":["Cash forecast at a glance"],"sentiment":"neutral","type":"feature request","comment":"Stated need, no explicit ask"}
+{"id":"en-044","lang":"en","split":"test","jobs":[],"pains":["Frequent logouts"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"en-045","lang":"en","split":"test","jobs":[],"pains":["Weak expense features"],"gains":[],"sentiment":"mixed","type":"complaint"}
+{"id":"en-046","lang":"en","split":"test","jobs":[],"pains":["Unclear plan differences"],"gains":[],"sentiment":"neutral","type":"question"}
+{"id":"en-047","lang":"en","split":"dev","jobs":["Work with my accountant"],"pains":[],"gains":["Own access for my accountant"],"sentiment":"positive","type":"praise"}
+{"id":"en-048","lang":"en","split":"test","jobs":["Reconcile payments"],"pains":["Duplicate bank transactions"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"en-049","lang":"en","split":"test","jobs":["Run payroll"],"pains":["Email-only support"],"gains":["Phone support"],"sentiment":"negative","type":"feature request"}
+{"id":"en-050","lang":"en","split":"dev","jobs":[],"pains":["Search fails with accented names"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"en-051","lang":"en","split":"test","jobs":[],"pains":[],"gains":["Bulk delete"],"sentiment":"positive","type":"praise"}
+{"id":"en-052","lang":"en","split":"dev","jobs":[],"pains":["Confusing new navigation"],"gains":[],"sentiment":"negative","type":"complaint","comment":"Sarcasm"}
+{"id":"en-053","lang":"en","split":"test","jobs":["Manage several companies"],"pains":["Too many clicks to switch companies"],"gains":[],"sentiment":"negative","type":"complaint"}
+{"id":"en-054","lang":"en","split":"test","jobs":["Close the financial year"],"pains":[],"gains":["Step-by-step year-end checklist"],"sentiment":"positive","type":"praise"}
+{"id":"en-055","lang":"en","split":"test","jobs":["Run payroll"],"pains":["Sending payslips one by one"],"gains":["Email payslips to employees"],"sentiment":"neutral","type":"feature request"}
+{"id":"en-056","lang":"en","split":"test","jobs":["Capture receipts and expenses"],"pains":["App keeps crashing"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"en-057","lang":"en","split":"dev","jobs":[],"pains":[],"gains":[],"sentiment":"neutral","type":"question"}
+{"id":"en-058","lang":"en","split":"dev","jobs":["Send invoices and get paid on time"],"pains":["Payment link expires too quickly"],"gains":[],"sentiment":"negative","type":"complaint"}
+{"id":"en-059","lang":"en","split":"dev","jobs":[],"pains":[],"gains":["Split expense across projects"],"sentiment":"neutral","type":"feature request"}
+{"id":"en-060","lang":"en","split":"dev","jobs":[],"pains":["Repeating problem to support"],"gains":[],"sentiment":"mixed","type":"complaint"}
+{"id":"en-061","lang":"en","split":"dev","jobs":["Keep business finances separate","Set aside money for tax"],"pains":[],"gains":["Accurate tax estimate"],"sentiment":"positive","type":"praise"}
+{"id":"en-062","lang":"en","split":"dev","jobs":[],"pains":["Wrong CSV separator"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"en-063","lang":"en","split":"dev","jobs":[],"pains":[],"gains":[],"sentiment":"positive","type":"praise"}
+{"id":"en-064","lang":"en","split":"dev","jobs":["Get financial reports"],"pains":["Dashboard and report numbers differ"],"gains":[],"sentiment":"negative","type":"bug","comment":"Phrased as a question, but reports a mismatch"}
+{"id":"en-065","lang":"en","split":"test","jobs":["Send invoices and get paid on time"],"pains":[],"gains":["Schedule invoices for a date"],"sentiment":"neutral","type":"feature request"}
+{"id":"en-066","lang":"en","split":"dev","jobs":["Reconcile payments"],"pains":[],"gains":["Smart reconciliation suggestions"],"sentiment":"positive","type":"praise"}
+{"id":"en-067","lang":"en","split":"dev","jobs":[],"pains":["VAT number missing on your invoice"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"en-068","lang":"en","split":"dev","jobs":["Run payroll"],"pains":["Slow payroll calculation"],"gains":[],"sentiment":"negative","type":"question"}
+{"id":"en-069","lang":"en","split":"dev","jobs":[],"pains":[],"gains":["See which clients pay late"],"sentiment":"neutral","type":"feature request"}
+{"id":"en-070","lang":"en","split":"test","jobs":[],"pains":["Frequent logouts","Text message codes don't arrive"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"en-071","lang":"en","split":"dev","jobs":[],"pains":[],"gains":["Professional-looking invoices"],"sentiment":"positive","type":"praise"}
+{"id":"en-072","lang":"en","split":"dev","jobs":[],"pains":[],"gains":["Import invoices from old system"],"sentiment":"neutral","type":"question"}
+{"id":"en-073","lang":"en","split":"dev","jobs":["Keep bank transactions up to date"],"pains":["Bank connection keeps dropping","Can't get a timely support answer"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"en-074","lang":"en","split":"dev","jobs":["Manage team expenses"],"pains":["No expenses per employee report"],"gains":["Expenses per employee report"],"sentiment":"negative","type":"feature request"}
+{"id":"en-075","lang":"en","split":"dev","jobs":[],"pains":["Slow app performance","App keeps crashing","Can't get a timely support answer"],"gains":[],"sentiment":"negative","type":"complaint","comment":"Customer says they are leaving"}
+{"id":"en-076","lang":"en","split":"test","jobs":[],"pains":[],"gains":["Separate numbering per business line"],"sentiment":"neutral","type":"question"}
+{"id":"en-077","lang":"en","split":"dev","jobs":[],"pains":[],"gains":["Quick bug fixes"],"sentiment":"positive","type":"praise"}
+{"id":"en-078","lang":"en","split":"test","jobs":["File VAT returns"],"pains":["VAT report grouped by rate only"],"gains":["VAT report by category"],"sentiment":"negative","type":"complaint","comment":"Could also be feature request"}
+{"id":"en-079","lang":"en","split":"dev","jobs":["Invoice clients on the spot"],"pains":[],"gains":["Fast mobile invoicing"],"sentiment":"positive","type":"praise"}
+{"id":"en-080","lang":"en","split":"dev","jobs":["Do the books simply"],"pains":["Intimidating reconciliation screen"],"gains":[],"sentiment":"mixed","type":"complaint"}
+{"id":"en-081","lang":"en","split":"dev","jobs":[],"pains":["Long client names cut off"],"gains":["Wider tables"],"sentiment":"neutral","type":"feature request"}
+{"id":"en-082","lang":"en","split":"dev","jobs":[],"pains":["Text message codes don't arrive"],"gains":["Authenticator app 2FA"],"sentiment":"neutral","type":"feature request"}
+{"id":"en-083","lang":"en","split":"test","jobs":["Work with my accountant"],"pains":["Export missing cost centre"],"gains":[],"sentiment":"negative","type":"bug","comment":"Could also be feature request"}
+{"id":"en-084","lang":"en","split":"dev","jobs":[],"pains":[],"gains":[],"sentiment":"positive","type":"praise"}
+{"id":"en-085","lang":"en","split":"dev","jobs":["Send invoices and get paid on time"],"pains":["Reminders sent to paid clients"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"en-086","lang":"en","split":"test","jobs":["Turn online orders into invoices"],"pains":["Typing orders by hand"],"gains":["Web shop orders imported automatically"],"sentiment":"neutral","type":"question"}
+{"id":"en-087","lang":"en","split":"test","jobs":["Keep bank transactions up to date"],"pains":["Can't add second bank account"],"gains":[],"sentiment":"negative","type":"question"}
+{"id":"en-088","lang":"en","split":"test","jobs":[],"pains":[],"gains":["Fast onboarding"],"sentiment":"positive","type":"praise"}
+{"id":"en-089","lang":"en","split":"dev","jobs":[],"pains":["Payment terms change for all invoices"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"en-090","lang":"en","split":"dev","jobs":[],"pains":[],"gains":["Non-profit discount"],"sentiment":"neutral","type":"question"}
+{"id":"en-091","lang":"en","split":"dev","jobs":[],"pains":[],"gains":["One-page yearly overview"],"sentiment":"neutral","type":"feature request"}
+{"id":"en-092","lang":"en","split":"test","jobs":["Get financial reports"],"pains":["Balance sheet PDF text overlaps"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"en-093","lang":"en","split":"test","jobs":[],"pains":[],"gains":["Helpful support"],"sentiment":"positive","type":"praise"}
+{"id":"en-094","lang":"en","split":"dev","jobs":["Manage team expenses"],"pains":["No bulk expense approval"],"gains":["Bulk approve expenses"],"sentiment":"negative","type":"feature request"}
+{"id":"en-095","lang":"en","split":"test","jobs":["Send invoices and get paid on time"],"pains":["Invoices flagged as spam"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"en-096","lang":"en","split":"test","jobs":["Keep bank transactions up to date"],"pains":[],"gains":["Reliable bank sync"],"sentiment":"positive","type":"praise"}
+{"id":"en-097","lang":"en","split":"test","jobs":[],"pains":["Unknown who changed invoice"],"gains":["Invoice change history"],"sentiment":"neutral","type":"question"}
+{"id":"en-098","lang":"en","split":"test","jobs":["Create quotes"],"pains":[],"gains":["Quote access without salary access"],"sentiment":"neutral","type":"feature request"}
+{"id":"en-099","lang":"en","split":"dev","jobs":[],"pains":["Price increase without new value"],"gains":["Invoicing-only plan"],"sentiment":"negative","type":"complaint","comment":"Also asks a question"}
+{"id":"en-100","lang":"en","split":"test","jobs":[],"pains":["Frequent logouts"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"en-101","lang":"en","split":"test","jobs":["Send invoices and get paid on time"],"pains":[],"gains":["Send invoices from own email"],"sentiment":"neutral","type":"feature request"}
+{"id":"en-102","lang":"en","split":"test","jobs":["Work with my accountant"],"pains":[],"gains":[],"sentiment":"neutral","type":"other"}
+{"id":"en-103","lang":"en","split":"dev","jobs":[],"pains":["Search fails with comma amounts"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"en-104","lang":"en","split":"dev","jobs":[],"pains":[],"gains":["Helpful support"],"sentiment":"positive","type":"praise"}
+{"id":"en-105","lang":"en","split":"test","jobs":[],"pains":[],"gains":["German interface"],"sentiment":"neutral","type":"feature request"}
+{"id":"en-106","lang":"en","split":"test","jobs":[],"pains":["Can't delete draft invoices"],"gains":[],"sentiment":"negative","type":"question"}
+{"id":"en-107","lang":"en","split":"dev","jobs":["Run payroll"],"pains":["Part-time payroll needs spreadsheets"],"gains":[],"sentiment":"negative","type":"complaint"}
+{"id":"en-108","lang":"en","split":"test","jobs":["See profit per project"],"pains":[],"gains":["Profit per project report"],"sentiment":"positive","type":"praise"}
+{"id":"en-109","lang":"en","split":"dev","jobs":[],"pains":[],"gains":["Paid invoice notifications"],"sentiment":"neutral","type":"feature request"}
+{"id":"en-110","lang":"en","split":"test","jobs":["Capture receipts and expenses"],"pains":["Receipts read incorrectly"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"en-111","lang":"en","split":"dev","jobs":[],"pains":[],"gains":[],"sentiment":"positive","type":"praise"}
+{"id":"en-112","lang":"en","split":"test","jobs":["Know my cash position"],"pains":["Cash forecast ignores recurring expenses"],"gains":[],"sentiment":"negative","type":"complaint"}
+{"id":"en-113","lang":"en","split":"dev","jobs":[],"pains":[],"gains":[],"sentiment":"negative","type":"other","comment":"Implies feedback is ignored"}
+{"id":"en-114","lang":"en","split":"dev","jobs":[],"pains":[],"gains":[],"sentiment":"neutral","type":"other"}
+{"id":"en-115","lang":"en","split":"test","jobs":["Send invoices and get paid on time"],"pains":["Can't attach delivery note"],"gains":["Attach documents to invoices"],"sentiment":"negative","type":"feature request"}
+{"id":"en-116","lang":"en","split":"dev","jobs":[],"pains":["Confusing new navigation"],"gains":[],"sentiment":"negative","type":"complaint","comment":"Can't find duplicate invoice button"}
+{"id":"en-117","lang":"en","split":"test","jobs":["Log business mileage"],"pains":["Logging kilometres on paper"],"gains":["Mileage tracking"],"sentiment":"neutral","type":"feature request"}
+{"id":"en-118","lang":"en","split":"test","jobs":["Track project hours and costs"],"pains":["Time entries lost when switching tabs"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"en-119","lang":"en","split":"test","jobs":["Run payroll"],"pains":["Confusing payroll setup questions"],"gains":["Payroll setup checklist"],"sentiment":"negative","type":"feature request"}
+{"id":"en-120","lang":"en","split":"test","jobs":[],"pains":[],"gains":[],"sentiment":"neutral","type":"other"}

@@ -1,4 +1,5 @@
 import type { ColumnRole } from '../columns/roles.ts'
+import { rebuildTable, sheetIndexOf } from '../items/table.ts'
 import type { Review } from '../review/review.ts'
 
 /**
@@ -20,13 +21,13 @@ function quote(cell: string, delimiter: string): string {
 
 export type CleanedFile = { header: string[], rows: string[][] }
 
-/** The cleaned table: dropped columns left out, checked columns with placeholders, the rest unchanged. */
-export function cleanedTable(table: { columns: string[], rows: string[][] }, roles: readonly ColumnRole[], review: Review): CleanedFile {
-  const kept = table.columns.flatMap((_, column) => (roles[column] === 'drop' ? [] : [column]))
-  return {
-    header: kept.map(column => table.columns[column]!),
-    rows: table.rows.map((cells, row) => kept.map(column => (roles[column] === 'scan' ? review.cleanedCell(row, column) : cells[column] ?? ''))),
-  }
+/**
+ * The cleaned table: dropped columns left out, checked columns with
+ * placeholders, the rest unchanged. Each checked cell is a feedback item, put
+ * back through its location by the table adapter.
+ */
+export function cleanedTable(table: { columns: string[], rows: string[][], sheetNames?: string[], sheetName?: string }, roles: readonly ColumnRole[], review: Review): CleanedFile {
+  return rebuildTable({ ...table, sheetIndex: sheetIndexOf(table) }, roles, item => review.cleanedItem(item.id))
 }
 
 /**

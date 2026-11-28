@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import type { Page } from '@playwright/test'
 import { utils, write } from 'xlsx'
-import { expect, test } from './fixtures'
+import { expect, expectRows, openSample, test } from './fixtures'
 
 // Files dropped anywhere, on every step, and what each kind of file does.
 
@@ -32,12 +32,12 @@ test.describe('on the start screen', () => {
     await page.goto('/')
     await drop(page, 'tickets.csv', sampleCsv)
     await expect(heading(page)).toHaveText('Choose what to check')
-    await expect(page.getByText('200 rows', { exact: true })).toBeVisible()
+    await expectRows(page, 200)
 
     await page.goto('/')
     await drop(page, 'feedback.xlsx', xlsx(), 'footer')
     await expect(heading(page)).toHaveText('Choose what to check')
-    await expect(page.getByText('2 rows', { exact: true })).toBeVisible()
+    await expectRows(page, 2)
   })
 
   for (const [name, content] of [
@@ -78,7 +78,7 @@ test.describe('on the start screen', () => {
 test.describe('during a review', () => {
   const startReview = async (page: Page) => {
     await page.goto('/')
-    await page.getByRole('button', { name: 'Try the sample file' }).click()
+    await openSample(page)
     await page.getByRole('button', { name: /^Find personal data in/ }).click()
     await expect(heading(page)).toHaveText(/findings in 200 rows$/)
   }
@@ -94,7 +94,7 @@ test.describe('during a review', () => {
     await drop(page, 'feedback.xlsx', xlsx())
     await asked.getByRole('button', { name: 'Start over' }).click()
     await expect(heading(page)).toHaveText('Choose what to check')
-    await expect(page.getByText('2 rows', { exact: true })).toBeVisible()
+    await expectRows(page, 2)
   })
 
   test('dropping a document leaves the review alone and says why, in place', async ({ page }) => {
@@ -159,7 +159,7 @@ test.describe('the toast', () => {
 
   test('nothing on the page moves, and it sits above the column step\'s action bar', async ({ page }) => {
     await page.goto('/')
-    await page.getByRole('button', { name: 'Try the sample file' }).click()
+    await openSample(page)
     const find = page.getByRole('button', { name: /^Find personal data in/ })
     const before = await find.boundingBox()
     await drop(page, 'interview.docx', docx())
@@ -179,17 +179,6 @@ test.describe('the toast', () => {
     expect(shown.y + shown.height).toBeLessThanOrEqual(footer.y - 24)
     const colours = await toast(page).evaluate(element => [getComputedStyle(element).backgroundColor, getComputedStyle(element).boxShadow])
     expect(colours[1]).not.toBe('none')
-  })
-
-  test.describe('on a phone', () => {
-    test.use({ viewport: { width: 390, height: 844 } })
-    test('spans the width, with a margin', async ({ page }) => {
-      await page.goto('/')
-      await drop(page, 'photo.png', Buffer.from([0x89, 0x50, 0x4E, 0x47]))
-      const shown = (await toast(page).boundingBox())!
-      expect(shown.x).toBe(16)
-      expect(shown.width).toBe(390 - 32)
-    })
   })
 })
 

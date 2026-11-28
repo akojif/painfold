@@ -1,4 +1,4 @@
-import type { CellDetections, ColumnCounts } from '../../core/detect/table'
+import type { ItemCounts, ItemDetections, TextItem } from '../../core/detect/items'
 import type { DetectRequest, DetectResponse } from '../../core/detect/worker-protocol'
 
 /**
@@ -10,7 +10,7 @@ export function useDetection() {
   let worker: Worker | undefined
   let lastId = 0
 
-  function request(kind: DetectRequest['kind'], rows: string[][], columns: number[]): Promise<DetectResponse> {
+  function request(kind: DetectRequest['kind'], items: TextItem[]): Promise<DetectResponse> {
     worker ??= new Worker(new URL('../workers/detect.worker.ts', import.meta.url), { type: 'module' })
     const active = worker
     const id = ++lastId
@@ -28,21 +28,21 @@ export function useDetection() {
         else resolve(data)
       }
       active.addEventListener('message', onMessage)
-      active.postMessage({ kind, id, rows, columns } satisfies DetectRequest)
+      active.postMessage({ kind, id, items } satisfies DetectRequest)
     })
   }
 
-  /** Every finding in the given columns, for review. */
-  async function run(rows: string[][], columns: number[]): Promise<CellDetections[]> {
-    progress.value = { done: 0, total: rows.length }
-    const response = await request('detect', rows, columns)
-    return response.kind === 'result' ? response.cells : []
+  /** Every finding in the items, for review. Progress counts units (rows). */
+  async function run(items: TextItem[]): Promise<ItemDetections[]> {
+    progress.value = { done: 0, total: new Set(items.map(item => item.unit ?? item.id)).size }
+    const response = await request('detect', items)
+    return response.kind === 'result' ? response.items : []
   }
 
-  /** How much personal data each of the given columns holds, as counts per type. */
-  async function survey(rows: string[][], columns: number[]): Promise<ColumnCounts[]> {
-    const response = await request('survey', rows, columns)
-    return response.kind === 'survey' ? response.columns : []
+  /** How much personal data each item holds, as counts per type; the column step adds them up per column. */
+  async function survey(items: TextItem[]): Promise<ItemCounts[]> {
+    const response = await request('survey', items)
+    return response.kind === 'survey' ? response.counts : []
   }
 
   onScopeDispose(() => worker?.terminate())

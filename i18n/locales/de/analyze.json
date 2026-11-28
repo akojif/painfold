@@ -1,0 +1,112 @@
+{
+  "analyze": {
+    "title": "Analysieren",
+    "heading": "Wo soll die Analyse laufen?",
+    "lead": "Painfold schickt das bereinigte Feedback an eine KI, die herausfindet, was Ihre Kundschaft erreichen will, was sie dabei behindert und was sie sich wünscht. Sie wählen die KI und sehen genau, was gesendet wird, bevor etwas hinausgeht.",
+    "where": {
+      "label": "Wo die Analyse läuft",
+      "key": "Mit Ihrem API-Schlüssel",
+      "local": "Auf diesem Computer (Ollama)"
+    },
+    "model": "Modell",
+    "modelNote": {
+      "claude-haiku-5-5": "Schnell und am günstigsten",
+      "claude-sonnet-5-5": "Gründlicher, etwa 20-mal so teuer"
+    },
+    "key": {
+      "label": "API-Schlüssel",
+      "show": "Anzeigen",
+      "hide": "Verbergen",
+      "remember": "Auf diesem Gerät merken",
+      "get": "API-Schlüssel bei Anthropic holen",
+      "newTab": "(öffnet in neuem Tab)"
+    },
+    "test": {
+      "button": "Verbindung testen",
+      "testing": "Wird getestet …",
+      "ok": "Mit {model} verbunden.",
+      "okLocal": "Mit {model} auf diesem Computer verbunden.",
+      "needKey": "Bitte zuerst den API-Schlüssel eingeben."
+    },
+    "problem": {
+      "unreachable": "Anthropic ist nicht erreichbar. Prüfen Sie die Internetverbindung und versuchen Sie es noch einmal.",
+      "browserBlocked": "Ihre Anthropic-Organisation erlaubt keine Aufrufe aus dem Browser. Ein Admin kann sie in der Anthropic Console erlauben.",
+      "invalidKey": "Anthropic hat diesen Schlüssel nicht angenommen. Bitte prüfen und noch einmal versuchen.",
+      "noAccess": "Dieser Schlüssel hat keinen Zugriff auf {model}.",
+      "rateLimited": "Gerade zu viele Anfragen. Bitte eine Minute warten und noch einmal versuchen.",
+      "overloaded": "Anthropic ist gerade ausgelastet. Bitte in einer Minute noch einmal versuchen.",
+      "modelMissing": "{model} ist für diesen Schlüssel nicht verfügbar.",
+      "other": "Etwas ist schiefgegangen. Bitte gleich noch einmal versuchen."
+    },
+    "ollama": {
+      "steps": "Drei Schritte, einmalig:",
+      "install": "Ollama und ein Modell installieren",
+      "installNote": "Von ollama.com. Dann im Terminal ein Modell herunterladen, zum Beispiel:",
+      "origins": "Diese Seite in Ollama erlauben",
+      "originsNote": "Ollama antwortet nur Webseiten, die Sie erlauben. Im Terminal ausführen und Ollama danach neu starten:",
+      "system": "Ihr System",
+      "systems": {
+        "mac": "macOS",
+        "windows": "Windows",
+        "linux": "Linux"
+      },
+      "permission": "Zugriff aufs lokale Netzwerk erlauben",
+      "permissionNote": "Chrome und Edge fragen einmal, ob diese Seite Programme auf Ihrem Computer erreichen darf. Wählen Sie Zulassen.",
+      "check": "Noch einmal prüfen",
+      "checking": "Wird geprüft …",
+      "found": "Ollama läuft und antwortet dieser Seite.",
+      "notFound": "Painfold erreicht Ollama nicht. Vielleicht läuft es nicht, erlaubt diese Seite noch nicht, oder die Berechtigung im Browser wurde abgelehnt.",
+      "noModels": "Ollama läuft, hat aber noch kein Modell. Laden Sie eines mit dem Befehl aus Schritt 1.",
+      "safari": "Safari lässt Webseiten keine Programme auf diesem Computer erreichen, daher geht Ollama hier nicht. Bitte Chrome, Edge oder Firefox verwenden.",
+      "copy": "Kopieren",
+      "copied": "Kopiert"
+    },
+    "run": {
+      "heading": "{n} bereinigte Texte werden mit {model} analysiert",
+      "headingDone": "{n} bereinigte Texte mit {model} analysiert",
+      "progressLabel": "Analysierte Texte",
+      "count": "{done} von {total}",
+      "cancel": "Abbrechen",
+      "stopping": "Wird gestoppt: Die bereits gesendeten Anfragen laufen fertig, nichts Neues wird gesendet.",
+      "cancelled": "Gestoppt: {done} von {total} Texten sind analysiert. Nichts weiter wurde gesendet.",
+      "paused": "Pausiert bei {done} von {total}. Fortsetzen sendet nur die noch nicht analysierten Texte.",
+      "resume": "Fortsetzen",
+      "done": "1 Text analysiert. | {n} Texte analysiert.",
+      "droppedQuotes": "1 Zitat stand nicht wortgleich im Text und wurde weggelassen. | {n} Zitate standen nicht wortgleich im Text und wurden weggelassen.",
+      "notAnalysed": "1 Text konnte nicht analysiert werden. | {n} Texte konnten nicht analysiert werden.",
+      "needKey": "Bitte zuerst oben den API-Schlüssel eingeben.",
+      "needOllama": "Bitte zuerst oben ein Modell in Ollama wählen.",
+      "needNames": "Bitte zuerst den Hinweis zu Namen bestätigen.",
+      "leak": "Solange etwas Entferntes darin wäre, kann nichts gesendet werden.",
+      "merging": "Ähnliche Aufgaben, Probleme und Wünsche werden gruppiert…",
+      "mergeCancelled": "Vor dem Ende der Gruppierung gestoppt. Alle Texte sind analysiert; Fortsetzen gruppiert den Rest.",
+      "mergePaused": "Alle Texte sind analysiert; die Gruppierung ist pausiert. Fortsetzen gruppiert den Rest.",
+      "themes": "Gruppiert in {jobs}, {pains} und {gains}.",
+      "jobs": "1 Aufgabe | {n} Aufgaben",
+      "pains": "1 Problem | {n} Probleme",
+      "gains": "1 Wunsch | {n} Wünsche",
+      "showReport": "Bericht anzeigen"
+    },
+    "demo": {
+      "offer": "Kein API-Schlüssel? Sehen Sie sich eine Demo-Analyse dieser Beispieldatei an: ein echter Lauf mit diesen erfundenen Tickets, in Painfold gespeichert. Beim Anzeigen wird nichts gesendet.",
+      "show": "Demo-Analyse anzeigen",
+      "shown": "Die Demo-Analyse wird angezeigt. Aus Ihrem Browser wurde nichts gesendet.",
+      "report": "Bericht anzeigen",
+      "leave": "Selbst analysieren"
+    },
+    "connected": {
+      "title": "Verbunden",
+      "ai": "KI",
+      "how": "Wie",
+      "anthropic": "Anthropic, {model}",
+      "ollama": "Ollama, {model}",
+      "direct": "Direkt aus diesem Browser zu Anthropic",
+      "local": "Auf diesem Computer, nichts verlässt ihn",
+      "keyEnding": "Endet auf {last}",
+      "remembered": ", auf diesem Gerät gemerkt",
+      "forgotten": ", vergessen, wenn Sie den Tab schließen",
+      "change": "Ändern",
+      "disconnect": "Trennen"
+    }
+  }
+}

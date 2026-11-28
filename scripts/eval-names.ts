@@ -11,13 +11,13 @@
 // are not names) may be used to tune the name rules; every other set is only
 // ever reported, never tuned against. The published tables (`npm run eval`)
 // are computed from the stored detections.
-import { readFileSync } from 'node:fs'
 import { parseArgs } from 'node:util'
 import { detect } from '../core/detect/index.ts'
 import { combined } from '../core/detect/merge.ts'
 import type { Detection } from '../core/detect/types.ts'
 import type { PiiType } from '../core/pii-types.ts'
 import { NAME_MODEL } from '../deploy/model.ts'
+import { readMessages } from '../i18n/messages.ts'
 import { detectNamesInBrowser } from './eval-browser.ts'
 import { evaluate, itemsOf, nameTables, positionTable, toMarkdown, type Mistake } from './eval.ts'
 import { readStoredDetections, STORED_SETS, storedFormat, writeStoredDetections, type StoredSet } from './name-detections.ts'
@@ -36,7 +36,7 @@ const finder = (names: readonly Detection[][]) => {
 }
 const find = finder(run.detections)
 
-const typeNames = JSON.parse(readFileSync('i18n/locales/en.json', 'utf8')).typeMany as Record<PiiType, string>
+const typeNames = readMessages('en').typeMany as Record<PiiType, string>
 const mistakes: Mistake[] = []
 const scores = evaluate(items, find, mistakes)
 console.log(`Name model ${NAME_MODEL.source}@${NAME_MODEL.revision.slice(0, 7)}, ${set}, ${items.length} texts, ${run.threads ? 'threads' : 'one thread'}, ${(run.milliseconds / 1000).toFixed(1)} s in Chromium\n`)

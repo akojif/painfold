@@ -6,7 +6,7 @@
  */
 @import "tailwindcss";
 
-/* Fonts: Geist and Geist Mono, self-hosted, SIL Open Font License (see OFL.txt next to each file). */
+/* Fonts: Geist for text, Sora for page and section headings, Geist Mono for tokens; self-hosted, SIL Open Font License (see OFL.txt next to each file). */
 
 @font-face {
   font-family: "Geist";
@@ -23,6 +23,23 @@
   font-display: swap;
   font-weight: 100 900;
   src: url("../fonts/geist/geist-latin-ext-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Sora";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 800;
+  src: url("../fonts/sora/sora-latin-wght-normal.woff2") format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Sora";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 800;
+  src: url("../fonts/sora/sora-latin-ext-wght-normal.woff2") format("woff2-variations");
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
@@ -52,6 +69,7 @@
 :root {
   --pf-light-canvas: #FFFFFF;        /* page */
   --pf-light-surface: #F7F8FA;       /* panels, lists, the side of a split view */
+  --pf-light-tint: #EEF1F5;          /* a fill that groups or selects: a selected row, a filter on hover, a track */
   --pf-light-raised: #FFFFFF;        /* things that float above the page: toasts (the page is already white) */
   --pf-light-raised-line: #CDD3DC;   /* their border, stronger than a hairline */
   --pf-light-line: #E4E7EC;          /* hairline borders and dividers */
@@ -61,6 +79,8 @@
   --pf-light-accent: #0F766E;        /* the one accent: links, focus, progress, the current stage */
   --pf-light-on-accent: #FFFFFF;
   --pf-light-danger: #B91C1C;        /* errors and risks only */
+  --pf-light-chart-bar: #5B6472;    /* charts: a magnitude bar (one neutral hue; accent and danger stay for status), 3:1 on every surface and its track */
+  --pf-light-chart-track: #E4E7EC;  /* charts: the track behind a bar */
   --pf-light-on-danger: #FFFFFF;
   --pf-light-pending: #FEF3C7;       /* personal data waiting for review (soft amber) */
   --pf-light-pending-line: #B45309;  /* its underline, so colour is not the only cue */
@@ -70,6 +90,7 @@
 
   --pf-dark-canvas: #11161F;
   --pf-dark-surface: #161C27;
+  --pf-dark-tint: #1C2330;
   --pf-dark-raised: #222A37;
   --pf-dark-raised-line: #3A4556;
   --pf-dark-line: #232B38;
@@ -79,6 +100,8 @@
   --pf-dark-accent: #2DD4BF;
   --pf-dark-on-accent: #11161F;
   --pf-dark-danger: #F87171;
+  --pf-dark-chart-bar: #94A0B0;
+  --pf-dark-chart-track: #2A3341;
   --pf-dark-on-danger: #11161F;
   --pf-dark-pending: #3B2F12;
   --pf-dark-pending-line: #F59E0B;
@@ -93,6 +116,7 @@
   color-scheme: light;
   --pf-canvas: var(--pf-light-canvas);
   --pf-surface: var(--pf-light-surface);
+  --pf-tint: var(--pf-light-tint);
   --pf-raised: var(--pf-light-raised);
   --pf-raised-line: var(--pf-light-raised-line);
   --pf-line: var(--pf-light-line);
@@ -102,6 +126,8 @@
   --pf-accent: var(--pf-light-accent);
   --pf-on-accent: var(--pf-light-on-accent);
   --pf-danger: var(--pf-light-danger);
+  --pf-chart-bar: var(--pf-light-chart-bar);
+  --pf-chart-track: var(--pf-light-chart-track);
   --pf-on-danger: var(--pf-light-on-danger);
   --pf-pending: var(--pf-light-pending);
   --pf-pending-line: var(--pf-light-pending-line);
@@ -116,6 +142,7 @@
     color-scheme: dark;
     --pf-canvas: var(--pf-dark-canvas);
     --pf-surface: var(--pf-dark-surface);
+    --pf-tint: var(--pf-dark-tint);
     --pf-raised: var(--pf-dark-raised);
     --pf-raised-line: var(--pf-dark-raised-line);
     --pf-line: var(--pf-dark-line);
@@ -125,6 +152,8 @@
     --pf-accent: var(--pf-dark-accent);
     --pf-on-accent: var(--pf-dark-on-accent);
     --pf-danger: var(--pf-dark-danger);
+    --pf-chart-bar: var(--pf-dark-chart-bar);
+    --pf-chart-track: var(--pf-dark-chart-track);
     --pf-on-danger: var(--pf-dark-on-danger);
     --pf-pending: var(--pf-dark-pending);
     --pf-pending-line: var(--pf-dark-pending-line);
@@ -139,6 +168,7 @@
   color-scheme: dark;
   --pf-canvas: var(--pf-dark-canvas);
   --pf-surface: var(--pf-dark-surface);
+  --pf-tint: var(--pf-dark-tint);
   --pf-raised: var(--pf-dark-raised);
   --pf-raised-line: var(--pf-dark-raised-line);
   --pf-line: var(--pf-dark-line);
@@ -148,6 +178,8 @@
   --pf-accent: var(--pf-dark-accent);
   --pf-on-accent: var(--pf-dark-on-accent);
   --pf-danger: var(--pf-dark-danger);
+  --pf-chart-bar: var(--pf-dark-chart-bar);
+  --pf-chart-track: var(--pf-dark-chart-track);
   --pf-on-danger: var(--pf-dark-on-danger);
   --pf-pending: var(--pf-dark-pending);
   --pf-pending-line: var(--pf-dark-pending-line);
@@ -172,6 +204,7 @@
 
   --color-canvas: var(--pf-canvas);
   --color-surface: var(--pf-surface);
+  --color-tint: var(--pf-tint);
   --color-raised: var(--pf-raised);
   --color-raised-line: var(--pf-raised-line);
   --color-line: var(--pf-line);
@@ -182,6 +215,8 @@
   --color-on-accent: var(--pf-on-accent);
   --color-danger: var(--pf-danger);
   --color-on-danger: var(--pf-on-danger);
+  --color-chart-bar: var(--pf-chart-bar);
+  --color-chart-track: var(--pf-chart-track);
   --color-pending: var(--pf-pending);
   --color-pending-line: var(--pf-pending-line);
   --color-on-pending: var(--pf-on-pending);
@@ -191,6 +226,7 @@
   --color-current: currentcolor;
 
   --font-sans: "Geist", system-ui, sans-serif;
+  --font-display: "Sora", "Geist", system-ui, sans-serif;
   --font-mono: "Geist Mono", ui-monospace, monospace;
 
   /* Type scale: 12, 13, 14, 16, 20, 24, 32, 48. Large sizes tighten their tracking. */
@@ -257,6 +293,14 @@
 }
 
 /* Every control: the same focus ring, and a small press on :active. */
+/* Page and section headings in Sora; everything else, smaller headings in lists included, in Geist. */
+@layer base {
+  h1,
+  h2 {
+    font-family: var(--font-display);
+  }
+}
+
 @utility focus-ring {
   &:focus-visible {
     outline: 2px solid var(--color-accent);

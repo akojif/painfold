@@ -1,0 +1,120 @@
+{"id":"de-001","lang":"de","split":"dev","jobs":["Bankbuchungen aktuell halten"],"pains":["Bankverbindung bricht ständig ab"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"de-002","lang":"de","split":"dev","jobs":["Rechnungen schreiben und pünktlich bezahlt werden"],"pains":[],"gains":["Erinnerungstexte selbst formulieren"],"sentiment":"positive","type":"feature request"}
+{"id":"de-003","lang":"de","split":"test","jobs":["Mit der Steuerberatung zusammenarbeiten"],"pains":[],"gains":["Eigener Zugang für Steuerberaterin"],"sentiment":"neutral","type":"question"}
+{"id":"de-004","lang":"de","split":"test","jobs":["Löhne abrechnen"],"pains":[],"gains":["Lohnverrechnung in Minuten erledigt"],"sentiment":"positive","type":"praise"}
+{"id":"de-005","lang":"de","split":"dev","jobs":["Finanzberichte erstellen"],"pains":["Langsamer Berichtsexport","Export bricht ab"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"de-006","lang":"de","split":"test","jobs":["UVA abgeben"],"pains":["UVA nicht auffindbar"],"gains":[],"sentiment":"negative","type":"question","comment":"Frustriert, daher negative statt neutral"}
+{"id":"de-007","lang":"de","split":"test","jobs":["Belege erfassen"],"pains":["App stürzt ab"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"de-008","lang":"de","split":"test","jobs":[],"pains":["Doppelt abgebucht"],"gains":[],"sentiment":"negative","type":"complaint","comment":"Abrechnungsfehler, könnte auch bug sein"}
+{"id":"de-009","lang":"de","split":"test","jobs":[],"pains":["Fehlende Berichtsfilter"],"gains":["Berichte nach Projekt filtern"],"sentiment":"mixed","type":"praise"}
+{"id":"de-010","lang":"de","split":"dev","jobs":[],"pains":["PDF-Rechnung schneidet Text ab"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"de-011","lang":"de","split":"test","jobs":[],"pains":[],"gains":["Neues Dashboard"],"sentiment":"positive","type":"praise"}
+{"id":"de-012","lang":"de","split":"test","jobs":[],"pains":["Support antwortet nicht rechtzeitig"],"gains":[],"sentiment":"negative","type":"complaint"}
+{"id":"de-013","lang":"de","split":"dev","jobs":["Projektstunden und -kosten erfassen","Gewinn pro Projekt sehen"],"pains":["Projektgewinn nirgends sichtbar"],"gains":["Gewinnbericht pro Projekt"],"sentiment":"negative","type":"feature request"}
+{"id":"de-014","lang":"de","split":"dev","jobs":["Rechnungen schreiben und pünktlich bezahlt werden"],"pains":["Dieselben Rechnungen monatlich neu schreiben"],"gains":["Wiederkehrende Rechnungen"],"sentiment":"neutral","type":"feature request"}
+{"id":"de-015","lang":"de","split":"test","jobs":[],"pains":["Nach Handywechsel ausgesperrt","Support antwortet nicht rechtzeitig"],"gains":[],"sentiment":"negative","type":"complaint","comment":"Zwei-Faktor funktioniert wie vorgesehen, daher complaint statt bug"}
+{"id":"de-016","lang":"de","split":"test","jobs":["Zahlungen abgleichen"],"pains":[],"gains":[],"sentiment":"neutral","type":"question"}
+{"id":"de-017","lang":"de","split":"dev","jobs":[],"pains":["Preiserhöhung ohne Mehrwert"],"gains":[],"sentiment":"negative","type":"complaint"}
+{"id":"de-018","lang":"de","split":"test","jobs":["Webshop-Bestellungen als Rechnungen übernehmen"],"pains":[],"gains":["Anbindung an den Webshop"],"sentiment":"neutral","type":"question"}
+{"id":"de-019","lang":"de","split":"dev","jobs":["Bankbuchungen aktuell halten"],"pains":["Kreditkartenkonto synchronisiert nicht"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"de-020","lang":"de","split":"test","jobs":[],"pains":["Verwirrende neue Navigation"],"gains":[],"sentiment":"negative","type":"complaint"}
+{"id":"de-021","lang":"de","split":"test","jobs":["Löhne abrechnen"],"pains":["Falsches Jahr am Lohnzettel"],"gains":[],"sentiment":"mixed","type":"bug"}
+{"id":"de-022","lang":"de","split":"dev","jobs":["Kunden in Fremdwährung verrechnen"],"pains":["Währungen händisch umrechnen"],"gains":["Rechnungen in Fremdwährung"],"sentiment":"neutral","type":"feature request"}
+{"id":"de-023","lang":"de","split":"dev","jobs":[],"pains":[],"gains":["Hilfsbereiter Support"],"sentiment":"positive","type":"praise"}
+{"id":"de-024","lang":"de","split":"test","jobs":[],"pains":["Augen brennen vom Bildschirm"],"gains":["Dunkler Modus"],"sentiment":"neutral","type":"feature request"}
+{"id":"de-025","lang":"de","split":"dev","jobs":["Belege erfassen"],"pains":["Beleg-Upload ohne Netz scheitert"],"gains":["Offline-Modus für Belege"],"sentiment":"mixed","type":"feature request"}
+{"id":"de-026","lang":"de","split":"dev","jobs":["UVA abgeben"],"pains":[],"gains":["Erinnerung vor der UVA-Frist"],"sentiment":"mixed","type":"praise"}
+{"id":"de-027","lang":"de","split":"test","jobs":[],"pains":["Langsame App"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"de-028","lang":"de","split":"test","jobs":["Mit der Steuerberatung zusammenarbeiten"],"pains":[],"gains":["Export im BMD-Format"],"sentiment":"neutral","type":"question"}
+{"id":"de-029","lang":"de","split":"dev","jobs":["Angebote erstellen"],"pains":["Kundendaten immer neu eingeben"],"gains":["Gespeicherte Kundendaten"],"sentiment":"negative","type":"complaint"}
+{"id":"de-030","lang":"de","split":"test","jobs":["Rechnungen schreiben und pünktlich bezahlt werden"],"pains":[],"gains":["Rechnungsversand ohne Aufwand"],"sentiment":"positive","type":"praise"}
+{"id":"de-031","lang":"de","split":"dev","jobs":["Finanzberichte erstellen"],"pains":["Berichtsgenerator schwer bedienbar"],"gains":["Monate als Spalten im Bericht"],"sentiment":"mixed","type":"question"}
+{"id":"de-032","lang":"de","split":"test","jobs":[],"pains":[],"gains":[],"sentiment":"positive","type":"praise"}
+{"id":"de-033","lang":"de","split":"dev","jobs":[],"pains":["Zusatzbenutzer nicht kündbar"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"de-034","lang":"de","split":"dev","jobs":["Belege erfassen"],"pains":["Belege falsch erkannt"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"de-035","lang":"de","split":"test","jobs":[],"pains":[],"gains":[],"sentiment":"neutral","type":"other"}
+{"id":"de-036","lang":"de","split":"dev","jobs":["Rechnungen schreiben und pünktlich bezahlt werden"],"pains":["Offene-Posten-Liste händisch erstellen"],"gains":["Filter für überfällige Rechnungen"],"sentiment":"neutral","type":"feature request"}
+{"id":"de-037","lang":"de","split":"test","jobs":["Bankbuchungen aktuell halten"],"pains":["Bankverbindung bricht ständig ab"],"gains":[],"sentiment":"neutral","type":"question"}
+{"id":"de-038","lang":"de","split":"test","jobs":[],"pains":["Support antwortet nicht rechtzeitig"],"gains":[],"sentiment":"negative","type":"complaint"}
+{"id":"de-039","lang":"de","split":"test","jobs":[],"pains":["Zu teuer für Ein-Personen-Unternehmen"],"gains":[],"sentiment":"mixed","type":"complaint"}
+{"id":"de-040","lang":"de","split":"dev","jobs":["Werkvertragsnehmer im Ausland bezahlen"],"pains":["Lohnverrechnung nur für Österreich"],"gains":[],"sentiment":"negative","type":"complaint","comment":"Könnte auch feature request sein"}
+{"id":"de-041","lang":"de","split":"dev","jobs":["Rechnungen schreiben und pünktlich bezahlt werden"],"pains":[],"gains":["Stripe markiert Rechnungen als bezahlt"],"sentiment":"neutral","type":"feature request"}
+{"id":"de-042","lang":"de","split":"dev","jobs":[],"pains":["Logogröße wird zurückgesetzt"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"de-043","lang":"de","split":"dev","jobs":["Liquidität im Blick behalten"],"pains":[],"gains":["Kontostand am Monatsende auf einen Blick"],"sentiment":"neutral","type":"feature request","comment":"Bedürfnis genannt, keine ausdrückliche Bitte"}
+{"id":"de-044","lang":"de","split":"dev","jobs":[],"pains":["Ständige Abmeldungen"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"de-045","lang":"de","split":"test","jobs":[],"pains":["Schwache Belegverwaltung"],"gains":[],"sentiment":"mixed","type":"complaint"}
+{"id":"de-046","lang":"de","split":"test","jobs":[],"pains":["Unklare Unterschiede zwischen Paketen"],"gains":[],"sentiment":"neutral","type":"question"}
+{"id":"de-047","lang":"de","split":"dev","jobs":["Mit der Steuerberatung zusammenarbeiten"],"pains":[],"gains":["Eigener Zugang für Steuerberaterin"],"sentiment":"positive","type":"praise"}
+{"id":"de-048","lang":"de","split":"test","jobs":["Zahlungen abgleichen"],"pains":["Doppelte Bankbuchungen"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"de-049","lang":"de","split":"test","jobs":["Löhne abrechnen"],"pains":["Support nur per Mail"],"gains":["Support per Telefon"],"sentiment":"negative","type":"feature request"}
+{"id":"de-050","lang":"de","split":"dev","jobs":[],"pains":["Suche scheitert an Umlauten"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"de-051","lang":"de","split":"dev","jobs":[],"pains":[],"gains":["Mehrere Einträge auf einmal löschen"],"sentiment":"positive","type":"praise"}
+{"id":"de-052","lang":"de","split":"dev","jobs":[],"pains":["Verwirrende neue Navigation"],"gains":[],"sentiment":"negative","type":"complaint","comment":"Sarkasmus"}
+{"id":"de-053","lang":"de","split":"test","jobs":["Mehrere Firmen verwalten"],"pains":["Zu viele Klicks beim Firmenwechsel"],"gains":[],"sentiment":"negative","type":"complaint"}
+{"id":"de-054","lang":"de","split":"dev","jobs":["Jahresabschluss machen"],"pains":[],"gains":["Checkliste für den Jahresabschluss"],"sentiment":"positive","type":"praise"}
+{"id":"de-055","lang":"de","split":"test","jobs":["Löhne abrechnen"],"pains":["Lohnzettel einzeln versenden"],"gains":["Lohnzettel direkt per Mail"],"sentiment":"neutral","type":"feature request"}
+{"id":"de-056","lang":"de","split":"test","jobs":["Belege erfassen"],"pains":["App stürzt ab"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"de-057","lang":"de","split":"test","jobs":[],"pains":[],"gains":[],"sentiment":"neutral","type":"question"}
+{"id":"de-058","lang":"de","split":"test","jobs":["Rechnungen schreiben und pünktlich bezahlt werden"],"pains":["Zahlungslink läuft zu schnell ab"],"gains":[],"sentiment":"negative","type":"complaint"}
+{"id":"de-059","lang":"de","split":"test","jobs":[],"pains":[],"gains":["Ausgabe auf Projekte aufteilen"],"sentiment":"neutral","type":"feature request"}
+{"id":"de-060","lang":"de","split":"dev","jobs":[],"pains":["Problem mehrfach erklären müssen"],"gains":[],"sentiment":"mixed","type":"complaint"}
+{"id":"de-061","lang":"de","split":"dev","jobs":["Firma und Privatgeld trennen","Geld für Einkommensteuer zurücklegen"],"pains":[],"gains":["Genaue Steuerschätzung"],"sentiment":"positive","type":"praise"}
+{"id":"de-062","lang":"de","split":"test","jobs":[],"pains":["Falsches CSV-Trennzeichen"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"de-063","lang":"de","split":"dev","jobs":[],"pains":[],"gains":[],"sentiment":"positive","type":"praise"}
+{"id":"de-064","lang":"de","split":"dev","jobs":["Finanzberichte erstellen"],"pains":["Dashboard und GuV widersprechen sich"],"gains":[],"sentiment":"negative","type":"bug","comment":"Als Frage formuliert, meldet aber eine Abweichung"}
+{"id":"de-065","lang":"de","split":"dev","jobs":["Rechnungen schreiben und pünktlich bezahlt werden"],"pains":[],"gains":["Rechnungen zeitgesteuert versenden"],"sentiment":"neutral","type":"feature request"}
+{"id":"de-066","lang":"de","split":"dev","jobs":["Zahlungen abgleichen"],"pains":[],"gains":["Treffsichere Abgleichsvorschläge"],"sentiment":"positive","type":"praise"}
+{"id":"de-067","lang":"de","split":"test","jobs":[],"pains":["UID-Nummer fehlt auf eurer Rechnung"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"de-068","lang":"de","split":"dev","jobs":["Löhne abrechnen"],"pains":["Langsame Lohnberechnung"],"gains":[],"sentiment":"negative","type":"question"}
+{"id":"de-069","lang":"de","split":"dev","jobs":[],"pains":[],"gains":["Säumige Kunden erkennen"],"sentiment":"neutral","type":"feature request"}
+{"id":"de-070","lang":"de","split":"dev","jobs":[],"pains":["Ständige Abmeldungen","SMS-Code kommt nicht an"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"de-071","lang":"de","split":"dev","jobs":[],"pains":[],"gains":["Professionelles Rechnungsdesign"],"sentiment":"positive","type":"praise"}
+{"id":"de-072","lang":"de","split":"dev","jobs":[],"pains":[],"gains":["Rechnungen aus Altsystem übernehmen"],"sentiment":"neutral","type":"question"}
+{"id":"de-073","lang":"de","split":"test","jobs":["Bankbuchungen aktuell halten"],"pains":["Bankverbindung bricht ständig ab","Support antwortet nicht rechtzeitig"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"de-074","lang":"de","split":"dev","jobs":["Spesen des Teams verwalten"],"pains":["Keine Ausgaben-Auswertung pro Mitarbeiter"],"gains":["Ausgaben pro Mitarbeiter auswerten"],"sentiment":"negative","type":"feature request"}
+{"id":"de-075","lang":"de","split":"test","jobs":[],"pains":["Langsame App","App stürzt ab","Support antwortet nicht rechtzeitig"],"gains":[],"sentiment":"negative","type":"complaint","comment":"Kunde kündigt Wechsel an"}
+{"id":"de-076","lang":"de","split":"dev","jobs":[],"pains":[],"gains":["Getrennte Nummernkreise pro Geschäftsbereich"],"sentiment":"neutral","type":"question"}
+{"id":"de-077","lang":"de","split":"test","jobs":[],"pains":[],"gains":["Schnelle Fehlerbehebung"],"sentiment":"positive","type":"praise"}
+{"id":"de-078","lang":"de","split":"dev","jobs":["UVA abgeben"],"pains":["UVA-Bericht nur nach Steuersatz"],"gains":["UVA-Bericht nach Kennzahlen"],"sentiment":"negative","type":"complaint","comment":"Könnte auch feature request sein"}
+{"id":"de-079","lang":"de","split":"test","jobs":["Rechnung direkt beim Kunden schreiben"],"pains":[],"gains":["Schnelle Rechnung per App"],"sentiment":"positive","type":"praise"}
+{"id":"de-080","lang":"de","split":"test","jobs":["Buchhaltung einfach erledigen"],"pains":["Bankabgleich wirkt einschüchternd"],"gains":[],"sentiment":"mixed","type":"complaint"}
+{"id":"de-081","lang":"de","split":"dev","jobs":[],"pains":["Lange Kundennamen abgeschnitten"],"gains":["Breitere Tabellen"],"sentiment":"neutral","type":"feature request"}
+{"id":"de-082","lang":"de","split":"dev","jobs":[],"pains":["SMS-Code kommt nicht an"],"gains":["Zwei-Faktor per Authenticator-App"],"sentiment":"neutral","type":"feature request"}
+{"id":"de-083","lang":"de","split":"test","jobs":["Mit der Steuerberatung zusammenarbeiten"],"pains":["Kostenstelle fehlt im Export"],"gains":[],"sentiment":"negative","type":"bug","comment":"Könnte auch feature request sein"}
+{"id":"de-084","lang":"de","split":"test","jobs":[],"pains":[],"gains":[],"sentiment":"positive","type":"praise"}
+{"id":"de-085","lang":"de","split":"dev","jobs":["Rechnungen schreiben und pünktlich bezahlt werden"],"pains":["Mahnung an bereits zahlende Kunden"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"de-086","lang":"de","split":"test","jobs":["Webshop-Bestellungen als Rechnungen übernehmen"],"pains":["Bestellungen händisch abtippen"],"gains":["Anbindung an den Webshop"],"sentiment":"neutral","type":"question"}
+{"id":"de-087","lang":"de","split":"dev","jobs":["Bankbuchungen aktuell halten"],"pains":["Zweites Bankkonto nicht hinzufügbar"],"gains":[],"sentiment":"negative","type":"question"}
+{"id":"de-088","lang":"de","split":"test","jobs":[],"pains":[],"gains":["Schnelle Einrichtung"],"sentiment":"positive","type":"praise"}
+{"id":"de-089","lang":"de","split":"test","jobs":[],"pains":["Zahlungsziel ändert sich überall"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"de-090","lang":"de","split":"test","jobs":[],"pains":[],"gains":["Rabatt für Vereine"],"sentiment":"neutral","type":"question"}
+{"id":"de-091","lang":"de","split":"dev","jobs":[],"pains":[],"gains":["Jahresüberblick auf einer Seite"],"sentiment":"neutral","type":"feature request"}
+{"id":"de-092","lang":"de","split":"dev","jobs":["Finanzberichte erstellen"],"pains":["Bilanz-PDF mit überlappendem Text"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"de-093","lang":"de","split":"test","jobs":[],"pains":[],"gains":["Hilfsbereiter Support"],"sentiment":"positive","type":"praise"}
+{"id":"de-094","lang":"de","split":"test","jobs":["Spesen des Teams verwalten"],"pains":["Keine Sammelfreigabe für Spesen"],"gains":["Spesen gesammelt freigeben"],"sentiment":"negative","type":"feature request"}
+{"id":"de-095","lang":"de","split":"test","jobs":["Rechnungen schreiben und pünktlich bezahlt werden"],"pains":["Rechnungen landen im Spam"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"de-096","lang":"de","split":"dev","jobs":["Bankbuchungen aktuell halten"],"pains":[],"gains":["Stabile Bankverbindung"],"sentiment":"positive","type":"praise"}
+{"id":"de-097","lang":"de","split":"test","jobs":[],"pains":["Unklar, wer Rechnung geändert hat"],"gains":["Änderungsverlauf für Rechnungen"],"sentiment":"neutral","type":"question"}
+{"id":"de-098","lang":"de","split":"test","jobs":["Angebote erstellen"],"pains":[],"gains":["Angebotszugang ohne Gehaltseinsicht"],"sentiment":"neutral","type":"feature request"}
+{"id":"de-099","lang":"de","split":"dev","jobs":[],"pains":["Preiserhöhung ohne Mehrwert"],"gains":["Paket nur für Rechnungen"],"sentiment":"negative","type":"complaint","comment":"Enthält auch eine Frage"}
+{"id":"de-100","lang":"de","split":"test","jobs":[],"pains":["Ständige Abmeldungen"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"de-101","lang":"de","split":"test","jobs":["Rechnungen schreiben und pünktlich bezahlt werden"],"pains":[],"gains":["Rechnungen von eigener Mailadresse"],"sentiment":"neutral","type":"feature request"}
+{"id":"de-102","lang":"de","split":"test","jobs":["Mit der Steuerberatung zusammenarbeiten"],"pains":[],"gains":[],"sentiment":"neutral","type":"other"}
+{"id":"de-103","lang":"de","split":"test","jobs":[],"pains":["Suche scheitert an Kommabeträgen"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"de-104","lang":"de","split":"test","jobs":[],"pains":[],"gains":["Hilfsbereiter Support"],"sentiment":"positive","type":"praise"}
+{"id":"de-105","lang":"de","split":"dev","jobs":[],"pains":[],"gains":["Direkte Übermittlung an FinanzOnline"],"sentiment":"neutral","type":"feature request"}
+{"id":"de-106","lang":"de","split":"dev","jobs":[],"pains":["Rechnungsentwurf nicht löschbar"],"gains":[],"sentiment":"negative","type":"question"}
+{"id":"de-107","lang":"de","split":"dev","jobs":["Löhne abrechnen"],"pains":["Teilzeit-Löhne nur mit Excel"],"gains":[],"sentiment":"negative","type":"complaint"}
+{"id":"de-108","lang":"de","split":"test","jobs":["Gewinn pro Projekt sehen"],"pains":[],"gains":["Gewinnbericht pro Projekt"],"sentiment":"positive","type":"praise"}
+{"id":"de-109","lang":"de","split":"dev","jobs":[],"pains":[],"gains":["Push-Nachricht bei Zahlungseingang"],"sentiment":"neutral","type":"feature request"}
+{"id":"de-110","lang":"de","split":"dev","jobs":["Belege erfassen"],"pains":["Belege falsch erkannt"],"gains":[],"sentiment":"negative","type":"bug"}
+{"id":"de-111","lang":"de","split":"test","jobs":[],"pains":[],"gains":[],"sentiment":"positive","type":"praise"}
+{"id":"de-112","lang":"de","split":"dev","jobs":["Liquidität im Blick behalten"],"pains":["Liquiditätsvorschau ignoriert wiederkehrende Ausgaben"],"gains":[],"sentiment":"negative","type":"complaint"}
+{"id":"de-113","lang":"de","split":"dev","jobs":[],"pains":[],"gains":[],"sentiment":"negative","type":"other","comment":"Deutet an, dass Feedback ignoriert wird"}
+{"id":"de-114","lang":"de","split":"dev","jobs":[],"pains":[],"gains":[],"sentiment":"neutral","type":"other"}
+{"id":"de-115","lang":"de","split":"test","jobs":["Rechnungen schreiben und pünktlich bezahlt werden"],"pains":["Lieferschein nicht anhängbar"],"gains":["Dokumente an Rechnung anhängen"],"sentiment":"negative","type":"feature request"}
+{"id":"de-116","lang":"de","split":"test","jobs":[],"pains":["Verwirrende neue Navigation"],"gains":[],"sentiment":"negative","type":"complaint","comment":"Knopf zum Duplizieren nicht mehr auffindbar"}
+{"id":"de-117","lang":"de","split":"dev","jobs":["Tageslosung erfassen"],"pains":["Tageslosung jeden Abend abtippen"],"gains":["Anbindung an die Registrierkasse"],"sentiment":"neutral","type":"feature request"}
+{"id":"de-118","lang":"de","split":"dev","jobs":["Sozialversicherung verbuchen"],"pains":["Unklar, welches Konto stimmt"],"gains":["Erklärungen direkt im Programm"],"sentiment":"neutral","type":"feature request"}
+{"id":"de-119","lang":"de","split":"dev","jobs":[],"pains":[],"gains":["Schnelle, übersichtliche Mobile-App"],"sentiment":"positive","type":"praise"}
+{"id":"de-120","lang":"de","split":"test","jobs":[],"pains":[],"gains":[],"sentiment":"neutral","type":"other"}

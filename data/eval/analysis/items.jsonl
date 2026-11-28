@@ -1,0 +1,240 @@
+{"id": "en-001", "lang": "en", "split": "dev", "text": "The bank feed disconnected again this morning, third time this month. I have to log in to my bank every few days just to keep the transactions coming in."}
+{"id": "en-002", "lang": "en", "split": "dev", "text": "I mainly use this to send invoices to my clients and chase late payers. The reminder emails work well, but I'd love to set the reminder schedule myself."}
+{"id": "en-003", "lang": "en", "split": "test", "text": "Can I give my accountant read-only access without sharing my password?"}
+{"id": "en-004", "lang": "en", "split": "dev", "text": "Payroll ran perfectly this month. Took me ten minutes instead of a whole afternoon. Thank you!"}
+{"id": "en-005", "lang": "en", "split": "dev", "text": "Exporting the profit and loss report for the year took over four minutes and then the file was empty."}
+{"id": "en-006", "lang": "en", "split": "test", "text": "Where do I find the VAT return? I've clicked through every menu twice."}
+{"id": "en-007", "lang": "en", "split": "dev", "text": "Your app crashed every time I tried to photograph a receipt on my phone. Android, latest version."}
+{"id": "en-008", "lang": "en", "split": "dev", "text": "We were charged twice for the annual plan. Please refund one of the payments."}
+{"id": "en-009", "lang": "en", "split": "dev", "text": "Great product, fair price. Reports could use a filter by project, though."}
+{"id": "en-010", "lang": "en", "split": "dev", "text": "The PDF invoices cut off the last line of the item description when it's long. Clients have asked what they're paying for."}
+{"id": "en-011", "lang": "en", "split": "test", "text": "Love the new dashboard!"}
+{"id": "en-012", "lang": "en", "split": "test", "text": "I waited six days for a reply from support. By then I had sorted it out myself."}
+{"id": "en-013", "lang": "en", "split": "test", "text": "We track every project's hours and costs here, but I can't see profit per project anywhere. That's the whole reason we signed up."}
+{"id": "en-014", "lang": "en", "split": "test", "text": "Recurring invoices would save me an hour every month. I send the same five invoices on the first of the month."}
+{"id": "en-015", "lang": "en", "split": "dev", "text": "I'm locked out after changing my phone. The two-factor code goes to the old number and nobody answers the support line."}
+{"id": "en-016", "lang": "en", "split": "dev", "text": "How do I reconcile a payment that covers three invoices at once?"}
+{"id": "en-017", "lang": "en", "split": "test", "text": "Honestly, the price increase in October was not great. You doubled the price and added nothing I use."}
+{"id": "en-018", "lang": "en", "split": "test", "text": "Is there an API? We want to push orders from our web shop straight into invoices."}
+{"id": "en-019", "lang": "en", "split": "test", "text": "Bank sync works fine for my main account but my credit card account never updates."}
+{"id": "en-020", "lang": "en", "split": "test", "text": "The new navigation is confusing. Things moved and nothing is where it used to be."}
+{"id": "en-021", "lang": "en", "split": "test", "text": "Payroll is easy, but the payslip PDF shows the wrong tax year in the header."}
+{"id": "en-022", "lang": "en", "split": "dev", "text": "Please add multi-currency. Half our clients pay in USD and I'm converting everything in a spreadsheet."}
+{"id": "en-023", "lang": "en", "split": "test", "text": "Thanks [NAME_1], you solved my problem in five minutes. Best support I've had from a software company."}
+{"id": "en-024", "lang": "en", "split": "dev", "text": "Dark mode please, my eyes hurt after a day of bookkeeping."}
+{"id": "en-025", "lang": "en", "split": "test", "text": "The mobile app is fine for checking invoices, but uploading receipts fails without a signal. Offline mode would help a lot on building sites."}
+{"id": "en-026", "lang": "en", "split": "test", "text": "I need to file VAT every quarter and the app makes it painless. Just wish it reminded me a week before the deadline."}
+{"id": "en-027", "lang": "en", "split": "test", "text": "Everything is slow since the update. Opening an invoice takes 10 seconds."}
+{"id": "en-028", "lang": "en", "split": "dev", "text": "Our accountant wants to export everything to her own software. Is there a standard format?"}
+{"id": "en-029", "lang": "en", "split": "dev", "text": "Why do I have to re-enter the client's address every time I create a quote?"}
+{"id": "en-030", "lang": "en", "split": "dev", "text": "I run a small cleaning company and I just want my invoices out the door on Friday afternoon without fuss. That works."}
+{"id": "en-031", "lang": "en", "split": "test", "text": "The report builder is powerful but I can't figure out how to show months as columns."}
+{"id": "en-032", "lang": "en", "split": "test", "text": "Customer for 6 years and still happy."}
+{"id": "en-033", "lang": "en", "split": "test", "text": "I tried to cancel the extra user seat and the page just reloads. Still being billed for it."}
+{"id": "en-034", "lang": "en", "split": "test", "text": "Expenses: when I forward a receipt by email it lands in the inbox, but the amount is never read correctly."}
+{"id": "en-035", "lang": "en", "split": "dev", "text": "ok"}
+{"id": "en-036", "lang": "en", "split": "test", "text": "Can you add a filter for unpaid invoices older than 30 days? I build that list by hand every week."}
+{"id": "en-037", "lang": "en", "split": "test", "text": "The bank connection asks me to re-authorise every 90 days. Is that something you can change or is it the bank?"}
+{"id": "en-038", "lang": "en", "split": "dev", "text": "Support chat closes before anyone answers. I tried three times today."}
+{"id": "en-039", "lang": "en", "split": "test", "text": "It's good, but too expensive for a one-person business."}
+{"id": "en-040", "lang": "en", "split": "dev", "text": "We pay contractors in three countries. Payroll only works for local employees, so we use a second tool."}
+{"id": "en-041", "lang": "en", "split": "dev", "text": "Please integrate with Stripe so payments mark invoices as paid automatically."}
+{"id": "en-042", "lang": "en", "split": "test", "text": "The invoice template editor keeps resetting my logo size."}
+{"id": "en-043", "lang": "en", "split": "dev", "text": "I just want to know at a glance whether we'll have enough cash at the end of the month."}
+{"id": "en-044", "lang": "en", "split": "test", "text": "After the last update the app logs me out every few minutes on my tablet."}
+{"id": "en-045", "lang": "en", "split": "test", "text": "Brilliant for invoicing, rubbish for anything else. The expense side feels like an afterthought."}
+{"id": "en-046", "lang": "en", "split": "test", "text": "What's the difference between the Standard and Plus plans? The pricing page doesn't say whether payroll is included."}
+{"id": "en-047", "lang": "en", "split": "dev", "text": "My accountant loves that she can log in herself now. Saves us both a lot of emails."}
+{"id": "en-048", "lang": "en", "split": "test", "text": "The bank feed duplicates some transactions and I have to delete them by hand before reconciling."}
+{"id": "en-049", "lang": "en", "split": "test", "text": "We'd pay more for phone support. Email-only support doesn't work when payroll is due tomorrow."}
+{"id": "en-050", "lang": "en", "split": "dev", "text": "Searching for an old invoice by client name doesn't find anything if the name has an accent, like José."}
+{"id": "en-051", "lang": "en", "split": "test", "text": "Thanks for adding bulk delete!"}
+{"id": "en-052", "lang": "en", "split": "dev", "text": "Yet another update that moved the reports menu. Fantastic. Really helpful."}
+{"id": "en-053", "lang": "en", "split": "test", "text": "I manage the books for my partner's practice and mine. Switching between the two companies takes far too many clicks."}
+{"id": "en-054", "lang": "en", "split": "test", "text": "The year-end checklist is great, it walked me through closing the year step by step."}
+{"id": "en-055", "lang": "en", "split": "test", "text": "Payslips should be sent to employees by email directly, not downloaded and attached by me one by one."}
+{"id": "en-056", "lang": "en", "split": "test", "text": "The app keeps crashing on iOS when I open the camera to scan a receipt."}
+{"id": "en-057", "lang": "en", "split": "dev", "text": "How long do you keep our data after we cancel?"}
+{"id": "en-058", "lang": "en", "split": "dev", "text": "Our clients complain that the payment link in the invoice email expires too quickly."}
+{"id": "en-059", "lang": "en", "split": "dev", "text": "I'd like to split one expense across two projects."}
+{"id": "en-060", "lang": "en", "split": "dev", "text": "Support solved it, but I had to explain the problem three times to three different people."}
+{"id": "en-061", "lang": "en", "split": "dev", "text": "I use this to keep my freelance finances separate from my personal ones, and to know how much to set aside for tax. The tax estimate is spot on."}
+{"id": "en-062", "lang": "en", "split": "dev", "text": "Exports to CSV use semicolons and my spreadsheet expects commas."}
+{"id": "en-063", "lang": "en", "split": "dev", "text": "Perfect."}
+{"id": "en-064", "lang": "en", "split": "dev", "text": "The dashboard numbers don't match the profit and loss report. Which one is right?"}
+{"id": "en-065", "lang": "en", "split": "test", "text": "Please let me schedule invoices to be sent on a specific date."}
+{"id": "en-066", "lang": "en", "split": "dev", "text": "Reconciliation is so much faster with the new suggestions, it matches about 9 out of 10 payments correctly."}
+{"id": "en-067", "lang": "en", "split": "dev", "text": "Price is fine but the annual invoice from you doesn't show our VAT number, so our accountant can't deduct it."}
+{"id": "en-068", "lang": "en", "split": "dev", "text": "We have 40 employees and payroll takes the app over an hour to calculate. Is that normal?"}
+{"id": "en-069", "lang": "en", "split": "dev", "text": "It would be great to see which clients always pay late."}
+{"id": "en-070", "lang": "en", "split": "test", "text": "I keep getting logged out, and every time I have to wait for the text message code."}
+{"id": "en-071", "lang": "en", "split": "dev", "text": "The new invoice design looks really professional, clients noticed."}
+{"id": "en-072", "lang": "en", "split": "dev", "text": "Can I import invoices from my old system? I have five years of history in Excel."}
+{"id": "en-073", "lang": "en", "split": "dev", "text": "The bank sync stopped working after my bank changed its login. Support said to wait. It's been two weeks."}
+{"id": "en-074", "lang": "en", "split": "dev", "text": "I need a report of all expenses per employee for reimbursement, and there isn't one."}
+{"id": "en-075", "lang": "en", "split": "dev", "text": "Slow, crashes, and support takes days. We're moving to another provider next month."}
+{"id": "en-076", "lang": "en", "split": "test", "text": "Is it possible to have different invoice numbering for two business lines?"}
+{"id": "en-077", "lang": "en", "split": "dev", "text": "Thank you for fixing the duplicate transactions so quickly."}
+{"id": "en-078", "lang": "en", "split": "test", "text": "The VAT report groups everything by rate, but my tax office wants it by category."}
+{"id": "en-079", "lang": "en", "split": "dev", "text": "Your mobile app is the only one I've found where I can create an invoice in under a minute at the client's door."}
+{"id": "en-080", "lang": "en", "split": "dev", "text": "Hi, I'm [NAME_2] from [PLACE_1]. We're a family bakery and I do the accounts at night. I need it to be simple and it mostly is, but the reconciliation screen scares me."}
+{"id": "en-081", "lang": "en", "split": "dev", "text": "Please make the tables wider, long client names are cut off everywhere."}
+{"id": "en-082", "lang": "en", "split": "dev", "text": "Two-factor via authenticator app instead of text message, please. Our mountain office has no mobile signal."}
+{"id": "en-083", "lang": "en", "split": "test", "text": "My accountant says the export is missing the cost centre field."}
+{"id": "en-084", "lang": "en", "split": "dev", "text": "Couldn't do my job without it."}
+{"id": "en-085", "lang": "en", "split": "dev", "text": "The reminders went out to a client who had already paid. Embarrassing."}
+{"id": "en-086", "lang": "en", "split": "test", "text": "Will there be a Shopify integration? We sell online and type every order in by hand."}
+{"id": "en-087", "lang": "en", "split": "test", "text": "I still can't figure out how to add a second bank account."}
+{"id": "en-088", "lang": "en", "split": "test", "text": "Your onboarding videos are excellent. Got set up in an afternoon."}
+{"id": "en-089", "lang": "en", "split": "dev", "text": "Changing the payment terms on one invoice changes them for all future invoices of that client, which is not what I want."}
+{"id": "en-090", "lang": "en", "split": "dev", "text": "We're a non-profit. Is there a discount?"}
+{"id": "en-091", "lang": "en", "split": "dev", "text": "I'd love an overview of the whole year on one page: income, expenses and tax owed."}
+{"id": "en-092", "lang": "en", "split": "test", "text": "The PDF export of the balance sheet has overlapping text in the last column."}
+{"id": "en-093", "lang": "en", "split": "test", "text": "Support replied within an hour and fixed the problem. Thank you, [NAME_3]."}
+{"id": "en-094", "lang": "en", "split": "dev", "text": "I have to approve expenses for 12 people and there's no way to approve them in bulk."}
+{"id": "en-095", "lang": "en", "split": "test", "text": "Our invoices get flagged as spam by some clients' email systems."}
+{"id": "en-096", "lang": "en", "split": "test", "text": "Bank sync is reliable now, thanks for whatever you changed."}
+{"id": "en-097", "lang": "en", "split": "test", "text": "Can I see the history of changes on an invoice? Someone changed an amount and I don't know who."}
+{"id": "en-098", "lang": "en", "split": "test", "text": "We want to give our sales team access to create quotes, but not to see salaries."}
+{"id": "en-099", "lang": "en", "split": "dev", "text": "The yearly price went up again and I only use invoicing. Can I get an invoicing-only plan?"}
+{"id": "en-100", "lang": "en", "split": "test", "text": "Every time the app updates on my phone I have to log in again with the code."}
+{"id": "en-101", "lang": "en", "split": "test", "text": "Sending invoices from my own email address instead of yours would look more professional."}
+{"id": "en-102", "lang": "en", "split": "test", "text": "I just need the numbers for my tax advisor at the end of each quarter, nothing more."}
+{"id": "en-103", "lang": "en", "split": "dev", "text": "When I search for a transaction amount with a comma it finds nothing."}
+{"id": "en-104", "lang": "en", "split": "dev", "text": "Your team was so patient with me. I'm not good with computers and they walked me through everything."}
+{"id": "en-105", "lang": "en", "split": "test", "text": "Please add a German interface for our Vienna office."}
+{"id": "en-106", "lang": "en", "split": "test", "text": "Why can't I delete a draft invoice?"}
+{"id": "en-107", "lang": "en", "split": "dev", "text": "Payroll for part-time staff with changing hours is a nightmare. I calculate the hours in a spreadsheet first."}
+{"id": "en-108", "lang": "en", "split": "test", "text": "I use the app to see which projects are actually making money, and the project profit report finally shows me that. Fantastic."}
+{"id": "en-109", "lang": "en", "split": "dev", "text": "Notifications on my phone for every paid invoice would be lovely."}
+{"id": "en-110", "lang": "en", "split": "test", "text": "The receipt scanner reads the date wrong when it's written day first."}
+{"id": "en-111", "lang": "en", "split": "dev", "text": "We switched from a desktop program last year and haven't looked back."}
+{"id": "en-112", "lang": "en", "split": "test", "text": "The cash flow forecast is useless because it ignores recurring expenses."}
+{"id": "en-113", "lang": "en", "split": "dev", "text": "Hello? Is anyone reading these?"}
+{"id": "en-114", "lang": "en", "split": "dev", "text": "Hard to say, it does what it says."}
+{"id": "en-115", "lang": "en", "split": "test", "text": "I can't attach the delivery note to the invoice, my clients need both in one email."}
+{"id": "en-116", "lang": "en", "split": "dev", "text": "Since the redesign I can't find the button to duplicate an invoice. It was the feature I used most."}
+{"id": "en-117", "lang": "en", "split": "test", "text": "Mileage tracking would be handy. I drive to clients every day and log the kilometres in a paper notebook."}
+{"id": "en-118", "lang": "en", "split": "test", "text": "The time tracker forgets my entries if I switch to another tab before saving."}
+{"id": "en-119", "lang": "en", "split": "test", "text": "We hired our first employee and the payroll setup wizard asked questions I couldn't answer. A checklist of what to prepare would help."}
+{"id": "en-120", "lang": "en", "split": "test", "text": "Fine for now. We'll see how it handles our growth next year."}
+{"id": "de-001", "lang": "de", "split": "dev", "text": "Die Bankverbindung ist schon wieder getrennt. Ich muss mich alle paar Tage neu bei der Bank anmelden, damit die Buchungen überhaupt ankommen."}
+{"id": "de-002", "lang": "de", "split": "dev", "text": "Ich schreibe hier hauptsächlich Rechnungen und will, dass meine Kunden schneller zahlen. Die Zahlungserinnerungen helfen, aber die Texte würde ich gern selbst formulieren."}
+{"id": "de-003", "lang": "de", "split": "test", "text": "Kann meine Steuerberaterin einen eigenen Zugang bekommen, ohne dass ich mein Passwort weitergebe?"}
+{"id": "de-004", "lang": "de", "split": "test", "text": "Die Lohnverrechnung hat diesen Monat super funktioniert, in zehn Minuten erledigt. Danke!"}
+{"id": "de-005", "lang": "de", "split": "dev", "text": "Der Export der Saldenliste dauert ewig und bricht dann ab."}
+{"id": "de-006", "lang": "de", "split": "test", "text": "Wo finde ich die UVA? Ich habe jedes Menü zweimal durchgeklickt."}
+{"id": "de-007", "lang": "de", "split": "test", "text": "Die App stürzt jedes Mal ab, wenn ich einen Beleg fotografieren will. iPhone, aktuelle Version."}
+{"id": "de-008", "lang": "de", "split": "test", "text": "Uns wurde das Jahresabo doppelt abgebucht. Bitte eine Zahlung zurückbuchen."}
+{"id": "de-009", "lang": "de", "split": "test", "text": "Gutes Produkt, fairer Preis. Bei den Auswertungen fehlt mir aber ein Filter nach Projekt."}
+{"id": "de-010", "lang": "de", "split": "dev", "text": "Auf den PDF-Rechnungen wird bei langen Positionen die letzte Zeile abgeschnitten. Kunden fragen nach, wofür sie zahlen."}
+{"id": "de-011", "lang": "de", "split": "test", "text": "Das neue Dashboard ist toll!"}
+{"id": "de-012", "lang": "de", "split": "test", "text": "Sechs Tage auf eine Antwort vom Support gewartet. Bis dahin hatte ich es selbst gelöst."}
+{"id": "de-013", "lang": "de", "split": "dev", "text": "Wir erfassen Stunden und Kosten pro Projekt, sehen aber nirgends, ob ein Projekt Gewinn macht. Genau dafür haben wir das Programm gekauft."}
+{"id": "de-014", "lang": "de", "split": "dev", "text": "Wiederkehrende Rechnungen würden mir jeden Monat eine Stunde sparen. Ich schicke am Ersten immer dieselben fünf Rechnungen."}
+{"id": "de-015", "lang": "de", "split": "test", "text": "Nach dem Handywechsel komme ich nicht mehr rein. Der Code geht an die alte Nummer und am Telefon hebt niemand ab."}
+{"id": "de-016", "lang": "de", "split": "test", "text": "Wie verbuche ich eine Zahlung, die drei Rechnungen auf einmal begleicht?"}
+{"id": "de-017", "lang": "de", "split": "dev", "text": "Ehrlich gesagt war die Preiserhöhung im Oktober eine Frechheit. Doppelter Preis, nichts Neues, das ich brauche."}
+{"id": "de-018", "lang": "de", "split": "test", "text": "Gibt es eine Schnittstelle? Wir möchten die Bestellungen aus dem Webshop direkt als Rechnungen übernehmen."}
+{"id": "de-019", "lang": "de", "split": "dev", "text": "Das Geschäftskonto synchronisiert, das Kreditkartenkonto aber nie."}
+{"id": "de-020", "lang": "de", "split": "test", "text": "Die neue Navigation ist verwirrend, nichts ist mehr dort, wo es war."}
+{"id": "de-021", "lang": "de", "split": "test", "text": "Die Lohnverrechnung ist einfach, aber auf dem Lohnzettel steht das falsche Jahr."}
+{"id": "de-022", "lang": "de", "split": "dev", "text": "Bitte Fremdwährungen einbauen. Die Hälfte unserer Kunden zahlt in Schweizer Franken und ich rechne alles in Excel um."}
+{"id": "de-023", "lang": "de", "split": "dev", "text": "Danke [NAME_1], Problem in fünf Minuten gelöst. Bester Support, den ich je bei einer Software hatte."}
+{"id": "de-024", "lang": "de", "split": "test", "text": "Bitte einen dunklen Modus, nach einem Tag Buchhaltung brennen mir die Augen."}
+{"id": "de-025", "lang": "de", "split": "dev", "text": "Die App ist gut zum Nachschauen, aber Belege hochladen geht ohne Netz nicht. Auf der Baustelle bräuchte ich einen Offline-Modus."}
+{"id": "de-026", "lang": "de", "split": "dev", "text": "Ich muss jedes Quartal die UVA machen und das geht wirklich einfach. Eine Erinnerung eine Woche vor der Frist wäre noch schön."}
+{"id": "de-027", "lang": "de", "split": "test", "text": "Seit dem Update ist alles langsam. Eine Rechnung öffnen dauert zehn Sekunden."}
+{"id": "de-028", "lang": "de", "split": "test", "text": "Meine Steuerberaterin will alles in ihr eigenes Programm übernehmen. Gibt es einen BMD-Export?"}
+{"id": "de-029", "lang": "de", "split": "dev", "text": "Warum muss ich die Adresse des Kunden bei jedem Angebot neu eingeben?"}
+{"id": "de-030", "lang": "de", "split": "test", "text": "Ich habe eine kleine Reinigungsfirma und will am Freitagnachmittag einfach meine Rechnungen rausschicken, ohne Theater. Das klappt."}
+{"id": "de-031", "lang": "de", "split": "dev", "text": "Der Berichtsgenerator kann viel, aber ich schaffe es nicht, die Monate als Spalten anzuzeigen."}
+{"id": "de-032", "lang": "de", "split": "test", "text": "Seit sechs Jahren Kunde und immer noch zufrieden."}
+{"id": "de-033", "lang": "de", "split": "dev", "text": "Ich wollte den zusätzlichen Benutzer kündigen, aber die Seite lädt nur neu. Er wird weiter verrechnet."}
+{"id": "de-034", "lang": "de", "split": "dev", "text": "Wenn ich einen Beleg per Mail weiterleite, landet er zwar im Eingang, aber der Betrag wird nie richtig erkannt."}
+{"id": "de-035", "lang": "de", "split": "test", "text": "passt"}
+{"id": "de-036", "lang": "de", "split": "dev", "text": "Könnt ihr einen Filter für offene Rechnungen älter als 30 Tage einbauen? Die Liste mache ich jede Woche händisch."}
+{"id": "de-037", "lang": "de", "split": "test", "text": "Die Bankverbindung will alle 90 Tage neu freigegeben werden. Liegt das an euch oder an der Bank?"}
+{"id": "de-038", "lang": "de", "split": "test", "text": "Der Support-Chat schließt sich, bevor jemand antwortet. Heute schon dreimal probiert."}
+{"id": "de-039", "lang": "de", "split": "test", "text": "Gut, aber für ein Ein-Personen-Unternehmen zu teuer."}
+{"id": "de-040", "lang": "de", "split": "dev", "text": "Wir zahlen Werkvertragsnehmer in drei Ländern. Die Lohnverrechnung kann nur österreichische Dienstnehmer, also brauchen wir ein zweites Programm."}
+{"id": "de-041", "lang": "de", "split": "dev", "text": "Bitte eine Anbindung an Stripe, damit bezahlte Rechnungen automatisch als bezahlt markiert werden."}
+{"id": "de-042", "lang": "de", "split": "dev", "text": "Der Vorlagen-Editor setzt die Größe meines Logos immer wieder zurück."}
+{"id": "de-043", "lang": "de", "split": "dev", "text": "Ich will einfach auf einen Blick sehen, ob am Monatsende genug Geld am Konto ist."}
+{"id": "de-044", "lang": "de", "split": "dev", "text": "Seit dem letzten Update werde ich am Tablet alle paar Minuten abgemeldet."}
+{"id": "de-045", "lang": "de", "split": "test", "text": "Für Rechnungen genial, für alles andere schwach. Die Belegverwaltung wirkt wie nachträglich drangeklebt."}
+{"id": "de-046", "lang": "de", "split": "test", "text": "Was ist der Unterschied zwischen Standard und Plus? Auf der Preisseite steht nicht, ob die Lohnverrechnung dabei ist."}
+{"id": "de-047", "lang": "de", "split": "dev", "text": "Meine Steuerberaterin ist begeistert, dass sie sich jetzt selbst einloggen kann. Spart uns beiden viele Mails."}
+{"id": "de-048", "lang": "de", "split": "test", "text": "Die Bankbuchungen kommen manchmal doppelt und ich muss sie vor dem Abgleich händisch löschen."}
+{"id": "de-049", "lang": "de", "split": "test", "text": "Wir würden mehr zahlen für Telefon-Support. Nur per Mail geht nicht, wenn morgen die Löhne raus müssen."}
+{"id": "de-050", "lang": "de", "split": "dev", "text": "Die Suche nach einer alten Rechnung findet nichts, wenn der Kundenname Umlaute hat, zum Beispiel Müller."}
+{"id": "de-051", "lang": "de", "split": "dev", "text": "Danke für die Mehrfach-Löschen-Funktion!"}
+{"id": "de-052", "lang": "de", "split": "dev", "text": "Schon wieder ein Update, das das Berichte-Menü verschiebt. Großartig. Sehr hilfreich."}
+{"id": "de-053", "lang": "de", "split": "test", "text": "Ich mache die Buchhaltung für meine Praxis und die meines Mannes. Zwischen den Firmen wechseln braucht viel zu viele Klicks."}
+{"id": "de-054", "lang": "de", "split": "dev", "text": "Die Jahresabschluss-Checkliste ist super, sie hat mich Schritt für Schritt durch den Abschluss geführt."}
+{"id": "de-055", "lang": "de", "split": "test", "text": "Die Lohnzettel sollten direkt per Mail an die Mitarbeiter gehen, nicht dass ich jeden einzeln herunterlade und anhänge."}
+{"id": "de-056", "lang": "de", "split": "test", "text": "Die App stürzt am Android-Handy ab, sobald ich die Kamera zum Belegscannen öffne."}
+{"id": "de-057", "lang": "de", "split": "test", "text": "Wie lange speichert ihr unsere Daten, nachdem wir gekündigt haben?"}
+{"id": "de-058", "lang": "de", "split": "test", "text": "Unsere Kunden beschweren sich, dass der Zahlungslink in der Rechnungsmail zu schnell abläuft."}
+{"id": "de-059", "lang": "de", "split": "test", "text": "Ich möchte eine Ausgabe auf zwei Projekte aufteilen können."}
+{"id": "de-060", "lang": "de", "split": "dev", "text": "Der Support hat es gelöst, aber ich musste das Problem drei verschiedenen Leuten erklären."}
+{"id": "de-061", "lang": "de", "split": "dev", "text": "Ich nutze das Programm, um meine Firma von meinem Privatgeld zu trennen und zu wissen, wie viel ich für die Einkommensteuer zurücklegen muss. Die Schätzung stimmt genau."}
+{"id": "de-062", "lang": "de", "split": "test", "text": "Der CSV-Export trennt mit Kommas, mein Excel erwartet Strichpunkte."}
+{"id": "de-063", "lang": "de", "split": "dev", "text": "Perfekt."}
+{"id": "de-064", "lang": "de", "split": "dev", "text": "Die Zahlen im Dashboard stimmen nicht mit der Gewinn- und Verlustrechnung überein. Was stimmt jetzt?"}
+{"id": "de-065", "lang": "de", "split": "dev", "text": "Bitte Rechnungen zu einem bestimmten Datum automatisch versenden lassen."}
+{"id": "de-066", "lang": "de", "split": "dev", "text": "Der Bankabgleich geht mit den neuen Vorschlägen viel schneller, neun von zehn Zahlungen werden richtig zugeordnet."}
+{"id": "de-067", "lang": "de", "split": "test", "text": "Der Preis passt, aber auf eurer Jahresrechnung fehlt unsere UID-Nummer, damit kann die Steuerberaterin die Vorsteuer nicht abziehen."}
+{"id": "de-068", "lang": "de", "split": "dev", "text": "Wir haben 40 Dienstnehmer und die Lohnberechnung dauert über eine Stunde. Ist das normal?"}
+{"id": "de-069", "lang": "de", "split": "dev", "text": "Schön wäre zu sehen, welche Kunden immer zu spät zahlen."}
+{"id": "de-070", "lang": "de", "split": "dev", "text": "Ich werde ständig abgemeldet und muss jedes Mal auf den SMS-Code warten."}
+{"id": "de-071", "lang": "de", "split": "dev", "text": "Das neue Rechnungsdesign schaut wirklich professionell aus, das haben auch die Kunden gemerkt."}
+{"id": "de-072", "lang": "de", "split": "dev", "text": "Kann ich Rechnungen aus dem alten Programm übernehmen? Ich habe fünf Jahre Geschichte in Excel."}
+{"id": "de-073", "lang": "de", "split": "test", "text": "Seit meine Bank den Login geändert hat, geht die Synchronisation nicht mehr. Der Support sagt, ich soll warten. Das ist jetzt zwei Wochen her."}
+{"id": "de-074", "lang": "de", "split": "dev", "text": "Ich brauche eine Auswertung aller Ausgaben pro Mitarbeiter für die Spesenabrechnung, und die gibt es nicht."}
+{"id": "de-075", "lang": "de", "split": "test", "text": "Langsam, stürzt ab, und der Support braucht Tage. Wir wechseln nächsten Monat."}
+{"id": "de-076", "lang": "de", "split": "dev", "text": "Kann ich für zwei Geschäftsbereiche verschiedene Rechnungsnummernkreise haben?"}
+{"id": "de-077", "lang": "de", "split": "test", "text": "Danke, dass ihr die doppelten Buchungen so schnell behoben habt."}
+{"id": "de-078", "lang": "de", "split": "dev", "text": "Der UVA-Bericht gruppiert nach Steuersatz, das Finanzamt will es aber nach Kennzahlen."}
+{"id": "de-079", "lang": "de", "split": "test", "text": "Mit eurer App schreibe ich die Rechnung in unter einer Minute direkt beim Kunden an der Tür."}
+{"id": "de-080", "lang": "de", "split": "test", "text": "Grüß Gott, ich bin [NAME_2] aus [PLACE_1]. Wir sind eine Familienbäckerei und ich mache die Buchhaltung am Abend. Es muss einfach sein, und meistens ist es das, aber der Bankabgleich macht mir Angst."}
+{"id": "de-081", "lang": "de", "split": "dev", "text": "Bitte die Tabellen breiter machen, lange Kundennamen werden überall abgeschnitten."}
+{"id": "de-082", "lang": "de", "split": "dev", "text": "Zwei-Faktor bitte per Authenticator-App statt SMS. In unserem Büro am Berg gibt es keinen Handyempfang."}
+{"id": "de-083", "lang": "de", "split": "test", "text": "Meine Steuerberaterin sagt, im Export fehlt die Kostenstelle."}
+{"id": "de-084", "lang": "de", "split": "test", "text": "Ohne das Programm könnte ich meine Arbeit nicht machen."}
+{"id": "de-085", "lang": "de", "split": "dev", "text": "Die Mahnung ging an einen Kunden raus, der schon bezahlt hatte. Peinlich."}
+{"id": "de-086", "lang": "de", "split": "test", "text": "Kommt eine Shopify-Anbindung? Wir verkaufen online und tippen jede Bestellung ab."}
+{"id": "de-087", "lang": "de", "split": "dev", "text": "Ich finde einfach nicht heraus, wie ich ein zweites Bankkonto hinzufüge."}
+{"id": "de-088", "lang": "de", "split": "test", "text": "Die Einführungsvideos sind ausgezeichnet. An einem Nachmittag war alles eingerichtet."}
+{"id": "de-089", "lang": "de", "split": "test", "text": "Wenn ich das Zahlungsziel bei einer Rechnung ändere, ändert es sich bei allen künftigen Rechnungen des Kunden. Das will ich nicht."}
+{"id": "de-090", "lang": "de", "split": "test", "text": "Wir sind ein Verein. Gibt es einen Rabatt?"}
+{"id": "de-091", "lang": "de", "split": "dev", "text": "Ich hätte gern einen Jahresüberblick auf einer Seite: Einnahmen, Ausgaben und Steuerlast."}
+{"id": "de-092", "lang": "de", "split": "dev", "text": "Im PDF-Export der Bilanz überlappt der Text in der letzten Spalte."}
+{"id": "de-093", "lang": "de", "split": "test", "text": "Der Support hat innerhalb einer Stunde geantwortet und das Problem behoben. Danke, [NAME_3]."}
+{"id": "de-094", "lang": "de", "split": "test", "text": "Ich muss Spesen von zwölf Leuten freigeben und kann sie nicht gesammelt freigeben."}
+{"id": "de-095", "lang": "de", "split": "test", "text": "Unsere Rechnungen landen bei manchen Kunden im Spam-Ordner."}
+{"id": "de-096", "lang": "de", "split": "dev", "text": "Die Bankverbindung läuft jetzt stabil, danke für was auch immer ihr geändert habt."}
+{"id": "de-097", "lang": "de", "split": "test", "text": "Kann ich sehen, wer eine Rechnung geändert hat? Jemand hat einen Betrag geändert und ich weiß nicht, wer."}
+{"id": "de-098", "lang": "de", "split": "test", "text": "Unser Vertrieb soll Angebote erstellen können, aber keine Gehälter sehen."}
+{"id": "de-099", "lang": "de", "split": "dev", "text": "Der Jahrespreis ist schon wieder gestiegen und ich nutze nur die Rechnungen. Gibt es ein Paket nur für Rechnungen?"}
+{"id": "de-100", "lang": "de", "split": "test", "text": "Nach jedem App-Update muss ich mich am Handy wieder mit Code anmelden."}
+{"id": "de-101", "lang": "de", "split": "test", "text": "Ich möchte Rechnungen von meiner eigenen Mailadresse verschicken, das wirkt professioneller."}
+{"id": "de-102", "lang": "de", "split": "test", "text": "Ich brauche am Quartalsende nur die Zahlen für meinen Steuerberater, sonst nichts."}
+{"id": "de-103", "lang": "de", "split": "test", "text": "Wenn ich nach einem Betrag mit Komma suche, findet die Suche nichts."}
+{"id": "de-104", "lang": "de", "split": "test", "text": "Euer Team war so geduldig mit mir. Ich kenne mich mit Computern nicht gut aus und sie haben mir alles erklärt."}
+{"id": "de-105", "lang": "de", "split": "dev", "text": "Die Übermittlung an FinanzOnline direkt aus dem Programm wäre ein Traum."}
+{"id": "de-106", "lang": "de", "split": "dev", "text": "Warum kann ich einen Rechnungsentwurf nicht löschen?"}
+{"id": "de-107", "lang": "de", "split": "dev", "text": "Die Lohnverrechnung für Teilzeitkräfte mit wechselnden Stunden ist ein Albtraum. Ich rechne die Stunden zuerst in Excel aus."}
+{"id": "de-108", "lang": "de", "split": "test", "text": "Ich nutze das Programm, um zu sehen, welche Projekte wirklich Geld bringen, und der Projektbericht zeigt mir das endlich. Großartig."}
+{"id": "de-109", "lang": "de", "split": "dev", "text": "Eine Benachrichtigung am Handy für jede bezahlte Rechnung wäre fein."}
+{"id": "de-110", "lang": "de", "split": "dev", "text": "Der Belegscanner liest das Datum falsch, wenn der Tag zuerst steht."}
+{"id": "de-111", "lang": "de", "split": "test", "text": "Wir sind letztes Jahr von einem Desktop-Programm umgestiegen und haben es nicht bereut."}
+{"id": "de-112", "lang": "de", "split": "dev", "text": "Die Liquiditätsvorschau ist nutzlos, weil sie wiederkehrende Ausgaben ignoriert."}
+{"id": "de-113", "lang": "de", "split": "dev", "text": "Hallo? Liest das überhaupt jemand?"}
+{"id": "de-114", "lang": "de", "split": "dev", "text": "Schwer zu sagen, es tut, was es soll."}
+{"id": "de-115", "lang": "de", "split": "test", "text": "Ich kann den Lieferschein nicht an die Rechnung anhängen, meine Kunden brauchen beides in einer Mail."}
+{"id": "de-116", "lang": "de", "split": "test", "text": "Seit dem Redesign finde ich den Knopf zum Duplizieren einer Rechnung nicht mehr. Das war die Funktion, die ich am meisten gebraucht habe."}
+{"id": "de-117", "lang": "de", "split": "dev", "text": "Die Registrierkassen-Anbindung fehlt mir. Ich muss die Tageslosung jeden Abend abtippen."}
+{"id": "de-118", "lang": "de", "split": "dev", "text": "Beim Verbuchen der Sozialversicherung ist mir nie klar, welches Konto stimmt. Eine kurze Erklärung im Programm wäre hilfreich."}
+{"id": "de-119", "lang": "de", "split": "dev", "text": "Die Mobile-App ist schnell und übersichtlich, viel besser als die Website."}
+{"id": "de-120", "lang": "de", "split": "test", "text": "Ich bin unsicher, ob ich das Programm nächstes Jahr noch brauche, wir sind gerade im Umbruch."}

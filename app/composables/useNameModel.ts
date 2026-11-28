@@ -1,4 +1,4 @@
-import type { CellDetections } from '~~/core/detect/table'
+import type { ItemDetections, TextItem } from '~~/core/detect/items'
 import { isCostlyConnection, isModelStored, removeModel } from '~~/core/detect/model-storage'
 import type { NameRequest, NameResponse } from '~~/core/detect/worker-protocol'
 
@@ -24,7 +24,7 @@ const pending = new Set<(error: Error) => void>()
 export class NameModelStopped extends Error {}
 
 // A request as the page writes it; the id and the runtime path are added here.
-type Message = { kind: 'load' } | { kind: 'names', rows: string[][], columns: number[] }
+type Message = { kind: 'load' } | { kind: 'names', items: TextItem[] }
 // Cache Storage is missing in some private windows; the model then works for the visit only.
 const storage = () => (globalThis.caches as CacheStorage | undefined)
 
@@ -126,10 +126,10 @@ export function useNameModel() {
     loaded.value = 0
   }
 
-  /** Names and places in the given columns; the model must be ready. Rejects with a NameModelStopped error after stop(). */
-  async function names(rows: string[][], columns: number[]): Promise<CellDetections[]> {
-    const response = await request({ kind: 'names', rows, columns })
-    return response.kind === 'result' ? response.cells : []
+  /** Names and places in the items; the model must be ready. Rejects with a NameModelStopped error after stop(). */
+  async function names(items: TextItem[]): Promise<ItemDetections[]> {
+    const response = await request({ kind: 'names', items })
+    return response.kind === 'result' ? response.items : []
   }
 
   /** Stops whatever the model is doing; a stored model stays stored. */

@@ -1,7 +1,7 @@
 import type { Page } from '@playwright/test'
 import { MODEL_BYTES, MODEL_CACHE } from '../../deploy/model'
 import { ortBytes } from '../../deploy/ort-version'
-import { expect, test } from './fixtures'
+import { expect, openSample, test } from './fixtures'
 
 // The name model download (ROADMAP Stage 2, #64). Each test runs in a fresh
 // browser context, so the model's cache starts empty, and downloads the real
@@ -13,9 +13,9 @@ const MODEL_FILE = '**/onnx/model_int8.onnx'
 
 test.describe.configure({ timeout: 60_000 })
 
-async function openSample(page: Page, path = '/') {
+async function gotoSample(page: Page, path = '/') {
   await page.goto(path)
-  await page.getByRole('button', { name: path === '/' ? 'Try the sample file' : 'Beispieldatei ausprobieren' }).click()
+  await openSample(page)
 }
 
 /** Every request for the model or its runtime, including those the worker makes. */
@@ -37,7 +37,7 @@ const storedLine = (page: Page) => page.getByText(`Name model stored in this bro
 
 test('explains the download and its size, and requests nothing before the user agrees', async ({ page }) => {
   const requests = modelRequests(page)
-  await openSample(page)
+  await gotoSample(page)
   await expect(page.getByRole('heading', { name: 'Names and places' })).toBeVisible()
   await expect(page.getByText(`Names and places need a name model: ${SIZE}, downloaded once from this site and kept in this browser.`)).toBeVisible()
   await expect(downloadButton(page)).toBeEnabled()
@@ -59,7 +59,7 @@ test('downloads exactly the size it states, keeps it, and lists it in the networ
     const length = response.headers()['content-length']
     bodies.set(response.url(), length ? Promise.resolve(Number(length)) : response.body().then(body => body.length))
   })
-  await openSample(page)
+  await gotoSample(page)
   await downloadButton(page).click()
   await expect(storedLine(page)).toBeVisible({ timeout: 30_000 })
 
@@ -76,13 +76,13 @@ test('downloads exactly the size it states, keeps it, and lists it in the networ
 })
 
 test('a later visit finds the stored model without downloading it, and Remove deletes it', async ({ page }) => {
-  await openSample(page)
+  await gotoSample(page)
   await downloadButton(page).click()
   await expect(storedLine(page)).toBeVisible({ timeout: 30_000 })
 
   await page.reload()
   const requests = modelRequests(page)
-  await page.getByRole('button', { name: 'Try the sample file' }).click()
+  await openSample(page)
   await expect(storedLine(page)).toBeVisible()
   expect(requests).toEqual([])
 
@@ -94,7 +94,7 @@ test('a later visit finds the stored model without downloading it, and Remove de
 test('Cancel stops the download and deletes what had arrived; the keyboard focus follows', async ({ page }) => {
   // The model file never arrives, so the download is still running when it is cancelled.
   await page.route(MODEL_FILE, () => {})
-  await openSample(page)
+  await gotoSample(page)
   await downloadButton(page).focus()
   await page.keyboard.press('Enter')
   const cancel = page.getByRole('button', { name: 'Cancel' })
@@ -107,13 +107,13 @@ test('Cancel stops the download and deletes what had arrived; the keyboard focus
 
   await page.keyboard.press('Enter')
   await expect(downloadButton(page)).toBeFocused()
-  await expect(page.getByText('Download cancelled.')).toBeAttached()
+  await expect(page.getByText('Download canceled.')).toBeAttached()
   expect(await cachedFiles(page)).toEqual([])
 })
 
 test('a failed download says where it stopped, the rules still work, and Try again finishes it', async ({ page }) => {
   await page.route(MODEL_FILE, route => route.abort('connectionreset'))
-  await openSample(page)
+  await gotoSample(page)
   await downloadButton(page).click()
   await expect(page.getByText(/^The download stopped at \d+ of 152\sMB\. Check the connection and try again\./)).toBeVisible()
   await expect(page.getByText('Everything else is checked without it.')).toBeVisible()
@@ -127,7 +127,7 @@ test('a failed download says where it stopped, the rules still work, and Try aga
 })
 
 test('offline, it says so instead of trying, and offers the download again once back online', async ({ page, context }) => {
-  await openSample(page)
+  await gotoSample(page)
   await context.setOffline(true)
   await downloadButton(page).click()
   await expect(page.getByText('You\'re offline. The name model can be downloaded once you\'re back online; everything else works now.')).toBeVisible()
@@ -136,7 +136,7 @@ test('offline, it says so instead of trying, and offers the download again once 
 })
 
 test('the review offers the download to people who skipped it, and the line goes once the model is ready', async ({ page }) => {
-  await openSample(page)
+  await gotoSample(page)
   await page.getByRole('button', { name: 'Find personal data in 200 rows' }).click()
   await page.getByRole('button', { name: `Download the name model (${SIZE})` }).click()
   const progress = page.getByText(/^Downloading the name model: \d+ of 152\sMB$/)
@@ -152,19 +152,19 @@ test.describe('where the browser reports Save-Data', () => {
   })
 
   test('it suggests Wi-Fi next to the button', async ({ page }) => {
-    await openSample(page)
+    await gotoSample(page)
     await expect(page.getByText('This is a large download. Consider Wi-Fi.')).toBeVisible()
   })
 })
 
 test('nothing extra is shown where the browser does not report the connection', async ({ page }) => {
-  await openSample(page)
+  await gotoSample(page)
   await expect(downloadButton(page)).toBeVisible()
   await expect(page.getByText('This is a large download. Consider Wi-Fi.')).toBeHidden()
 })
 
 test('the German page explains the download in German', async ({ page }) => {
-  await openSample(page, '/de/')
+  await gotoSample(page, '/de/')
   await expect(page.getByRole('heading', { name: 'Namen und Orte' })).toBeVisible()
   await expect(page.getByRole('button', { name: `Namensmodell herunterladen (${SIZE})` })).toBeVisible()
 })
@@ -174,7 +174,7 @@ test('where the browser cannot keep it, it says the model works for this visit o
   await page.addInitScript(() => {
     CacheStorage.prototype.open = () => Promise.reject(new DOMException('No room', 'QuotaExceededError'))
   })
-  await openSample(page)
+  await gotoSample(page)
   await downloadButton(page).click()
   await expect(page.getByText('This browser had no room to keep the name model. It works for this visit and downloads again next time.')).toBeVisible({ timeout: 30_000 })
   await expect(page.getByRole('button', { name: 'Remove' })).toBeHidden()

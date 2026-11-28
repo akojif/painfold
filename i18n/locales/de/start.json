@@ -1,0 +1,57 @@
+{
+  "start": {
+    "headline": "Finden Sie, was Ihren Kunden wehtut. Ohne preiszugeben, wer sie sind.",
+    "subline": "Bereinigen Sie zuerst Ihre Feedback-Datei: Namen, E-Mail-Adressen, Telefonnummern, IBANs und mehr werden entfernt, bevor jemand sie liest.",
+    "choose": "CSV- oder Excel-Datei auswählen",
+    "reading": "{name} wird gelesen…",
+    "journeyLabel": "Was Painfold macht",
+    "journey": {
+      "clean": {
+        "title": "Datei bereinigen",
+        "body": "Personenbezogene Daten werden durch Platzhalter ersetzt."
+      },
+      "find": {
+        "title": "Aufgaben, Probleme und Wünsche finden",
+        "body": "In Themen gruppiert, im Code gezählt, mit echten Zitaten."
+      },
+      "decide": {
+        "title": "Entscheiden, was gebaut wird",
+        "body": "Die stärksten Probleme, als Fragen für Ihr Team formuliert."
+      },
+      "coming": "Kommt in {version}"
+    },
+    "example": {
+      "button": "Beispiel ausprobieren",
+      "title": "Painfold mit erfundenen Daten ausprobieren",
+      "body": "200 Support-Tickets auf Deutsch und Englisch. Keine echten Personen.",
+      "sample": {
+        "title": "Beispieldatei bereinigen",
+        "body": "Jeden Schritt selbst durchgehen: personenbezogene Daten finden, prüfen, dann analysieren."
+      },
+      "demo": {
+        "title": "Fertige Analyse ansehen",
+        "body": "Der Bericht aus einem gespeicherten Lauf mit dieser Datei. Kein API-Schlüssel nötig, und nichts wird gesendet."
+      },
+      "cancel": "Abbrechen",
+      "openSample": "Beispieldatei öffnen",
+      "showDemo": "Analyse anzeigen"
+    }
+  },
+  "example": {
+    "caption": "Ein Support-Ticket, vor und nach der Bereinigung",
+    "ticket": "Hallo, hier ist {name} aus {place}. Bitte rufen Sie mich unter {phone} zurück oder schreiben Sie an {email}.",
+    "found": "In der Datei gefunden",
+    "description": "Beispiel: In einem Support-Ticket werden ein Name, ein Ort, eine Telefonnummer und eine E-Mail-Adresse durch die Platzhalter [NAME_1], [PLACE_1], [PHONE_1] und [EMAIL_1] ersetzt.",
+    "removed": "{type} entfernt:",
+    "languages": "Funktioniert mit deutschem und englischem Feedback",
+    "values": {
+      "name": "Anna Huber",
+      "place": "Graz",
+      "email": "anna.huber{'@'}example.com",
+      "phone": "+49 30 23125 417",
+      "iban": "AT61 1904 3002 3457 3201",
+      "address": "Lindengasse 5/2/7",
+      "dateOfBirth": "12.03.1987"
+    }
+  }
+}

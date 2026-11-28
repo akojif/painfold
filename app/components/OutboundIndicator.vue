@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import type { NetworkEntry } from '~/composables/useNetworkLog'
 
+/** In the workspace top bar the label waits for a wide screen, and from 1 kB the count is rounded (48 kB), so the steps fit at 768 px; screen readers always hear the label and the exact count. */
+defineProps<{ compact?: boolean }>()
 const { t } = useI18n()
 const { number } = useFormat()
-const { entries, foreign, foreignBytes } = useNetworkLog()
+const { entries, ai, foreign, sentBytes } = useNetworkLog()
 const dialog = useTemplateRef<HTMLDialogElement>('dialog')
-const label = computed(() => t('header.bytes', { n: number(foreignBytes.value) }, foreignBytes.value))
+const label = computed(() => t('header.bytes', { n: number(sentBytes.value) }, sentBytes.value))
+const short = computed(() => (sentBytes.value < 1024 ? label.value : sentBytes.value < 1_000_000 ? t('network.kilobytes', { n: number(Math.round(sentBytes.value / 1024)) }) : t('network.megabytes', { n: number(Math.round(sentBytes.value / 1_000_000)) })))
 
 function size(entry: NetworkEntry) {
   if (entry.stored) return t('network.stored')
@@ -29,8 +32,14 @@ function size(entry: NetworkEntry) {
         class="size-1.5 rounded-full"
         :class="foreign.length > 0 ? 'bg-danger' : 'bg-accent'"
       />
-      <span class="max-sm:sr-only">{{ $t('header.outbound') }}</span>
+      <span :class="compact ? 'max-xl:sr-only' : 'max-sm:sr-only'">{{ $t('header.outbound') }}</span>
       <span
+        v-if="compact && short !== label"
+        class="font-mono text-xs whitespace-nowrap"
+        :class="foreign.length > 0 ? 'text-danger' : 'text-fg'"
+      ><span aria-hidden="true">{{ short }}</span><span class="sr-only">{{ label }}</span></span>
+      <span
+        v-else
         class="font-mono text-xs whitespace-nowrap"
         :class="foreign.length > 0 ? 'text-danger' : 'text-fg'"
       >{{ label }}</span>
@@ -60,9 +69,9 @@ function size(entry: NetworkEntry) {
         </div>
         <p
           class="font-semibold"
-          :class="foreign.length > 0 ? 'text-danger' : 'text-accent'"
+          :class="foreign.length > 0 ? 'text-danger' : ai.length > 0 ? 'text-fg' : 'text-accent'"
         >
-          {{ foreign.length > 0 ? $t('network.foreign', { n: foreign.length }, foreign.length) : $t('network.none') }}
+          {{ foreign.length > 0 ? $t('network.foreign', { n: foreign.length }, foreign.length) : ai.length > 0 ? $t('network.toAi', { n: ai.length }, ai.length) : $t('network.none') }}
         </p>
         <p class="text-sm text-fg-muted">
           {{ $t('network.explain') }}
@@ -100,11 +109,11 @@ function size(entry: NetworkEntry) {
                 <td class="max-w-0 py-1.5 pr-3">
                   <span
                     class="block truncate font-mono text-xs"
-                    :class="{ 'text-danger': !entry.own }"
+                    :class="{ 'text-danger': !entry.own && entry.kind !== 'ai' }"
                   >{{ entry.own ? entry.url : entry.host }}</span>
                 </td>
                 <td class="py-1.5 pr-3 whitespace-nowrap text-fg-muted">
-                  {{ entry.own ? $t(`network.kind.${entry.kind}`) : $t('network.otherSite') }}
+                  {{ entry.own || entry.kind === 'ai' ? $t(`network.kind.${entry.kind}`) : $t('network.otherSite') }}
                 </td>
                 <td
                   class="py-1.5 text-right whitespace-nowrap tabular-nums"
@@ -117,10 +126,16 @@ function size(entry: NetworkEntry) {
           </table>
         </div>
         <p
-          v-if="foreign.length === 0"
+          v-if="foreign.length === 0 && ai.length === 0"
           class="text-sm text-fg-muted"
         >
           {{ $t('network.allOwn', { host: entries[0]?.host ?? '' }) }}
+        </p>
+        <p
+          v-else-if="foreign.length === 0"
+          class="text-sm text-fg-muted"
+        >
+          {{ $t('network.aiOnly') }}
         </p>
       </div>
     </dialog>

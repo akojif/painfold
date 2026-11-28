@@ -1,6 +1,6 @@
 import type { Download, Page, Request } from '@playwright/test'
 import { utils, write } from 'xlsx'
-import { expect, test } from './fixtures'
+import { expect, openSample, test } from './fixtures'
 
 // One file, every kind of decision: a dropped personal column, a checked
 // message column, a column kept as is with a formula in it, an email that is
@@ -56,7 +56,7 @@ async function cleanFile(page: Page, file: { name: string, mimeType: string, buf
   await page.getByRole('button', { name: 'Mark as personal data' }).click()
   await expect(page.getByText('1 not reviewed will be removed.')).toBeVisible() // the link
 
-  await page.getByRole('link', { name: 'Continue to download' }).click()
+  await page.getByRole('link', { name: 'Download the cleaned file' }).click()
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Your cleaned file is ready.')
   const [download] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: /^Download tickets_cleaned/ }).click()])
   const [reportDownload] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: 'Download cleaning report (.txt)' }).click()])
@@ -133,7 +133,7 @@ test('a semicolon file is downloaded with semicolons', async ({ page }) => {
   await page.goto('/')
   await page.getByTestId('file-input').setInputFiles({ name: 'de.csv', mimeType: 'text/csv', buffer: Buffer.from('Nr;Rückmeldung\n1;Bitte an anna@example.com schreiben, danke\n') })
   await page.getByRole('button', { name: /Find personal data/ }).click()
-  await page.getByRole('link', { name: 'Continue to download' }).click()
+  await page.getByRole('link', { name: 'Download the cleaned file' }).click()
   const [download] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: /^Download de_cleaned/ }).click()])
   const lines = (await text(download)).slice(1).split('\r\n')
   expect(lines.slice(0, 2)).toEqual(['Nr;Rückmeldung', '1;Bitte an [EMAIL_1] schreiben, danke'])
@@ -154,9 +154,9 @@ test('the privacy panel lists every request, all to this site', async ({ page })
 
 test('Start over after downloading goes back to the start with nothing kept', async ({ page }) => {
   await page.goto('/')
-  await page.getByRole('button', { name: 'Try the sample file' }).click()
+  await openSample(page)
   await page.getByRole('button', { name: /Find personal data/ }).click()
-  await page.getByRole('link', { name: 'Continue to download' }).click()
+  await page.getByRole('link', { name: 'Download the cleaned file' }).click()
   await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: /^Download support-tickets_cleaned/ }).click()])
   await page.getByRole('button', { name: 'Start over' }).click()
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Find what hurts your customers. Without exposing who they are.')

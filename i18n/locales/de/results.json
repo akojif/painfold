@@ -1,0 +1,60 @@
+{
+  "results": {
+    "title": "Bericht",
+    "heading": "Was Ihre Kunden sagen",
+    "lead": "1 Text mit {model} analysiert. Jede Zahl wird in diesem Browser gezählt, und jedes Zitat steht wortwörtlich im bereinigten Text. | {n} Texte mit {model} analysiert. Jede Zahl wird in diesem Browser gezählt, und jedes Zitat steht wortwörtlich im bereinigten Text.",
+    "several": "Ein Text kann unter mehreren Themen vorkommen.",
+    "sections": "Abschnitte",
+    "kinds": {
+      "jobs": {
+        "title": "Aufgaben",
+        "lead": "Was Ihre Kunden erledigen wollen.",
+        "few": "1 weitere Aufgabe, in weniger als {min} Texten | {n} weitere Aufgaben, jede in weniger als {min} Texten",
+        "none": "Es wurden keine Aufgaben gefunden."
+      },
+      "pains": {
+        "title": "Probleme",
+        "lead": "Was Ihre Kunden stört oder behindert.",
+        "few": "1 weiteres Problem, in weniger als {min} Texten | {n} weitere Probleme, jedes in weniger als {min} Texten",
+        "none": "Es wurden keine Probleme gefunden."
+      },
+      "gains": {
+        "title": "Wünsche",
+        "lead": "Was sich Ihre Kunden wünschen oder was sie begeistern würde.",
+        "few": "1 weiterer Wunsch, in weniger als {min} Texten | {n} weitere Wünsche, jeder in weniger als {min} Texten",
+        "none": "Es wurden keine Wünsche gefunden."
+      }
+    },
+    "column": {
+      "texts": "Texte",
+      "share": "Anteil",
+      "intensity": "Stärke"
+    },
+    "intensity": {
+      "mild": "Schwach",
+      "moderate": "Mittel",
+      "strong": "Stark",
+      "outOf": "auf einer Skala von 1 bis 3"
+    },
+    "textsWord": "Text | Texte",
+    "allTexts": "Alle {n} Texte",
+    "hideTexts": "Texte ausblenden",
+    "noQuote": "Für dieses Thema wurde kein wortwörtliches Zitat gefunden.",
+    "empty": {
+      "heading": "Noch kein Bericht",
+      "body": "Der Bericht entsteht aus einer Analyse in diesem Besuch. Die Ergebnisse liegen nur im Speicher dieses Tabs und sind nach dem Neuladen oder Schließen weg.",
+      "analyze": "Zur Analyse"
+    },
+    "download": {
+      "title": "Die bereinigte Datei",
+      "body": "Dieselbe Datei wie auf der Download-Seite: personenbezogene Daten durch Platzhalter ersetzt, so wie Sie sie geprüft haben."
+    },
+    "demo": {
+      "label": "Demo mit erfundenen Daten.",
+      "note": "Die Support-Tickets der Beispieldatei wurden im Browser bereinigt, am {date} analysiert und in Painfold gespeichert. Beim Anzeigen wurde nichts aus Ihrem Browser gesendet.",
+      "noFile": "Hier ist keine Datei geöffnet: Die Zeilen beziehen sich auf die Beispieldatei.",
+      "standIn": "Platzhalter: erfundene Antworten, kein echter Modelllauf.",
+      "leave": "Selbst eine Datei analysieren"
+    }
+  }
+}

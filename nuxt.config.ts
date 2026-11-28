@@ -2,6 +2,7 @@ import tailwindcss from '@tailwindcss/vite'
 import { MODEL_BYTES, MODEL_PATH, ORT_PREFIX } from './deploy/model'
 import { ortBytes, ortVersion } from './deploy/ort-version'
 import { version } from './package.json'
+import { localeFiles } from './i18n/messages'
 
 // Painfold is a fully static site: everything that touches a user's file runs
 // in the browser. There are no server routes, so there is nowhere for data to go.
@@ -50,7 +51,8 @@ export default defineNuxtConfig({
 
   nitro: {
     preset: 'static',
-    prerender: { routes: ['/roadmap/', '/accuracy/', '/de/', '/de/roadmap/', '/de/accuracy/'] },
+    // /analyze/ and /report/ are only linked from pages that render in the browser, so they are listed here to be generated.
+    prerender: { routes: ['/roadmap/', '/accuracy/', '/analyze/', '/report/', '/de/', '/de/roadmap/', '/de/accuracy/', '/de/analyze/', '/de/report/'] },
   },
 
   vite: {
@@ -84,8 +86,8 @@ export default defineNuxtConfig({
     trailingSlash: true,
     baseUrl: 'https://painfold.com',
     locales: [
-      { code: 'en', language: 'en', name: 'English', file: 'en.json' },
-      { code: 'de', language: 'de-AT', name: 'Deutsch', file: 'de.json' },
+      { code: 'en', language: 'en', name: 'English', files: localeFiles('en') },
+      { code: 'de', language: 'de-AT', name: 'Deutsch', files: localeFiles('de') },
     ],
     detectBrowserLanguage: false,
   },

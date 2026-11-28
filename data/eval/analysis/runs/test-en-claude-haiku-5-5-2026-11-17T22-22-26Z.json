@@ -1,0 +1,539 @@
+{
+ "format": "painfold-eval-run/1",
+ "painfoldVersion": "0.2.0",
+ "commit": "68492d2",
+ "createdAt": "2026-11-17T22:22:26.138Z",
+ "provider": "anthropic",
+ "model": "claude-haiku-5-5",
+ "settings": {
+  "batchSize": 25,
+  "effort": "low",
+  "maxTokens": 16000
+ },
+ "split": "test",
+ "lang": "en",
+ "payload": {
+  "format": "painfold-analysis/1",
+  "provider": "anthropic",
+  "model": "claude-haiku-5-5",
+  "instructions": "You analyse customer feedback for a product team, using the Value Proposition Canvas.\n\nFor each text, find:\n- jobs: what the customer is trying to get done, in their words (a goal, not a feature).\n- pains: what frustrates, blocks or risks that job.\n- gains: what the customer wants or would be delighted by.\nEach with a short label from the customer's point of view (2 to 7 words, in the language of the text), an intensity from 1 (mild) to 3 (strong), and a quote: the exact words from the text that show it, copied character for character.\n\nAlso give each text's overall sentiment (positive, negative, mixed or neutral) and its main type (bug, feature request, question, praise, complaint or other).\n\nRules:\n- Only what the text says. A text can have no jobs, pains or gains.\n- Placeholders such as [NAME_1] or [EMAIL_2] replace removed personal data. Never guess what they stand for, and never put them in a label.\n- Answer only with JSON: {\"texts\": [{\"id\": \"...\", \"jobs\": [...], \"pains\": [...], \"gains\": [...], \"sentiment\": \"...\", \"type\": \"...\"}]}, one entry per text, with each job, pain and gain as {\"label\": \"...\", \"intensity\": 1, \"quote\": \"...\"}.",
+  "mergeInstructions": "You group what customers said into themes for a product team, using the Value Proposition Canvas.\n\nYou get one kind at a time: jobs (what customers are trying to get done), pains (what frustrates, blocks or risks a job) or gains (what customers want or would be delighted by). Each label has an id and the number of texts it came from. Labels are in German or English.\n\nPut labels that mean the same thing for the customer into one theme, whatever their language. Keep different things apart: a theme should be specific enough for a team to act on. Give each theme a short name from the customer's point of view, 2 to 7 words, in English.\n\nRules:\n- Every label id in exactly one theme. A label that fits no other is a theme of its own.\n- Placeholders such as [NAME_1] or [EMAIL_2] replace removed personal data. Never put them in a theme name.\n- Answer only with JSON: {\"themes\": [{\"name\": \"...\", \"labels\": [\"l1\", \"l7\"]}]}.",
+  "texts": [
+   {
+    "id": "t1",
+    "text": "Can I give my accountant read-only access without sharing my password?"
+   },
+   {
+    "id": "t2",
+    "text": "Where do I find the VAT return? I've clicked through every menu twice."
+   },
+   {
+    "id": "t3",
+    "text": "Love the new dashboard!"
+   },
+   {
+    "id": "t4",
+    "text": "I waited six days for a reply from support. By then I had sorted it out myself."
+   },
+   {
+    "id": "t5",
+    "text": "We track every project's hours and costs here, but I can't see profit per project anywhere. That's the whole reason we signed up."
+   },
+   {
+    "id": "t6",
+    "text": "Recurring invoices would save me an hour every month. I send the same five invoices on the first of the month."
+   },
+   {
+    "id": "t7",
+    "text": "Honestly, the price increase in October was not great. You doubled the price and added nothing I use."
+   },
+   {
+    "id": "t8",
+    "text": "Is there an API? We want to push orders from our web shop straight into invoices."
+   },
+   {
+    "id": "t9",
+    "text": "Bank sync works fine for my main account but my credit card account never updates."
+   },
+   {
+    "id": "t10",
+    "text": "The new navigation is confusing. Things moved and nothing is where it used to be."
+   },
+   {
+    "id": "t11",
+    "text": "Payroll is easy, but the payslip PDF shows the wrong tax year in the header."
+   },
+   {
+    "id": "t12",
+    "text": "Thanks [NAME_1], you solved my problem in five minutes. Best support I've had from a software company."
+   },
+   {
+    "id": "t13",
+    "text": "The mobile app is fine for checking invoices, but uploading receipts fails without a signal. Offline mode would help a lot on building sites."
+   },
+   {
+    "id": "t14",
+    "text": "I need to file VAT every quarter and the app makes it painless. Just wish it reminded me a week before the deadline."
+   },
+   {
+    "id": "t15",
+    "text": "Everything is slow since the update. Opening an invoice takes 10 seconds."
+   },
+   {
+    "id": "t16",
+    "text": "The report builder is powerful but I can't figure out how to show months as columns."
+   },
+   {
+    "id": "t17",
+    "text": "Customer for 6 years and still happy."
+   },
+   {
+    "id": "t18",
+    "text": "I tried to cancel the extra user seat and the page just reloads. Still being billed for it."
+   },
+   {
+    "id": "t19",
+    "text": "Expenses: when I forward a receipt by email it lands in the inbox, but the amount is never read correctly."
+   },
+   {
+    "id": "t20",
+    "text": "Can you add a filter for unpaid invoices older than 30 days? I build that list by hand every week."
+   },
+   {
+    "id": "t21",
+    "text": "The bank connection asks me to re-authorise every 90 days. Is that something you can change or is it the bank?"
+   },
+   {
+    "id": "t22",
+    "text": "It's good, but too expensive for a one-person business."
+   },
+   {
+    "id": "t23",
+    "text": "The invoice template editor keeps resetting my logo size."
+   },
+   {
+    "id": "t24",
+    "text": "After the last update the app logs me out every few minutes on my tablet."
+   },
+   {
+    "id": "t25",
+    "text": "Brilliant for invoicing, rubbish for anything else. The expense side feels like an afterthought."
+   },
+   {
+    "id": "t26",
+    "text": "What's the difference between the Standard and Plus plans? The pricing page doesn't say whether payroll is included."
+   },
+   {
+    "id": "t27",
+    "text": "The bank feed duplicates some transactions and I have to delete them by hand before reconciling."
+   },
+   {
+    "id": "t28",
+    "text": "We'd pay more for phone support. Email-only support doesn't work when payroll is due tomorrow."
+   },
+   {
+    "id": "t29",
+    "text": "Thanks for adding bulk delete!"
+   },
+   {
+    "id": "t30",
+    "text": "I manage the books for my partner's practice and mine. Switching between the two companies takes far too many clicks."
+   },
+   {
+    "id": "t31",
+    "text": "The year-end checklist is great, it walked me through closing the year step by step."
+   },
+   {
+    "id": "t32",
+    "text": "Payslips should be sent to employees by email directly, not downloaded and attached by me one by one."
+   },
+   {
+    "id": "t33",
+    "text": "The app keeps crashing on iOS when I open the camera to scan a receipt."
+   },
+   {
+    "id": "t34",
+    "text": "Please let me schedule invoices to be sent on a specific date."
+   },
+   {
+    "id": "t35",
+    "text": "I keep getting logged out, and every time I have to wait for the text message code."
+   },
+   {
+    "id": "t36",
+    "text": "Is it possible to have different invoice numbering for two business lines?"
+   },
+   {
+    "id": "t37",
+    "text": "The VAT report groups everything by rate, but my tax office wants it by category."
+   },
+   {
+    "id": "t38",
+    "text": "My accountant says the export is missing the cost centre field."
+   },
+   {
+    "id": "t39",
+    "text": "Will there be a Shopify integration? We sell online and type every order in by hand."
+   },
+   {
+    "id": "t40",
+    "text": "I still can't figure out how to add a second bank account."
+   },
+   {
+    "id": "t41",
+    "text": "Your onboarding videos are excellent. Got set up in an afternoon."
+   },
+   {
+    "id": "t42",
+    "text": "The PDF export of the balance sheet has overlapping text in the last column."
+   },
+   {
+    "id": "t43",
+    "text": "Support replied within an hour and fixed the problem. Thank you, [NAME_3]."
+   },
+   {
+    "id": "t44",
+    "text": "Our invoices get flagged as spam by some clients' email systems."
+   },
+   {
+    "id": "t45",
+    "text": "Bank sync is reliable now, thanks for whatever you changed."
+   },
+   {
+    "id": "t46",
+    "text": "Can I see the history of changes on an invoice? Someone changed an amount and I don't know who."
+   },
+   {
+    "id": "t47",
+    "text": "We want to give our sales team access to create quotes, but not to see salaries."
+   },
+   {
+    "id": "t48",
+    "text": "Every time the app updates on my phone I have to log in again with the code."
+   },
+   {
+    "id": "t49",
+    "text": "Sending invoices from my own email address instead of yours would look more professional."
+   },
+   {
+    "id": "t50",
+    "text": "I just need the numbers for my tax advisor at the end of each quarter, nothing more."
+   },
+   {
+    "id": "t51",
+    "text": "Please add a German interface for our Vienna office."
+   },
+   {
+    "id": "t52",
+    "text": "Why can't I delete a draft invoice?"
+   },
+   {
+    "id": "t53",
+    "text": "I use the app to see which projects are actually making money, and the project profit report finally shows me that. Fantastic."
+   },
+   {
+    "id": "t54",
+    "text": "The receipt scanner reads the date wrong when it's written day first."
+   },
+   {
+    "id": "t55",
+    "text": "The cash flow forecast is useless because it ignores recurring expenses."
+   },
+   {
+    "id": "t56",
+    "text": "I can't attach the delivery note to the invoice, my clients need both in one email."
+   },
+   {
+    "id": "t57",
+    "text": "Mileage tracking would be handy. I drive to clients every day and log the kilometres in a paper notebook."
+   },
+   {
+    "id": "t58",
+    "text": "The time tracker forgets my entries if I switch to another tab before saving."
+   },
+   {
+    "id": "t59",
+    "text": "We hired our first employee and the payroll setup wizard asked questions I couldn't answer. A checklist of what to prepare would help."
+   },
+   {
+    "id": "t60",
+    "text": "Fine for now. We'll see how it handles our growth next year."
+   }
+  ]
+ },
+ "itemOf": [
+  [
+   "t1",
+   "en-003"
+  ],
+  [
+   "t2",
+   "en-006"
+  ],
+  [
+   "t3",
+   "en-011"
+  ],
+  [
+   "t4",
+   "en-012"
+  ],
+  [
+   "t5",
+   "en-013"
+  ],
+  [
+   "t6",
+   "en-014"
+  ],
+  [
+   "t7",
+   "en-017"
+  ],
+  [
+   "t8",
+   "en-018"
+  ],
+  [
+   "t9",
+   "en-019"
+  ],
+  [
+   "t10",
+   "en-020"
+  ],
+  [
+   "t11",
+   "en-021"
+  ],
+  [
+   "t12",
+   "en-023"
+  ],
+  [
+   "t13",
+   "en-025"
+  ],
+  [
+   "t14",
+   "en-026"
+  ],
+  [
+   "t15",
+   "en-027"
+  ],
+  [
+   "t16",
+   "en-031"
+  ],
+  [
+   "t17",
+   "en-032"
+  ],
+  [
+   "t18",
+   "en-033"
+  ],
+  [
+   "t19",
+   "en-034"
+  ],
+  [
+   "t20",
+   "en-036"
+  ],
+  [
+   "t21",
+   "en-037"
+  ],
+  [
+   "t22",
+   "en-039"
+  ],
+  [
+   "t23",
+   "en-042"
+  ],
+  [
+   "t24",
+   "en-044"
+  ],
+  [
+   "t25",
+   "en-045"
+  ],
+  [
+   "t26",
+   "en-046"
+  ],
+  [
+   "t27",
+   "en-048"
+  ],
+  [
+   "t28",
+   "en-049"
+  ],
+  [
+   "t29",
+   "en-051"
+  ],
+  [
+   "t30",
+   "en-053"
+  ],
+  [
+   "t31",
+   "en-054"
+  ],
+  [
+   "t32",
+   "en-055"
+  ],
+  [
+   "t33",
+   "en-056"
+  ],
+  [
+   "t34",
+   "en-065"
+  ],
+  [
+   "t35",
+   "en-070"
+  ],
+  [
+   "t36",
+   "en-076"
+  ],
+  [
+   "t37",
+   "en-078"
+  ],
+  [
+   "t38",
+   "en-083"
+  ],
+  [
+   "t39",
+   "en-086"
+  ],
+  [
+   "t40",
+   "en-087"
+  ],
+  [
+   "t41",
+   "en-088"
+  ],
+  [
+   "t42",
+   "en-092"
+  ],
+  [
+   "t43",
+   "en-093"
+  ],
+  [
+   "t44",
+   "en-095"
+  ],
+  [
+   "t45",
+   "en-096"
+  ],
+  [
+   "t46",
+   "en-097"
+  ],
+  [
+   "t47",
+   "en-098"
+  ],
+  [
+   "t48",
+   "en-100"
+  ],
+  [
+   "t49",
+   "en-101"
+  ],
+  [
+   "t50",
+   "en-102"
+  ],
+  [
+   "t51",
+   "en-105"
+  ],
+  [
+   "t52",
+   "en-106"
+  ],
+  [
+   "t53",
+   "en-108"
+  ],
+  [
+   "t54",
+   "en-110"
+  ],
+  [
+   "t55",
+   "en-112"
+  ],
+  [
+   "t56",
+   "en-115"
+  ],
+  [
+   "t57",
+   "en-117"
+  ],
+  [
+   "t58",
+   "en-118"
+  ],
+  [
+   "t59",
+   "en-119"
+  ],
+  [
+   "t60",
+   "en-120"
+  ]
+ ],
+ "tagging": [
+  {
+   "asked": "{\"texts\":[{\"id\":\"t26\",\"text\":\"What's the difference between the Standard and Plus plans? The pricing page doesn't say whether payroll is included.\"},{\"id\":\"t27\",\"text\":\"The bank feed duplicates some transactions and I have to delete them by hand before reconciling.\"},{\"id\":\"t28\",\"text\":\"We'd pay more for phone support. Email-only support doesn't work when payroll is due tomorrow.\"},{\"id\":\"t29\",\"text\":\"Thanks for adding bulk delete!\"},{\"id\":\"t30\",\"text\":\"I manage the books for my partner's practice and mine. Switching between the two companies takes far too many clicks.\"},{\"id\":\"t31\",\"text\":\"The year-end checklist is great, it walked me through closing the year step by step.\"},{\"id\":\"t32\",\"text\":\"Payslips should be sent to employees by email directly, not downloaded and attached by me one by one.\"},{\"id\":\"t33\",\"text\":\"The app keeps crashing on iOS when I open the camera to scan a receipt.\"},{\"id\":\"t34\",\"text\":\"Please let me schedule invoices to be sent on a specific date.\"},{\"id\":\"t35\",\"text\":\"I keep getting logged out, and every time I have to wait for the text message code.\"},{\"id\":\"t36\",\"text\":\"Is it possible to have different invoice numbering for two business lines?\"},{\"id\":\"t37\",\"text\":\"The VAT report groups everything by rate, but my tax office wants it by category.\"},{\"id\":\"t38\",\"text\":\"My accountant says the export is missing the cost centre field.\"},{\"id\":\"t39\",\"text\":\"Will there be a Shopify integration? We sell online and type every order in by hand.\"},{\"id\":\"t40\",\"text\":\"I still can't figure out how to add a second bank account.\"},{\"id\":\"t41\",\"text\":\"Your onboarding videos are excellent. Got set up in an afternoon.\"},{\"id\":\"t42\",\"text\":\"The PDF export of the balance sheet has overlapping text in the last column.\"},{\"id\":\"t43\",\"text\":\"Support replied within an hour and fixed the problem. Thank you, [NAME_3].\"},{\"id\":\"t44\",\"text\":\"Our invoices get flagged as spam by some clients' email systems.\"},{\"id\":\"t45\",\"text\":\"Bank sync is reliable now, thanks for whatever you changed.\"},{\"id\":\"t46\",\"text\":\"Can I see the history of changes on an invoice? Someone changed an amount and I don't know who.\"},{\"id\":\"t47\",\"text\":\"We want to give our sales team access to create quotes, but not to see salaries.\"},{\"id\":\"t48\",\"text\":\"Every time the app updates on my phone I have to log in again with the code.\"},{\"id\":\"t49\",\"text\":\"Sending invoices from my own email address instead of yours would look more professional.\"},{\"id\":\"t50\",\"text\":\"I just need the numbers for my tax advisor at the end of each quarter, nothing more.\"}]}",
+   "answer": "{\"stop_reason\":\"end_turn\",\"content\":[{\"type\":\"text\",\"text\":\"{\\\"texts\\\":[{\\\"id\\\":\\\"t26\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Choose the right plan\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"What's the difference between the Standard and Plus plans?\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Unclear whether payroll is included\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"The pricing page doesn't say whether payroll is included.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"question\\\"},{\\\"id\\\":\\\"t27\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Reconcile bank transactions\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I have to delete them by hand before reconciling.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Bank feed duplicates transactions\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"The bank feed duplicates some transactions\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t28\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get payroll done on time\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"when payroll is due tomorrow.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Email-only support fails urgent needs\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Email-only support doesn't work when payroll is due tomorrow.\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Phone support available\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"We'd pay more for phone support.\\\"}],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t29\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Bulk delete feature\\\",\\\"intensity\\\":1,\\\"quote\\\":\\\"Thanks for adding bulk delete!\\\"}],\\\"sentiment\\\":\\\"positive\\\",\\\"type\\\":\\\"praise\\\"},{\\\"id\\\":\\\"t30\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Manage books for two practices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I manage the books for my partner's practice and mine.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Switching companies takes too many clicks\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Switching between the two companies takes far too many clicks.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t31\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Close the year step by step\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"it walked me through closing the year step by step.\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Year-end checklist guidance\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"The year-end checklist is great\\\"}],\\\"sentiment\\\":\\\"positive\\\",\\\"type\\\":\\\"praise\\\"},{\\\"id\\\":\\\"t32\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Send payslips to employees\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Payslips should be sent to employees by email directly\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Downloading and attaching payslips one by one\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"not downloaded and attached by me one by one.\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Payslips emailed directly\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Payslips should be sent to employees by email directly\\\"}],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t33\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Scan receipts with camera\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"when I open the camera to scan a receipt.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"App crashes on iOS\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"The app keeps crashing on iOS\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t34\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Schedule invoices for a date\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Please let me schedule invoices to be sent on a specific date.\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Scheduled invoice sending\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Please let me schedule invoices to be sent on a specific date.\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t35\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Stay logged in to work\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I keep getting logged out\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Frequent logouts\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"I keep getting logged out\\\"},{\\\"label\\\":\\\"Waiting for text message codes\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"every time I have to wait for the text message code.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t36\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Number invoices for two lines\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"different invoice numbering for two business lines?\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Separate invoice numbering\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"different invoice numbering for two business lines?\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"question\\\"},{\\\"id\\\":\\\"t37\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"File VAT report for tax office\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"my tax office wants it by category.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"VAT report grouped by rate\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"The VAT report groups everything by rate\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"VAT report grouped by category\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"my tax office wants it by category.\\\"}],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t38\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Share export with accountant\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"My accountant says the export is missing the cost centre field.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Export missing cost centre field\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"the export is missing the cost centre field.\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Cost centre field in export\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"the export is missing the cost centre field.\\\"}],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t39\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Sell online without manual entry\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"We sell online and type every order in by hand.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Typing every order by hand\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"type every order in by hand.\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Shopify integration\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Will there be a Shopify integration?\\\"}],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"question\\\"},{\\\"id\\\":\\\"t40\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Add second bank account\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"how to add a second bank account.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Cannot figure out how\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I still can't figure out how to add a second bank account.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"question\\\"},{\\\"id\\\":\\\"t41\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get set up quickly\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Got set up in an afternoon.\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Excellent onboarding videos\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Your onboarding videos are excellent.\\\"}],\\\"sentiment\\\":\\\"positive\\\",\\\"type\\\":\\\"praise\\\"},{\\\"id\\\":\\\"t42\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Export balance sheet as PDF\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"The PDF export of the balance sheet\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Overlapping text in PDF\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"has overlapping text in the last column.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t43\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Fast support response\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Support replied within an hour and fixed the problem.\\\"}],\\\"sentiment\\\":\\\"positive\\\",\\\"type\\\":\\\"praise\\\"},{\\\"id\\\":\\\"t44\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Send invoices to clients\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Our invoices get flagged as spam by some clients' email systems.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Invoices flagged as spam\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Our invoices get flagged as spam by some clients' email systems.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t45\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Keep bank sync working\\\",\\\"intensity\\\":1,\\\"quote\\\":\\\"Bank sync is reliable now\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Reliable bank sync\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Bank sync is reliable now, thanks for whatever you changed.\\\"}],\\\"sentiment\\\":\\\"positive\\\",\\\"type\\\":\\\"praise\\\"},{\\\"id\\\":\\\"t46\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Trace invoice changes\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Can I see the history of changes on an invoice?\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Unknown who changed amount\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Someone changed an amount and I don't know who.\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Invoice change history\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Can I see the history of changes on an invoice?\\\"}],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"question\\\"},{\\\"id\\\":\\\"t47\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Let sales create quotes\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"We want to give our sales team access to create quotes\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Sales team seeing salaries\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"but not to see salaries.\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Role-based access to salaries\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"but not to see salaries.\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t48\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Use app on phone\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Every time the app updates on my phone\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Re-login with code after updates\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"I have to log in again with the code.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t49\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Send professional invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"would look more professional.\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Invoices from own email\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Sending invoices from my own email address instead of yours\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t50\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Provide numbers to tax advisor\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I just need the numbers for my tax advisor at the end of each quarter\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Quarterly figures for advisor\\\",\\\"intensity\\\":1,\\\"quote\\\":\\\"at the end of each quarter, nothing more.\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"}]}\"}],\"usage\":{\"input_tokens\":2259,\"output_tokens\":3374}}"
+  },
+  {
+   "asked": "{\"texts\":[{\"id\":\"t1\",\"text\":\"Can I give my accountant read-only access without sharing my password?\"},{\"id\":\"t2\",\"text\":\"Where do I find the VAT return? I've clicked through every menu twice.\"},{\"id\":\"t3\",\"text\":\"Love the new dashboard!\"},{\"id\":\"t4\",\"text\":\"I waited six days for a reply from support. By then I had sorted it out myself.\"},{\"id\":\"t5\",\"text\":\"We track every project's hours and costs here, but I can't see profit per project anywhere. That's the whole reason we signed up.\"},{\"id\":\"t6\",\"text\":\"Recurring invoices would save me an hour every month. I send the same five invoices on the first of the month.\"},{\"id\":\"t7\",\"text\":\"Honestly, the price increase in October was not great. You doubled the price and added nothing I use.\"},{\"id\":\"t8\",\"text\":\"Is there an API? We want to push orders from our web shop straight into invoices.\"},{\"id\":\"t9\",\"text\":\"Bank sync works fine for my main account but my credit card account never updates.\"},{\"id\":\"t10\",\"text\":\"The new navigation is confusing. Things moved and nothing is where it used to be.\"},{\"id\":\"t11\",\"text\":\"Payroll is easy, but the payslip PDF shows the wrong tax year in the header.\"},{\"id\":\"t12\",\"text\":\"Thanks [NAME_1], you solved my problem in five minutes. Best support I've had from a software company.\"},{\"id\":\"t13\",\"text\":\"The mobile app is fine for checking invoices, but uploading receipts fails without a signal. Offline mode would help a lot on building sites.\"},{\"id\":\"t14\",\"text\":\"I need to file VAT every quarter and the app makes it painless. Just wish it reminded me a week before the deadline.\"},{\"id\":\"t15\",\"text\":\"Everything is slow since the update. Opening an invoice takes 10 seconds.\"},{\"id\":\"t16\",\"text\":\"The report builder is powerful but I can't figure out how to show months as columns.\"},{\"id\":\"t17\",\"text\":\"Customer for 6 years and still happy.\"},{\"id\":\"t18\",\"text\":\"I tried to cancel the extra user seat and the page just reloads. Still being billed for it.\"},{\"id\":\"t19\",\"text\":\"Expenses: when I forward a receipt by email it lands in the inbox, but the amount is never read correctly.\"},{\"id\":\"t20\",\"text\":\"Can you add a filter for unpaid invoices older than 30 days? I build that list by hand every week.\"},{\"id\":\"t21\",\"text\":\"The bank connection asks me to re-authorise every 90 days. Is that something you can change or is it the bank?\"},{\"id\":\"t22\",\"text\":\"It's good, but too expensive for a one-person business.\"},{\"id\":\"t23\",\"text\":\"The invoice template editor keeps resetting my logo size.\"},{\"id\":\"t24\",\"text\":\"After the last update the app logs me out every few minutes on my tablet.\"},{\"id\":\"t25\",\"text\":\"Brilliant for invoicing, rubbish for anything else. The expense side feels like an afterthought.\"}]}",
+   "answer": "{\"stop_reason\":\"end_turn\",\"content\":[{\"type\":\"text\",\"text\":\"{\\\"texts\\\":[{\\\"id\\\":\\\"t1\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Give accountant access safely\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Can I give my accountant read-only access without sharing my password?\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Read-only access without password\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"without sharing my password\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"question\\\"},{\\\"id\\\":\\\"t2\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Find the VAT return\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Where do I find the VAT return?\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Cannot find VAT return\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"I've clicked through every menu twice.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"question\\\"},{\\\"id\\\":\\\"t3\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Liking the new dashboard\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Love the new dashboard!\\\"}],\\\"sentiment\\\":\\\"positive\\\",\\\"type\\\":\\\"praise\\\"},{\\\"id\\\":\\\"t4\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Get support reply quickly\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I waited six days for a reply from support.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Support reply took six days\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"I waited six days for a reply from support.\\\"},{\\\"label\\\":\\\"Had to solve it myself\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"By then I had sorted it out myself.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t5\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Track project hours and costs\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"We track every project's hours and costs here\\\"},{\\\"label\\\":\\\"Know profit per project\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"That's the whole reason we signed up.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Cannot see profit per project\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"I can't see profit per project anywhere.\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Profit per project visible\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"I can't see profit per project anywhere.\\\"}],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t6\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Send monthly invoices easily\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I send the same five invoices on the first of the month.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Repeating the same invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I send the same five invoices on the first of the month.\\\"},{\\\"label\\\":\\\"Losing an hour monthly\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"would save me an hour every month\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Recurring invoices saving time\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Recurring invoices would save me an hour every month.\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t7\\\",\\\"jobs\\\":[],\\\"pains\\\":[{\\\"label\\\":\\\"Price doubled without benefit\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"You doubled the price and added nothing I use.\\\"},{\\\"label\\\":\\\"October price increase unwelcome\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"the price increase in October was not great\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t8\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Push web shop orders to invoices\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"We want to push orders from our web shop straight into invoices.\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"API for order integration\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Is there an API?\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"question\\\"},{\\\"id\\\":\\\"t9\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Keep bank accounts updated\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Bank sync works fine for my main account\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Credit card account never updates\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"my credit card account never updates.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"mixed\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t10\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Find things in navigation\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Things moved and nothing is where it used to be.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"New navigation confusing\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"The new navigation is confusing.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t11\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Produce correct payslips\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"the payslip PDF shows the wrong tax year in the header.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Payslip shows wrong tax year\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"the payslip PDF shows the wrong tax year in the header.\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Payroll is easy\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Payroll is easy\\\"}],\\\"sentiment\\\":\\\"mixed\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t12\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Solve software problem quickly\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"you solved my problem in five minutes.\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Fast, excellent support\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Best support I've had from a software company.\\\"}],\\\"sentiment\\\":\\\"positive\\\",\\\"type\\\":\\\"praise\\\"},{\\\"id\\\":\\\"t13\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Check invoices on mobile\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"The mobile app is fine for checking invoices\\\"},{\\\"label\\\":\\\"Upload receipts on building sites\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"uploading receipts fails without a signal.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Receipt upload fails offline\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"uploading receipts fails without a signal.\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Offline mode for sites\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Offline mode would help a lot on building sites.\\\"}],\\\"sentiment\\\":\\\"mixed\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t14\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"File VAT every quarter\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"I need to file VAT every quarter\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"No reminder before deadline\\\",\\\"intensity\\\":1,\\\"quote\\\":\\\"Just wish it reminded me a week before the deadline.\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Painless VAT filing\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"the app makes it painless.\\\"},{\\\"label\\\":\\\"Deadline reminder wanted\\\",\\\"intensity\\\":1,\\\"quote\\\":\\\"Just wish it reminded me a week before the deadline.\\\"}],\\\"sentiment\\\":\\\"mixed\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t15\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Open invoices quickly\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Opening an invoice takes 10 seconds.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"App slow since update\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Everything is slow since the update.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t16\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Build reports with months as columns\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I can't figure out how to show months as columns.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Cannot find month column setting\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I can't figure out how to show months as columns.\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Powerful report builder\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"The report builder is powerful\\\"}],\\\"sentiment\\\":\\\"mixed\\\",\\\"type\\\":\\\"question\\\"},{\\\"id\\\":\\\"t17\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Long-term satisfied customer\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Customer for 6 years and still happy.\\\"}],\\\"sentiment\\\":\\\"positive\\\",\\\"type\\\":\\\"praise\\\"},{\\\"id\\\":\\\"t18\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Cancel extra user seat\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"I tried to cancel the extra user seat\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Cancel page just reloads\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"the page just reloads.\\\"},{\\\"label\\\":\\\"Billed for unwanted seat\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Still being billed for it.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t19\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Record expenses from email receipts\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"when I forward a receipt by email it lands in the inbox\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Receipt amount never read\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"the amount is never read correctly.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t20\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Track overdue unpaid invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Can you add a filter for unpaid invoices older than 30 days?\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Building overdue list by hand\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I build that list by hand every week.\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Filter for overdue invoices\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Can you add a filter for unpaid invoices older than 30 days?\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t21\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Keep bank connection working\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"The bank connection asks me to re-authorise every 90 days.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Re-authorising bank every 90 days\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"asks me to re-authorise every 90 days.\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Less frequent bank re-authorisation\\\",\\\"intensity\\\":1,\\\"quote\\\":\\\"Is that something you can change or is it the bank?\\\"}],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"question\\\"},{\\\"id\\\":\\\"t22\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Run one-person business affordably\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"too expensive for a one-person business.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Too expensive for solo business\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"too expensive for a one-person business.\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Good product overall\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"It's good\\\"}],\\\"sentiment\\\":\\\"mixed\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t23\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Design invoice templates with logo\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"The invoice template editor keeps resetting my logo size.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Logo size keeps resetting\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"keeps resetting my logo size.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t24\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Use app on tablet\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"the app logs me out every few minutes on my tablet.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Logged out every few minutes\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"the app logs me out every few minutes on my tablet.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t25\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Invoice customers\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Brilliant for invoicing\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Expense side feels neglected\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"The expense side feels like an afterthought.\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Strong invoicing\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"Brilliant for invoicing\\\"}],\\\"sentiment\\\":\\\"mixed\\\",\\\"type\\\":\\\"complaint\\\"}]}\"}],\"usage\":{\"input_tokens\":2318,\"output_tokens\":3648}}"
+  },
+  {
+   "asked": "{\"texts\":[{\"id\":\"t51\",\"text\":\"Please add a German interface for our Vienna office.\"},{\"id\":\"t52\",\"text\":\"Why can't I delete a draft invoice?\"},{\"id\":\"t53\",\"text\":\"I use the app to see which projects are actually making money, and the project profit report finally shows me that. Fantastic.\"},{\"id\":\"t54\",\"text\":\"The receipt scanner reads the date wrong when it's written day first.\"},{\"id\":\"t55\",\"text\":\"The cash flow forecast is useless because it ignores recurring expenses.\"},{\"id\":\"t56\",\"text\":\"I can't attach the delivery note to the invoice, my clients need both in one email.\"},{\"id\":\"t57\",\"text\":\"Mileage tracking would be handy. I drive to clients every day and log the kilometres in a paper notebook.\"},{\"id\":\"t58\",\"text\":\"The time tracker forgets my entries if I switch to another tab before saving.\"},{\"id\":\"t59\",\"text\":\"We hired our first employee and the payroll setup wizard asked questions I couldn't answer. A checklist of what to prepare would help.\"},{\"id\":\"t60\",\"text\":\"Fine for now. We'll see how it handles our growth next year.\"}]}",
+   "answer": "{\"stop_reason\":\"end_turn\",\"content\":[{\"type\":\"text\",\"text\":\"{\\\"texts\\\":[{\\\"id\\\":\\\"t51\\\",\\\"jobs\\\":[],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"German interface for Vienna office\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Please add a German interface for our Vienna office.\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t52\\\",\\\"jobs\\\":[],\\\"pains\\\":[{\\\"label\\\":\\\"Cannot delete draft invoice\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Why can't I delete a draft invoice?\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"question\\\"},{\\\"id\\\":\\\"t53\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"See which projects make money\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"I use the app to see which projects are actually making money\\\"}],\\\"pains\\\":[],\\\"gains\\\":[{\\\"label\\\":\\\"Project profit report shows profitability\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"the project profit report finally shows me that. Fantastic.\\\"}],\\\"sentiment\\\":\\\"positive\\\",\\\"type\\\":\\\"praise\\\"},{\\\"id\\\":\\\"t54\\\",\\\"jobs\\\":[],\\\"pains\\\":[{\\\"label\\\":\\\"Receipt scanner misreads day-first dates\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"The receipt scanner reads the date wrong when it's written day first.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t55\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Forecast cash flow\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"The cash flow forecast is useless\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Forecast ignores recurring expenses\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"The cash flow forecast is useless because it ignores recurring expenses.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"complaint\\\"},{\\\"id\\\":\\\"t56\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Send invoice with delivery note\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"my clients need both in one email.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Cannot attach delivery note\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"I can't attach the delivery note to the invoice\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t57\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Record kilometres driven to clients\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"I drive to clients every day and log the kilometres in a paper notebook.\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Logging kilometres in paper notebook\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"log the kilometres in a paper notebook\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Mileage tracking in app\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"Mileage tracking would be handy.\\\"}],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t58\\\",\\\"jobs\\\":[],\\\"pains\\\":[{\\\"label\\\":\\\"Time entries lost on tab switch\\\",\\\"intensity\\\":3,\\\"quote\\\":\\\"The time tracker forgets my entries if I switch to another tab before saving.\\\"}],\\\"gains\\\":[],\\\"sentiment\\\":\\\"negative\\\",\\\"type\\\":\\\"bug\\\"},{\\\"id\\\":\\\"t59\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Set up payroll for first employee\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"We hired our first employee\\\"}],\\\"pains\\\":[{\\\"label\\\":\\\"Payroll wizard questions unanswerable\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"the payroll setup wizard asked questions I couldn't answer.\\\"}],\\\"gains\\\":[{\\\"label\\\":\\\"Checklist of what to prepare\\\",\\\"intensity\\\":2,\\\"quote\\\":\\\"A checklist of what to prepare would help.\\\"}],\\\"sentiment\\\":\\\"mixed\\\",\\\"type\\\":\\\"feature request\\\"},{\\\"id\\\":\\\"t60\\\",\\\"jobs\\\":[{\\\"label\\\":\\\"Handle growth next year\\\",\\\"intensity\\\":1,\\\"quote\\\":\\\"how it handles our growth next year\\\"}],\\\"pains\\\":[],\\\"gains\\\":[],\\\"sentiment\\\":\\\"neutral\\\",\\\"type\\\":\\\"other\\\"}]}\"}],\"usage\":{\"input_tokens\":1720,\"output_tokens\":2247}}"
+  }
+ ],
+ "merge": [
+  {
+   "asked": "{\"kind\":\"jobs\",\"labels\":[{\"id\":\"l1\",\"label\":\"Give accountant access safely\",\"count\":1},{\"id\":\"l2\",\"label\":\"Find the VAT return\",\"count\":1},{\"id\":\"l3\",\"label\":\"Get support reply quickly\",\"count\":1},{\"id\":\"l4\",\"label\":\"Track project hours and costs\",\"count\":1},{\"id\":\"l5\",\"label\":\"Know profit per project\",\"count\":1},{\"id\":\"l6\",\"label\":\"Send monthly invoices easily\",\"count\":1},{\"id\":\"l7\",\"label\":\"Push web shop orders to invoices\",\"count\":1},{\"id\":\"l8\",\"label\":\"Keep bank accounts updated\",\"count\":1},{\"id\":\"l9\",\"label\":\"Find things in navigation\",\"count\":1},{\"id\":\"l10\",\"label\":\"Produce correct payslips\",\"count\":1},{\"id\":\"l11\",\"label\":\"Solve software problem quickly\",\"count\":1},{\"id\":\"l12\",\"label\":\"Check invoices on mobile\",\"count\":1},{\"id\":\"l13\",\"label\":\"Upload receipts on building sites\",\"count\":1},{\"id\":\"l14\",\"label\":\"File VAT every quarter\",\"count\":1},{\"id\":\"l15\",\"label\":\"Open invoices quickly\",\"count\":1},{\"id\":\"l16\",\"label\":\"Build reports with months as columns\",\"count\":1},{\"id\":\"l17\",\"label\":\"Cancel extra user seat\",\"count\":1},{\"id\":\"l18\",\"label\":\"Record expenses from email receipts\",\"count\":1},{\"id\":\"l19\",\"label\":\"Track overdue unpaid invoices\",\"count\":1},{\"id\":\"l20\",\"label\":\"Keep bank connection working\",\"count\":1},{\"id\":\"l21\",\"label\":\"Run one-person business affordably\",\"count\":1},{\"id\":\"l22\",\"label\":\"Design invoice templates with logo\",\"count\":1},{\"id\":\"l23\",\"label\":\"Use app on tablet\",\"count\":1},{\"id\":\"l24\",\"label\":\"Invoice customers\",\"count\":1},{\"id\":\"l25\",\"label\":\"Choose the right plan\",\"count\":1},{\"id\":\"l26\",\"label\":\"Reconcile bank transactions\",\"count\":1},{\"id\":\"l27\",\"label\":\"Get payroll done on time\",\"count\":1},{\"id\":\"l28\",\"label\":\"Manage books for two practices\",\"count\":1},{\"id\":\"l29\",\"label\":\"Close the year step by step\",\"count\":1},{\"id\":\"l30\",\"label\":\"Send payslips to employees\",\"count\":1},{\"id\":\"l31\",\"label\":\"Scan receipts with camera\",\"count\":1},{\"id\":\"l32\",\"label\":\"Schedule invoices for a date\",\"count\":1},{\"id\":\"l33\",\"label\":\"Stay logged in to work\",\"count\":1},{\"id\":\"l34\",\"label\":\"Number invoices for two lines\",\"count\":1},{\"id\":\"l35\",\"label\":\"File VAT report for tax office\",\"count\":1},{\"id\":\"l36\",\"label\":\"Share export with accountant\",\"count\":1},{\"id\":\"l37\",\"label\":\"Sell online without manual entry\",\"count\":1},{\"id\":\"l38\",\"label\":\"Add second bank account\",\"count\":1},{\"id\":\"l39\",\"label\":\"Get set up quickly\",\"count\":1},{\"id\":\"l40\",\"label\":\"Export balance sheet as PDF\",\"count\":1},{\"id\":\"l41\",\"label\":\"Send invoices to clients\",\"count\":1},{\"id\":\"l42\",\"label\":\"Keep bank sync working\",\"count\":1},{\"id\":\"l43\",\"label\":\"Trace invoice changes\",\"count\":1},{\"id\":\"l44\",\"label\":\"Let sales create quotes\",\"count\":1},{\"id\":\"l45\",\"label\":\"Use app on phone\",\"count\":1},{\"id\":\"l46\",\"label\":\"Send professional invoices\",\"count\":1},{\"id\":\"l47\",\"label\":\"Provide numbers to tax advisor\",\"count\":1},{\"id\":\"l48\",\"label\":\"See which projects make money\",\"count\":1},{\"id\":\"l49\",\"label\":\"Forecast cash flow\",\"count\":1},{\"id\":\"l50\",\"label\":\"Send invoice with delivery note\",\"count\":1},{\"id\":\"l51\",\"label\":\"Record kilometres driven to clients\",\"count\":1},{\"id\":\"l52\",\"label\":\"Set up payroll for first employee\",\"count\":1},{\"id\":\"l53\",\"label\":\"Handle growth next year\",\"count\":1}]}",
+   "answer": "{\"stop_reason\":\"end_turn\",\"content\":[{\"type\":\"text\",\"text\":\"{\\\"themes\\\":[{\\\"name\\\":\\\"Share access with accountant\\\",\\\"labels\\\":[\\\"l1\\\",\\\"l36\\\",\\\"l47\\\"]},{\\\"name\\\":\\\"Find and file VAT returns\\\",\\\"labels\\\":[\\\"l2\\\",\\\"l14\\\",\\\"l35\\\"]},{\\\"name\\\":\\\"Get quick support replies\\\",\\\"labels\\\":[\\\"l3\\\",\\\"l11\\\"]},{\\\"name\\\":\\\"Track project hours and costs\\\",\\\"labels\\\":[\\\"l4\\\"]},{\\\"name\\\":\\\"Know profit per project\\\",\\\"labels\\\":[\\\"l5\\\",\\\"l48\\\"]},{\\\"name\\\":\\\"Send invoices easily\\\",\\\"labels\\\":[\\\"l6\\\",\\\"l24\\\",\\\"l41\\\",\\\"l46\\\"]},{\\\"name\\\":\\\"Sync web shop orders to invoices\\\",\\\"labels\\\":[\\\"l7\\\",\\\"l37\\\"]},{\\\"name\\\":\\\"Keep bank accounts connected\\\",\\\"labels\\\":[\\\"l8\\\",\\\"l20\\\",\\\"l42\\\"]},{\\\"name\\\":\\\"Find things in navigation\\\",\\\"labels\\\":[\\\"l9\\\"]},{\\\"name\\\":\\\"Produce correct payslips\\\",\\\"labels\\\":[\\\"l10\\\",\\\"l30\\\"]},{\\\"name\\\":\\\"Check invoices on mobile\\\",\\\"labels\\\":[\\\"l12\\\",\\\"l45\\\",\\\"l23\\\"]},{\\\"name\\\":\\\"Upload receipts from site\\\",\\\"labels\\\":[\\\"l13\\\",\\\"l31\\\"]},{\\\"name\\\":\\\"Open invoices quickly\\\",\\\"labels\\\":[\\\"l15\\\"]},{\\\"name\\\":\\\"Build reports with monthly columns\\\",\\\"labels\\\":[\\\"l16\\\"]},{\\\"name\\\":\\\"Manage user seats\\\",\\\"labels\\\":[\\\"l17\\\"]},{\\\"name\\\":\\\"Record expenses from email receipts\\\",\\\"labels\\\":[\\\"l18\\\"]},{\\\"name\\\":\\\"Track overdue invoices\\\",\\\"labels\\\":[\\\"l19\\\"]},{\\\"name\\\":\\\"Run affordable one-person business\\\",\\\"labels\\\":[\\\"l21\\\",\\\"l25\\\"]},{\\\"name\\\":\\\"Design branded invoice templates\\\",\\\"labels\\\":[\\\"l22\\\"]},{\\\"name\\\":\\\"Reconcile bank transactions\\\",\\\"labels\\\":[\\\"l26\\\"]},{\\\"name\\\":\\\"Run payroll on time\\\",\\\"labels\\\":[\\\"l27\\\",\\\"l52\\\"]},{\\\"name\\\":\\\"Manage books for multiple practices\\\",\\\"labels\\\":[\\\"l28\\\"]},{\\\"name\\\":\\\"Close the year step by step\\\",\\\"labels\\\":[\\\"l29\\\"]},{\\\"name\\\":\\\"Stay logged in\\\",\\\"labels\\\":[\\\"l33\\\"]},{\\\"name\\\":\\\"Number invoice lines\\\",\\\"labels\\\":[\\\"l34\\\"]},{\\\"name\\\":\\\"Get set up quickly\\\",\\\"labels\\\":[\\\"l39\\\"]},{\\\"name\\\":\\\"Export balance sheet as PDF\\\",\\\"labels\\\":[\\\"l40\\\"]},{\\\"name\\\":\\\"Trace invoice changes\\\",\\\"labels\\\":[\\\"l43\\\"]},{\\\"name\\\":\\\"Let sales create quotes\\\",\\\"labels\\\":[\\\"l44\\\"]},{\\\"name\\\":\\\"Schedule invoices for future dates\\\",\\\"labels\\\":[\\\"l32\\\"]},{\\\"name\\\":\\\"Add second bank account\\\",\\\"labels\\\":[\\\"l38\\\"]},{\\\"name\\\":\\\"Include delivery notes on invoices\\\",\\\"labels\\\":[\\\"l50\\\"]},{\\\"name\\\":\\\"Record vehicle kilometres to clients\\\",\\\"labels\\\":[\\\"l51\\\"]},{\\\"name\\\":\\\"Forecast cash flow\\\",\\\"labels\\\":[\\\"l49\\\"]},{\\\"name\\\":\\\"Scale for next year's growth\\\",\\\"labels\\\":[\\\"l53\\\"]}]}\"}],\"usage\":{\"input_tokens\":1929,\"output_tokens\":886}}"
+  },
+  {
+   "asked": "{\"kind\":\"pains\",\"labels\":[{\"id\":\"l1\",\"label\":\"Cannot find VAT return\",\"count\":1},{\"id\":\"l2\",\"label\":\"Support reply took six days\",\"count\":1},{\"id\":\"l3\",\"label\":\"Had to solve it myself\",\"count\":1},{\"id\":\"l4\",\"label\":\"Cannot see profit per project\",\"count\":1},{\"id\":\"l5\",\"label\":\"Repeating the same invoices\",\"count\":1},{\"id\":\"l6\",\"label\":\"Losing an hour monthly\",\"count\":1},{\"id\":\"l7\",\"label\":\"Price doubled without benefit\",\"count\":1},{\"id\":\"l8\",\"label\":\"October price increase unwelcome\",\"count\":1},{\"id\":\"l9\",\"label\":\"Credit card account never updates\",\"count\":1},{\"id\":\"l10\",\"label\":\"New navigation confusing\",\"count\":1},{\"id\":\"l11\",\"label\":\"Payslip shows wrong tax year\",\"count\":1},{\"id\":\"l12\",\"label\":\"Receipt upload fails offline\",\"count\":1},{\"id\":\"l13\",\"label\":\"No reminder before deadline\",\"count\":1},{\"id\":\"l14\",\"label\":\"App slow since update\",\"count\":1},{\"id\":\"l15\",\"label\":\"Cannot find month column setting\",\"count\":1},{\"id\":\"l16\",\"label\":\"Cancel page just reloads\",\"count\":1},{\"id\":\"l17\",\"label\":\"Billed for unwanted seat\",\"count\":1},{\"id\":\"l18\",\"label\":\"Receipt amount never read\",\"count\":1},{\"id\":\"l19\",\"label\":\"Building overdue list by hand\",\"count\":1},{\"id\":\"l20\",\"label\":\"Re-authorising bank every 90 days\",\"count\":1},{\"id\":\"l21\",\"label\":\"Too expensive for solo business\",\"count\":1},{\"id\":\"l22\",\"label\":\"Logo size keeps resetting\",\"count\":1},{\"id\":\"l23\",\"label\":\"Logged out every few minutes\",\"count\":1},{\"id\":\"l24\",\"label\":\"Expense side feels neglected\",\"count\":1},{\"id\":\"l25\",\"label\":\"Unclear whether payroll is included\",\"count\":1},{\"id\":\"l26\",\"label\":\"Bank feed duplicates transactions\",\"count\":1},{\"id\":\"l27\",\"label\":\"Email-only support fails urgent needs\",\"count\":1},{\"id\":\"l28\",\"label\":\"Switching companies takes too many clicks\",\"count\":1},{\"id\":\"l29\",\"label\":\"Downloading and attaching payslips one by one\",\"count\":1},{\"id\":\"l30\",\"label\":\"App crashes on iOS\",\"count\":1},{\"id\":\"l31\",\"label\":\"Frequent logouts\",\"count\":1},{\"id\":\"l32\",\"label\":\"Waiting for text message codes\",\"count\":1},{\"id\":\"l33\",\"label\":\"VAT report grouped by rate\",\"count\":1},{\"id\":\"l34\",\"label\":\"Export missing cost centre field\",\"count\":1},{\"id\":\"l35\",\"label\":\"Typing every order by hand\",\"count\":1},{\"id\":\"l36\",\"label\":\"Cannot figure out how\",\"count\":1},{\"id\":\"l37\",\"label\":\"Overlapping text in PDF\",\"count\":1},{\"id\":\"l38\",\"label\":\"Invoices flagged as spam\",\"count\":1},{\"id\":\"l39\",\"label\":\"Unknown who changed amount\",\"count\":1},{\"id\":\"l40\",\"label\":\"Sales team seeing salaries\",\"count\":1},{\"id\":\"l41\",\"label\":\"Re-login with code after updates\",\"count\":1},{\"id\":\"l42\",\"label\":\"Cannot delete draft invoice\",\"count\":1},{\"id\":\"l43\",\"label\":\"Receipt scanner misreads day-first dates\",\"count\":1},{\"id\":\"l44\",\"label\":\"Forecast ignores recurring expenses\",\"count\":1},{\"id\":\"l45\",\"label\":\"Cannot attach delivery note\",\"count\":1},{\"id\":\"l46\",\"label\":\"Logging kilometres in paper notebook\",\"count\":1},{\"id\":\"l47\",\"label\":\"Time entries lost on tab switch\",\"count\":1},{\"id\":\"l48\",\"label\":\"Payroll wizard questions unanswerable\",\"count\":1}]}",
+   "answer": "{\"stop_reason\":\"end_turn\",\"content\":[{\"type\":\"text\",\"text\":\"{\\\"themes\\\":[{\\\"name\\\":\\\"Cannot find features or settings\\\",\\\"labels\\\":[\\\"l1\\\",\\\"l15\\\",\\\"l36\\\"]},{\\\"name\\\":\\\"Navigation feels confusing\\\",\\\"labels\\\":[\\\"l10\\\"]},{\\\"name\\\":\\\"Slow or unhelpful support replies\\\",\\\"labels\\\":[\\\"l2\\\",\\\"l3\\\",\\\"l27\\\"]},{\\\"name\\\":\\\"Price increases feel unjustified\\\",\\\"labels\\\":[\\\"l7\\\",\\\"l8\\\",\\\"l21\\\"]},{\\\"name\\\":\\\"Charged for seats not needed\\\",\\\"labels\\\":[\\\"l17\\\"]},{\\\"name\\\":\\\"Bank accounts go stale\\\",\\\"labels\\\":[\\\"l9\\\",\\\"l20\\\"]},{\\\"name\\\":\\\"Bank feed creates duplicate transactions\\\",\\\"labels\\\":[\\\"l26\\\"]},{\\\"name\\\":\\\"Frequent unexpected logouts\\\",\\\"labels\\\":[\\\"l23\\\",\\\"l31\\\"]},{\\\"name\\\":\\\"Login codes slow and repeated\\\",\\\"labels\\\":[\\\"l32\\\",\\\"l41\\\"]},{\\\"name\\\":\\\"App slow since update\\\",\\\"labels\\\":[\\\"l14\\\"]},{\\\"name\\\":\\\"App crashes on iPhone\\\",\\\"labels\\\":[\\\"l30\\\"]},{\\\"name\\\":\\\"Receipt capture fails or misreads\\\",\\\"labels\\\":[\\\"l12\\\",\\\"l18\\\",\\\"l43\\\"]},{\\\"name\\\":\\\"Repetitive manual data entry\\\",\\\"labels\\\":[\\\"l5\\\",\\\"l35\\\",\\\"l19\\\",\\\"l46\\\"]},{\\\"name\\\":\\\"Invoice layout and branding break\\\",\\\"labels\\\":[\\\"l22\\\",\\\"l37\\\"]},{\\\"name\\\":\\\"Invoices wrongly flagged as spam\\\",\\\"labels\\\":[\\\"l38\\\"]},{\\\"name\\\":\\\"Cannot delete draft invoice\\\",\\\"labels\\\":[\\\"l42\\\"]},{\\\"name\\\":\\\"Cannot attach delivery note\\\",\\\"labels\\\":[\\\"l45\\\"]},{\\\"name\\\":\\\"VAT report grouping is wrong\\\",\\\"labels\\\":[\\\"l33\\\"]},{\\\"name\\\":\\\"Payslips show wrong tax year\\\",\\\"labels\\\":[\\\"l11\\\"]},{\\\"name\\\":\\\"Unclear whether payroll is included\\\",\\\"labels\\\":[\\\"l25\\\"]},{\\\"name\\\":\\\"Payroll wizard questions unanswerable\\\",\\\"labels\\\":[\\\"l48\\\"]},{\\\"name\\\":\\\"Payslips downloaded one by one\\\",\\\"labels\\\":[\\\"l29\\\"]},{\\\"name\\\":\\\"Sales team can see salaries\\\",\\\"labels\\\":[\\\"l40\\\"]},{\\\"name\\\":\\\"No profit view per project\\\",\\\"labels\\\":[\\\"l4\\\"]},{\\\"name\\\":\\\"Expenses feel under-supported\\\",\\\"labels\\\":[\\\"l24\\\"]},{\\\"name\\\":\\\"Forecast misses recurring costs\\\",\\\"labels\\\":[\\\"l44\\\"]},{\\\"name\\\":\\\"Export lacks cost centre field\\\",\\\"labels\\\":[\\\"l34\\\"]},{\\\"name\\\":\\\"Lost time every month\\\",\\\"labels\\\":[\\\"l6\\\"]},{\\\"name\\\":\\\"No reminder before deadlines\\\",\\\"labels\\\":[\\\"l13\\\"]},{\\\"name\\\":\\\"Cancel page just reloads\\\",\\\"labels\\\":[\\\"l16\\\"]},{\\\"name\\\":\\\"Too many clicks to switch companies\\\",\\\"labels\\\":[\\\"l28\\\"]},{\\\"name\\\":\\\"Unclear who changed an amount\\\",\\\"labels\\\":[\\\"l39\\\"]},{\\\"name\\\":\\\"Time entries lost on tab switch\\\",\\\"labels\\\":[\\\"l47\\\"]},{\\\"name\\\":\\\"Overdue invoices listed by hand\\\",\\\"labels\\\":[]}]}\"}],\"usage\":{\"input_tokens\":1868,\"output_tokens\":2801}}"
+  },
+  {
+   "asked": "{\"kind\":\"gains\",\"labels\":[{\"id\":\"l1\",\"label\":\"Read-only access without password\",\"count\":1},{\"id\":\"l2\",\"label\":\"Liking the new dashboard\",\"count\":1},{\"id\":\"l3\",\"label\":\"Profit per project visible\",\"count\":1},{\"id\":\"l4\",\"label\":\"Recurring invoices saving time\",\"count\":1},{\"id\":\"l5\",\"label\":\"API for order integration\",\"count\":1},{\"id\":\"l6\",\"label\":\"Payroll is easy\",\"count\":1},{\"id\":\"l7\",\"label\":\"Fast, excellent support\",\"count\":1},{\"id\":\"l8\",\"label\":\"Offline mode for sites\",\"count\":1},{\"id\":\"l9\",\"label\":\"Painless VAT filing\",\"count\":1},{\"id\":\"l10\",\"label\":\"Deadline reminder wanted\",\"count\":1},{\"id\":\"l11\",\"label\":\"Powerful report builder\",\"count\":1},{\"id\":\"l12\",\"label\":\"Long-term satisfied customer\",\"count\":1},{\"id\":\"l13\",\"label\":\"Filter for overdue invoices\",\"count\":1},{\"id\":\"l14\",\"label\":\"Less frequent bank re-authorisation\",\"count\":1},{\"id\":\"l15\",\"label\":\"Good product overall\",\"count\":1},{\"id\":\"l16\",\"label\":\"Strong invoicing\",\"count\":1},{\"id\":\"l17\",\"label\":\"Phone support available\",\"count\":1},{\"id\":\"l18\",\"label\":\"Bulk delete feature\",\"count\":1},{\"id\":\"l19\",\"label\":\"Year-end checklist guidance\",\"count\":1},{\"id\":\"l20\",\"label\":\"Payslips emailed directly\",\"count\":1},{\"id\":\"l21\",\"label\":\"Scheduled invoice sending\",\"count\":1},{\"id\":\"l22\",\"label\":\"Separate invoice numbering\",\"count\":1},{\"id\":\"l23\",\"label\":\"VAT report grouped by category\",\"count\":1},{\"id\":\"l24\",\"label\":\"Cost centre field in export\",\"count\":1},{\"id\":\"l25\",\"label\":\"Shopify integration\",\"count\":1},{\"id\":\"l26\",\"label\":\"Excellent onboarding videos\",\"count\":1},{\"id\":\"l27\",\"label\":\"Fast support response\",\"count\":1},{\"id\":\"l28\",\"label\":\"Reliable bank sync\",\"count\":1},{\"id\":\"l29\",\"label\":\"Invoice change history\",\"count\":1},{\"id\":\"l30\",\"label\":\"Role-based access to salaries\",\"count\":1},{\"id\":\"l31\",\"label\":\"Invoices from own email\",\"count\":1},{\"id\":\"l32\",\"label\":\"Quarterly figures for advisor\",\"count\":1},{\"id\":\"l33\",\"label\":\"German interface for Vienna office\",\"count\":1},{\"id\":\"l34\",\"label\":\"Project profit report shows profitability\",\"count\":1},{\"id\":\"l35\",\"label\":\"Mileage tracking in app\",\"count\":1},{\"id\":\"l36\",\"label\":\"Checklist of what to prepare\",\"count\":1}]}",
+   "answer": "{\"stop_reason\":\"end_turn\",\"content\":[{\"type\":\"text\",\"text\":\"{\\\"themes\\\":[{\\\"name\\\":\\\"Fast and reachable support\\\",\\\"labels\\\":[\\\"l7\\\",\\\"l17\\\",\\\"l27\\\"]},{\\\"name\\\":\\\"Liking the new dashboard\\\",\\\"labels\\\":[\\\"l2\\\"]},{\\\"name\\\":\\\"Happy with product overall\\\",\\\"labels\\\":[\\\"l12\\\",\\\"l15\\\"]},{\\\"name\\\":\\\"Automated recurring invoice sending\\\",\\\"labels\\\":[\\\"l4\\\",\\\"l21\\\"]},{\\\"name\\\":\\\"Strong invoicing overall\\\",\\\"labels\\\":[\\\"l16\\\"]},{\\\"name\\\":\\\"Tracking overdue invoices\\\",\\\"labels\\\":[\\\"l13\\\"]},{\\\"name\\\":\\\"Bulk deleting records\\\",\\\"labels\\\":[\\\"l18\\\"]},{\\\"name\\\":\\\"Seeing invoice change history\\\",\\\"labels\\\":[\\\"l29\\\"]},{\\\"name\\\":\\\"Separate invoice numbering\\\",\\\"labels\\\":[\\\"l22\\\"]},{\\\"name\\\":\\\"Sending invoices from own email\\\",\\\"labels\\\":[\\\"l31\\\"]},{\\\"name\\\":\\\"Easy VAT filing and reporting\\\",\\\"labels\\\":[\\\"l9\\\",\\\"l23\\\"]},{\\\"name\\\":\\\"Easy payroll with emailed payslips\\\",\\\"labels\\\":[\\\"l6\\\",\\\"l20\\\"]},{\\\"name\\\":\\\"Restricting salary access by role\\\",\\\"labels\\\":[\\\"l30\\\"]},{\\\"name\\\":\\\"Project profitability visibility\\\",\\\"labels\\\":[\\\"l3\\\",\\\"l34\\\"]},{\\\"name\\\":\\\"Flexible custom report builder\\\",\\\"labels\\\":[\\\"l11\\\"]},{\\\"name\\\":\\\"Quarterly figures for accountant\\\",\\\"labels\\\":[\\\"l32\\\"]},{\\\"name\\\":\\\"Connecting shop and order systems\\\",\\\"labels\\\":[\\\"l5\\\",\\\"l25\\\"]},{\\\"name\\\":\\\"Reliable bank connection\\\",\\\"labels\\\":[\\\"l14\\\",\\\"l28\\\"]},{\\\"name\\\":\\\"Offline mode at job sites\\\",\\\"labels\\\":[\\\"l8\\\"]},{\\\"name\\\":\\\"Deadline reminders\\\",\\\"labels\\\":[\\\"l10\\\"]},{\\\"name\\\":\\\"Guided year-end preparation checklists\\\",\\\"labels\\\":[\\\"l19\\\",\\\"l36\\\"]},{\\\"name\\\":\\\"Onboarding videos\\\",\\\"labels\\\":[\\\"l26\\\"]},{\\\"name\\\":\\\"Read-only access without password\\\",\\\"labels\\\":[\\\"l1\\\"]},{\\\"name\\\":\\\"Cost centre field in exports\\\",\\\"labels\\\":[\\\"l24\\\"]},{\\\"name\\\":\\\"German interface for Vienna office\\\",\\\"labels\\\":[\\\"l33\\\"]},{\\\"name\\\":\\\"Mileage tracking in app\\\",\\\"labels\\\":[\\\"l35\\\"]}]}\"}],\"usage\":{\"input_tokens\":1506,\"output_tokens\":1951}}"
+  }
+ ],
+ "usage": {
+  "input": 11600,
+  "output": 14907
+ },
+ "durationMs": 43771
+}

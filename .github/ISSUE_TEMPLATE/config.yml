@@ -1,1 +1,11 @@
 blank_issues_enabled: false
+contact_links:
+  - name: Report a security or privacy problem privately
+    url: https://github.com/akojif/painfold/security/advisories/new
+    about: Personal data leaving the browser, detection bypasses, prompt injection. Not in a public issue.
+  - name: Ask a question
+    url: https://github.com/akojif/painfold/discussions/categories/q-a
+    about: How something works, or whether Painfold fits your case.
+  - name: Suggest an idea
+    url: https://github.com/akojif/painfold/discussions/categories/ideas
+    about: Ideas and feedback, before they become planned work.
