@@ -39,7 +39,7 @@ describe('checkAudit', () => {
 
   it('has one exception, for the picomatch advisory, with a reason and a tracking issue', () => {
     expect(EXCEPTIONS.map(entry => [entry.id, entry.expires, entry.issue])).toEqual([
-      ['GHSA-fc5q-39xc-vjpf', '2026-12-01', 'https://github.com/akojif/painfold/issues/167'],
+      ['GHSA-fc5q-39xc-vjpf', '2027-01-01', 'https://github.com/akojif/painfold/issues/167'],
     ])
   })
 })

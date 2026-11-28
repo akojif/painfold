@@ -11,10 +11,11 @@ export type AuditException = { id: string, expires: string, reason: string, issu
 export const EXCEPTIONS: AuditException[] = [
   {
     id: 'GHSA-fc5q-39xc-vjpf',
-    expires: '2026-12-01',
+    expires: '2027-01-01',
     reason: 'picomatch ReDoS through repeated extglobs. Build-time only: picomatch comes in through Nuxt '
       + 'and its build tooling and only matches our own file patterns; the published site is static and '
-      + 'never runs it on visitor input. No fixed release as of 2026-11-17 (every version up to 4.0.7, the newest).',
+      + 'never runs it on visitor input. No fixed release as of 2026-11-20 (every version up to 4.0.7, the newest); '
+      + 'extended from 2026-12-01 with the same reasoning.',
     issue: 'https://github.com/akojif/painfold/issues/167',
   },
 ]
